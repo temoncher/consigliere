@@ -1,0 +1,50 @@
+image: node:latest
+
+cache: &global_cache
+  paths:
+    - node_modules/
+
+stages:
+  - install_modules
+  - lint
+  - build
+  - deploy
+
+install_modules:
+  stage: install_modules
+  script:
+    - npm ci
+
+lint:
+  stage: lint
+  script:
+    - npm run lint
+
+build:
+  stage: build
+  script:
+    - npm run build
+
+deploy_dev:
+  stage: deploy
+  environment:
+    name: development
+    url: https://consigliere-app-client.firebaseapp.com/
+  only:
+    - master
+  before_script:
+    - npm i -g firebase-tools
+  script:
+    - firebase use --token $FIREBASE_TOKEN development
+    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+
+
+# deploy_production:
+#   stage: deploy
+#   environment:
+#     name: production
+#     url: https://consigliere-app-client.firebaseapp.com/
+#   when: manual
+#   script:
+#     - firebase use --token $FIREBASE_TOKEN production
+#     - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN

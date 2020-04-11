@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "test",
   "integrations": {
     "capacitor": {}
   },
