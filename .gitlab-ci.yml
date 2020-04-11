@@ -1,8 +1,13 @@
 image: node:latest
 
-cache: &global_cache
+variables:
+  FIREBASE_PROJECT_DEV: consigliere-app-client
+
+# Cache modules in between jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+  - .npm/
 
 stages:
   - install_modules
@@ -10,10 +15,8 @@ stages:
   - build
   - deploy
 
-install_modules:
-  stage: install_modules
-  script:
-    - npm ci
+before_script:
+  - npm ci --cache .npm --prefer-offline
 
 lint:
   stage: lint
@@ -35,16 +38,5 @@ deploy_dev:
   before_script:
     - npm i -g firebase-tools
   script:
-    - firebase use --token $FIREBASE_TOKEN development
-    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
-
-
-# deploy_production:
-#   stage: deploy
-#   environment:
-#     name: production
-#     url: https://consigliere-app-client.firebaseapp.com/
-#   when: manual
-#   script:
-#     - firebase use --token $FIREBASE_TOKEN production
-#     - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+    - firebase use $FIREBASE_PROJECT_DEV --token $FIREBASE_TOKEN 
+    - firebase deploy --only-hosting -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
