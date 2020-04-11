@@ -38,4 +38,4 @@ deploy_dev:
     - npm i -g firebase-tools
   script:
     - firebase use $FIREBASE_PROJECT_DEV --token $FIREBASE_TOKEN 
-    - firebase deploy --only-hosting -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+    - firebase deploy --only hosting -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
