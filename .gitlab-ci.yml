@@ -10,7 +10,6 @@ cache:
   - .npm/
 
 stages:
-  - install_modules
   - lint
   - build
   - deploy
