@@ -1,5 +1,6 @@
 {
   "projects": {
-    "staging": "consigliere-app-client"
+    "dev": "mafia-consigliere-dev",
+    "prod": "mafia-consigliere"
   }
 }
