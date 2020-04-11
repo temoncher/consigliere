@@ -1,9 +1,5 @@
 image: node:latest
 
-variables:
-  FIREBASE_PROJECT_DEV: consigliere-development
-  FIREBASE_PROJECT_PROD: consigliere-classic
-
 # Cache modules in between jobs
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -33,25 +29,25 @@ deploy_dev:
   stage: deploy
   environment:
     name: development
-    url: https://consigliere-development.web.app/
+    url: https://mafia-consigliere-dev.web.app/
   only:
     - master
   before_script:
     - npm i -g firebase-tools
   script:
-    - firebase use $FIREBASE_PROJECT_DEV --token $FIREBASE_TOKEN 
-    - firebase deploy --only hosting:client-dev, -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+    - firebase use dev --token $FIREBASE_TOKEN
+    - firebase deploy --only hosting -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
 
 deploy_prod:
   stage: deploy
   environment:
     name: production
-    url: https://consigliere-classic.web.app/
+    url: https://mafia-consigliere.web.app/
   only:
     - /^release-.*$/
   when: manual
   before_script:
     - npm i -g firebase-tools
   script:
-    - firebase use $FIREBASE_PROJECT_PROD --token $FIREBASE_TOKEN 
-    - firebase deploy --only hosting:client-prod -m "Branch $CI_COMMIT_REF_NAME, User $GITLAB_USER_EMAIL | Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+    - firebase use prod --token $FIREBASE_TOKEN 
+    - firebase deploy --only hosting -m "Branch $CI_COMMIT_REF_NAME, User $GITLAB_USER_EMAIL | Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
