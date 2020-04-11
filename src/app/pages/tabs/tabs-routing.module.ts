@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TabsPage } from './tabs.page';
+import { TabsComponent } from './tabs.component';
 
 const routes: Routes = [
   {
     path: 'tabs',
-    component: TabsPage,
+    component: TabsComponent,
     children: [
       {
         path: 'clubs',
@@ -13,7 +13,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./clubs/clubs.module').then(m => m.ClubsPageModule)
+              import('./clubs/clubs.module').then(m => m.ClubsComponentModule)
           }
         ]
       },
@@ -23,7 +23,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./table/table.module').then(m => m.TablePageModule)
+              import('./table/table.module').then(m => m.TableComponentModule)
           }
         ]
       },
@@ -33,7 +33,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./profile/profile.module').then(m => m.ProfilePageModule)
+              import('./profile/profile.module').then(m => m.ProfileComponentModule)
           }
         ]
       },
@@ -55,4 +55,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsComponentRoutingModule {}

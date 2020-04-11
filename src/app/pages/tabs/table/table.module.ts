@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TablePage } from './table.page';
+import { TableComponent } from './table.component';
 import { ExploreContainerComponentModule } from '@shared/components/explore-container/explore-container.module';
 
 @NgModule({
@@ -13,8 +13,8 @@ import { ExploreContainerComponentModule } from '@shared/components/explore-cont
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: TablePage }])
+    RouterModule.forChild([{ path: '', component: TableComponent }])
   ],
-  declarations: [TablePage]
+  declarations: [TableComponent]
 })
-export class TablePageModule {}
+export class TableComponentModule {}
