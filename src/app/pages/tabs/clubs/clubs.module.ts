@@ -3,7 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ClubsPage } from './clubs.page';
+
+import { ClubsComponent } from './clubs.component';
 import { ExploreContainerComponentModule } from '@shared/components/explore-container/explore-container.module';
 
 @NgModule({
@@ -12,8 +13,8 @@ import { ExploreContainerComponentModule } from '@shared/components/explore-cont
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: ClubsPage }])
+    RouterModule.forChild([{ path: '', component: ClubsComponent }])
   ],
-  declarations: [ClubsPage]
+  declarations: [ClubsComponent]
 })
-export class ClubsPageModule {}
+export class ClubsComponentModule {}

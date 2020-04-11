@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-clubs',
-  templateUrl: 'clubs.page.html',
-  styleUrls: ['clubs.page.scss']
+  templateUrl: 'clubs.component.html',
+  styleUrls: ['clubs.component.scss']
 })
-export class ClubsPage {
+export class ClubsComponent {
 
   constructor() {}
 
