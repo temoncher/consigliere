@@ -20,3 +20,13 @@
     }
   }
 }
+
+ion-avatar.with-badge {
+  position: relative;
+
+  .avatar-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+}

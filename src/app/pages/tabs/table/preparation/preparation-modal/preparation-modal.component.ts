@@ -20,6 +20,11 @@ export class PreparationModalComponent implements OnInit {
       new Player({ nickname: 'Булочка', user: { id: 'bulochka' } }),
       new Player({ nickname: 'Краснова', user: { id: 'krasnova' } }),
       new Player({ nickname: 'Олежа', user: { id: 'olega' } }),
+      new Player({ nickname: 'Маффин', user: { id: 'maffin' } }),
+      new Player({ nickname: 'Девяткин', user: { id: 'devyatkin' } }),
+      new Player({ nickname: 'Одинаковый', user: { id: 'odynakoviy' } }),
+      new Player({ nickname: 'Люба', user: { id: 'lyba' } }),
+      new Player({ nickname: 'Углическая', user: { id: 'uglicheskaya' } }),
     ];
   }
 

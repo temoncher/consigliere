@@ -4,6 +4,13 @@
       <ion-back-button defaultHref="tabs/table"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ toolbarTitle }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outlined"
+                  (click)="shufflePlayers()">
+        <ion-icon slot="icon-only"
+                  name="repeat"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,7 +19,8 @@
 
     <div class="sticky-top">
       <div class="d-flex">
-        <ion-item lines="none">
+        <ion-item *ngIf="(host$ | async)"
+                  lines="none">
           <ion-avatar slot="start">
             <img [src]="(host$ | async)?.user?.avatar ? (host$ | async).user.avatar : defaultAvatar">
           </ion-avatar>
@@ -26,11 +34,20 @@
                     (click)="presentHostModal()"></ion-icon>
         </ion-item>
 
-        <div class="sticky-button-container">
-          <ion-label *ngIf="(players$ | async)?.length < 10"
-                     color="primary">{{ (players$ | async).length }}/10</ion-label>
+        <ion-item class="add-new"
+                  *ngIf="!(host$ | async)"
+                  lines="none">
+          <ion-icon slot="start"
+                    name="add"
+                    color="primary"></ion-icon>
+          <ion-label color="primary">{{ setHostText }}</ion-label>
+        </ion-item>
 
-          <ion-button *ngIf="(players$ | async)?.length === 10"
+        <div class="sticky-button-container">
+          <ion-label *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) < 11"
+                     color="primary">{{ (players$ | async).length + (!!(host$ | async) ? 1 : 0) }}/11</ion-label>
+
+          <ion-button *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) === 11"
                       fill="outlined"
                       size="large">
             <ion-icon slot="icon-only"
@@ -43,14 +60,16 @@
       <div class="app-divider"></div>
     </div>
 
-    <ion-item *ngFor="let player of (players$ | async)"
+    <ion-item *ngFor="let player of (players$ | async); let i = index"
               lines="none">
-      <ion-avatar slot="start">
+      <ion-avatar class="with-badge"
+                  slot="start">
+        <ion-badge class="avatar-badge">{{ i + 1 }}</ion-badge>
         <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
       </ion-avatar>
       <ion-label>
         <h3>{{ player.nickname }}</h3>
-        <p *ngIf="player.isGuest">{{ guestText }}</p>
+        <p>{{ player.isGuest ? guestText : authorizedUserText }}</p>
       </ion-label>
       <ion-icon slot="end"
                 name="close"

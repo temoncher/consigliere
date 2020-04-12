@@ -7,7 +7,7 @@ import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { TableState } from '@shared/store/table/table.state';
-import { AddPlayer, RemovePlayer, SetHost } from '@shared/store/table/table.actions';
+import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from '@shared/store/table/table.actions';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 
 @Component({
@@ -33,7 +33,9 @@ export class PreparationComponent implements OnInit {
     confirmButton: 'Подтвердить',
   };
   addNewPlayerText = 'Добавить нового игрока';
+  setHostText = 'Выбрать ведущего';
   guestText = 'Гость';
+  authorizedUserText = 'Участник';
   toolbarTitle = 'Подбор игроков';
   hostTitle = 'Ведущий';
 
@@ -44,16 +46,10 @@ export class PreparationComponent implements OnInit {
     private store: Store,
   ) { }
 
-  ngOnInit() {
-    const player = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
+  ngOnInit() { }
 
-    this.store.dispatch(new SetHost(player))
-      .pipe(
-        catchError((err) => {
-          this.displayToast(err.message, 'danger');
-          return of('');
-        })
-      ).subscribe();
+  shufflePlayers() {
+    this.store.dispatch(new ShufflePlayers());
   }
 
   removePlayer({ user: { id } }: Player) {
@@ -86,20 +82,20 @@ export class PreparationComponent implements OnInit {
 
   async presentHostPrompt() {
     const prompt = await this.alertController.create({
-      header: this.playerPromptText.header,
+      header: this.hostPropmptText.header,
       inputs: [
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.playerPromptText.namePlaceholder
+          placeholder: this.hostPropmptText.namePlaceholder
         },
       ],
       buttons: [
         {
-          text: this.playerPromptText.cancelButton,
+          text: this.hostPropmptText.cancelButton,
           role: 'cancel'
         }, {
-          text: this.playerPromptText.confirmButton,
+          text: this.hostPropmptText.confirmButton,
           handler: (player) => this.setHost(player)
         }
       ]
