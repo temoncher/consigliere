@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 import { ExploreContainerComponent } from '@shared/components/explore-container/explore-container.component';
-import { IonicModule } from '@ionic/angular';
+import { AuthService } from '@shared/services/auth.service';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
+    AngularFireAuthModule,
+    AngularFireAuthGuardModule,
   ],
   declarations: [
     ExploreContainerComponent,
@@ -16,4 +21,11 @@ import { IonicModule } from '@ionic/angular';
     ExploreContainerComponent,
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+  static forRoot() {
+    return {
+      ngModule: SharedModule,
+      providers: [AuthService]
+    };
+  }
+}

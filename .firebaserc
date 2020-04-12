@@ -1,6 +1,6 @@
 {
   "projects": {
-    "dev": "mafia-consigliere-dev",
+    "dev": "mafia-consigliere-develop",
     "prod": "mafia-consigliere"
   }
 }
