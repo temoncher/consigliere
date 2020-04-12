@@ -6,7 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.component.scss']
 })
 export class TabsComponent {
+  searchTitle = 'Поиск';
+  clubsTitle = 'Клубы';
+  tableTitle = 'Стол';
+  profileTitle = 'Профиль';
 
   constructor() {}
-
 }

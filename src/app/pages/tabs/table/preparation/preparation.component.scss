@@ -1,0 +1,22 @@
+@import '~src/theme/variables';
+
+.sticky-top {
+  background-color: var(--ion-color-primary-contrast);
+
+  ion-item {
+    flex: 3;
+    background-color: var(--ion-color-primary-contrast);
+  }
+
+  .sticky-button-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ion-label {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
+}

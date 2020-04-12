@@ -7,7 +7,7 @@ import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { TableState } from '@shared/store/table/table.state';
-import { AddPlayer, RemovePlayer } from '@shared/store/table/table.actions';
+import { AddPlayer, RemovePlayer, SetHost } from '@shared/store/table/table.actions';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 
 @Component({
@@ -17,16 +17,25 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 })
 export class PreparationComponent implements OnInit {
   @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(TableState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private alertText = {
+  private playerPromptText = {
     header: 'Как зовут гостя?',
     namePlaceholder: 'Каспер',
     cancelButton: 'Отмена',
     confirmButton: 'Добавить',
   };
+  private hostPropmptText = {
+    header: 'Как обращаться к новому ведущему?',
+    namePlaceholder: 'Каспер',
+    cancelButton: 'Отмена',
+    confirmButton: 'Подтвердить',
+  };
   addNewPlayerText = 'Добавить нового игрока';
   guestText = 'Гость';
+  toolbarTitle = 'Подбор игроков';
+  hostTitle = 'Ведущий';
 
   constructor(
     private modalController: ModalController,
@@ -36,13 +45,90 @@ export class PreparationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const player = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
+
+    this.store.dispatch(new SetHost(player))
+      .pipe(
+        catchError((err) => {
+          this.displayToast(err.message, 'danger');
+          return of('');
+        })
+      ).subscribe();
   }
 
   removePlayer({ user: { id } }: Player) {
     this.store.dispatch(new RemovePlayer(id));
   }
 
-  async awaitModalResult(modal) {
+  async presentHostModal() {
+    const modal = await this.modalController.create({
+      component: PreparationModalComponent,
+      swipeToClose: true,
+    });
+
+    await modal.present();
+    await this.awaitHostModalResult(modal);
+  }
+
+  private async awaitHostModalResult(modal) {
+    const { data: player, role } = await modal.onWillDismiss();
+
+    if (role === 'authenticated') {
+      this.setHost(player);
+      return;
+    }
+
+    if (role === 'guest') {
+      await this.presentHostPrompt();
+      return;
+    }
+  }
+
+  async presentHostPrompt() {
+    const prompt = await this.alertController.create({
+      header: this.playerPromptText.header,
+      inputs: [
+        {
+          name: 'nickname',
+          type: 'text',
+          placeholder: this.playerPromptText.namePlaceholder
+        },
+      ],
+      buttons: [
+        {
+          text: this.playerPromptText.cancelButton,
+          role: 'cancel'
+        }, {
+          text: this.playerPromptText.confirmButton,
+          handler: (player) => this.setHost(player)
+        }
+      ]
+    });
+
+    await prompt.present();
+  }
+
+  private setHost(player: Player) {
+    this.store.dispatch(new SetHost(player))
+      .pipe(
+        catchError((err) => {
+          this.displayToast(err.message, 'danger');
+          return of('');
+        })
+      ).subscribe();
+  }
+
+  async presentPlayerModal() {
+    const modal = await this.modalController.create({
+      component: PreparationModalComponent,
+      swipeToClose: true,
+    });
+
+    await modal.present();
+    await this.awaitPlayerModalResult(modal);
+  }
+
+  private async awaitPlayerModalResult(modal) {
     const { data: player, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {
@@ -51,43 +137,33 @@ export class PreparationComponent implements OnInit {
     }
 
     if (role === 'guest') {
-      await this.presentPrompt();
+      await this.presentPlayerPrompt();
       return;
     }
   }
 
-  async presentPrompt() {
+  async presentPlayerPrompt() {
     const prompt = await this.alertController.create({
-      header: this.alertText.header,
+      header: this.playerPromptText.header,
       inputs: [
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.alertText.namePlaceholder
+          placeholder: this.playerPromptText.namePlaceholder
         },
       ],
       buttons: [
         {
-          text: this.alertText.cancelButton,
+          text: this.playerPromptText.cancelButton,
           role: 'cancel'
         }, {
-          text: this.alertText.confirmButton,
+          text: this.playerPromptText.confirmButton,
           handler: (player) => this.addNewPlayer(player)
         }
       ]
     });
 
     await prompt.present();
-  }
-
-  async presentModal() {
-    const modal = await this.modalController.create({
-      component: PreparationModalComponent,
-      swipeToClose: true,
-    });
-
-    await modal.present();
-    await this.awaitModalResult(modal);
   }
 
   private addNewPlayer(player: Player) {

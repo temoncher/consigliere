@@ -1,5 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tabs/table"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ toolbarTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]=true>
-  <ion-list class="cards-list">
+  <ion-list class="cards-list with-fixed-element">
+
+    <div class="sticky-top">
+      <div class="d-flex">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img [src]="(host$ | async)?.user?.avatar ? (host$ | async).user.avatar : defaultAvatar">
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ (host$ | async)?.nickname }}</h3>
+            <p>{{ hostTitle }}</p>
+          </ion-label>
+          <ion-icon slot="end"
+                    name="swap-vertical"
+                    color="medium"
+                    (click)="presentHostModal()"></ion-icon>
+        </ion-item>
+
+        <div class="sticky-button-container">
+          <ion-label *ngIf="(players$ | async)?.length < 10"
+                     color="primary">{{ (players$ | async).length }}/10</ion-label>
+
+          <ion-button *ngIf="(players$ | async)?.length === 10"
+                      fill="outlined"
+                      size="large">
+            <ion-icon slot="icon-only"
+                      name="play"
+                      color="primary"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="app-divider"></div>
+    </div>
+
     <ion-item *ngFor="let player of (players$ | async)"
               lines="none">
       <ion-avatar slot="start">
@@ -17,7 +60,7 @@
     <ion-item *ngIf="(players$ | async)?.length < 10"
               class="add-new"
               lines="none"
-              (click)="presentModal()">
+              (click)="presentPlayerModal()">
       <ion-icon slot="start"
                 name="add"
                 color="primary"></ion-icon>
