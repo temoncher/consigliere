@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: 'AIzaSyCY6Mv_ZT7co_N2dQ-keI2_sh55JwIeJOM',
+    authDomain: 'mafia-consigliere-develop.firebaseapp.com',
+    databaseURL: 'https://mafia-consigliere-develop.firebaseio.com',
+    projectId: 'mafia-consigliere-develop',
+    storageBucket: 'mafia-consigliere-develop.appspot.com',
+    messagingSenderId: '416078619810',
+    appId: '1:416078619810:web:8ff8cf3d11db5a58e623fb'
+  }
 };
 
 /*
