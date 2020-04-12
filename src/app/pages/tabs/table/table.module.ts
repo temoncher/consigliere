@@ -1,11 +1,12 @@
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { TableComponent } from './table.component';
 import { ExploreContainerComponentModule } from '@shared/components/explore-container/explore-container.module';
+import { TableRoutingModule } from './table-routing.module';
+import { PreparationFormComponent } from './preparation-form/preparation-form.component';
 
 @NgModule({
   imports: [
@@ -13,8 +14,11 @@ import { ExploreContainerComponentModule } from '@shared/components/explore-cont
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: TableComponent }])
+    TableRoutingModule,
   ],
-  declarations: [TableComponent]
+  declarations: [
+    TableComponent,
+    PreparationFormComponent,
+  ]
 })
-export class TableComponentModule {}
+export class TableModule {}

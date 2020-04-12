@@ -1,3 +1,11 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
+
+.grid-center {
+  display: grid;
+  height: 100%;
+
+  text-align: center;
+  place-content: center;
+}
