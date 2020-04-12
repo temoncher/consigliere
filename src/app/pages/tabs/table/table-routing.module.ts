@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TableComponent } from './table.component';
-import { PreparationFormComponent } from './preparation-form/preparation-form.component';
 
 const routes: Routes = [
   {
@@ -11,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'preparation',
-    component: PreparationFormComponent,
+    loadChildren: () => import('./preparation/preparation.module').then(m => m.PreparationModule)
   }
 ];
 
