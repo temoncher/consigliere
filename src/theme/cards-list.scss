@@ -1,0 +1,18 @@
+@import './custom-variables.scss';
+@import './variables.scss';
+
+ion-list.cards-list {
+  ion-item {
+    margin: 8px;
+    padding: 8px 0;
+    border-radius: var(--app-border-radius);
+    box-shadow: var(--app-box-shadow);
+  }
+
+  ion-item.add-new {
+    margin-top: 16px;
+    padding: 0;
+    border: var(--app-border-width) solid var(--ion-color-primary);
+    box-shadow: unset;
+  }
+}

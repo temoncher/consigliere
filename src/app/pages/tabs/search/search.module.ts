@@ -5,14 +5,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { SearchComponent } from './search.component';
-import { ExploreContainerComponentModule } from '@shared/components/explore-container/explore-container.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
+    SharedModule,
     RouterModule.forChild([{ path: '', component: SearchComponent }])
   ],
   declarations: [SearchComponent]

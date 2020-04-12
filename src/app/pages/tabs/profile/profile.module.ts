@@ -5,14 +5,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ProfileComponent } from './profile.component';
-import { ExploreContainerComponentModule } from '@shared/components/explore-container/explore-container.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
+    SharedModule,
     RouterModule.forChild([{ path: '', component: ProfileComponent }])
   ],
   declarations: [ProfileComponent]
