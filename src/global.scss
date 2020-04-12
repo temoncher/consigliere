@@ -29,3 +29,17 @@
 @import "./theme/variables.scss";
 @import "./theme/custom-variables.scss";
 @import "./theme/cards-list.scss";
+
+.app-divider {
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.sticky-top {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+}
