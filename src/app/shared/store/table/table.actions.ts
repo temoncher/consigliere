@@ -13,3 +13,7 @@ export class RemovePlayer {
   static readonly type = '[Table] Remove player';
   constructor(public userId: string) {}
 }
+export class ShufflePlayers {
+  static readonly type = '[Table] Shuffle players';
+  constructor() {}
+}

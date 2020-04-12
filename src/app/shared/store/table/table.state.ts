@@ -1,7 +1,21 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
-import { AddPlayer, RemovePlayer, SetHost } from './table.actions';
+import lodash from 'lodash';
+import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from './table.actions';
 
+const dummyPlayers = [
+  new Player({ nickname: 'Воланд', user: { id: 'voland' } }),
+  new Player({ nickname: 'Cabby', user: { id: 'cabby' } }),
+  new Player({ nickname: 'Булочка', user: { id: 'bulochka' } }),
+  new Player({ nickname: 'Краснова', user: { id: 'krasnova' } }),
+  new Player({ nickname: 'Олежа', user: { id: 'olega' } }),
+  new Player({ nickname: 'Маффин', user: { id: 'maffin' } }),
+  new Player({ nickname: 'Девяткин', user: { id: 'devyatkin' } }),
+  new Player({ nickname: 'Одинаковый', user: { id: 'odynakoviy' } }),
+  new Player({ nickname: 'Люба', user: { id: 'lyba' } }),
+  new Player({ nickname: 'Углическая', user: { id: 'uglicheskaya' } }),
+];
+const dummyHost = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
 export interface TableStateModel {
   host: Player;
   players: Player[];
@@ -10,8 +24,8 @@ export interface TableStateModel {
 @State<TableStateModel>({
   name: 'table',
   defaults: {
-    host: undefined,
-    players: [],
+    host: dummyHost,
+    players: dummyPlayers,
   }
 })
 export class TableState {
@@ -57,6 +71,13 @@ export class TableState {
     const newHost = player.user?.id ? player : new Player(guestTemplate);
 
     return patchState({ host: newHost });
+  }
+
+  @Action(ShufflePlayers)
+  shufflePlayers({patchState, getState}: StateContext<TableStateModel>) {
+    const { players } = getState();
+
+    return patchState({ players: lodash.shuffle(players) });
   }
 
   @Action(AddPlayer)
