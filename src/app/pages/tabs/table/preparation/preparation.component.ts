@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from '@shared/models/player.model';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { Store, Select } from '@ngxs/store';
+import { catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+import { TableState } from '@shared/store/table/table.state';
+import { AddPlayer, RemovePlayer } from '@shared/store/table/table.actions';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
 
 @Component({
   selector: 'app-preparation',
@@ -9,32 +16,44 @@ import { PreparationModalComponent } from './preparation-modal/preparation-modal
   styleUrls: ['./preparation.component.scss'],
 })
 export class PreparationComponent implements OnInit {
-  players: Player[] = [];
+  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  defaultAvatar = defaultAvatarSrc;
 
   private alertText = {
     header: 'Как зовут гостя?',
     namePlaceholder: 'Каспер',
     cancelButton: 'Отмена',
-    confirmButton: 'Ок',
+    confirmButton: 'Добавить',
   };
   addNewPlayerText = 'Добавить нового игрока';
   guestText = 'Гость';
 
-  constructor(private modalController: ModalController,
-              private alertController: AlertController) { }
+  constructor(
+    private modalController: ModalController,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private store: Store,
+  ) { }
 
   ngOnInit() {
   }
 
-  async addNewPlayer(modal) {
-    const modalOutput = await modal.onWillDismiss();
-    console.log(modalOutput);
-    if (modalOutput.data) {
-      this.players.push(modalOutput.data);
+  removePlayer({ user: { id } }: Player) {
+    this.store.dispatch(new RemovePlayer(id));
+  }
+
+  async awaitModalResult(modal) {
+    const { data: player, role } = await modal.onWillDismiss();
+
+    if (role === 'authenticated') {
+      this.addNewPlayer(player);
       return;
     }
 
-    await this.presentPrompt();
+    if (role === 'guest') {
+      await this.presentPrompt();
+      return;
+    }
   }
 
   async presentPrompt() {
@@ -50,16 +69,10 @@ export class PreparationComponent implements OnInit {
       buttons: [
         {
           text: this.alertText.cancelButton,
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
+          role: 'cancel'
         }, {
           text: this.alertText.confirmButton,
-          handler: (player) => {
-            this.players.push(player);
-          }
+          handler: (player) => this.addNewPlayer(player)
         }
       ]
     });
@@ -69,11 +82,32 @@ export class PreparationComponent implements OnInit {
 
   async presentModal() {
     const modal = await this.modalController.create({
-      component: PreparationModalComponent
+      component: PreparationModalComponent,
+      swipeToClose: true,
     });
 
     await modal.present();
-    await this.addNewPlayer(modal);
+    await this.awaitModalResult(modal);
+  }
+
+  private addNewPlayer(player: Player) {
+    this.store.dispatch(new AddPlayer(player))
+      .pipe(
+        catchError((err) => {
+          this.displayToast(err.message, 'danger');
+          return of('');
+        })
+      ).subscribe();
+  }
+
+  private async displayToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message,
+      color,
+      duration: 3000
+    });
+
+    toast.present();
   }
 
 }

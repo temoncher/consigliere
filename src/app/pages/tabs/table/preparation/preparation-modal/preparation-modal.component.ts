@@ -15,16 +15,21 @@ export class PreparationModalComponent implements OnInit {
 
   ngOnInit() {
     this.players = [
-      new Player({ nickname: 'Temoncher' }),
-      new Player({ nickname: 'Cabby' }),
-      new Player({ nickname: 'Булочка' }),
-      new Player({ nickname: 'Краснова' }),
-      new Player({ nickname: 'Олежа' }),
+      new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } }),
+      new Player({ nickname: 'Cabby', user: { id: 'cabby' } }),
+      new Player({ nickname: 'Булочка', user: { id: 'bulochka' } }),
+      new Player({ nickname: 'Краснова', user: { id: 'krasnova' } }),
+      new Player({ nickname: 'Олежа', user: { id: 'olega' } }),
     ];
   }
 
-  async choosePlayer(player: Player) {
-    await this.modalController.dismiss(player);
+  async choosePlayer(player?: Player) {
+    const role = player ? 'authenticated' : 'guest';
+    await this.modalController.dismiss(player, role);
+  }
+
+  async close() {
+    await this.modalController.dismiss(undefined, 'cancel');
   }
 
 }
