@@ -8,12 +8,22 @@ const routes: Routes = [
     component: TabsComponent,
     children: [
       {
+        path: 'search',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('./search/search.module').then(m => m.SearchModule)
+          }
+        ]
+      },
+      {
         path: 'clubs',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('./clubs/clubs.module').then(m => m.ClubsComponentModule)
+              import('./clubs/clubs.module').then(m => m.ClubsModule)
           }
         ]
       },
@@ -23,7 +33,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./table/table.module').then(m => m.TableComponentModule)
+              import('./table/table.module').then(m => m.TableModule)
           }
         ]
       },
@@ -33,7 +43,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./profile/profile.module').then(m => m.ProfileComponentModule)
+              import('./profile/profile.module').then(m => m.ProfileModule)
           }
         ]
       },
@@ -55,4 +65,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsComponentRoutingModule {}
+export class TabsRoutingModule {}

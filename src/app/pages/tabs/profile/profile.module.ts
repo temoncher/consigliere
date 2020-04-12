@@ -17,4 +17,4 @@ import { ExploreContainerComponentModule } from '@shared/components/explore-cont
   ],
   declarations: [ProfileComponent]
 })
-export class ProfileComponentModule {}
+export class ProfileModule {}

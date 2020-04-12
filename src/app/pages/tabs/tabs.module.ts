@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TabsComponentRoutingModule } from './tabs-routing.module';
+import { TabsRoutingModule } from './tabs-routing.module';
 
 import { TabsComponent } from './tabs.component';
 
@@ -12,7 +12,7 @@ import { TabsComponent } from './tabs.component';
     IonicModule,
     CommonModule,
     FormsModule,
-    TabsComponentRoutingModule
+    TabsRoutingModule
   ],
   declarations: [TabsComponent]
 })
