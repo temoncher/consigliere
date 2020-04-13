@@ -1,34 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from '@shared/models/player.model';
-import { ModalController, AlertController, ToastController } from '@ionic/angular';
-import { Store, Select } from '@ngxs/store';
-import { catchError } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
-
-import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+import { Select, Store } from '@ngxs/store';
 import { TableState } from '@shared/store/table/table.state';
-import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from '@shared/store/table/table.player.actions';
+import { Observable, of } from 'rxjs';
+import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
+import { AddPlayer, RemovePlayer } from '@shared/store/table/table.player.actions';
+import { catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-preparation',
-  templateUrl: './preparation.component.html',
-  styleUrls: ['./preparation.component.scss'],
+  selector: 'app-players-list',
+  templateUrl: './players-list.component.html',
+  styleUrls: ['./players-list.component.scss'],
 })
-export class PreparationComponent implements OnInit {
+export class PlayersListComponent implements OnInit {
   @Select(TableState.getPlayers) players$: Observable<Player[]>;
   @Select(TableState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private hostPropmptText = {
-    header: 'Как обращаться к новому ведущему?',
+  private playerPromptText = {
+    header: 'Как зовут гостя?',
     namePlaceholder: 'Каспер',
     cancelButton: 'Отмена',
-    confirmButton: 'Подтвердить',
+    confirmButton: 'Добавить',
   };
-  setHostText = 'Выбрать ведущего';
-  toolbarTitle = 'Подбор игроков';
-  hostTitle = 'Ведущий';
+  addNewPlayerText = 'Добавить нового игрока';
+  guestText = 'Гость';
+  authorizedUserText = 'Участник';
 
   constructor(
     private modalController: ModalController,
@@ -39,51 +38,51 @@ export class PreparationComponent implements OnInit {
 
   ngOnInit() { }
 
-  shufflePlayers() {
-    this.store.dispatch(new ShufflePlayers());
+  removePlayer({ user: { id } }: Player) {
+    this.store.dispatch(new RemovePlayer(id));
   }
 
-  async presentHostModal() {
+  async presentPlayerModal() {
     const modal = await this.modalController.create({
       component: PreparationModalComponent,
       swipeToClose: true,
     });
 
     await modal.present();
-    await this.awaitHostModalResult(modal);
+    await this.awaitPlayerModalResult(modal);
   }
 
-  private async awaitHostModalResult(modal) {
+  private async awaitPlayerModalResult(modal) {
     const { data: player, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {
-      this.setHost(player);
+      this.addNewPlayer(player);
       return;
     }
 
     if (role === 'guest') {
-      await this.presentHostPrompt();
+      await this.presentPlayerPrompt();
       return;
     }
   }
 
-  async presentHostPrompt() {
+  async presentPlayerPrompt() {
     const prompt = await this.alertController.create({
-      header: this.hostPropmptText.header,
+      header: this.playerPromptText.header,
       inputs: [
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.hostPropmptText.namePlaceholder
+          placeholder: this.playerPromptText.namePlaceholder
         },
       ],
       buttons: [
         {
-          text: this.hostPropmptText.cancelButton,
+          text: this.playerPromptText.cancelButton,
           role: 'cancel'
         }, {
-          text: this.hostPropmptText.confirmButton,
-          handler: (player) => this.setHost(player)
+          text: this.playerPromptText.confirmButton,
+          handler: (player) => this.addNewPlayer(player)
         }
       ]
     });
@@ -91,8 +90,8 @@ export class PreparationComponent implements OnInit {
     await prompt.present();
   }
 
-  private setHost(player: Player) {
-    this.store.dispatch(new SetHost(player))
+  private addNewPlayer(player: Player) {
+    this.store.dispatch(new AddPlayer(player))
       .pipe(
         catchError((err) => {
           this.displayToast(err.message, 'danger');

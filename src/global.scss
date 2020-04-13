@@ -29,6 +29,7 @@
 @import "./theme/variables.scss";
 @import "./theme/custom-variables.scss";
 @import "./theme/cards-list.scss";
+@import "./theme/avatars.scss";
 
 .app-divider {
   border-bottom: 1px solid var(--ion-color-light);
@@ -38,8 +39,11 @@
   display: flex;
 }
 
-.sticky-top {
+.sticky {
   position: sticky;
   z-index: 2;
-  top: 0;
+
+  &.top {
+    top: 0;
+  }
 }

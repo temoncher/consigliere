@@ -6,6 +6,7 @@ import { PreparationComponent } from './preparation.component';
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
+import { PlayersListComponent } from './players-list/players-list.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { SharedModule } from '@shared/shared.module';
   declarations: [
     PreparationComponent,
     PreparationModalComponent,
+    PlayersListComponent,
   ]
 })
 export class PreparationModule { }

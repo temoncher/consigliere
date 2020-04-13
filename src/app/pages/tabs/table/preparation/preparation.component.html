@@ -8,17 +8,19 @@
       <ion-button fill="outlined"
                   (click)="shufflePlayers()">
         <ion-icon slot="icon-only"
-                  name="repeat"></ion-icon>
+                  name="repeat"
+                  color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]=true>
+<ion-content>
   <ion-list class="cards-list with-fixed-element">
 
-    <div class="sticky-top">
+    <div class="sticky top host-container">
       <div class="d-flex">
+        <!-- Host card -->
         <ion-item *ngIf="(host$ | async)"
                   lines="none">
           <ion-avatar slot="start">
@@ -33,7 +35,9 @@
                     color="medium"
                     (click)="presentHostModal()"></ion-icon>
         </ion-item>
+        <!-- END Host card -->
 
+        <!-- Add new host button-->
         <ion-item class="add-new"
                   *ngIf="!(host$ | async)"
                   lines="none">
@@ -42,8 +46,9 @@
                     color="primary"></ion-icon>
           <ion-label color="primary">{{ setHostText }}</ion-label>
         </ion-item>
+        <!-- END Add new host button -->
 
-        <div class="sticky-button-container">
+        <div class="proceed-button-container">
           <ion-label *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) < 11"
                      color="primary">{{ (players$ | async).length + (!!(host$ | async) ? 1 : 0) }}/11</ion-label>
 
@@ -62,30 +67,7 @@
       <div class="app-divider"></div>
     </div>
 
-    <ion-item *ngFor="let player of (players$ | async); let i = index"
-              lines="none">
-      <ion-avatar class="with-badge"
-                  slot="start">
-        <ion-badge class="avatar-badge">{{ i + 1 }}</ion-badge>
-        <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
-      </ion-avatar>
-      <ion-label>
-        <h3>{{ player.nickname }}</h3>
-        <p>{{ player.isGuest ? guestText : authorizedUserText }}</p>
-      </ion-label>
-      <ion-icon slot="end"
-                name="close"
-                color="medium"
-                (click)="removePlayer(player)"></ion-icon>
-    </ion-item>
-    <ion-item *ngIf="(players$ | async)?.length < 10"
-              class="add-new"
-              lines="none"
-              (click)="presentPlayerModal()">
-      <ion-icon slot="start"
-                name="add"
-                color="primary"></ion-icon>
-      <ion-label color="primary">{{ addNewPlayerText }}</ion-label>
-    </ion-item>
+    <app-players-list></app-players-list>
+
   </ion-list>
 </ion-content>
