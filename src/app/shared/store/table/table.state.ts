@@ -1,7 +1,17 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { shuffle } from 'lodash';
+
 import { Player } from '@shared/models/player.model';
-import lodash from 'lodash';
-import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from './table.actions';
+import { Role } from '@shared/models/role.enum';
+import { Day } from '@shared/models/table/day.model';
+import {
+  AddPlayer,
+  RemovePlayer,
+  SetHost,
+  ShufflePlayers,
+  GiveRoles,
+} from './table.player.actions';
+import { StartNewDay } from './table.day.actions';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', user: { id: 'voland' } }),
@@ -16,9 +26,22 @@ const dummyPlayers = [
   new Player({ nickname: 'Углическая', user: { id: 'uglicheskaya' } }),
 ];
 const dummyHost = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
+const rolesArray = [
+  Role.DON,
+  Role.SHERIFF,
+  Role.MAFIA,
+  Role.MAFIA,
+  Role.CITIZEN,
+  Role.CITIZEN,
+  Role.CITIZEN,
+  Role.CITIZEN,
+  Role.CITIZEN,
+  Role.CITIZEN
+];
 export interface TableStateModel {
   host: Player;
   players: Player[];
+  days: Day[];
 }
 
 @State<TableStateModel>({
@@ -26,6 +49,7 @@ export interface TableStateModel {
   defaults: {
     host: dummyHost,
     players: dummyPlayers,
+    days: [],
   }
 })
 export class TableState {
@@ -41,6 +65,36 @@ export class TableState {
   @Selector()
   static getPlayers(state: TableStateModel) {
     return state.players;
+  }
+
+  @Selector()
+  static getDays(state: TableStateModel) {
+    return state.days;
+  }
+
+  @Selector()
+  static getCurrentDay(state: TableStateModel) {
+    return state.days[state.days.length - 1];
+  }
+
+  @Action(GiveRoles)
+  giveRoles({ patchState, getState }: StateContext<TableStateModel>) {
+    const { players } = getState();
+    const roles = shuffle([...rolesArray]);
+
+    for (const [index, player] of players.entries()) {
+      player.role = roles[index];
+    }
+
+    return patchState({ players });
+  }
+
+  @Action(StartNewDay)
+  startNewDay({ patchState, getState }: StateContext<TableStateModel>) {
+    const { days } = getState();
+    days.push(new Day());
+
+    return patchState({ days });
   }
 
   @Action(SetHost)
@@ -74,10 +128,10 @@ export class TableState {
   }
 
   @Action(ShufflePlayers)
-  shufflePlayers({patchState, getState}: StateContext<TableStateModel>) {
+  shufflePlayers({ patchState, getState }: StateContext<TableStateModel>) {
     const { players } = getState();
 
-    return patchState({ players: lodash.shuffle(players) });
+    return patchState({ players: shuffle(players) });
   }
 
   @Action(AddPlayer)

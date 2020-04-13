@@ -17,9 +17,6 @@ import { SharedModule } from '@shared/shared.module';
   declarations: [
     PreparationComponent,
     PreparationModalComponent,
-  ],
-  entryComponents: [
-    PreparationModalComponent
   ]
 })
 export class PreparationModule { }

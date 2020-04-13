@@ -27,6 +27,7 @@
     "@ionic/angular": "^5.0.0",
     "@ngxs/logger-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
+    "@types/lodash": "^4.14.149",
     "core-js": "^2.5.4",
     "firebase": "^7.14.0",
     "lodash": "^4.17.15",

@@ -1,14 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ toolbarTitle }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outlined"
+                  (click)="close()">
+        <ion-icon slot="icon-only"
+                  name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]=true>
   <ion-list class="cards-list">
     <ion-item *ngFor="let player of players" lines="none" (click)="choosePlayer(player)">
       <ion-avatar slot="start">
-        <img [src]="player.user?.avatar ? player.user.avatar : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'">
+        <img [src]="player.user?.avatar ? player.user.avatar : defaultAvatar">
       </ion-avatar>
       <ion-label>
         <h3>{{ player.nickname }}</h3>
       </ion-label>
     </ion-item>
-    <ion-item *ngIf="players.length < 10" class="add-new" lines="none" (click)="choosePlayer()">
+    
+    <ion-item class="add-new" lines="none" (click)="choosePlayer()">
       <ion-icon slot="start" name="add" color="primary"></ion-icon>
       <ion-label color="primary">{{ addGuestText }}</ion-label>
     </ion-item>

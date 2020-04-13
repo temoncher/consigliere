@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Player } from '@shared/models/player.model';
 import { ModalController } from '@ionic/angular';
 
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+
 @Component({
   selector: 'app-preparation-modal',
   templateUrl: './preparation-modal.component.html',
   styleUrls: ['./preparation-modal.component.scss'],
 })
 export class PreparationModalComponent implements OnInit {
+  defaultAvatar = defaultAvatarSrc;
   addGuestText = 'Добавить гостя';
+  toolbarTitle = 'Выбор игрока';
   players: Player[] = [];
 
   constructor(private modalController: ModalController) { }
