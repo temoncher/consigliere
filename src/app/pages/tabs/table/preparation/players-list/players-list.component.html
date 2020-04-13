@@ -1,0 +1,28 @@
+<!-- Add new player button-->
+<ion-item *ngIf="(players$ | async)?.length < 10"
+          class="add-new"
+          lines="none"
+          (click)="presentPlayerModal()">
+  <ion-icon slot="start"
+            name="add"
+            color="primary"></ion-icon>
+  <ion-label color="primary">{{ addNewPlayerText }}</ion-label>
+</ion-item>
+<!-- END Add new player button-->
+
+<ion-item *ngFor="let player of (players$ | async); let i = index"
+          lines="none">
+  <ion-avatar class="with-badge"
+              slot="start">
+    <ion-badge class="avatar-badge">{{ i + 1 }}</ion-badge>
+    <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
+  </ion-avatar>
+  <ion-label>
+    <h3>{{ player.nickname }}</h3>
+    <p>{{ player.isGuest ? guestText : authorizedUserText }}</p>
+  </ion-label>
+  <ion-icon slot="end"
+            name="close"
+            color="medium"
+            (click)="removePlayer(player)"></ion-icon>
+</ion-item>
