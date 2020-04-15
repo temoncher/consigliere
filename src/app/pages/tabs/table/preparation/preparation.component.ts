@@ -53,7 +53,7 @@ export class PreparationComponent implements OnInit {
     await this.awaitHostModalResult(modal);
   }
 
-  private async awaitHostModalResult(modal) {
+  private async awaitHostModalResult(modal: HTMLIonModalElement) {
     const { data: player, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {

@@ -1,0 +1,63 @@
+<ion-card class="player-card">
+  <ion-badge class="player-card__number-badge"
+             color="primary">
+    {{ playerNumber + 1 }}
+  </ion-badge>
+  <ion-card-header class="player-card__header">
+    <ion-card-title>{{ player.nickname }}</ion-card-title>
+  </ion-card-header>
+  <ion-icon class="player-card__menu-button"
+            (click)="presentPopover($event)"
+            name="ellipsis-vertical"></ion-icon>
+
+  <ion-card-content>
+    <div class="progress-container">
+      <round-progress class="progress-circle"
+                      (click)="switchTimer()"
+                      [ngStyle]="{ 'background-image' : 'url(' + defaultAvatar + ')' }"
+                      [current]="roundedTime"
+                      [max]="time"
+                      [color]="colors[timeColor]"
+                      [rounded]="true"
+                      [responsive]="true"
+                      [duration]="500">
+      </round-progress>
+      <ion-badge class="progress-badge"
+                 [color]="timeColor">
+        {{ roundedTime }}
+      </ion-badge>
+    </div>
+
+    <div class="ion-text-center ion-padding">
+      <ion-label>{{ proposedPlayerText }}</ion-label>
+    </div>
+
+    <ion-buttons class="ion-justify-content-between">
+
+      <ion-button (click)="!proposedPlayer ? proposePlayer() : withdrawPlayer()"
+                  [disabled]="isSpeechEnded"
+                  fill="clear"
+                  size="small">
+        <ion-icon slot="icon-only"
+                  [color]="timeColor"
+                  [name]="!proposedPlayer ? 'thumbs-up' : 'arrow-undo'">
+        </ion-icon>
+      </ion-button>
+
+      <ion-button (click)="endPlayerSpeech()"
+                  [disabled]="isSpeechEnded"
+                  fill="clear"
+                  size="small">
+        <ion-icon slot="icon-only"
+                  [color]="timeColor"
+                  name="time">
+        </ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-card-content>
+  <div *ngIf="player.isDead"
+       class="full-parent-overlay grid-content-center">
+    <h1>{{ deadPlayerText }}</h1>
+  </div>
+</ion-card>

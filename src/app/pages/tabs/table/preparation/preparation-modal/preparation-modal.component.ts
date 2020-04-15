@@ -32,13 +32,12 @@ export class PreparationModalComponent implements OnInit {
     ];
   }
 
-  async choosePlayer(player?: Player) {
+  choosePlayer(player?: Player) {
     const role = player ? 'authenticated' : 'guest';
-    await this.modalController.dismiss(player, role);
+    this.modalController.dismiss(player, role);
   }
 
-  async close() {
-    await this.modalController.dismiss(undefined, 'cancel');
+  close() {
+    this.modalController.dismiss(undefined, 'cancel');
   }
-
 }

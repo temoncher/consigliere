@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['table.component.scss']
 })
 export class TableComponent {
-  constructor() {}
+  newGameText = 'Открыть стол';
+  continueText = 'Продолжить';
+
+  constructor() { }
 }

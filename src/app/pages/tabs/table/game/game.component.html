@@ -5,5 +5,5 @@
 </ion-header>
 
 <ion-content>
-
+  <app-player-card *ngFor="let player of (players$ | async)" [player]="player"></app-player-card>
 </ion-content>
