@@ -1,0 +1,10 @@
+<ion-list>
+  <ion-item button
+            (click)="chooseOption('refresh')">{{ refreshText }}</ion-item>
+  <ion-item button
+            (click)="chooseOption('fall')">{{ fallText }}</ion-item>
+  <ion-item button
+            lines="none"
+            detail="false"
+            (click)="dismissPopover()">{{ closeText }}</ion-item>
+</ion-list>

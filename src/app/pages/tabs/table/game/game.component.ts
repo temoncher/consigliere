@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { TableState } from '@shared/store/table/table.state';
 import { Day } from '@shared/models/table/day.model';
 import { StartNewDay } from '@shared/store/table/table.day.actions';
-import { ModalController } from '@ionic/angular';
+import { Player } from '@shared/models/player.model';
 
 @Component({
   selector: 'app-game',
@@ -13,8 +14,9 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  @Select(TableState.getCurrentDay) day$: Observable<Day>;
   @Select(TableState.getDays) days$: Observable<Day[]>;
+  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+
   dayText = 'День';
 
   constructor(
@@ -25,4 +27,8 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new StartNewDay());
   }
+
+  endSpeech() {}
+  proposePlayer() {}
+  withdrawPlayer() {}
 }

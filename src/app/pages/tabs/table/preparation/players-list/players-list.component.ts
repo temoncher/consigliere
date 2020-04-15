@@ -52,7 +52,7 @@ export class PlayersListComponent implements OnInit {
     await this.awaitPlayerModalResult(modal);
   }
 
-  private async awaitPlayerModalResult(modal) {
+  private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
     const { data: player, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {
