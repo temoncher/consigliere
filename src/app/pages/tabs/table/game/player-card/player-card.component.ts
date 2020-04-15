@@ -1,23 +1,29 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { Select, Store } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayerMenuComponent } from '../player-menu/player-menu.component';
-import { PopoverController } from '@ionic/angular';
-import { Select } from '@ngxs/store';
 import { TableState } from '@shared/store/table/table.state';
 import { Observable, timer, Subscription } from 'rxjs';
 import { Day } from '@shared/models/table/day.model';
+import { fadeSlide } from '@shared/animations';
+import { EndPlayerSpeech } from '@shared/store/table/table.day.actions';
 
 @Component({
   selector: 'app-player-card',
   templateUrl: './player-card.component.html',
   styleUrls: ['./player-card.component.scss'],
+  animations: [fadeSlide]
 })
 export class PlayerCardComponent implements OnInit {
   @Input() player: Player;
+  @Input() isBeforeVoteSpeech = false;
   @Input() playerNumber = 0;
   @Input() time = 60;
   @Input() proposedPlayer: Player;
+
+  @Output() speechEnd = new EventEmitter();
 
   @Select(TableState.getCurrentDay) day$: Observable<Day>;
 
@@ -54,7 +60,10 @@ export class PlayerCardComponent implements OnInit {
     return 'primary';
   }
 
-  constructor(private popoverController: PopoverController) { }
+  constructor(
+    private store: Store,
+    private popoverController: PopoverController
+  ) { }
 
   ngOnInit() {
     this.timeLeft = this.time * 1000;
@@ -80,7 +89,12 @@ export class PlayerCardComponent implements OnInit {
   }
 
   proposePlayer() {
-    this.proposedPlayer = new Player({ nickname: 'Jared' });
+    this.proposedPlayer = new Player(
+      {
+        number: 1,
+        nickname: 'Jared',
+        user: { id: 'jared' },
+      });
   }
 
   withdrawPlayer() {
@@ -90,6 +104,8 @@ export class PlayerCardComponent implements OnInit {
   endPlayerSpeech() {
     this.pauseTimer();
     this.isSpeechEnded = true;
+    this.store.dispatch(new EndPlayerSpeech(this.player.user.id, this.timeLeft, this.proposedPlayer?.user?.id));
+    this.speechEnd.emit(this.player.user.id);
   }
 
   private async awaitMenuOptionResult(popover: HTMLIonPopoverElement) {

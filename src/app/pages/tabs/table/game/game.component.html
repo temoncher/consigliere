@@ -5,5 +5,31 @@
 </ion-header>
 
 <ion-content>
-  <app-player-card *ngFor="let player of (players$ | async)" [player]="player"></app-player-card>
+  <ion-slides #numberSlider
+              [options]="firstSliderConfig">
+
+    <ion-slide *ngFor="let player of (players$ | async); let i = index">
+      <ion-card class="small-card"
+                (click)="navigateToSlide(i)">
+        <ion-card-content>{{ i + 1 }}</ion-card-content>
+        <!-- <div *ngIf="player.quitPhase || (player.quitPhase === 0)"
+						 class="classic-overlay">
+					<h1>{{ (player.quitPhase % 2) === 0 ? player.quitPhase / 2 + 'd' : (player.quitPhase / 2 + 0.5) + 'n' }}
+					</h1>
+				</div> -->
+      </ion-card>
+    </ion-slide>
+
+  </ion-slides>
+
+  <ion-slides #playerSlider
+              class="playerSlider"
+              [options]="secondSliderConfig">
+
+    <ion-slide *ngFor="let player of (players$ | async); let i = index">
+      <app-player-card [playerNumber]="i"
+                       [player]="player"
+                       (speechEnd)="endSpeech($event)"></app-player-card>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

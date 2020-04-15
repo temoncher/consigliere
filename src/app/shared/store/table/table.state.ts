@@ -11,7 +11,7 @@ import {
   ShufflePlayers,
   GiveRoles,
 } from './table.player.actions';
-import { StartNewDay } from './table.day.actions';
+import { StartNewDay, EndPlayerSpeech, VoteForCandidate } from './table.day.actions';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', user: { id: 'voland' } }),
@@ -40,6 +40,7 @@ const rolesArray = [
 ];
 export interface TableStateModel {
   host: Player;
+  falls: Map<string, number>; // <playerId, number of falls>
   players: Player[];
   days: Day[];
 }
@@ -47,6 +48,7 @@ export interface TableStateModel {
 @State<TableStateModel>({
   name: 'table',
   defaults: {
+    falls: new Map<string, number>(),
     host: dummyHost,
     players: dummyPlayers,
     days: [],
@@ -76,7 +78,64 @@ export class TableState {
   static getCurrentDay(state: TableStateModel) {
     return state.days[state.days.length - 1];
   }
+  // #region Day actions
+  @Action(StartNewDay)
+  startNewDay({ patchState, getState }: StateContext<TableStateModel>) {
+    const { days } = getState();
+    days.push(new Day());
 
+    return patchState({ days });
+  }
+
+  @Action(EndPlayerSpeech)
+  endPlayerSpeech(
+    { patchState, getState }: StateContext<TableStateModel>,
+    {
+      playerId,
+      timeLeft,
+      proposedPlayerId,
+    }: EndPlayerSpeech
+  ) {
+    const { days } = getState();
+    const currentDay = days[days.length - 1];
+    currentDay.timers[playerId] = timeLeft;
+    if (!currentDay.proposedPlayers.includes(proposedPlayerId)) {
+      currentDay.proposedPlayers.push(proposedPlayerId);
+    }
+
+    return patchState({ days });
+  }
+
+  @Action(VoteForCandidate)
+  voteForPerson(
+    { patchState, getState }: StateContext<TableStateModel>,
+    {
+      playerIds,
+      proposedPlayerId,
+    }: VoteForCandidate
+  ) {
+    const { days } = getState();
+    const currentDay = days[days.length - 1];
+
+    if (proposedPlayerId) {
+      if (!currentDay.votes[0]) {
+        currentDay.votes.push(new Map<string, string[]>());
+      }
+
+      const vote = currentDay.votes[0];
+
+      for (const votedPlayers of vote.values()) {
+        votedPlayers.filter((votedPlayerId) => playerIds.includes(votedPlayerId));
+      }
+
+      vote[proposedPlayerId] = playerIds;
+    }
+
+    return patchState({ days });
+  }
+  // #endregion
+
+  //#region Player actions
   @Action(GiveRoles)
   giveRoles({ patchState, getState }: StateContext<TableStateModel>) {
     const { players } = getState();
@@ -87,14 +146,6 @@ export class TableState {
     }
 
     return patchState({ players });
-  }
-
-  @Action(StartNewDay)
-  startNewDay({ patchState, getState }: StateContext<TableStateModel>) {
-    const { days } = getState();
-    days.push(new Day());
-
-    return patchState({ days });
   }
 
   @Action(SetHost)
@@ -172,4 +223,5 @@ export class TableState {
 
     patchState({ players: newPlayers });
   }
+  // #endregion
 }

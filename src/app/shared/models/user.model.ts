@@ -1,8 +1,8 @@
 export class User {
   id: string;
-  avatar: string;
+  avatar?: string;
 
-  constructor(user) {
+  constructor(user: any) {
     this.id = user.id;
     this.avatar = user.avatar;
   }

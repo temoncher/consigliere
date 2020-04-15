@@ -27,8 +27,10 @@
 
 /* Custom styles */
 @import "./theme/variables.scss";
+@import "./theme/clip-buttons.scss";
+@import "./theme/cards.scss";
+@import "./theme/colors.scss";
 @import "./theme/custom-variables.scss";
-@import "./theme/cards-list.scss";
 @import "./theme/avatars.scss";
 
 .app-divider {

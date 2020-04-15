@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController, IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -14,9 +14,20 @@ import { Player } from '@shared/models/player.model';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
+  @ViewChild('numberSlider') numberSlider: IonSlides;
+  @ViewChild('playerSlider') playerSlider: IonSlides;
+
   @Select(TableState.getDays) days$: Observable<Day[]>;
   @Select(TableState.getPlayers) players$: Observable<Player[]>;
-
+  firstSliderConfig = {
+    slidesPerView: 5.5,
+    centeredSlides: true
+  };
+  secondSliderConfig = {
+    spaceBetween: 0,
+    centeredSlides: true,
+    slidesPerView: 1.4
+  };
   dayText = 'День';
 
   constructor(
@@ -28,7 +39,22 @@ export class GameComponent implements OnInit {
     this.store.dispatch(new StartNewDay());
   }
 
-  endSpeech() {}
-  proposePlayer() {}
-  withdrawPlayer() {}
+  navigateToSlide(index: number) {
+    this.playerSlider.slideTo(index);
+    this.numberSlider.slideTo(index);
+  }
+
+  endSpeech(playerId: string) {
+    const players = this.store.selectSnapshot<Player[]>(TableState.getPlayers);
+    const finishedPlayerIndex = players.findIndex((player) => player.user.id === playerId);
+
+    if (finishedPlayerIndex < players.length - 1) {
+      const day = this.store.selectSnapshot<Day>(TableState.getCurrentDay);
+      const slideIndex = players.findIndex((player, index) => index > finishedPlayerIndex && !player.isDead && !day.timers[player.user.id]);
+      this.navigateToSlide(slideIndex);
+      return;
+    }
+  }
+  proposePlayer() { }
+  withdrawPlayer() { }
 }

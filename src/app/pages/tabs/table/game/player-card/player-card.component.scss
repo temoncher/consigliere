@@ -2,50 +2,47 @@
 @import "~src/theme/variables.scss";
 
 .player-card {
+  min-width: 59.5vmin;
   max-width: 59.5vmin;
+  margin-bottom: 40px;
+  overflow: initial;
 
   &__header {
     text-align: center;
     padding-bottom: 0;
+
+    &__title {
+      font-size: 1.2rem;
+    }
   }
 
-  &__number-badge {
-    position: absolute;
-    top: 0;
-    padding: 3px 8px;
-
-    border-radius: var(--app-border-radius) 0;
-    font-size: 1.8rem;
-  }
-
-  &__menu-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 3px 1px;
-
-    border-radius: 0 var(--app-border-radius);
-    background-color: var(--ion-color-primary);
-    font-size: 1.8rem;
-    color: white;
+  .menu-button {
+    padding: 6px 0;
   }
 
   .progress-container {
     position: relative;
+    padding-bottom: 24px;
+
+    .progress-circle {
+      background-size: contain;
+      border-radius: 100%;
+    }
 
     .progress-badge {
       position: absolute;
       left: 70%;
-      top: 75%;
+      top: 70%;
 
       min-width: 12.8px;
-      padding: 3px 8px;
+      padding: 4px 8px;
       font-size: 1.8rem;
     }
   }
 
-  .progress-circle {
-    background-size: contain;
-    border-radius: 100%;
+  .proposed-player-card {
+    position: absolute;
+    bottom: -36px;
+    left: 12px;
   }
 }
