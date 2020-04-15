@@ -1,0 +1,42 @@
+@import "./custom-variables.scss";
+
+.clip-button {
+  position: absolute;
+  display: grid;
+  place-content: center;
+  font-size: 1.8rem;
+  padding: 4px 8px;
+
+  &.top-left {
+    top: 0;
+    left: 0;
+
+    border-radius: var(--app-border-radius) 0;
+  }
+
+  &.top-right {
+    top: 0;
+    right: 0;
+
+    border-radius: 0 var(--app-border-radius);
+  }
+
+  &.bottom-right {
+    bottom: 0;
+    right: 0;
+
+    border-radius: var(--app-border-radius) 0;
+  }
+
+  &.bottom-left {
+    bottom: 0;
+    left: 0;
+
+    border-radius: 0 var(--app-border-radius);
+  }
+
+  &.text-only {
+    padding: 4px 8px;
+    font-weight: bold;
+  }
+}

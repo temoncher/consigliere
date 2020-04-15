@@ -1,6 +1,23 @@
 @import "./custom-variables.scss";
 @import "./variables.scss";
 
+ion-card.small-card {
+  display: grid;
+  place-content: center;
+
+  width: 12.8vmin;
+  max-width: 60px;
+  height: 19vmin;
+  max-height: 90px;
+  margin-left: 0;
+  margin-right: 0;
+
+  ion-card-content {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
+
 ion-list.cards-list {
   ion-item {
     margin: 8px;
