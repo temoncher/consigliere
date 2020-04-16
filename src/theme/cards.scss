@@ -18,6 +18,12 @@ ion-card.small-card {
   }
 }
 
+ion-card.large-card {
+  min-width: 59.5vmin;
+  max-width: 59.5vmin;
+  height: 80vmin;
+}
+
 ion-list.cards-list {
   ion-item {
     margin: 8px;

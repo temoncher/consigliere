@@ -1,22 +1,29 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ dayText }} {{ (days$ | async).length - 1 }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outlined">
+        <ion-icon slot="icon-only"
+                  color="primary"
+                  name="moon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-slides #numberSlider
-              [options]="firstSliderConfig">
+              [options]="numberSliderConfig">
 
     <ion-slide *ngFor="let player of (players$ | async); let i = index">
       <ion-card class="small-card"
                 (click)="navigateToSlide(i)">
         <ion-card-content>{{ i + 1 }}</ion-card-content>
-        <!-- <div *ngIf="player.quitPhase || (player.quitPhase === 0)"
-						 class="classic-overlay">
-					<h1>{{ (player.quitPhase % 2) === 0 ? player.quitPhase / 2 + 'd' : (player.quitPhase / 2 + 0.5) + 'n' }}
-					</h1>
-				</div> -->
+        <div *ngIf="player.quitPhase"
+             class="full-parent-overlay grid-content-center">
+          <!-- TODO: Rework this -->
+          <h1>{{ player.quitPhase.number + player.quitPhase.stage === 'Night' ? 'н' : 'д' }}</h1>
+        </div>
       </ion-card>
     </ion-slide>
 
@@ -24,11 +31,10 @@
 
   <ion-slides #playerSlider
               class="playerSlider"
-              [options]="secondSliderConfig">
+              [options]="playerSliderConfig">
 
-    <ion-slide *ngFor="let player of (players$ | async); let i = index">
-      <app-player-card [playerNumber]="i"
-                       [player]="player"
+    <ion-slide *ngFor="let player of (players$ | async)">
+      <app-player-card [player]="player"
                        (speechEnd)="endSpeech($event)"></app-player-card>
     </ion-slide>
   </ion-slides>

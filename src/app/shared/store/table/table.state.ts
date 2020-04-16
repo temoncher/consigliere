@@ -3,7 +3,7 @@ import { shuffle } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
-import { Day } from '@shared/models/table/day.model';
+import { Day } from '@shared/models/day.model';
 import {
   AddPlayer,
   RemovePlayer,
@@ -11,19 +11,24 @@ import {
   ShufflePlayers,
   GiveRoles,
 } from './table.player.actions';
-import { StartNewDay, EndPlayerSpeech, VoteForCandidate } from './table.day.actions';
+import {
+  StartNewDay,
+  EndPlayerSpeech,
+  VoteForCandidate,
+  ResetPlayer,
+} from './table.day.actions';
 
 const dummyPlayers = [
-  new Player({ nickname: 'Воланд', user: { id: 'voland' } }),
-  new Player({ nickname: 'Cabby', user: { id: 'cabby' } }),
-  new Player({ nickname: 'Булочка', user: { id: 'bulochka' } }),
-  new Player({ nickname: 'Краснова', user: { id: 'krasnova' } }),
-  new Player({ nickname: 'Олежа', user: { id: 'olega' } }),
-  new Player({ nickname: 'Маффин', user: { id: 'maffin' } }),
-  new Player({ nickname: 'Девяткин', user: { id: 'devyatkin' } }),
-  new Player({ nickname: 'Одинаковый', user: { id: 'odynakoviy' } }),
-  new Player({ nickname: 'Люба', user: { id: 'lyba' } }),
-  new Player({ nickname: 'Углическая', user: { id: 'uglicheskaya' } }),
+  new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
+  new Player({ nickname: 'Cabby', number: 2, user: { id: 'cabby' } }),
+  new Player({ nickname: 'Булочка', number: 3, user: { id: 'bulochka' } }),
+  new Player({ nickname: 'Краснова', number: 4, user: { id: 'krasnova' } }),
+  new Player({ nickname: 'Олежа', number: 5, user: { id: 'olega' } }),
+  new Player({ nickname: 'Маффин', number: 6, user: { id: 'maffin' } }),
+  new Player({ nickname: 'Девяткин', number: 7, user: { id: 'devyatkin' } }),
+  new Player({ nickname: 'Одинаковый', number: 8, user: { id: 'odynakoviy' } }),
+  new Player({ nickname: 'Люба', number: 9, user: { id: 'lyba' } }),
+  new Player({ nickname: 'Углическая', number: 10, user: { id: 'uglicheskaya' } }),
 ];
 const dummyHost = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
 const rolesArray = [
@@ -78,6 +83,17 @@ export class TableState {
   static getCurrentDay(state: TableStateModel) {
     return state.days[state.days.length - 1];
   }
+
+  @Selector()
+  static getSheriff(state: TableStateModel) {
+    return state.players.find((player) => player.role === Role.SHERIFF);
+  }
+
+  @Selector()
+  static getDon(state: TableStateModel) {
+    return state.players.find((player) => player.role === Role.DON);
+  }
+
   // #region Day actions
   @Action(StartNewDay)
   startNewDay({ patchState, getState }: StateContext<TableStateModel>) {
@@ -98,9 +114,11 @@ export class TableState {
   ) {
     const { days } = getState();
     const currentDay = days[days.length - 1];
+
     currentDay.timers[playerId] = timeLeft;
-    if (!currentDay.proposedPlayers.includes(proposedPlayerId)) {
-      currentDay.proposedPlayers.push(proposedPlayerId);
+
+    if (!currentDay.proposedPlayers.has(proposedPlayerId)) {
+      currentDay.proposedPlayers[proposedPlayerId] = playerId;
     }
 
     return patchState({ days });
@@ -129,6 +147,21 @@ export class TableState {
       }
 
       vote[proposedPlayerId] = playerIds;
+    }
+
+    return patchState({ days });
+  }
+
+  @Action(ResetPlayer)
+  resetPlayer({ patchState, getState }: StateContext<TableStateModel>, { playerId }: ResetPlayer) {
+    const { days } = getState();
+    const currentDay = days[days.length - 1];
+
+    currentDay.timers[playerId] = null;
+    for (const [candidateId, votingPlayerId] of currentDay.proposedPlayers) {
+      if (votingPlayerId === playerId) {
+        currentDay.proposedPlayers.delete(candidateId);
+      }
     }
 
     return patchState({ days });
@@ -166,23 +199,15 @@ export class TableState {
       throw new Error(this.isPlayerAlreadyPresentText);
     }
 
-    const guestTemplate = {
-      ...player,
-      isGuest: true,
-      user: {
-        id: new Date().getTime(),
-      }
-    };
-    const newHost = player.user?.id ? player : new Player(guestTemplate);
-
-    return patchState({ host: newHost });
+    return patchState({ host: player });
   }
 
   @Action(ShufflePlayers)
   shufflePlayers({ patchState, getState }: StateContext<TableStateModel>) {
     const { players } = getState();
+    const newPlayers = shuffle(players).map((player, index) => new Player({ ...player, number: index + 1 }));
 
-    return patchState({ players: shuffle(players) });
+    return patchState({ players: newPlayers });
   }
 
   @Action(AddPlayer)
@@ -203,14 +228,8 @@ export class TableState {
       throw new Error(this.isPlayerAlreadyPresentText);
     }
 
-    const guestTemplate = {
-      ...player,
-      isGuest: true,
-      user: {
-        id: new Date().getTime(),
-      }
-    };
-    const newPlayer = player.user?.id ? player : new Player(guestTemplate);
+    player.number = players.length;
+    const newPlayer = new Player({ ...player, number: players.length });
     const newPlayers = [...players, newPlayer];
 
     return patchState({ players: newPlayers });

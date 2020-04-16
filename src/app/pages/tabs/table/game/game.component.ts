@@ -4,9 +4,10 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { TableState } from '@shared/store/table/table.state';
-import { Day } from '@shared/models/table/day.model';
+import { Day } from '@shared/models/day.model';
 import { StartNewDay } from '@shared/store/table/table.day.actions';
 import { Player } from '@shared/models/player.model';
+import { FirstNightModalComponent } from './first-night-modal/first-night-modal.component';
 
 @Component({
   selector: 'app-game',
@@ -19,11 +20,11 @@ export class GameComponent implements OnInit {
 
   @Select(TableState.getDays) days$: Observable<Day[]>;
   @Select(TableState.getPlayers) players$: Observable<Player[]>;
-  firstSliderConfig = {
+  numberSliderConfig = {
     slidesPerView: 5.5,
     centeredSlides: true
   };
-  secondSliderConfig = {
+  playerSliderConfig = {
     spaceBetween: 0,
     centeredSlides: true,
     slidesPerView: 1.4
@@ -35,8 +36,15 @@ export class GameComponent implements OnInit {
     private modalController: ModalController,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.store.dispatch(new StartNewDay());
+
+    const firstNightModal = await this.modalController.create({
+      component: FirstNightModalComponent,
+      swipeToClose: true,
+    });
+
+    await firstNightModal.present();
   }
 
   navigateToSlide(index: number) {
@@ -50,7 +58,10 @@ export class GameComponent implements OnInit {
 
     if (finishedPlayerIndex < players.length - 1) {
       const day = this.store.selectSnapshot<Day>(TableState.getCurrentDay);
-      const slideIndex = players.findIndex((player, index) => index > finishedPlayerIndex && !player.isDead && !day.timers[player.user.id]);
+      const slideIndex = players.findIndex(
+        (player, index) => index > finishedPlayerIndex && !player.quitPhase && !day.timers[player.user.id]
+      );
+
       this.navigateToSlide(slideIndex);
       return;
     }

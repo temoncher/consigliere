@@ -1,0 +1,38 @@
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .role-card__content {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .player-card__header {
+    text-align: center;
+
+    &__title {
+      font-size: 1.2rem;
+    }
+  }
+
+  .progress-container {
+    position: relative;
+
+    .progress-circle {
+      background-size: contain;
+      border-radius: 100%;
+    }
+
+    .progress-badge {
+      position: absolute;
+      left: 75%;
+      top: 75%;
+
+      min-width: 12.8px;
+      padding: 4px 8px;
+      font-size: 1.8rem;
+    }
+  }
+}

@@ -8,6 +8,8 @@ import { RoundProgressModule } from 'angular-svg-round-progressbar';
 import { GameComponent } from './game.component';
 import { PlayerCardComponent } from './player-card/player-card.component';
 import { PlayerMenuComponent } from './player-menu/player-menu.component';
+import { NightModalComponent } from './night-modal/night-modal.component';
+import { FirstNightModalComponent } from './first-night-modal/first-night-modal.component';
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import { PlayerMenuComponent } from './player-menu/player-menu.component';
   declarations: [
     GameComponent,
     PlayerCardComponent,
-    PlayerMenuComponent
+    PlayerMenuComponent,
+    FirstNightModalComponent,
+    NightModalComponent,
   ],
 })
 export class GameModule { }

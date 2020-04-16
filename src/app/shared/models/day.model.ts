@@ -7,12 +7,12 @@ export class Day {
 
   // Day
   timers: Map<string, number>; // <playerId, timeLeft>
-  proposedPlayers: string[]; // playerIds
+  proposedPlayers: Map<string, string>; // <candidateId, playerId>
   votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
 
   constructor(day?: any) {
     this.timers = day?.timers || new Map<string, number>();
-    this.proposedPlayers = day?.proposedPlayers || [];
+    this.proposedPlayers = day?.proposedPlayers || new Map<string, string>();
     this.votes = day?.votes || [];
     this.kickedPlayer = day?.kickedPlayer;
     this.murderedPlayer = day?.murderedPlayer;
