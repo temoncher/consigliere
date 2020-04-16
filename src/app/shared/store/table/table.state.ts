@@ -10,7 +10,7 @@ import {
   SetHost,
   ShufflePlayers,
   GiveRoles,
-} from './table.player.actions';
+} from './table.preparation.actions';
 import {
   StartNewDay,
   EndPlayerSpeech,

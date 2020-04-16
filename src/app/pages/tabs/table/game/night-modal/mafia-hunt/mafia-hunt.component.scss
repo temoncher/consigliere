@@ -1,0 +1,29 @@
+.mafia-hunt {
+  position: relative;
+
+  .center-item {
+    height: 90%;
+    overflow: initial;
+
+    .mafia-cards-container {
+      position: absolute;
+      left: -5%;
+      bottom: -20%;
+
+      width: 110%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .skip-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  ion-card {
+    margin: 0;
+  }
+}

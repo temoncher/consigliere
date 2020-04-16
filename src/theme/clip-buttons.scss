@@ -4,8 +4,8 @@
   position: absolute;
   display: grid;
   place-content: center;
-  font-size: 1.8rem;
-  padding: 4px 8px;
+  font-size: 1.4rem;
+  font-weight: bold;
 
   &.top-left {
     top: 0;
@@ -36,7 +36,24 @@
   }
 
   &.text-only {
+    padding: 3px 6px;
+  }
+
+  .small-card & {
+    font-size: 0.7rem;
+    padding: 4px;
+
+    &.text-only {
+      padding: 2px 4px;
+    }
+  }
+
+  .player-card & {
+    font-size: 1.8rem;
     padding: 4px 8px;
-    font-weight: bold;
+
+    &.text-only {
+      padding: 4px 8px;
+    }
   }
 }

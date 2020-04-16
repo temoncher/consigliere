@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { StateReset } from 'ngxs-reset-plugin';
+import { TableState } from '@shared/store/table/table.state';
 
 @Component({
   selector: 'app-table',
@@ -9,5 +12,9 @@ export class TableComponent {
   newGameText = 'Открыть стол';
   continueText = 'Продолжить';
 
-  constructor() { }
+  constructor(private store: Store) { }
+
+  resetTableState() {
+    this.store.dispatch(new StateReset(TableState));
+  }
 }

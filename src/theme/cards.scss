@@ -1,6 +1,7 @@
 @import "./custom-variables.scss";
 @import "./variables.scss";
 
+// small card
 ion-card.small-card {
   display: grid;
   place-content: center;
@@ -18,11 +19,7 @@ ion-card.small-card {
   }
 }
 
-ion-card.large-card {
-  min-width: 59.5vmin;
-  max-width: 59.5vmin;
-  height: 80vmin;
-}
+// Cards list
 
 ion-list.cards-list {
   ion-item {
@@ -41,5 +38,37 @@ ion-list.cards-list {
   ion-label h3 {
     font-weight: bold;
     color: var(--ion-color-dark-tint);
+  }
+}
+
+// Large player card
+ion-card.large-card {
+  min-width: 59.5vmin;
+  max-width: 59.5vmin;
+  height: 80vmin;
+}
+
+.player-card {
+  min-width: 59.5vmin;
+  max-width: 59.5vmin;
+
+  &__header {
+    text-align: center;
+    padding-bottom: 0;
+
+    &__title {
+      font-size: 1.2rem;
+    }
+  }
+
+  &__content {
+    padding-top: 0;
+  }
+
+  &__avatar {
+    width: 100%;
+    height: auto;
+
+    padding: 16px;
   }
 }

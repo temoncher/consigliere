@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 
 import { environment } from '../environments/environment';
 import { SharedModule } from '@shared/shared.module';
@@ -31,6 +32,7 @@ const devModules = environment.production ? [] : [
     AppRoutingModule,
     SharedModule,
     NgxsModule.forRoot(ApplicationState),
+    NgxsResetPluginModule.forRoot(),
     devModules,
   ],
   providers: [

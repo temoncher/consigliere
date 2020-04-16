@@ -6,10 +6,9 @@ import { RouterModule } from '@angular/router';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
 import { GameComponent } from './game.component';
-import { PlayerCardComponent } from './player-card/player-card.component';
 import { PlayerMenuComponent } from './player-menu/player-menu.component';
-import { NightModalComponent } from './night-modal/night-modal.component';
-import { FirstNightModalComponent } from './first-night-modal/first-night-modal.component';
+import { NightModalModule } from './night-modal/night-modal.module';
+import { PlayerTimerComponent } from './player-timer/player-timer.component';
 
 @NgModule({
   imports: [
@@ -18,13 +17,12 @@ import { FirstNightModalComponent } from './first-night-modal/first-night-modal.
     SharedModule,
     RouterModule.forChild([{ path: '', component: GameComponent }]),
     RoundProgressModule,
+    NightModalModule,
   ],
   declarations: [
     GameComponent,
-    PlayerCardComponent,
+    PlayerTimerComponent,
     PlayerMenuComponent,
-    FirstNightModalComponent,
-    NightModalComponent,
   ],
 })
 export class GameModule { }

@@ -12,12 +12,12 @@ import { EndPlayerSpeech, ResetPlayer } from '@shared/store/table/table.day.acti
 import { colors } from '@shared/constants/colors';
 
 @Component({
-  selector: 'app-player-card',
-  templateUrl: './player-card.component.html',
-  styleUrls: ['./player-card.component.scss'],
+  selector: 'app-player-timer',
+  templateUrl: './player-timer.component.html',
+  styleUrls: ['./player-timer.component.scss'],
   animations: [fadeSlide]
 })
-export class PlayerCardComponent implements OnInit {
+export class PlayerTimerComponent implements OnInit {
   @Input() player: Player;
   @Input() isBeforeVoteSpeech = false;
   @Input() time = 60;

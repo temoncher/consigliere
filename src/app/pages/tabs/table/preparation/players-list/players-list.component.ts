@@ -6,7 +6,7 @@ import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
-import { AddPlayer, RemovePlayer } from '@shared/store/table/table.player.actions';
+import { AddPlayer, RemovePlayer } from '@shared/store/table/table.preparation.actions';
 import { catchError } from 'rxjs/operators';
 
 @Component({

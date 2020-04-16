@@ -1,3 +1,81 @@
-<p>
-  night-modal works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="outlined"
+                  [disabled]="stage === NightStages.MAFIA"
+                  (click)="previousStage()">
+        <ion-icon slot="icon-only"
+                  color="primary"
+                  name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>{{ toolbarTitle }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="outlined"
+                  (click)="nextStage()">
+        <ion-icon slot="icon-only"
+                  color="primary"
+                  [name]="stage === NightStages.SHERIFF ? 'sunny' : 'arrow-forward'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h1 class="ion-text-center text-color-dark">{{ currentStageText }}</h1>
+  <div class="modal-content">
+    <ng-container [ngSwitch]="stage">
+      <ng-container *ngSwitchCase="NightStages.MAFIA">
+        <div *ngIf="dayNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
+
+        <ng-template #giveRolesBlock>
+          <app-give-roles></app-give-roles>
+        </ng-template>
+
+        <ng-template #mafiaHuntBlock>
+          <app-mafia-hunt></app-mafia-hunt>
+        </ng-template>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="NightStages.DON">
+      </ng-container>
+
+      <ng-container *ngSwitchCase="NightStages.SHERIFF">
+        <ion-card class="large-card">
+
+          <div class="clip-button top-left"
+               [ngClass]="stage === NightStages.DON ? 'background-color-danger' : 'background-color-warning'">
+            <ion-icon class="text-color-dark-contrast"
+                      [name]="stage === NightStages.DON ? 'rose' : 'star'"></ion-icon>
+          </div>
+
+          <ion-card-header class="player-card__header">
+            <ion-card-title class="player-card__header__title text-color-dark">
+              {{ stage === NightStages.DON ? don.nickname : sheriff.nickname }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content class="player-card__content">
+            <div class="progress-container">
+              <round-progress class="progress-circle"
+                              (click)="switchTimer()"
+                              [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                              [current]="roundedTime"
+                              [max]="10"
+                              [color]="colors[stage === NightStages.DON ? 'danger' : 'warning']"
+                              [rounded]="true"
+                              [responsive]="true"
+                              [duration]="500">
+              </round-progress>
+              <ion-badge class="progress-badge text-color-dark-contrast"
+                         [color]="stage === NightStages.DON ? 'danger' : 'warning'">
+                {{ roundedTime }}
+              </ion-badge>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+    </ng-container>
+  </div>
+</ion-content>

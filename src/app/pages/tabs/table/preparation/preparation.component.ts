@@ -7,7 +7,7 @@ import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { TableState } from '@shared/store/table/table.state';
-import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from '@shared/store/table/table.player.actions';
+import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from '@shared/store/table/table.preparation.actions';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 
 @Component({

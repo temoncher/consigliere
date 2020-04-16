@@ -1,0 +1,36 @@
+<app-table-template class="mafia-hunt">
+  <app-small-player-card *ngFor="let player of (players$ | async)"
+                         [slot]="player.number"
+                         [player]="player"
+                         showRole="true"></app-small-player-card>
+
+  <ion-card slot="center"
+            class="center-item center-card">
+    <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
+      {{ players[currentPlayerIndex].number }}
+    </div>
+
+    <ion-card-header class="player-card__header">
+      <ion-card-title class="player-card__header__title text-color-dark">
+        {{ players[currentPlayerIndex].nickname }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content class="player-card__content">
+      <ion-avatar class="player-card__avatar">
+        <img [src]="players[currentPlayerIndex].user?.avatar ? players[currentPlayerIndex].user.avatar : defaultAvatar">
+      </ion-avatar>
+    </ion-card-content>
+
+    <div class="mafia-cards-container">
+      <app-small-player-card *ngFor="let mafiaPlayer of mafia"
+                             [player]="mafiaPlayer"
+                             showTeam="true"></app-small-player-card>
+    </div>
+  </ion-card>
+
+  <div slot="under"
+       class="skip-button-container">
+    <ion-button size="large">{{ skipButtonText }}</ion-button>
+  </div>
+</app-table-template>

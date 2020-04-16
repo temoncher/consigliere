@@ -6,6 +6,8 @@ import { ExploreContainerComponent } from '@shared/components/explore-container/
 import { AuthService } from '@shared/services/auth.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
+import { TableTemplateComponent } from './components/table-template/table-template.component';
+import { SmallPlayerCardComponent } from './components/small-player-card/small-player-card.component';
 
 @NgModule({
   imports: [
@@ -16,9 +18,13 @@ import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
   ],
   declarations: [
     ExploreContainerComponent,
+    TableTemplateComponent,
+    SmallPlayerCardComponent,
   ],
   exports: [
     ExploreContainerComponent,
+    TableTemplateComponent,
+    SmallPlayerCardComponent,
   ]
 })
 export class SharedModule {
