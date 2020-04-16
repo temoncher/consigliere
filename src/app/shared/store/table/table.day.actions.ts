@@ -19,3 +19,8 @@ export class VoteForCandidate {
     public proposedPlayerId: string,
   ) { }
 }
+
+export class ResetPlayer {
+  static readonly type = '[Table.Day] Reset player';
+  constructor(public playerId: string) { }
+}

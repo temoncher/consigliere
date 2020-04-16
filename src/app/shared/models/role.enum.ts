@@ -1,6 +1,6 @@
 export enum Role {
-  CITIZEN,
-  MAFIA,
-  SHERIFF,
-  DON,
+  MAFIA = 'Мафия',
+  CITIZEN = 'Мирный',
+  DON = 'Дон',
+  SHERIFF = 'Шериф',
 }

@@ -6,9 +6,10 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayerMenuComponent } from '../player-menu/player-menu.component';
 import { TableState } from '@shared/store/table/table.state';
 import { Observable, timer, Subscription } from 'rxjs';
-import { Day } from '@shared/models/table/day.model';
+import { Day } from '@shared/models/day.model';
 import { fadeSlide } from '@shared/animations';
-import { EndPlayerSpeech } from '@shared/store/table/table.day.actions';
+import { EndPlayerSpeech, ResetPlayer } from '@shared/store/table/table.day.actions';
+import { colors } from '@shared/constants/colors';
 
 @Component({
   selector: 'app-player-card',
@@ -19,7 +20,6 @@ import { EndPlayerSpeech } from '@shared/store/table/table.day.actions';
 export class PlayerCardComponent implements OnInit {
   @Input() player: Player;
   @Input() isBeforeVoteSpeech = false;
-  @Input() playerNumber = 0;
   @Input() time = 60;
   @Input() proposedPlayer: Player;
 
@@ -34,13 +34,7 @@ export class PlayerCardComponent implements OnInit {
   interval: Subscription = Subscription.EMPTY;
   isTimerPaused = true;
   isSpeechEnded = false;
-
-  defaultAvatar = defaultAvatarSrc;
-  colors = {
-    medium: '#989aa2',
-    primary: '#3880ff',
-    danger: '#f04141',
-  };
+  colors = colors;
 
   get proposedPlayerText() {
     return this.proposedPlayer ? `${this.alredyProposedPlayerText} ${this.proposedPlayer.nickname}` : this.didntProposeAnyPlayerText;
@@ -58,6 +52,10 @@ export class PlayerCardComponent implements OnInit {
       return 'danger';
     }
     return 'primary';
+  }
+
+  get playerAvatar() {
+    return this.player.user.avatar || defaultAvatarSrc;
   }
 
   constructor(
@@ -98,6 +96,9 @@ export class PlayerCardComponent implements OnInit {
   }
 
   withdrawPlayer() {
+    if (this.isSpeechEnded) {
+      return;
+    }
     this.proposedPlayer = null;
   }
 
@@ -141,6 +142,7 @@ export class PlayerCardComponent implements OnInit {
     this.timeLeft = this.time * 1000;
     this.proposedPlayer = null;
     this.isSpeechEnded = false;
+    this.store.dispatch(new ResetPlayer(this.player.user.id));
   }
 
   private assignFall() {
