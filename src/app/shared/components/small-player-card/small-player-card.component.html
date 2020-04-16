@@ -1,0 +1,16 @@
+<ion-card class="small-card"
+          [ngClass]="(showRole || showTeam) && ((player.role === Role.MAFIA) || (player.role === Role.DON)) ? 'background-color-dark' : ''">
+  <div *ngIf="showRole && ((player.role === Role.DON) || (player.role === Role.SHERIFF))"
+       class="clip-button top-left"
+       [ngClass]="(player.role === Role.DON) ? 'background-color-danger' : 'background-color-warning'">
+    <ion-icon class="text-color-dark-contrast"
+              [name]="(player.role === Role.DON) ? 'rose': 'star'"></ion-icon>
+  </div>
+
+  <ion-card-content>{{ player.number }}</ion-card-content>
+
+  <div *ngIf="player.quitPhase"
+       class="full-parent-overlay grid-content-center">
+    <h1 class="text-color-medium">{{ quitPhase }}</h1>
+  </div>
+</ion-card>

@@ -7,7 +7,7 @@ import { TableState } from '@shared/store/table/table.state';
 import { Day } from '@shared/models/day.model';
 import { StartNewDay } from '@shared/store/table/table.day.actions';
 import { Player } from '@shared/models/player.model';
-import { FirstNightModalComponent } from './first-night-modal/first-night-modal.component';
+import { NightModalComponent } from './night-modal/night-modal.component';
 
 @Component({
   selector: 'app-game',
@@ -20,6 +20,7 @@ export class GameComponent implements OnInit {
 
   @Select(TableState.getDays) days$: Observable<Day[]>;
   @Select(TableState.getPlayers) players$: Observable<Player[]>;
+
   numberSliderConfig = {
     slidesPerView: 5.5,
     centeredSlides: true
@@ -36,15 +37,10 @@ export class GameComponent implements OnInit {
     private modalController: ModalController,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.store.dispatch(new StartNewDay());
 
-    const firstNightModal = await this.modalController.create({
-      component: FirstNightModalComponent,
-      swipeToClose: true,
-    });
-
-    await firstNightModal.present();
+    this.presentNightModal();
   }
 
   navigateToSlide(index: number) {
@@ -68,4 +64,13 @@ export class GameComponent implements OnInit {
   }
   proposePlayer() { }
   withdrawPlayer() { }
+
+  async presentNightModal() {
+    const nightModal = await this.modalController.create({
+      component: NightModalComponent,
+      swipeToClose: true,
+    });
+
+    await nightModal.present();
+  }
 }

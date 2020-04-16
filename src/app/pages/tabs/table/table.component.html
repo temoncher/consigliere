@@ -5,6 +5,7 @@
                 routerDirection="forward">{{ continueText }}</ion-button>
     <ion-button shape="round"
                 routerLink="preparation"
-                routerDirection="forward">{{ newGameText }}</ion-button>
+                routerDirection="forward"
+                (click)="resetTableState()">{{ newGameText }}</ion-button>
   </div>
 </ion-content>

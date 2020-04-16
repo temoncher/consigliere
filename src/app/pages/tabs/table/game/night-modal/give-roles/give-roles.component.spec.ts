@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PlayerCardComponent } from './player-card.component';
+import { GiveRolesComponent } from './give-roles.component';
 
-describe('PlayerCardComponent', () => {
-  let component: PlayerCardComponent;
-  let fixture: ComponentFixture<PlayerCardComponent>;
+describe('GiveRolesComponent', () => {
+  let component: GiveRolesComponent;
+  let fixture: ComponentFixture<GiveRolesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerCardComponent ],
+      declarations: [ GiveRolesComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PlayerCardComponent);
+    fixture = TestBed.createComponent(GiveRolesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

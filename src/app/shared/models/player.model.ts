@@ -1,15 +1,6 @@
 import { User } from './user.model';
 import { Role } from './role.enum';
-
-enum DayTime {
-  DAY = 'Day',
-  Night = 'Night',
-}
-
-interface QuitPhase {
-  stage: DayTime;
-  number: number;
-}
+import { QuitPhase } from './quit-phase.interface';
 
 export class Player {
   nickname: string;

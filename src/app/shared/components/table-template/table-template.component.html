@@ -1,0 +1,14 @@
+<div class="table-template">
+  <div *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]"
+       [ngClass]="'slot-' + number">
+    <slot [name]="number"></slot>
+  </div>
+
+  <div class="slot-center">
+    <slot name="center"></slot>
+  </div>
+
+  <div class="slot-under">
+    <slot name="under"></slot>
+  </div>
+</div>

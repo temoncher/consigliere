@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { FirstNightModalComponent } from './first-night-modal.component';
+import { TableTemplateComponent } from './table-template.component';
 
-describe('FirstNightModalComponent', () => {
-  let component: FirstNightModalComponent;
-  let fixture: ComponentFixture<FirstNightModalComponent>;
+describe('TableTemplateComponent', () => {
+  let component: TableTemplateComponent;
+  let fixture: ComponentFixture<TableTemplateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FirstNightModalComponent ],
+      declarations: [ TableTemplateComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FirstNightModalComponent);
+    fixture = TestBed.createComponent(TableTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
