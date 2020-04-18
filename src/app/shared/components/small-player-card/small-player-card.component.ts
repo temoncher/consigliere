@@ -13,11 +13,38 @@ export class SmallPlayerCardComponent implements OnInit {
   @Input() player: Player;
   @Input() showRole = false;
   @Input() showTeam = false;
+  @Input() disableOverlay = false;
+  @Input() overlayCondition = null;
+  @Input() overlayText = null;
 
   Role = Role;
 
   get quitPhase() {
-    return `${this.player.quitPhase.number} + ${(this.player.quitPhase.stage === DayTime.NIGHT ? 'н' : 'д')}`;
+    if (this.player.quitPhase) {
+      return `${this.player.quitPhase.number} + ${(this.player.quitPhase.stage === DayTime.NIGHT ? 'н' : 'д')}`;
+    }
+
+    return '';
+  }
+
+  get isOverlayVisible() {
+    if (this.disableOverlay) {
+      return false;
+    }
+
+    if (this.overlayCondition !== null) {
+      return this.overlayCondition;
+    }
+
+    return this.quitPhase;
+  }
+
+  get computedOverlayText() {
+    if (this.overlayCondition === null) {
+      return this.quitPhase;
+    }
+
+    return this.overlayText;
   }
 
   constructor() { }

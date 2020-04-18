@@ -1,16 +1,16 @@
 <ion-card class="player-card">
-  <div class="clip-button top-left text-only text-color-dark-contrast"
-       [ngClass]="isSpeechEnded ? 'background-color-medium': 'background-color-primary'">
-    {{ player.number }}
-  </div>
   <ion-card-header class="player-card__header">
+    <div class="clip-button top-left text-only text-color-dark-contrast"
+         [ngClass]="isSpeechEnded ? 'background-color-medium': 'background-color-primary'">
+      {{ player.number }}
+    </div>
     <ion-card-title class="player-card__header__title text-color-dark">{{ player.nickname }}</ion-card-title>
+    <div class="menu-button clip-button top-right background-color-primary"
+         (click)="presentPlayerMenu($event)">
+      <ion-icon class="text-color-dark-contrast"
+                name="ellipsis-vertical"></ion-icon>
+    </div>
   </ion-card-header>
-  <div class="menu-button clip-button top-right background-color-primary"
-       (click)="presentPopover($event)">
-    <ion-icon class="text-color-dark-contrast"
-              name="ellipsis-vertical"></ion-icon>
-  </div>
 
   <ion-card-content class="player-card__content">
     <div class="progress-container">
@@ -32,7 +32,7 @@
 
     <ion-buttons class="ion-justify-content-between">
       <ion-button (click)="proposePlayer()"
-                  [disabled]="isSpeechEnded || !!proposedPlayer || isBeforeVoteSpeech">
+                  [disabled]="isSpeechEnded || !!(proposedPlayer$ | async)">
         <ion-icon slot="icon-only"
                   name="thumbs-up"
                   [color]="isSpeechEnded ? 'medium' : 'primary'">
@@ -52,10 +52,10 @@
 
   <ion-card #proposedPlayerCard
             @fadeSlide
-            *ngIf="proposedPlayer"
+            *ngIf="(proposedPlayer$ | async)"
             class="proposed-player-card small-card background-color-medium"
             (click)="withdrawPlayer()">
-    <ion-card-content class="text-color-dark-contrast">{{ proposedPlayer.number }}</ion-card-content>
+    <ion-card-content class="text-color-dark-contrast">{{ (proposedPlayer$ | async).number }}</ion-card-content>
   </ion-card>
 
   <div *ngIf="player.quitPhase"

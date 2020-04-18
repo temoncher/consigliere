@@ -1,6 +1,7 @@
 .give-roles {
   .role-card {
     height: 100%;
+    min-width: unset;
 
     &__content {
       font-size: 1.4rem;
@@ -10,16 +11,5 @@
         font-size: 0.8rem;
       }
     }
-  }
-
-  .show-all-roles-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
-
-  ion-card {
-    margin: 0;
   }
 }

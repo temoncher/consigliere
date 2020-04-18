@@ -3,13 +3,24 @@ export class StartNewDay {
   constructor() { }
 }
 
-export class EndPlayerSpeech {
-  static readonly type = '[Table.Day] End player speech';
+export class StopSpeech {
+  static readonly type = '[Table.Day] Stop player speech';
   constructor(
     public playerId: string,
     public timeLeft: number,
-    public proposedPlayerId: string,
   ) { }
+}
+
+export class ProposePlayer {
+  static readonly type = '[Table.Day] Propose player';
+  constructor(
+    public playerId: string,
+    public candidateId: string,
+  ) { }
+}
+export class WithdrawPlayer {
+  static readonly type = '[Table.Day] Withdraw player';
+  constructor(public playerId: string) { }
 }
 
 export class VoteForCandidate {

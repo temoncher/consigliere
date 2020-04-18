@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content>
-  <h1 class="ion-text-center text-color-dark">{{ currentStageText }}</h1>
+  <h1 class="ion-padding ion-text-center text-color-dark">{{ currentStageText }}</h1>
   <div class="modal-content">
     <ng-container [ngSwitch]="stage">
       <ng-container *ngSwitchCase="NightStages.MAFIA">
@@ -40,41 +40,59 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="NightStages.DON">
+        <div class="card-wrapper">
+          <ion-card class="don-card player-card">
+
+            <ion-card-header class="player-card__header">
+              <div class="clip-button top-left background-color-danger">
+                <ion-icon class="text-color-dark-contrast"
+                          name="rose"></ion-icon>
+              </div>
+              <ion-card-title class="player-card__header__title text-color-dark">{{ don.nickname }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content class="player-card__content">
+              <ion-avatar class="player-card__avatar">
+                <img [src]="don.user?.avatar ? don.user.avatar : defaultAvatar">
+              </ion-avatar>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </ng-container>
 
       <ng-container *ngSwitchCase="NightStages.SHERIFF">
-        <ion-card class="large-card">
+        <div class="card-wrapper">
+          <ion-card class="player-card">
 
-          <div class="clip-button top-left"
-               [ngClass]="stage === NightStages.DON ? 'background-color-danger' : 'background-color-warning'">
-            <ion-icon class="text-color-dark-contrast"
-                      [name]="stage === NightStages.DON ? 'rose' : 'star'"></ion-icon>
-          </div>
+            <ion-card-header class="player-card__header">
+              <div class="clip-button top-left background-color-warning">
+                <ion-icon class="text-color-dark-contrast"
+                          name="star"></ion-icon>
+              </div>
+              <ion-card-title class="player-card__header__title text-color-dark">
+                {{ sheriff.nickname }}</ion-card-title>
+            </ion-card-header>
 
-          <ion-card-header class="player-card__header">
-            <ion-card-title class="player-card__header__title text-color-dark">
-              {{ stage === NightStages.DON ? don.nickname : sheriff.nickname }}</ion-card-title>
-          </ion-card-header>
-
-          <ion-card-content class="player-card__content">
-            <div class="progress-container">
-              <round-progress class="progress-circle"
-                              (click)="switchTimer()"
-                              [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
-                              [current]="roundedTime"
-                              [max]="10"
-                              [color]="colors[stage === NightStages.DON ? 'danger' : 'warning']"
-                              [rounded]="true"
-                              [responsive]="true"
-                              [duration]="500">
-              </round-progress>
-              <ion-badge class="progress-badge text-color-dark-contrast"
-                         [color]="stage === NightStages.DON ? 'danger' : 'warning'">
-                {{ roundedTime }}
-              </ion-badge>
-            </div>
-          </ion-card-content>
-        </ion-card>
+            <ion-card-content class="player-card__content">
+              <div class="progress-container">
+                <round-progress class="progress-circle"
+                                (click)="switchTimer()"
+                                [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                                [current]="roundedTime"
+                                [max]="time"
+                                [color]="colors['warning']"
+                                [rounded]="true"
+                                [responsive]="true"
+                                [duration]="500">
+                </round-progress>
+                <ion-badge class="progress-badge text-color-dark-contrast"
+                           color="warning">
+                  {{ roundedTime }}
+                </ion-badge>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </ng-container>
     </ng-container>
   </div>

@@ -10,6 +10,7 @@ import { Player } from '@shared/models/player.model';
 import { colors } from '@shared/constants/colors';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { Day } from '@shared/models/day.model';
+import { GiveRoles } from '@shared/store/table/table.preparation.actions';
 
 @Component({
   selector: 'app-night-modal',
@@ -29,7 +30,8 @@ export class NightModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
 
   dayNumber = 0;
-  timeLeft = 10000;
+  time = 20;
+  timeLeft = 20000;
   isTimerPaused = true;
   stage = NightStages.MAFIA;
   interval: Subscription = Subscription.EMPTY;
@@ -38,12 +40,12 @@ export class NightModalComponent implements OnInit {
   mafiaHuntsText = 'Мафия выходит на охоту';
   giveRolesText = 'Игроки выбирают роли';
   donChecksText = 'Просыпается Дон';
-  hostMeetsDonText = 'Дон знакомится с ведущим';
+  hostMeetsDonText = 'Ведущий знакомится с доном';
   sheriffChecksText = 'Просыпается Шериф';
   hostMeetsSheriffText = 'Просыпается Шериф';
 
   get playerAvatar() {
-    return (this.stage === NightStages.SHERIFF ? this.sheriff.user.avatar : this.don.user.avatar) || defaultAvatarSrc;
+    return this.sheriff.user.avatar || this.defaultAvatar;
   }
 
   get roundedTime() {
@@ -69,6 +71,8 @@ export class NightModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.timeLeft = this.time * 1000;
+    this.store.dispatch(new GiveRoles());
     this.sheriff = this.store.selectSnapshot<Player>(TableState.getSheriff);
     this.don = this.store.selectSnapshot<Player>(TableState.getDon);
 
@@ -76,12 +80,11 @@ export class NightModalComponent implements OnInit {
   }
 
   nextStage() {
-    if (this.stage === 2) {
-      return this.modalController.dismiss(undefined, 'cancel');
+    this.pauseTimer();
+    if (this.stage === NightStages.SHERIFF) {
+      return this.modalController.dismiss(null, 'cancel');
     }
 
-    this.pauseTimer();
-    this.timeLeft = 10000;
     this.stage++;
   }
 

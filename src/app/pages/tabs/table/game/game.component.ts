@@ -23,12 +23,12 @@ export class GameComponent implements OnInit {
 
   numberSliderConfig = {
     slidesPerView: 5.5,
-    centeredSlides: true
+    centeredSlides: true,
   };
   playerSliderConfig = {
     spaceBetween: 0,
     centeredSlides: true,
-    slidesPerView: 1.4
+    slidesPerView: 1.4,
   };
   dayText = 'День';
 
@@ -55,7 +55,7 @@ export class GameComponent implements OnInit {
     if (finishedPlayerIndex < players.length - 1) {
       const day = this.store.selectSnapshot<Day>(TableState.getCurrentDay);
       const slideIndex = players.findIndex(
-        (player, index) => index > finishedPlayerIndex && !player.quitPhase && !day.timers[player.user.id]
+        (player, index) => index > finishedPlayerIndex && !player.quitPhase && !day.timers[player.user.id],
       );
 
       this.navigateToSlide(slideIndex);

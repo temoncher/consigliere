@@ -10,7 +10,7 @@ describe('MafiaHuntComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ MafiaHuntComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MafiaHuntComponent);

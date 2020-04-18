@@ -13,6 +13,7 @@
 
 <ion-content>
   <ion-slides #numberSlider
+              class="number-slider"
               [options]="numberSliderConfig">
 
     <ion-slide *ngFor="let player of (players$ | async); let i = index">
@@ -23,7 +24,7 @@
   </ion-slides>
 
   <ion-slides #playerSlider
-              class="playerSlider"
+              class="player-slider"
               [options]="playerSliderConfig">
 
     <ion-slide *ngFor="let player of (players$ | async)">

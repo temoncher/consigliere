@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { shuffle } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
@@ -13,9 +13,11 @@ import {
 } from './table.preparation.actions';
 import {
   StartNewDay,
-  EndPlayerSpeech,
+  StopSpeech,
   VoteForCandidate,
   ResetPlayer,
+  ProposePlayer,
+  WithdrawPlayer,
 } from './table.day.actions';
 
 const dummyPlayers = [
@@ -41,7 +43,7 @@ const rolesArray = [
   Role.CITIZEN,
   Role.CITIZEN,
   Role.CITIZEN,
-  Role.CITIZEN
+  Role.CITIZEN,
 ];
 export interface TableStateModel {
   host: Player;
@@ -57,7 +59,7 @@ export interface TableStateModel {
     host: dummyHost,
     players: dummyPlayers,
     days: [],
-  }
+  },
 })
 export class TableState {
   private isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
@@ -84,6 +86,27 @@ export class TableState {
     return state.days[state.days.length - 1];
   }
 
+  static getProposedPlayer(playerId: string) {
+    return createSelector([TableState], ({ days, players }: TableStateModel) => {
+      const proposedPlayers = days[days.length - 1].proposedPlayers;
+      let foundCandidateId = null;
+
+      for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
+        if (playerId === proposingPlayerId) {
+          foundCandidateId = candidateId;
+        }
+      }
+
+      if (foundCandidateId) {
+        const foundPlayer = players.find((player) => player.user.id === foundCandidateId);
+
+        return foundPlayer;
+      }
+
+      return null;
+    });
+  }
+
   @Selector()
   static getSheriff(state: TableStateModel) {
     return state.players.find((player) => player.role === Role.SHERIFF);
@@ -103,22 +126,57 @@ export class TableState {
     return patchState({ days });
   }
 
-  @Action(EndPlayerSpeech)
-  endPlayerSpeech(
+  @Action(WithdrawPlayer)
+  withdrawPlayer(
+    { patchState, getState }: StateContext<TableStateModel>,
+    { playerId }: WithdrawPlayer,
+  ) {
+    const { days } = getState();
+    const proposedPlayers = days[days.length - 1].proposedPlayers;
+    let foundCandidateId = null;
+
+    for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
+      if (playerId === proposingPlayerId) {
+        foundCandidateId = candidateId;
+      }
+    }
+
+    if (foundCandidateId) {
+      proposedPlayers.delete(foundCandidateId);
+    }
+
+    return patchState({ days });
+  }
+
+  @Action(StopSpeech)
+  stopSpeech(
     { patchState, getState }: StateContext<TableStateModel>,
     {
       playerId,
       timeLeft,
-      proposedPlayerId,
-    }: EndPlayerSpeech
+    }: StopSpeech,
   ) {
     const { days } = getState();
     const currentDay = days[days.length - 1];
 
     currentDay.timers[playerId] = timeLeft;
 
-    if (!currentDay.proposedPlayers.has(proposedPlayerId)) {
-      currentDay.proposedPlayers[proposedPlayerId] = playerId;
+    return patchState({ days });
+  }
+
+  @Action(ProposePlayer)
+  proposePlayer(
+    { patchState, getState }: StateContext<TableStateModel>,
+    {
+      playerId,
+      candidateId,
+    }: ProposePlayer,
+  ) {
+    const { days } = getState();
+    const currentDay = days[days.length - 1];
+
+    if (!currentDay.proposedPlayers.has(candidateId)) {
+      currentDay.proposedPlayers.set(candidateId, playerId);
     }
 
     return patchState({ days });
@@ -130,7 +188,7 @@ export class TableState {
     {
       playerIds,
       proposedPlayerId,
-    }: VoteForCandidate
+    }: VoteForCandidate,
   ) {
     const { days } = getState();
     const currentDay = days[days.length - 1];
@@ -158,11 +216,6 @@ export class TableState {
     const currentDay = days[days.length - 1];
 
     currentDay.timers[playerId] = null;
-    for (const [candidateId, votingPlayerId] of currentDay.proposedPlayers) {
-      if (votingPlayerId === playerId) {
-        currentDay.proposedPlayers.delete(candidateId);
-      }
-    }
 
     return patchState({ days });
   }

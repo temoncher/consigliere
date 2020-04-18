@@ -13,12 +13,12 @@ import { PlayersListComponent } from './players-list/players-list.component';
     CommonModule,
     IonicModule,
     SharedModule,
-    RouterModule.forChild([{ path: '', component: PreparationComponent }])
+    RouterModule.forChild([{ path: '', component: PreparationComponent }]),
   ],
   declarations: [
     PreparationComponent,
     PreparationModalComponent,
     PlayersListComponent,
-  ]
+  ],
 })
 export class PreparationModule { }

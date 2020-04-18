@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
@@ -8,37 +8,36 @@ import { TableState } from '@shared/store/table/table.state';
 import { Observable, timer, Subscription } from 'rxjs';
 import { Day } from '@shared/models/day.model';
 import { fadeSlide } from '@shared/animations';
-import { EndPlayerSpeech, ResetPlayer } from '@shared/store/table/table.day.actions';
+import { StopSpeech, ResetPlayer, ProposePlayer, WithdrawPlayer } from '@shared/store/table/table.day.actions';
 import { colors } from '@shared/constants/colors';
+import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
+import { pluck, mergeMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-player-timer',
   templateUrl: './player-timer.component.html',
   styleUrls: ['./player-timer.component.scss'],
-  animations: [fadeSlide]
+  animations: [fadeSlide],
 })
 export class PlayerTimerComponent implements OnInit {
   @Input() player: Player;
-  @Input() isBeforeVoteSpeech = false;
   @Input() time = 60;
-  @Input() proposedPlayer: Player;
 
   @Output() speechEnd = new EventEmitter();
 
   @Select(TableState.getCurrentDay) day$: Observable<Day>;
+  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  proposedPlayer$: Observable<Player>;
 
+  players: Player[];
   timeLeft: number;
-  alredyProposedPlayerText = 'Выставил игрока';
-  didntProposeAnyPlayerText = 'Не выставил игрока';
-  deadPlayerText = 'Игрок выбыл';
+
+  colors = colors;
+
   interval: Subscription = Subscription.EMPTY;
   isTimerPaused = true;
   isSpeechEnded = false;
-  colors = colors;
-
-  get proposedPlayerText() {
-    return this.proposedPlayer ? `${this.alredyProposedPlayerText} ${this.proposedPlayer.nickname}` : this.didntProposeAnyPlayerText;
-  }
+  deadPlayerText = 'Игрок выбыл';
 
   get roundedTime() {
     return Math.round(this.timeLeft / 1000);
@@ -60,11 +59,15 @@ export class PlayerTimerComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private modalController: ModalController,
   ) { }
 
   ngOnInit() {
     this.timeLeft = this.time * 1000;
+    this.players = this.store.selectSnapshot<Player[]>(TableState.getPlayers);
+
+    this.proposedPlayer$ = this.store.select(TableState.getProposedPlayer(this.player.user.id));
   }
 
   switchTimer() {
@@ -86,26 +89,36 @@ export class PlayerTimerComponent implements OnInit {
     });
   }
 
-  proposePlayer() {
-    this.proposedPlayer = new Player(
-      {
-        number: 1,
-        nickname: 'Jared',
-        user: { id: 'jared' },
-      });
+  async proposePlayer() {
+    const proposeModal = await this.modalController.create({
+      component: ProposeModalComponent,
+      swipeToClose: true,
+    });
+
+    await proposeModal.present();
+    await this.awaitProposeModalResult(proposeModal);
+  }
+
+  private async awaitProposeModalResult(proposeModal: HTMLIonModalElement) {
+    const { data: proposedPlayer, role } = await proposeModal.onWillDismiss();
+
+    switch (role) {
+      case 'propose':
+        this.store.dispatch(new ProposePlayer(this.player.user.id, proposedPlayer.user.id));
+        break;
+
+      default:
+        break;
+    }
   }
 
   withdrawPlayer() {
-    if (this.isSpeechEnded) {
-      return;
-    }
-    this.proposedPlayer = null;
+    this.store.dispatch(new WithdrawPlayer(this.player.user.id));
   }
 
   endPlayerSpeech() {
     this.pauseTimer();
     this.isSpeechEnded = true;
-    this.store.dispatch(new EndPlayerSpeech(this.player.user.id, this.timeLeft, this.proposedPlayer?.user?.id));
     this.speechEnd.emit(this.player.user.id);
   }
 
@@ -126,11 +139,11 @@ export class PlayerTimerComponent implements OnInit {
     }
   }
 
-  async presentPopover(event: any) {
+  async presentPlayerMenu(event: any) {
     const popover = await this.popoverController.create({
       component: PlayerMenuComponent,
       event,
-      translucent: true
+      translucent: true,
     });
 
     await popover.present();
@@ -138,10 +151,9 @@ export class PlayerTimerComponent implements OnInit {
   }
 
   private refresh() {
-    this.pauseTimer();
     this.timeLeft = this.time * 1000;
-    this.proposedPlayer = null;
     this.isSpeechEnded = false;
+    this.pauseTimer();
     this.store.dispatch(new ResetPlayer(this.player.user.id));
   }
 
@@ -150,6 +162,7 @@ export class PlayerTimerComponent implements OnInit {
 
   private pauseTimer() {
     this.isTimerPaused = true;
+    this.store.dispatch(new StopSpeech(this.player.user.id, this.timeLeft));
     return this.interval.unsubscribe();
   }
 }

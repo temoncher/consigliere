@@ -12,8 +12,8 @@ import { TabsComponent } from './tabs.component';
     IonicModule,
     CommonModule,
     FormsModule,
-    TabsRoutingModule
+    TabsRoutingModule,
   ],
-  declarations: [TabsComponent]
+  declarations: [TabsComponent],
 })
 export class TabsModule {}

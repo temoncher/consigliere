@@ -10,16 +10,16 @@ const routes: Routes = [
   },
   {
     path: 'preparation',
-    loadChildren: () => import('./preparation/preparation.module').then(m => m.PreparationModule)
+    loadChildren: () => import('./preparation/preparation.module').then(m => m.PreparationModule),
   },
   {
     path: 'game',
-    loadChildren: () => import('./game/game.module').then(m => m.GameModule)
-  }
+    loadChildren: () => import('./game/game.module').then(m => m.GameModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class TableRoutingModule {}
