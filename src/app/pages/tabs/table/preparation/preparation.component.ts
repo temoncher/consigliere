@@ -74,18 +74,18 @@ export class PreparationComponent implements OnInit {
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.hostPropmptText.namePlaceholder
+          placeholder: this.hostPropmptText.namePlaceholder,
         },
       ],
       buttons: [
         {
           text: this.hostPropmptText.cancelButton,
-          role: 'cancel'
+          role: 'cancel',
         }, {
           text: this.hostPropmptText.confirmButton,
-          handler: (player) => this.setHost(player)
-        }
-      ]
+          handler: (player) => this.setHost(player),
+        },
+      ],
     });
 
     await prompt.present();
@@ -97,7 +97,7 @@ export class PreparationComponent implements OnInit {
         catchError((err) => {
           this.displayToast(err.message, 'danger');
           return of('');
-        })
+        }),
       ).subscribe();
   }
 
@@ -105,7 +105,7 @@ export class PreparationComponent implements OnInit {
     const toast = await this.toastController.create({
       message,
       color,
-      duration: 3000
+      duration: 3000,
     });
 
     toast.present();

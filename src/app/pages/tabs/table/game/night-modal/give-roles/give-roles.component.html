@@ -5,28 +5,32 @@
                            [player]="player"
                            [showRole]="isAllRolesVisible"
                            (click)="navigateToPlayer(player.number)"></app-small-player-card>
+
     <ion-card slot="center"
-              class="role-card"
+              class="player-card role-card"
               (click)="isRoleVisible ? nextPlayer() : revealRole()">
       <ion-card-header class="player-card__header">
+        <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+          {{ players[currentPlayerIndex].number }}
+        </div>
         <ion-card-title class="player-card__header__title text-color-dark">{{ players[currentPlayerIndex].nickname }}
         </ion-card-title>
       </ion-card-header>
-      <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-        {{ players[currentPlayerIndex].number }}
-      </div>
       <ion-card-content [ngClass]="isRoleVisible ? '' : 'text-color-medium role-hidden'"
                         class="player-card__content role-card__content ion-text-center">
         <ion-avatar class="player-card__avatar">
-          <img [src]="players[currentPlayerIndex].user?.avatar ? players[currentPlayerIndex].user.avatar : defaultAvatar">
+          <img
+               [src]="players[currentPlayerIndex].user?.avatar ? players[currentPlayerIndex].user.avatar : defaultAvatar">
         </ion-avatar>
         {{ isRoleVisible ? players[currentPlayerIndex].role : hiddenRoleText}}
       </ion-card-content>
     </ion-card>
 
     <div slot="under"
-         class="show-all-roles-button-container">
-      <ion-button size="large" (click)="toggleAllRolesVisibility()">{{ isAllRolesVisible ? hideAllRolesText : showAllRolesText }}</ion-button>
+         class="grid-content-center">
+      <ion-button size="large"
+                  (click)="toggleAllRolesVisibility()">{{ isAllRolesVisible ? hideAllRolesText : showAllRolesText }}
+      </ion-button>
     </div>
   </app-table-template>
 </div>

@@ -68,3 +68,13 @@
 
   height: 100%;
 }
+
+.felx-centralize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ios ion-card {
+  margin: 10px 0;
+}

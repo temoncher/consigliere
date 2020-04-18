@@ -1,7 +1,22 @@
 .modal-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  .card-wrapper {
+    display: flex;
+    justify-content: center;
+
+    .player-card {
+      width: 50vmin;
+      height: 75vmin;
+
+      &__content {
+        padding-top: 20px;
+      }
+    }
+  }
 
   .progress-container {
     position: relative;

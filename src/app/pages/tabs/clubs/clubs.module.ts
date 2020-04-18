@@ -13,8 +13,8 @@ import { SharedModule } from '@shared/shared.module';
     CommonModule,
     FormsModule,
     SharedModule,
-    RouterModule.forChild([{ path: '', component: ClubsComponent }])
+    RouterModule.forChild([{ path: '', component: ClubsComponent }]),
   ],
-  declarations: [ClubsComponent]
+  declarations: [ClubsComponent],
 })
 export class ClubsModule {}

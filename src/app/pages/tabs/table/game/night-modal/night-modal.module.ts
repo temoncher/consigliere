@@ -18,10 +18,7 @@ import { GiveRolesComponent } from './give-roles/give-roles.component';
   declarations: [
     NightModalComponent,
     MafiaHuntComponent,
-    GiveRolesComponent
+    GiveRolesComponent,
   ],
-  exports: [
-    NightModalComponent,
-  ]
 })
 export class NightModalModule { }

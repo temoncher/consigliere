@@ -15,6 +15,6 @@ import { TableRoutingModule } from './table-routing.module';
   ],
   declarations: [
     TableComponent,
-  ]
+  ],
 })
 export class TableModule {}

@@ -9,8 +9,8 @@
 
   <ion-card-content>{{ player.number }}</ion-card-content>
 
-  <div *ngIf="player.quitPhase"
+  <div *ngIf="isOverlayVisible"
        class="full-parent-overlay grid-content-center">
-    <h1 class="text-color-medium">{{ quitPhase }}</h1>
+    <h1 class="text-color-medium">{{ computedOverlayText }}</h1>
   </div>
 </ion-card>

@@ -13,9 +13,9 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./search/search.module').then(m => m.SearchModule)
-          }
-        ]
+              import('./search/search.module').then(m => m.SearchModule),
+          },
+        ],
       },
       {
         path: 'clubs',
@@ -23,9 +23,9 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./clubs/clubs.module').then(m => m.ClubsModule)
-          }
-        ]
+              import('./clubs/clubs.module').then(m => m.ClubsModule),
+          },
+        ],
       },
       {
         path: 'table',
@@ -33,9 +33,9 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./table/table.module').then(m => m.TableModule)
-          }
-        ]
+              import('./table/table.module').then(m => m.TableModule),
+          },
+        ],
       },
       {
         path: 'profile',
@@ -43,26 +43,26 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('./profile/profile.module').then(m => m.ProfileModule)
-          }
-        ]
+              import('./profile/profile.module').then(m => m.ProfileModule),
+          },
+        ],
       },
       {
         path: '',
         redirectTo: '/tabs/table',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/tabs/table',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class TabsRoutingModule {}

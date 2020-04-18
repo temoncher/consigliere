@@ -12,8 +12,8 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     IonicModule,
     RouterModule.forChild([{ path: '', component: LoginComponent }]),
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [LoginComponent]
+  declarations: [LoginComponent],
 })
 export class LoginModule { }

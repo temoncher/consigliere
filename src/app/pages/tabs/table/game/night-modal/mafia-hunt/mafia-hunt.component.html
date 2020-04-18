@@ -6,11 +6,10 @@
 
   <ion-card slot="center"
             class="center-item center-card">
-    <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
-      {{ players[currentPlayerIndex].number }}
-    </div>
-
     <ion-card-header class="player-card__header">
+      <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
+        {{ players[currentPlayerIndex].number }}
+      </div>
       <ion-card-title class="player-card__header__title text-color-dark">
         {{ players[currentPlayerIndex].nickname }}
       </ion-card-title>
@@ -30,7 +29,7 @@
   </ion-card>
 
   <div slot="under"
-       class="skip-button-container">
+       class="grid-content-center">
     <ion-button size="large">{{ skipButtonText }}</ion-button>
   </div>
 </app-table-template>

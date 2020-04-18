@@ -73,18 +73,18 @@ export class PlayersListComponent implements OnInit {
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.playerPromptText.namePlaceholder
+          placeholder: this.playerPromptText.namePlaceholder,
         },
       ],
       buttons: [
         {
           text: this.playerPromptText.cancelButton,
-          role: 'cancel'
+          role: 'cancel',
         }, {
           text: this.playerPromptText.confirmButton,
-          handler: (player) => this.addNewPlayer(player)
-        }
-      ]
+          handler: (player) => this.addNewPlayer(player),
+        },
+      ],
     });
 
     await prompt.present();
@@ -96,7 +96,7 @@ export class PlayersListComponent implements OnInit {
         catchError((err) => {
           this.displayToast(err.message, 'danger');
           return of('');
-        })
+        }),
       ).subscribe();
   }
 
@@ -104,7 +104,7 @@ export class PlayersListComponent implements OnInit {
     const toast = await this.toastController.create({
       message,
       color,
-      duration: 3000
+      duration: 3000,
     });
 
     toast.present();

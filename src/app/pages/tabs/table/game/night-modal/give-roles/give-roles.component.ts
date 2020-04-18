@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { GiveRoles } from '@shared/store/table/table.preparation.actions';
 import { TableState } from '@shared/store/table/table.state';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
@@ -26,10 +25,9 @@ export class GiveRolesComponent implements OnInit {
   showAllRolesText = 'Показать роли';
   hideAllRolesText = 'Скрыть роли';
 
-  constructor(private store: Store) { }
+  constructor() { }
 
   ngOnInit() {
-    this.store.dispatch(new GiveRoles());
     this.players$.subscribe((players) => this.players = players);
   }
 

@@ -40,9 +40,9 @@ const devModules = environment.production ? [] : [
     SplashScreen,
     {
       provide: RouteReuseStrategy,
-      useClass: IonicRouteStrategy
-    }
+      useClass: IonicRouteStrategy,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

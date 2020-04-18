@@ -25,13 +25,13 @@ import { SmallPlayerCardComponent } from './components/small-player-card/small-p
     ExploreContainerComponent,
     TableTemplateComponent,
     SmallPlayerCardComponent,
-  ]
+  ],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [AuthService]
+      providers: [AuthService],
     };
   }
 }

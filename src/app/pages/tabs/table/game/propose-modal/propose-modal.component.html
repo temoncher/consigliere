@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ toolbarTitle }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="outlined"
+                  (click)="close()">
+        <ion-icon slot="icon-only"
+                  color="primary"
+                  name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="propose-modal">
+    <app-table-template>
+      <app-small-player-card *ngFor="let player of (players$ | async)"
+                             [slot]="player.number"
+                             [player]="player"
+                             [overlayCondition]="(proposedPlayers$ | async).has(player.user.id)"
+                             (click)="navigateToPlayer(player)"></app-small-player-card>
+      <ion-card slot="center"
+                class="player-card">
+        <ion-card-header class="player-card__header">
+          <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+            {{ (players$ | async)[currentPlayerIndex].number }}
+          </div>
+          <ion-card-title class="player-card__header__title text-color-dark">{{ (players$ | async)[currentPlayerIndex].nickname }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="player-card__content ion-text-center">
+          <ion-avatar class="player-card__avatar">
+            <img [src]="(players$ | async)[currentPlayerIndex].user?.avatar || defaultAvatar">
+          </ion-avatar>
+        </ion-card-content>
+      </ion-card>
+  
+      <div slot="under"
+           class="grid-content-center">
+        <ion-button size="large"
+                    (click)="proposePlayer()">{{ proposeButtonText }}
+        </ion-button>
+      </div>
+    </app-table-template>
+  </div>
+</ion-content>
