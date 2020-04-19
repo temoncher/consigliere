@@ -12,11 +12,16 @@
 
 <ion-item *ngFor="let player of (players$ | async); let i = index"
           lines="none">
-  <ion-avatar class="with-badge"
-              slot="start">
-    <ion-badge class="avatar-badge">{{ i + 1 }}</ion-badge>
-    <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
-  </ion-avatar>
+
+  <div slot="start">
+    <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
+      {{ i + 1 }}
+    </div>
+    <ion-avatar>
+      <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
+    </ion-avatar>
+  </div>
+
   <ion-label>
     <h3>{{ player.nickname }}</h3>
     <p>{{ player.isGuest ? guestText : authorizedUserText }}</p>

@@ -7,10 +7,10 @@ import { PopoverController } from '@ionic/angular';
   styleUrls: ['./player-menu.component.scss'],
 })
 export class PlayerMenuComponent implements OnInit {
-  refreshText = 'Сбросить игрока';
-  fallText = 'Зафиксировать фол';
+  refreshText = 'Сбросить';
+  fallText = 'Фол';
   viewProfileText = 'Открыть профиль';
-  closeText = 'Закрыть меню';
+  kickText = 'Удалить игрока';
 
   constructor(private popoverController: PopoverController) { }
 

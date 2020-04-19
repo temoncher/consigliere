@@ -6,9 +6,9 @@ import { catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
-import { TableState } from '@shared/store/table/table.state';
-import { AddPlayer, RemovePlayer, SetHost, ShufflePlayers } from '@shared/store/table/table.preparation.actions';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { PlayersState } from '@shared/store/table/players/players.state';
+import { ShufflePlayers, SetHost } from '@shared/store/table/players/players.actions';
 
 @Component({
   selector: 'app-preparation',
@@ -16,8 +16,8 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
   styleUrls: ['./preparation.component.scss'],
 })
 export class PreparationComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
-  @Select(TableState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
   private hostPropmptText = {

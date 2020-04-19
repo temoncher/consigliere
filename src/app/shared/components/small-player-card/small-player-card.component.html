@@ -6,11 +6,15 @@
     <ion-icon class="text-color-dark-contrast"
               [name]="(player.role === Role.DON) ? 'rose': 'star'"></ion-icon>
   </div>
+  <div *ngIf="showFalls && player.falls"
+       class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
+    {{ player.falls }}
+  </div>
 
   <ion-card-content>{{ player.number }}</ion-card-content>
 
   <div *ngIf="isOverlayVisible"
        class="full-parent-overlay grid-content-center">
-    <h1 class="text-color-medium">{{ computedOverlayText }}</h1>
+    <span class="text-color-medium">{{ computedOverlayText }}</span>
   </div>
 </ion-card>

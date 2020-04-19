@@ -1,52 +1,55 @@
 @import "~src/theme/custom-variables.scss";
 @import "~src/theme/variables.scss";
 
-.player-card {
+.card-container {
+  position: relative;
   min-width: 59.5vmin;
   max-width: 59.5vmin;
-  margin-bottom: 40px;
-  overflow: initial;
 
-  &__header {
-    text-align: center;
-    padding-bottom: 0;
+  .player-card {
+    margin-bottom: 40px;
 
-    &__title {
-      font-size: 1.2rem;
-    }
-  }
+    &__header {
+      text-align: center;
+      padding-bottom: 0;
 
-  &__content {
-    padding-top: 13px;
-  }
-
-  .menu-button {
-    padding: 6px 0;
-  }
-
-  .progress-container {
-    position: relative;
-    padding-bottom: 24px;
-
-    .progress-circle {
-      background-size: contain;
-      border-radius: 100%;
+      &__title {
+        font-size: 1.2rem;
+      }
     }
 
-    .progress-badge {
-      position: absolute;
-      left: 70%;
-      top: 70%;
+    &__content {
+      padding-top: 13px;
+    }
 
-      min-width: 12.8px;
-      padding: 4px 8px;
-      font-size: 1.8rem;
+    .progress-container {
+      position: relative;
+      padding-bottom: 24px;
+
+      .progress-circle {
+        background-size: contain;
+        border-radius: 100%;
+      }
+
+      .progress-badge {
+        position: absolute;
+        left: 70%;
+        top: 70%;
+
+        min-width: 12.8px;
+        padding: 4px 8px;
+        font-size: 1.8rem;
+      }
+    }
+    .full-parent-overlay span {
+      font-size: 5rem;
+      font-weight: bold;
     }
   }
 
   .proposed-player-card {
     position: absolute;
-    bottom: -36px;
+    bottom: -30px;
     left: 12px;
   }
 }

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { TableState } from '@shared/store/table/table.state';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { PlayersState } from '@shared/store/table/players/players.state';
 
 @Component({
   selector: 'app-give-roles',
@@ -12,7 +12,7 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
   styleUrls: ['./give-roles.component.scss'],
 })
 export class GiveRolesComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   players: Player[];
 

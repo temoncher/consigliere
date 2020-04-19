@@ -1,6 +1,6 @@
-import { DayTime } from './day-time.enum';
+import { DayPhase } from './day-phase.enum';
 
 export interface QuitPhase {
-  stage: DayTime;
+  stage: DayPhase;
   number: number;
 }

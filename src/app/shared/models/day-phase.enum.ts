@@ -1,4 +1,4 @@
-export enum DayTime {
+export enum DayPhase {
   DAY = 'Day',
   NIGHT = 'Night',
 }

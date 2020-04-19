@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { TableState } from '@shared/store/table/table.state';
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { PlayersState } from '@shared/store/table/players/players.state';
 
 @Component({
   selector: 'app-mafia-hunt',
@@ -13,7 +13,7 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
   styleUrls: ['./mafia-hunt.component.scss'],
 })
 export class MafiaHuntComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
