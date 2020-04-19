@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApplicationState } from '@shared/store';
+import { ApplicationStates } from '@shared/store';
 
 const devModules = environment.production ? [] : [
   NgxsReduxDevtoolsPluginModule.forRoot(),
@@ -31,7 +31,7 @@ const devModules = environment.production ? [] : [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AppRoutingModule,
     SharedModule,
-    NgxsModule.forRoot(ApplicationState),
+    NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsResetPluginModule.forRoot(),
     devModules,
   ],

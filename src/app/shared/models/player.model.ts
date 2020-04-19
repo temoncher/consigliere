@@ -10,14 +10,15 @@ export class Player {
   isGuest?: boolean;
   role?: Role;
   quitPhase?: QuitPhase;
+  isNextSpeechBanned?: boolean;
 
   constructor(player: any) {
     this.nickname = player.nickname;
     this.number = player.number;
-    this.falls = player.falls;
-    this.isGuest = player.isGuest;
+    this.falls = player.falls || 0;
     this.role = player.role;
     this.quitPhase = player.quitPhase;
+    this.isNextSpeechBanned = player.isNextSpeechBanned;
 
     if (player.user?.id) {
       this.isGuest = false;

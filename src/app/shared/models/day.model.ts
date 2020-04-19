@@ -1,5 +1,7 @@
+import { DayPhase } from './day-phase.enum';
+
 export class Day {
-  kickedPlayer: string;
+  kickedPlayers: string[];
   // Night
   shots: Map<string, string>; // <mafiaId, playerId>
   murderedPlayer: string; // murdered player id
@@ -12,7 +14,7 @@ export class Day {
   votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
 
   constructor(day?: any) {
-    this.kickedPlayer = day?.kickedPlayer;
+    this.kickedPlayers = day?.kickedPlayers || [];
 
     this.shots = day?.shots || new Map<string, string>();
     this.murderedPlayer = day?.murderedPlayer;

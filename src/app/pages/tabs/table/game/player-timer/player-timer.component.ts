@@ -1,17 +1,22 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
+import { Observable, timer, Subscription } from 'rxjs';
+
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayerMenuComponent } from '../player-menu/player-menu.component';
-import { TableState } from '@shared/store/table/table.state';
-import { Observable, timer, Subscription } from 'rxjs';
 import { Day } from '@shared/models/day.model';
 import { fadeSlide } from '@shared/animations';
-import { StopSpeech, ResetPlayer, ProposePlayer, WithdrawPlayer } from '@shared/store/table/table.day.actions';
 import { colors } from '@shared/constants/colors';
+import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
+import { PlayersState } from '@shared/store/table/players/players.state';
+import {
+  ProposePlayer,
+  WithdrawPlayer,
+  StopSpeech,
+} from '@shared/store/table/current-day/current-day.actions';
 import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
-import { pluck, mergeMap, map } from 'rxjs/operators';
+import { DayPhase } from '@shared/models/day-phase.enum';
 
 @Component({
   selector: 'app-player-timer',
@@ -25,8 +30,8 @@ export class PlayerTimerComponent implements OnInit {
 
   @Output() speechEnd = new EventEmitter();
 
-  @Select(TableState.getCurrentDay) day$: Observable<Day>;
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(CurrentDayState.getDay) day$: Observable<Day>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   proposedPlayer$: Observable<Player>;
 
   players: Player[];
@@ -37,14 +42,13 @@ export class PlayerTimerComponent implements OnInit {
   interval: Subscription = Subscription.EMPTY;
   isTimerPaused = true;
   isSpeechEnded = false;
-  deadPlayerText = 'Игрок выбыл';
 
   get roundedTime() {
     return Math.round(this.timeLeft / 1000);
   }
 
   get timeColor() {
-    if (this.timeLeft === 0 || this.isSpeechEnded) {
+    if (this.timeLeft === 0 || this.isSpeechEnded || this.player.quitPhase) {
       return 'medium';
     }
     if (this.timeLeft < 10000) {
@@ -57,17 +61,24 @@ export class PlayerTimerComponent implements OnInit {
     return this.player.user.avatar || defaultAvatarSrc;
   }
 
+  get quitPhase() {
+    if (this.player.quitPhase) {
+      return `${this.player.quitPhase.number}${(this.player.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
+    }
+
+    return '';
+  }
+
   constructor(
     private store: Store,
-    private popoverController: PopoverController,
     private modalController: ModalController,
   ) { }
 
   ngOnInit() {
     this.timeLeft = this.time * 1000;
-    this.players = this.store.selectSnapshot<Player[]>(TableState.getPlayers);
+    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
 
-    this.proposedPlayer$ = this.store.select(TableState.getProposedPlayer(this.player.user.id));
+    this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.player.user.id));
   }
 
   switchTimer() {
@@ -120,44 +131,6 @@ export class PlayerTimerComponent implements OnInit {
     this.pauseTimer();
     this.isSpeechEnded = true;
     this.speechEnd.emit(this.player.user.id);
-  }
-
-  private async awaitMenuOptionResult(popover: HTMLIonPopoverElement) {
-    const { role } = await popover.onWillDismiss();
-
-    switch (role) {
-      case 'refresh':
-        this.refresh();
-        break;
-
-      case 'fall':
-        this.assignFall();
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  async presentPlayerMenu(event: any) {
-    const popover = await this.popoverController.create({
-      component: PlayerMenuComponent,
-      event,
-      translucent: true,
-    });
-
-    await popover.present();
-    await this.awaitMenuOptionResult(popover);
-  }
-
-  private refresh() {
-    this.timeLeft = this.time * 1000;
-    this.isSpeechEnded = false;
-    this.pauseTimer();
-    this.store.dispatch(new ResetPlayer(this.player.user.id));
-  }
-
-  private assignFall() {
   }
 
   private pauseTimer() {

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { TableState } from '@shared/store/table/table.state';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { PlayersState } from '@shared/store/table/players/players.state';
+import { RemovePlayer, AddPlayer } from '@shared/store/table/players/players.actions';
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
-import { AddPlayer, RemovePlayer } from '@shared/store/table/table.preparation.actions';
-import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-players-list',
@@ -15,8 +16,8 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./players-list.component.scss'],
 })
 export class PlayersListComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
-  @Select(TableState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
   private playerPromptText = {

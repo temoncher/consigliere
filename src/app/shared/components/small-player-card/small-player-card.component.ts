@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
-import { DayTime } from '@shared/models/day-time.enum';
+import { DayPhase } from '@shared/models/day-phase.enum';
 
 @Component({
   selector: 'app-small-player-card',
@@ -12,6 +12,7 @@ import { DayTime } from '@shared/models/day-time.enum';
 export class SmallPlayerCardComponent implements OnInit {
   @Input() player: Player;
   @Input() showRole = false;
+  @Input() showFalls = false;
   @Input() showTeam = false;
   @Input() disableOverlay = false;
   @Input() overlayCondition = null;
@@ -21,7 +22,7 @@ export class SmallPlayerCardComponent implements OnInit {
 
   get quitPhase() {
     if (this.player.quitPhase) {
-      return `${this.player.quitPhase.number} + ${(this.player.quitPhase.stage === DayTime.NIGHT ? 'н' : 'д')}`;
+      return `${this.player.quitPhase.number}${(this.player.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
     }
 
     return '';

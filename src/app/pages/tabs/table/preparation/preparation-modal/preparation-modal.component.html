@@ -12,18 +12,18 @@
 </ion-header>
 
 <ion-content>
-  <!-- Add unauthorized user button-->
-  <ion-item class="add-new"
-            lines="none"
-            (click)="choosePlayer()">
-    <ion-icon slot="start"
-              name="add"
-              color="primary"></ion-icon>
-    <ion-label color="primary">{{ addGuestText }}</ion-label>
-  </ion-item>
-  <!-- END Add unauthorized user button-->
-
   <ion-list class="cards-list">
+    <!-- Add unauthorized user button-->
+    <ion-item class="add-new"
+              lines="none"
+              (click)="choosePlayer()">
+      <ion-icon slot="start"
+                name="add"
+                color="primary"></ion-icon>
+      <ion-label color="primary">{{ addGuestText }}</ion-label>
+    </ion-item>
+    <!-- END Add unauthorized user button-->
+
     <ion-item *ngFor="let player of players"
               lines="none"
               (click)="choosePlayer(player)">

@@ -16,8 +16,9 @@
               class="number-slider"
               [options]="numberSliderConfig">
 
-    <ion-slide *ngFor="let player of (players$ | async); let i = index">
-      <app-small-player-card (click)="navigateToSlide(i)"
+    <ion-slide *ngFor="let player of (players$ | async)">
+      <app-small-player-card (click)="openPlayerMenu(player)"
+                             [showFalls]="true"
                              [player]="player"></app-small-player-card>
     </ion-slide>
 

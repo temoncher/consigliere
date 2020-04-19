@@ -1,8 +1,9 @@
 @import "./custom-variables.scss";
 @import "./variables.scss";
 
-// small card
+// Small card
 ion-card.small-card {
+  position: relative;
   display: grid;
   place-content: center;
 
@@ -22,11 +23,18 @@ ion-card.small-card {
 // Cards list
 
 ion-list.cards-list {
+  .clip-button {
+    font-size: 0.8rem;
+  }
+
   ion-item {
     margin: 8px;
-    padding: 8px 0;
     border-radius: var(--app-border-radius);
     box-shadow: var(--app-box-shadow);
+
+    ion-label {
+      padding: 8px 0;
+    }
   }
 
   ion-item.add-new {
@@ -49,6 +57,7 @@ ion-card.large-card {
 }
 
 .player-card {
+  position: relative;
   min-width: 59.5vmin;
   max-width: 59.5vmin;
 
@@ -59,10 +68,6 @@ ion-card.large-card {
     &__title {
       font-size: 1.2rem;
     }
-  }
-
-  &__content {
-    // padding-top: 0;
   }
 
   &__avatar {

@@ -10,7 +10,8 @@ import { Player } from '@shared/models/player.model';
 import { colors } from '@shared/constants/colors';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { Day } from '@shared/models/day.model';
-import { GiveRoles } from '@shared/store/table/table.preparation.actions';
+import { PlayersState } from '@shared/store/table/players/players.state';
+import { GiveRoles } from '@shared/store/table/players/players.actions';
 
 @Component({
   selector: 'app-night-modal',
@@ -18,7 +19,7 @@ import { GiveRoles } from '@shared/store/table/table.preparation.actions';
   styleUrls: ['./night-modal.component.scss'],
 })
 export class NightModalComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(TableState.getDays) days$: Observable<Day[]>;
 
   sheriff: Player;
@@ -68,15 +69,17 @@ export class NightModalComponent implements OnInit {
   constructor(
     private store: Store,
     private modalController: ModalController,
-  ) { }
+  ) {
+    this.store.dispatch(new GiveRoles());
+  }
 
   ngOnInit() {
     this.timeLeft = this.time * 1000;
-    this.store.dispatch(new GiveRoles());
-    this.sheriff = this.store.selectSnapshot<Player>(TableState.getSheriff);
-    this.don = this.store.selectSnapshot<Player>(TableState.getDon);
+    this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
+    this.don = this.store.selectSnapshot(PlayersState.getDon);
 
     this.days$.subscribe((days) => this.dayNumber = days.length - 1);
+    this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 
   nextStage() {

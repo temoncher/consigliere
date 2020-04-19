@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { TableState } from '@shared/store/table/table.state';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { ModalController } from '@ionic/angular';
-import { Day } from '@shared/models/day.model';
 import { map } from 'rxjs/operators';
+import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
+import { PlayersState } from '@shared/store/table/players/players.state';
 
 @Component({
   selector: 'app-propose-modal',
@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./propose-modal.component.scss'],
 })
 export class ProposeModalComponent implements OnInit {
-  @Select(TableState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   proposedPlayers$: Observable<Map<string, string>>;
 
   players: Player[];
@@ -34,7 +34,7 @@ export class ProposeModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const day$ = this.store.select(TableState.getCurrentDay);
+    const day$ = this.store.select(CurrentDayState.getDay);
     this.proposedPlayers$ = day$.pipe(map((day) => day.proposedPlayers));
     this.proposedPlayers$.subscribe((proposedPlayers) => this.proposedPlayers = proposedPlayers);
     this.players$.subscribe((players) => this.players = players);
