@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { Day } from '@shared/models/day.model';
 import {
-  StartNewDay,
+  AddDay,
 } from './table.actions';
 import { PlayersState } from './players/players.state';
 import { CurrentDayState } from './current-day/current-day.state';
@@ -35,11 +35,13 @@ export class TableState {
     return state.days.length;
   }
 
-  @Action(StartNewDay)
-  startNewDay({ patchState, getState }: StateContext<TableStateModel>) {
+  @Action(AddDay)
+  addNewDay(
+    { patchState, getState }: StateContext<TableStateModel>,
+    { day }: AddDay) {
     const { days } = cloneDeep(getState());
 
-    days.push(new Day());
+    days.push(day);
 
     return patchState({ days });
   }

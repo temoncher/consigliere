@@ -1,7 +1,7 @@
 <app-table-template class="mafia-hunt">
   <app-small-player-card *ngFor="let player of (players$ | async)"
                          [slot]="player.number"
-                         [player]="player"
+                         [playerId]="player.user.id"
                          showRole="true"></app-small-player-card>
 
   <ion-card slot="center"
@@ -23,7 +23,7 @@
 
     <div class="mafia-cards-container">
       <app-small-player-card *ngFor="let mafiaPlayer of mafia"
-                             [player]="mafiaPlayer"
+                             [playerId]="mafiaPlayer.user.id"
                              showTeam="true"></app-small-player-card>
     </div>
   </ion-card>

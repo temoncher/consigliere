@@ -2,7 +2,7 @@
   <app-table-template>
     <app-small-player-card *ngFor="let player of (players$ | async)"
                            [slot]="player.number"
-                           [player]="player"
+                           [playerId]="player.user.id"
                            [showRole]="isAllRolesVisible"
                            (click)="navigateToPlayer(player.number)"></app-small-player-card>
 

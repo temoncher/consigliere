@@ -32,7 +32,7 @@ export class VoteForCandidate {
   ) { }
 }
 
-export class ResetPlayer {
-  static readonly type = '[Table.CurrentDay] Reset player';
-  constructor(public playerId: string) { }
+export class StartNewDay {
+  static readonly type = '[Table.CurrentDay] Start new day';
+  constructor() { }
 }

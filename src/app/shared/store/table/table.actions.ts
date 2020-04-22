@@ -1,4 +1,6 @@
-export class StartNewDay {
-  static readonly type = '[Table] Start new day';
-  constructor() { }
+import { Day } from '@shared/models/day.model';
+
+export class AddDay {
+  static readonly type = '[Table] Add day';
+  constructor(public day: Day) { }
 }

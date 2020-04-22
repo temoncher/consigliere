@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PopoverController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable, timer, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
@@ -13,10 +13,11 @@ import { PlayersState } from '@shared/store/table/players/players.state';
 import {
   ProposePlayer,
   WithdrawPlayer,
-  StopSpeech,
 } from '@shared/store/table/current-day/current-day.actions';
 import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
 import { DayPhase } from '@shared/models/day-phase.enum';
+import { TimersService } from '@shared/services/timers.service';
+import { Timer } from '@shared/models/timer.model';
 
 @Component({
   selector: 'app-player-timer',
@@ -25,7 +26,7 @@ import { DayPhase } from '@shared/models/day-phase.enum';
   animations: [fadeSlide],
 })
 export class PlayerTimerComponent implements OnInit {
-  @Input() player: Player;
+  @Input() playerId: string;
   @Input() time = 60;
 
   @Output() speechEnd = new EventEmitter();
@@ -34,36 +35,29 @@ export class PlayerTimerComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   proposedPlayer$: Observable<Player>;
 
-  players: Player[];
-  timeLeft: number;
+  player: Player;
+  players: Player[] = null;
+  timer: Timer;
 
   colors = colors;
 
-  interval: Subscription = Subscription.EMPTY;
-  isTimerPaused = true;
-  isSpeechEnded = false;
-
-  get roundedTime() {
-    return Math.round(this.timeLeft / 1000);
-  }
-
   get timeColor() {
-    if (this.timeLeft === 0 || this.isSpeechEnded || this.player.quitPhase) {
+    if (this.timer?.time === 0 || this.timer?.isSpeechEnded || this.player.quitPhase) {
       return 'medium';
     }
-    if (this.timeLeft < 10000) {
+    if (this.timer?.time < 10) {
       return 'danger';
     }
     return 'primary';
   }
 
   get playerAvatar() {
-    return this.player.user.avatar || defaultAvatarSrc;
+    return this.player?.user.avatar || defaultAvatarSrc;
   }
 
   get quitPhase() {
-    if (this.player.quitPhase) {
-      return `${this.player.quitPhase.number}${(this.player.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
+    if (this.player?.quitPhase) {
+      return `${this.player?.quitPhase.number}${(this.player?.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
     }
 
     return '';
@@ -72,32 +66,20 @@ export class PlayerTimerComponent implements OnInit {
   constructor(
     private store: Store,
     private modalController: ModalController,
-  ) { }
+    private timersService: TimersService,
+  ) {
+    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
+  }
 
   ngOnInit() {
-    this.timeLeft = this.time * 1000;
-    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
-
-    this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.player.user.id));
+    this.store.select(PlayersState.getPlayer(this.playerId))
+      .subscribe((player) => this.player = player);
+    this.timer = this.timersService.getPlayerTimer(this.playerId);
+    this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
   }
 
   switchTimer() {
-    if (this.isSpeechEnded) {
-      return;
-    }
-
-    if (!this.isTimerPaused) {
-      return this.pauseTimer();
-    }
-
-    this.isTimerPaused = false;
-    return this.interval = timer(100, 100).subscribe(() => {
-      if (this.timeLeft === 0) {
-        return this.endPlayerSpeech();
-      }
-
-      this.timeLeft -= 100;
-    });
+    this.timer.switchTimer();
   }
 
   async proposePlayer() {
@@ -115,7 +97,7 @@ export class PlayerTimerComponent implements OnInit {
 
     switch (role) {
       case 'propose':
-        this.store.dispatch(new ProposePlayer(this.player.user.id, proposedPlayer.user.id));
+        this.store.dispatch(new ProposePlayer(this.playerId, proposedPlayer.user.id));
         break;
 
       default:
@@ -124,18 +106,11 @@ export class PlayerTimerComponent implements OnInit {
   }
 
   withdrawPlayer() {
-    this.store.dispatch(new WithdrawPlayer(this.player.user.id));
+    this.store.dispatch(new WithdrawPlayer(this.playerId));
   }
 
   endPlayerSpeech() {
-    this.pauseTimer();
-    this.isSpeechEnded = true;
-    this.speechEnd.emit(this.player.user.id);
-  }
-
-  private pauseTimer() {
-    this.isTimerPaused = true;
-    this.store.dispatch(new StopSpeech(this.player.user.id, this.timeLeft));
-    return this.interval.unsubscribe();
+    this.timer.endSpeech();
+    this.speechEnd.emit(this.playerId);
   }
 }

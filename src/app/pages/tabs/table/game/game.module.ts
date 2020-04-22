@@ -10,6 +10,7 @@ import { PlayerMenuComponent } from './player-menu/player-menu.component';
 import { NightModalModule } from './night-modal/night-modal.module';
 import { PlayerTimerComponent } from './player-timer/player-timer.component';
 import { ProposeModalComponent } from './propose-modal/propose-modal.component';
+import { ManagePlayerCardComponent } from './manage-player-card/manage-player-card.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ProposeModalComponent } from './propose-modal/propose-modal.component';
     PlayerTimerComponent,
     PlayerMenuComponent,
     ProposeModalComponent,
+    ManagePlayerCardComponent,
   ],
 })
 export class GameModule { }

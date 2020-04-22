@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ExploreContainerComponent } from '@shared/components/explore-container/explore-container.component';
 import { AuthService } from '@shared/services/auth.service';
+import { TimersService } from '@shared/services/timers.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { TableTemplateComponent } from './components/table-template/table-template.component';
@@ -31,7 +32,10 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        TimersService,
+      ],
     };
   }
 }

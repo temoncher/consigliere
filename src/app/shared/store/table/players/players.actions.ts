@@ -28,3 +28,8 @@ export class AssignFall {
   static readonly type = '[Table.Players] Assign fall to a player';
   constructor(public playerId: string) { }
 }
+
+export class ResetPlayer {
+  static readonly type = '[Table.Players] Reset player';
+  constructor(public playerId: string) { }
+}
