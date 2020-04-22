@@ -78,7 +78,7 @@ export class NightModalComponent implements OnInit {
     this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
     this.don = this.store.selectSnapshot(PlayersState.getDon);
 
-    this.days$.subscribe((days) => this.dayNumber = days.length - 1);
+    this.days$.subscribe((days) => this.dayNumber = days.length);
     this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 

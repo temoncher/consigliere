@@ -7,14 +7,14 @@ import { DayPhase } from '@shared/models/day-phase.enum';
 import {
   StopSpeech,
   VoteForCandidate,
-  ResetPlayer,
   ProposePlayer,
   WithdrawPlayer,
   KickPlayer,
+  StartNewDay,
 } from './current-day.actions';
 import { KillPlayer } from '../players/players.actions';
 import { PlayersState, PlayersStateModel } from '../players/players.state';
-import { ApplicationStateModel } from '@shared/store';
+import { AddDay } from '../table.actions';
 
 export interface CurrentDayStateModel {
   day: Day;
@@ -170,16 +170,12 @@ export class CurrentDayState {
     return patchState({ day });
   }
 
-  @Action(ResetPlayer)
-  resetPlayer({ patchState, getState }: StateContext<CurrentDayStateModel>, { playerId }: ResetPlayer) {
+  @Action(StartNewDay)
+  startNewDay({ dispatch, patchState, getState }: StateContext<CurrentDayStateModel>) {
     const { day } = cloneDeep(getState());
-    const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.table.players.players);
-    const foundPlayer = players.find((player) => player.user.id === playerId);
 
-    day.timers[playerId] = null;
-    foundPlayer.falls = 0;
-    foundPlayer.quitPhase = null;
+    dispatch(new AddDay(day));
 
-    return patchState({ day });
+    return patchState({ day: new Day() });
   }
 }

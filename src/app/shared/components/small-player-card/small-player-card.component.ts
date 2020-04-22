@@ -3,6 +3,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
 import { DayPhase } from '@shared/models/day-phase.enum';
+import { Store } from '@ngxs/store';
+import { PlayersState } from '@shared/store/table/players/players.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-small-player-card',
@@ -10,13 +13,15 @@ import { DayPhase } from '@shared/models/day-phase.enum';
   styleUrls: ['./small-player-card.component.scss'],
 })
 export class SmallPlayerCardComponent implements OnInit {
-  @Input() player: Player;
+  @Input() playerId: string;
   @Input() showRole = false;
   @Input() showFalls = false;
   @Input() showTeam = false;
   @Input() disableOverlay = false;
   @Input() overlayCondition = null;
   @Input() overlayText = null;
+
+  player: Player;
 
   Role = Role;
 
@@ -48,8 +53,12 @@ export class SmallPlayerCardComponent implements OnInit {
     return this.overlayText;
   }
 
-  constructor() { }
+  constructor(private store: Store) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.store.select(PlayersState.getPlayer(this.playerId))
+      .subscribe((player) => this.player = player);
+  }
 
 }

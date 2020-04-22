@@ -18,7 +18,7 @@
     <app-table-template>
       <app-small-player-card *ngFor="let player of (players$ | async)"
                              [slot]="player.number"
-                             [player]="player"
+                             [playerId]="player.user.id"
                              [overlayCondition]="(proposedPlayers$ | async).has(player.user.id)"
                              (click)="navigateToPlayer(player)"></app-small-player-card>
       <ion-card slot="center"

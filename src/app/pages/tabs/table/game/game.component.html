@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ dayText }} {{ (days$ | async).length - 1 }}</ion-title>
+    <ion-title>{{ dayText }} {{ (days$ | async).length }}</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="outlined">
         <ion-icon slot="icon-only"
@@ -16,10 +16,8 @@
               class="number-slider"
               [options]="numberSliderConfig">
 
-    <ion-slide *ngFor="let player of (players$ | async)">
-      <app-small-player-card (click)="openPlayerMenu(player)"
-                             [showFalls]="true"
-                             [player]="player"></app-small-player-card>
+    <ion-slide *ngFor="let player of players">
+      <app-manage-player-card [playerId]="player.user.id"></app-manage-player-card>
     </ion-slide>
 
   </ion-slides>
@@ -28,8 +26,8 @@
               class="player-slider"
               [options]="playerSliderConfig">
 
-    <ion-slide *ngFor="let player of (players$ | async)">
-      <app-player-timer [player]="player"
+    <ion-slide *ngFor="let player of players">
+      <app-player-timer [playerId]="player.user.id"
                         (speechEnd)="endSpeech($event)"></app-player-timer>
     </ion-slide>
   </ion-slides>

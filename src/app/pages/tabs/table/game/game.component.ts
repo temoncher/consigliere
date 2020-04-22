@@ -8,10 +8,11 @@ import { Day } from '@shared/models/day.model';
 import { Player } from '@shared/models/player.model';
 import { PlayersState } from '@shared/store/table/players/players.state';
 import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
-import { AssignFall } from '@shared/store/table/players/players.actions';
-import { ResetPlayer, KickPlayer } from '@shared/store/table/current-day/current-day.actions';
+import { AssignFall, ResetPlayer } from '@shared/store/table/players/players.actions';
+import { KickPlayer } from '@shared/store/table/current-day/current-day.actions';
 import { NightModalComponent } from './night-modal/night-modal.component';
 import { PlayerMenuComponent } from './player-menu/player-menu.component';
+import { TimersService } from '@shared/services/timers.service';
 
 @Component({
   selector: 'app-game',
@@ -23,7 +24,6 @@ export class GameComponent implements OnInit {
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
   @Select(TableState.getDays) days$: Observable<Day[]>;
-  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   players = [];
 
   numberSliderConfig = {
@@ -40,16 +40,14 @@ export class GameComponent implements OnInit {
   constructor(
     private store: Store,
     private modalController: ModalController,
-    private popoverController: PopoverController,
+    private timersService: TimersService,
   ) {
+    this.timersService.resetTimers();
+    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
   }
 
   ngOnInit() {
     this.presentNightModal();
-  }
-
-  openPlayerMenu(player: Player) {
-    this.presentPlayerMenu(player);
   }
 
   navigateToSlide(index: number) {
@@ -71,8 +69,6 @@ export class GameComponent implements OnInit {
       return;
     }
   }
-  proposePlayer() { }
-  withdrawPlayer() { }
 
   async presentNightModal() {
     const nightModal = await this.modalController.create({
@@ -81,44 +77,5 @@ export class GameComponent implements OnInit {
     });
 
     await nightModal.present();
-  }
-
-  async presentPlayerMenu(player: Player) {
-    const popover = await this.popoverController.create({
-      component: PlayerMenuComponent,
-      event,
-      translucent: true,
-    });
-
-    await popover.present();
-    await this.awaitMenuOptionResult(popover, player);
-  }
-
-  private async awaitMenuOptionResult(popover: HTMLIonPopoverElement, player: Player) {
-    const { role } = await popover.onWillDismiss();
-
-    switch (role) {
-      case 'refresh':
-        this.refresh(player);
-        break;
-
-      case 'fall':
-        this.store.dispatch(new AssignFall(player.user.id));
-        break;
-
-      case 'kick':
-        this.store.dispatch(new KickPlayer(player.user.id));
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  private refresh(player: Player) {
-    // this.timeLeft = this.time * 1000;
-    // this.isSpeechEnded = false;
-    // this.pauseTimer();
-    this.store.dispatch(new ResetPlayer(player.user.id));
   }
 }

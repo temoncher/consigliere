@@ -1,4 +1,4 @@
-import { Action, State, Selector, StateContext, Store } from '@ngxs/store';
+import { Action, State, Selector, StateContext, Store, createSelector } from '@ngxs/store';
 import { shuffle, cloneDeep } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
@@ -11,10 +11,12 @@ import {
   RemovePlayer,
   AssignFall,
   KillPlayer,
+  ResetPlayer,
 } from './players.actions';
 import { KickPlayer } from '../current-day/current-day.actions';
 import { Injectable } from '@angular/core';
 import { ApplicationStateModel } from '@shared/store';
+import { TimersService } from '@shared/services/timers.service';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
@@ -60,7 +62,10 @@ export class PlayersState {
   private emptyNicknameText = 'У гостя должно быть имя.';
   private isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
 
-  constructor(private store: Store) { }
+  constructor(
+    private store: Store,
+    private timersService: TimersService,
+    ) { }
 
   @Selector()
   static getHost(state: PlayersStateModel) {
@@ -80,6 +85,12 @@ export class PlayersState {
   @Selector()
   static getDon(state: PlayersStateModel) {
     return state.players.find((player) => player.role === Role.DON);
+  }
+
+  static getPlayer(playerId: string) {
+    return createSelector([PlayersState], ({ players }: PlayersStateModel) => {
+      return players.find((player) => player.user.id === playerId);
+    });
   }
 
   @Action(GiveRoles)
@@ -165,10 +176,26 @@ export class PlayersState {
 
     foundPlayer.quitPhase = {
       stage,
-      number: days.length - 1,
+      number: days.length,
     };
 
+    this.timersService.getPlayerTimer(playerId).endSpeech();
+
     patchState({ players });
+  }
+
+  @Action(ResetPlayer)
+  resetPlayer(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { playerId }: ResetPlayer,
+  ) {
+    const { players } = cloneDeep(getState());
+    const foundPlayer = players.find((player) => player.user.id === playerId);
+
+    foundPlayer.falls = 0;
+    foundPlayer.quitPhase = null;
+
+    return patchState({ players });
   }
 
   @Action(AssignFall)
@@ -182,7 +209,7 @@ export class PlayersState {
     foundPlayer.falls++;
     switch (foundPlayer.falls) {
       case 3:
-        foundPlayer.isNextSpeechBanned = true;
+        foundPlayer.nextSpeechTime = 0;
         break;
       case 4:
         dispatch(new KickPlayer(playerId));
