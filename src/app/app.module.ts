@@ -27,7 +27,9 @@ const devModules = environment.production ? [] : [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'ios',
+    }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AppRoutingModule,
     SharedModule,
