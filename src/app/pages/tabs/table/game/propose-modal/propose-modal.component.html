@@ -16,23 +16,25 @@
 <ion-content>
   <div class="propose-modal">
     <app-table-template>
-      <app-small-player-card *ngFor="let player of (players$ | async)"
+      <app-small-player-card *ngFor="let player of players"
                              [slot]="player.number"
                              [playerId]="player.user.id"
-                             [overlayCondition]="(proposedPlayers$ | async).has(player.user.id)"
+                             [overlayCondition]="isAlreadyACandidate(player.user.id)"
+                             [disabled]="isAlreadyACandidate(player.user.id) || player.quitPhase"
                              (click)="navigateToPlayer(player)"></app-small-player-card>
+                             
       <ion-card slot="center"
                 class="player-card">
         <ion-card-header class="player-card__header">
           <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-            {{ (players$ | async)[currentPlayerIndex].number }}
+            {{ players[currentPlayerIndex].number }}
           </div>
-          <ion-card-title class="player-card__header__title text-color-dark">{{ (players$ | async)[currentPlayerIndex].nickname }}
+          <ion-card-title class="player-card__header__title text-color-dark">{{ players[currentPlayerIndex].nickname }}
           </ion-card-title>
         </ion-card-header>
         <ion-card-content class="player-card__content ion-text-center">
           <ion-avatar class="player-card__avatar">
-            <img [src]="(players$ | async)[currentPlayerIndex].user?.avatar || defaultAvatar">
+            <img [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar">
           </ion-avatar>
         </ion-card-content>
       </ion-card>

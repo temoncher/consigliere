@@ -24,7 +24,9 @@ export class TimersService {
   }
 
   resetPlayerTimer(playerId: string) {
-    this.timers.get(playerId).pauseTimer();
-    this.timers.set(playerId, new Timer());
+    const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.table.players.players);
+    const foundPlayer = players.find((player) => player.user.id === playerId);
+
+    this.timers.get(playerId).resetTimer(foundPlayer.nextSpeechTime);
   }
 }

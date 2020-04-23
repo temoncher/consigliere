@@ -4,8 +4,10 @@
             (click)="chooseOption('refresh')">{{ refreshText }}</ion-item>
   <ion-item button
             lines="none"
+            [disabled]="player.quitPhase"
             (click)="chooseOption('fall')">{{ fallText }}</ion-item>
   <ion-item button
             lines="none"
+            [disabled]="player.quitPhase"
             (click)="chooseOption('kick')">{{ kickText }}</ion-item>
 </ion-list>

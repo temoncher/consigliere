@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Player } from '@shared/models/player.model';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';
-import { catchError } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/table/players/players.state';
 import { ShufflePlayers, SetHost } from '@shared/store/table/players/players.actions';
+import { StartGame } from '@shared/store/table/table.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-preparation',
@@ -34,6 +36,7 @@ export class PreparationComponent implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
+    private router: Router,
     private store: Store,
   ) { }
 
@@ -43,6 +46,12 @@ export class PreparationComponent implements OnInit {
     this.store.dispatch(new ShufflePlayers());
   }
 
+  async start() {
+    this.store.dispatch(new StartGame())
+      .pipe(first())
+      .subscribe(() => this.router.navigate(['tabs', 'table', 'game']));
+  }
+
   async presentHostModal() {
     const modal = await this.modalController.create({
       component: PreparationModalComponent,
@@ -50,20 +59,22 @@ export class PreparationComponent implements OnInit {
     });
 
     await modal.present();
-    await this.awaitHostModalResult(modal);
+    this.awaitHostModalResult(modal);
   }
 
   private async awaitHostModalResult(modal: HTMLIonModalElement) {
     const { data: player, role } = await modal.onWillDismiss();
 
-    if (role === 'authenticated') {
-      this.setHost(player);
-      return;
-    }
+    switch (role) {
+      case 'authenticated':
+        this.setHost(player);
+        return;
+      case 'guest':
+        this.presentHostPrompt();
+        return;
 
-    if (role === 'guest') {
-      await this.presentHostPrompt();
-      return;
+      default:
+        break;
     }
   }
 

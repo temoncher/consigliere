@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { ModalController } from '@ionic/angular';
-import { map } from 'rxjs/operators';
 import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
 import { PlayersState } from '@shared/store/table/players/players.state';
 
@@ -16,10 +15,10 @@ import { PlayersState } from '@shared/store/table/players/players.state';
 })
 export class ProposeModalComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  proposedPlayers$: Observable<Map<string, string>>;
+  @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
 
   players: Player[];
-  proposedPlayers: Map<string, string>;
+  proposedPlayers: Map<string, string> = new Map<string, string>();
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -29,23 +28,22 @@ export class ProposeModalComponent implements OnInit {
   proposeButtonText = 'Выставить';
 
   constructor(
-    private store: Store,
     private modalController: ModalController,
   ) { }
 
   ngOnInit() {
-    const day$ = this.store.select(CurrentDayState.getDay);
-    this.proposedPlayers$ = day$.pipe(map((day) => day.proposedPlayers));
     this.proposedPlayers$.subscribe((proposedPlayers) => this.proposedPlayers = proposedPlayers);
     this.players$.subscribe((players) => this.players = players);
 
-    this.currentPlayerIndex = this.players.findIndex((player) => !this.proposedPlayers.has(player.user.id));
+    this.currentPlayerIndex = this.players.findIndex((player) => !player.quitPhase && !this.isAlreadyACandidate(player.user.id));
   }
 
   navigateToPlayer(player: Player) {
-    if (!this.proposedPlayers.has(player.user.id)) {
-      this.currentPlayerIndex = player.number - 1;
-    }
+    this.currentPlayerIndex = player.number - 1;
+  }
+
+  isAlreadyACandidate(playerId: string) {
+    return this.proposedPlayers.has(playerId);
   }
 
   proposePlayer() {

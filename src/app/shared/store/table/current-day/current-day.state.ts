@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector, Store, createSelector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
@@ -11,6 +11,9 @@ import {
   WithdrawPlayer,
   KickPlayer,
   StartNewDay,
+  SwitchDayPhase,
+  StartVote,
+  ResetCurrentDayPlayerState,
 } from './current-day.actions';
 import { KillPlayer } from '../players/players.actions';
 import { PlayersState, PlayersStateModel } from '../players/players.state';
@@ -18,8 +21,8 @@ import { AddDay } from '../table.actions';
 
 export interface CurrentDayStateModel {
   day: Day;
-  isNextVotingDisabled: boolean;
   finishedPlayers: string[];
+  proposedPlayers: Map<string, string>;
   currentPhase: DayPhase;
 }
 
@@ -27,14 +30,14 @@ export interface CurrentDayStateModel {
   name: 'currentDay',
   defaults: {
     day: new Day(),
-    isNextVotingDisabled: false,
     finishedPlayers: [],
-    currentPhase: DayPhase.DAY,
+    proposedPlayers: new Map<string, string>(), // <candidateId, playerId>
+    currentPhase: DayPhase.NIGHT,
   },
 })
 @Injectable()
 export class CurrentDayState {
-  constructor(private store: Store) { }
+  constructor() { }
 
   @Selector()
   static getDay(state: CurrentDayStateModel) {
@@ -46,9 +49,23 @@ export class CurrentDayState {
     return state.currentPhase;
   }
 
+  @Selector()
+  static getIsNextVotingDisabled(state: CurrentDayStateModel) {
+    return Boolean(state.day.kickedPlayers.length);
+  }
+
+  @Selector()
+  static getCurrentVote({ day: { votes } }: CurrentDayStateModel) {
+    return votes[votes.length - 1];
+  }
+
+  @Selector()
+  static getProposedPlayers(state: CurrentDayStateModel) {
+    return state.proposedPlayers;
+  }
+
   static getProposedPlayer(playerId: string) {
-    return createSelector([CurrentDayState, PlayersState], ({ day }: CurrentDayStateModel, { players }: PlayersStateModel) => {
-      const proposedPlayers = day.proposedPlayers;
+    return createSelector([CurrentDayState, PlayersState], ({ proposedPlayers }: CurrentDayStateModel, { players }: PlayersStateModel) => {
       let foundCandidateId = null;
 
       for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
@@ -75,13 +92,34 @@ export class CurrentDayState {
       candidateId,
     }: ProposePlayer,
   ) {
-    const { day } = cloneDeep(getState());
+    const { proposedPlayers } = cloneDeep(getState());
 
-    if (!day.proposedPlayers.has(candidateId)) {
-      day.proposedPlayers.set(candidateId, playerId);
+    if (!proposedPlayers.has(candidateId)) {
+      proposedPlayers.set(candidateId, playerId);
     }
 
-    return patchState({ day });
+    return patchState({ proposedPlayers });
+  }
+
+  @Action(ResetCurrentDayPlayerState)
+  resetCurrentDayPlayerState(
+    { patchState, getState }: StateContext<CurrentDayStateModel>,
+    { playerId }: ResetCurrentDayPlayerState,
+  ) {
+    const { day, finishedPlayers } = cloneDeep(getState());
+
+    day.kickedPlayers.filter((kickedPlayerId) => kickedPlayerId !== playerId);
+    finishedPlayers.filter((finishedPlayerId) => finishedPlayerId !== playerId);
+
+    return patchState({ day, finishedPlayers });
+  }
+
+  @Action(SwitchDayPhase)
+  switchDayPhase(
+    { patchState }: StateContext<CurrentDayStateModel>,
+    { dayPhase }: SwitchDayPhase,
+  ) {
+    return patchState({ currentPhase: dayPhase });
   }
 
   @Action(WithdrawPlayer)
@@ -89,8 +127,7 @@ export class CurrentDayState {
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId }: WithdrawPlayer,
   ) {
-    const { day } = cloneDeep(getState());
-    const proposedPlayers = day.proposedPlayers;
+    const { proposedPlayers } = cloneDeep(getState());
     let foundCandidateId = null;
 
     for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
@@ -103,7 +140,7 @@ export class CurrentDayState {
       proposedPlayers.delete(foundCandidateId);
     }
 
-    return patchState({ day });
+    return patchState({ proposedPlayers });
   }
 
   @Action(KickPlayer)
@@ -121,7 +158,9 @@ export class CurrentDayState {
 
     dispatch(new KillPlayer(playerId));
 
-    return patchState({ day, finishedPlayers, isNextVotingDisabled: true });
+    const proposedPlayers = new Map<string, string>();
+
+    return patchState({ day, finishedPlayers, proposedPlayers });
   }
 
   @Action(StopSpeech)
@@ -134,7 +173,7 @@ export class CurrentDayState {
   ) {
     const { day, finishedPlayers } = cloneDeep(getState());
 
-    day.timers[playerId] = timeLeft;
+    day.timers.set(playerId, timeLeft);
 
     if (!finishedPlayers.includes(playerId)) {
       finishedPlayers.push(playerId);
@@ -144,28 +183,44 @@ export class CurrentDayState {
   }
 
   @Action(VoteForCandidate)
-  voteForPerson(
+  voteForCandidate(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     {
-      playerIds,
+      playerId,
       proposedPlayerId,
     }: VoteForCandidate,
   ) {
     const { day } = cloneDeep(getState());
+    const vote = day.votes[day.votes.length - 1];
+    const isAlreadyVotedForThisPlayer = vote.get(proposedPlayerId).includes(playerId);
 
-    if (proposedPlayerId) {
-      if (!day.votes[0]) {
-        day.votes.push(new Map<string, string[]>());
-      }
+    if (isAlreadyVotedForThisPlayer) {
+      vote.set(proposedPlayerId, vote.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
 
-      const vote = day.votes[0];
-
-      for (const votedPlayers of vote.values()) {
-        votedPlayers.filter((votedPlayerId) => playerIds.includes(votedPlayerId));
-      }
-
-      vote[proposedPlayerId] = playerIds;
+      return patchState({ day });
     }
+
+    for (const votedPlayers of vote.values()) {
+      votedPlayers.filter((votedPlayerId) => playerId === votedPlayerId);
+    }
+
+    vote.set(proposedPlayerId, [...vote.get(proposedPlayerId), playerId]);
+
+    return patchState({ day });
+  }
+
+  @Action(StartVote)
+  startVote({ dispatch, patchState, getState }: StateContext<CurrentDayStateModel>) {
+    const { proposedPlayers, day } = cloneDeep(getState());
+    const voteMap = new Map<string, string[]>();
+
+    for (const candidateId of proposedPlayers.keys()) {
+      voteMap.set(candidateId, []);
+    }
+
+    day.votes.push(voteMap);
+
+    dispatch(new SwitchDayPhase(DayPhase.VOTE));
 
     return patchState({ day });
   }

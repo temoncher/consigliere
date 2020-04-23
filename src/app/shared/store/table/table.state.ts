@@ -4,10 +4,11 @@ import { cloneDeep } from 'lodash';
 
 import { Day } from '@shared/models/day.model';
 import {
-  AddDay,
+  AddDay, StartGame,
 } from './table.actions';
 import { PlayersState } from './players/players.state';
 import { CurrentDayState } from './current-day/current-day.state';
+import { SetPlayersNumbers } from './players/players.actions';
 
 export interface TableStateModel {
   days: Day[];
@@ -25,6 +26,8 @@ export interface TableStateModel {
 })
 @Injectable()
 export class TableState {
+  constructor() { }
+
   @Selector()
   static getDays(state: TableStateModel) {
     return state.days;
@@ -44,5 +47,10 @@ export class TableState {
     days.push(day);
 
     return patchState({ days });
+  }
+
+  @Action(StartGame)
+  startGame({ dispatch }: StateContext<TableStateModel>) {
+    dispatch(new SetPlayersNumbers());
   }
 }

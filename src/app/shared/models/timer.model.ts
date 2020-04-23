@@ -40,6 +40,13 @@ export class Timer {
         return this.interval.unsubscribe();
     }
 
+    resetTimer(time: number) {
+        this.isTimerPaused = true;
+        this.isSpeechEnded = false;
+        this.timeLeft = time * 1000;
+        return this.interval.unsubscribe();
+    }
+
     endSpeech() {
         this.isTimerPaused = true;
         this.isSpeechEnded = true;

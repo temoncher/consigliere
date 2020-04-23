@@ -13,18 +13,17 @@
     <ion-title>{{ toolbarTitle }}</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button fill="outlined"
-                  (click)="nextStage()">
-        <ion-icon slot="icon-only"
-                  color="primary"
-                  [name]="stage === NightStages.SHERIFF ? 'sunny' : 'arrow-forward'"></ion-icon>
+      <ion-button (click)="nextStage()">
+        <ion-label color="primary">{{ nextStageButtonText }}</ion-label>
+        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <h1 class="ion-padding ion-text-center text-color-dark">{{ currentStageText }}</h1>
+  <app-player-controls></app-player-controls>
+  <h1 class="ion-text-center text-color-dark">{{ currentStageText }}</h1>
   <div class="modal-content">
     <ng-container [ngSwitch]="stage">
       <ng-container *ngSwitchCase="NightStages.MAFIA">
@@ -78,7 +77,7 @@
                 <round-progress class="progress-circle"
                                 (click)="switchTimer()"
                                 [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
-                                [current]="roundedTime"
+                                [current]="sheriffTimer.time"
                                 [max]="time"
                                 [color]="colors['warning']"
                                 [rounded]="true"
@@ -87,7 +86,7 @@
                 </round-progress>
                 <ion-badge class="progress-badge text-color-dark-contrast"
                            color="warning">
-                  {{ roundedTime }}
+                  {{ sheriffTimer.time }}
                 </ion-badge>
               </div>
             </ion-card-content>

@@ -12,8 +12,9 @@ import {
   AssignFall,
   KillPlayer,
   ResetPlayer,
+  SetPlayersNumbers,
 } from './players.actions';
-import { KickPlayer } from '../current-day/current-day.actions';
+import { KickPlayer, ResetCurrentDayPlayerState } from '../current-day/current-day.actions';
 import { Injectable } from '@angular/core';
 import { ApplicationStateModel } from '@shared/store';
 import { TimersService } from '@shared/services/timers.service';
@@ -95,14 +96,15 @@ export class PlayersState {
 
   @Action(GiveRoles)
   giveRoles({ patchState, getState }: StateContext<PlayersStateModel>) {
-    const { players } = cloneDeep(getState());
+    const { players, host } = cloneDeep(getState());
     const roles = shuffle([...rolesArray]);
+    host.role = Role.HOST;
 
     for (const [index, player] of players.entries()) {
       player.role = roles[index];
     }
 
-    return patchState({ players });
+    return patchState({ players, host });
   }
 
   @Action(SetHost)
@@ -129,7 +131,15 @@ export class PlayersState {
   @Action(ShufflePlayers)
   shufflePlayers({ patchState, getState }: StateContext<PlayersStateModel>) {
     const { players } = cloneDeep(getState());
-    const newPlayers = shuffle(players).map((player, index) => new Player({ ...player, number: index + 1 }));
+    const newPlayers = shuffle(players);
+
+    return patchState({ players: newPlayers });
+  }
+
+  @Action(SetPlayersNumbers)
+  setPlayersNumbers({ patchState, getState }: StateContext<PlayersStateModel>) {
+    const { players } = cloneDeep(getState());
+    const newPlayers = players.map((player, index) => new Player({ ...player, number: index + 1 }));
 
     return patchState({ players: newPlayers });
   }
@@ -186,7 +196,7 @@ export class PlayersState {
 
   @Action(ResetPlayer)
   resetPlayer(
-    { patchState, getState }: StateContext<PlayersStateModel>,
+    { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: ResetPlayer,
   ) {
     const { players } = cloneDeep(getState());
@@ -194,6 +204,8 @@ export class PlayersState {
 
     foundPlayer.falls = 0;
     foundPlayer.quitPhase = null;
+
+    dispatch(new ResetCurrentDayPlayerState(playerId));
 
     return patchState({ players });
   }

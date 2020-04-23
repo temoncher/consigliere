@@ -32,6 +32,7 @@ export class PlayerTimerComponent implements OnInit {
   @Output() speechEnd = new EventEmitter();
 
   @Select(CurrentDayState.getDay) day$: Observable<Day>;
+  @Select(CurrentDayState.getIsNextVotingDisabled) isNextVotingDisabled$: Observable<boolean>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   proposedPlayer$: Observable<Player>;
 
@@ -89,7 +90,7 @@ export class PlayerTimerComponent implements OnInit {
     });
 
     await proposeModal.present();
-    await this.awaitProposeModalResult(proposeModal);
+    this.awaitProposeModalResult(proposeModal);
   }
 
   private async awaitProposeModalResult(proposeModal: HTMLIonModalElement) {

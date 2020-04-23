@@ -50,7 +50,7 @@ export class PlayersListComponent implements OnInit {
     });
 
     await modal.present();
-    await this.awaitPlayerModalResult(modal);
+    this.awaitPlayerModalResult(modal);
   }
 
   private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
@@ -62,7 +62,7 @@ export class PlayersListComponent implements OnInit {
     }
 
     if (role === 'guest') {
-      await this.presentPlayerPrompt();
+      this.presentPlayerPrompt();
       return;
     }
   }

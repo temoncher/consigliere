@@ -63,6 +63,10 @@
   color: white;
 }
 
+.quit-overlay {
+  background-color: var(--ion-color-dark);
+}
+
 .grid-content-center {
   display: grid;
   place-content: center;
@@ -78,4 +82,10 @@
 
 .ios ion-card {
   margin: 10px 0;
+}
+
+.number-slider {
+  & > * {
+    margin: 8px 0;
+  }
 }

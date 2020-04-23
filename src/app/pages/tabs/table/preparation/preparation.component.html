@@ -55,6 +55,7 @@
           <ion-button *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) === 11"
                       fill="outlined"
                       size="large"
+                      (click)="start()"
                       routerLink="/tabs/table/game"
                       routerDirection="forward">
             <ion-icon slot="icon-only"

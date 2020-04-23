@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ toolbarTitle }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-label color="primary">{{ nextPhaseText }}</ion-label>
+        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="vote-modal">
+    <app-player-controls></app-player-controls>
+    <app-vote-stage></app-vote-stage>
+</ion-content>
