@@ -1,21 +1,62 @@
-<ion-card class="small-card"
-          *ngIf="player"
-          [ngClass]="(showRole || showTeam) && ((player.role === Role.MAFIA) || (player.role === Role.DON)) ? 'background-color-dark' : ''">
-  <div *ngIf="showRole && ((player.role === Role.DON) || (player.role === Role.SHERIFF))"
-       class="clip-button top-left"
-       [ngClass]="(player.role === Role.DON) ? 'background-color-danger' : 'background-color-warning'">
-    <ion-icon class="text-color-dark-contrast"
-              [name]="(player.role === Role.DON) ? 'rose': 'star'"></ion-icon>
+<ion-card
+  class="small-card"
+  *ngIf="player"
+  [ngClass]="
+    (showRole || showTeam) &&
+    (player.role === Role.MAFIA || player.role === Role.DON)
+      ? 'background-color-dark'
+      : ''
+  "
+  (click)="onClick($event)"
+>
+  <div
+    *ngIf="
+      showRole && (player.role === Role.DON || player.role === Role.SHERIFF)
+    "
+    class="clip-button top-left"
+    [ngClass]="
+      player.role === Role.DON
+        ? 'background-color-danger'
+        : 'background-color-warning'
+    "
+  >
+    <ion-icon
+      class="text-color-dark-contrast"
+      [name]="player.role === Role.DON ? 'rose' : 'star'"
+    ></ion-icon>
   </div>
-  <div *ngIf="showFalls && player.falls"
-       class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
-    {{ player.falls }}
-  </div>
+
+  <div *ngIf="useSlot; then slotBlock; else fallsBlock"></div>
+
+  <ng-template #slotBlock>
+    <slot name="clips"></slot>
+  </ng-template>
+
+  <ng-template #fallsBlock>
+    <div
+      *ngIf="showFalls && player.falls"
+      class="clip-button top-right text-only background-color-danger text-color-dark-contrast"
+    >
+      {{ player.falls }}
+    </div>
+  </ng-template>
 
   <ion-card-content>{{ player.number }}</ion-card-content>
 
-  <div *ngIf="isOverlayVisible"
-       class="full-parent-overlay grid-content-center">
-    <span class="text-color-medium">{{ computedOverlayText }}</span>
+  <div
+    *ngIf="showProposedPlayer && proposedPlayer?.number"
+    class="clip-button bottom-left text-only background-color-medium text-color-dark-contrast"
+  >
+    {{ proposedPlayer?.number }}
+  </div>
+
+  <div *ngIf="quitPhase" class="quit-overlay full-parent-overlay grid-content-center">
+    <span class="text-color-medium">{{ quitPhase }}</span>
+  </div>
+
+  <slot name="overlay"></slot>
+
+  <div *ngIf="overlayCondition" class="full-parent-overlay grid-content-center">
+    <span *ngIf="overlayText" class="text-color-medium">{{ overlayText }}</span>
   </div>
 </ion-card>

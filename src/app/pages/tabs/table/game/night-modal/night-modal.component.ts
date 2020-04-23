@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { NightStages } from '@shared/constants/table';
 import { Role } from '@shared/models/role.enum';
@@ -12,6 +12,9 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { Day } from '@shared/models/day.model';
 import { PlayersState } from '@shared/store/table/players/players.state';
 import { GiveRoles } from '@shared/store/table/players/players.actions';
+import { Timer } from '@shared/models/timer.model';
+import { SwitchDayPhase } from '@shared/store/table/current-day/current-day.actions';
+import { DayPhase } from '@shared/models/day-phase.enum';
 
 @Component({
   selector: 'app-night-modal',
@@ -32,10 +35,8 @@ export class NightModalComponent implements OnInit {
 
   dayNumber = 0;
   time = 20;
-  timeLeft = 20000;
-  isTimerPaused = true;
+  sheriffTimer = new Timer({ time: this.time });
   stage = NightStages.MAFIA;
-  interval: Subscription = Subscription.EMPTY;
 
   toolbarTitle = `Ночь ${this.dayNumber}`;
   mafiaHuntsText = 'Мафия выходит на охоту';
@@ -44,13 +45,25 @@ export class NightModalComponent implements OnInit {
   hostMeetsDonText = 'Ведущий знакомится с доном';
   sheriffChecksText = 'Просыпается Шериф';
   hostMeetsSheriffText = 'Просыпается Шериф';
+  donNextText = 'Дон';
+  sheriffNextText = 'Шериф';
+  dayNextText = 'Утро';
+
+  get nextStageButtonText() {
+    switch (this.stage) {
+      case NightStages.DON:
+        return this.sheriffNextText;
+      case NightStages.MAFIA:
+        return this.donNextText;
+      case NightStages.SHERIFF:
+        return this.dayNextText;
+      default:
+        return 'Далее';
+    }
+  }
 
   get playerAvatar() {
     return this.sheriff.user.avatar || this.defaultAvatar;
-  }
-
-  get roundedTime() {
-    return Math.round(this.timeLeft / 1000);
   }
 
   get currentStageText() {
@@ -71,20 +84,20 @@ export class NightModalComponent implements OnInit {
     private modalController: ModalController,
   ) {
     this.store.dispatch(new GiveRoles());
+    this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
+    this.don = this.store.selectSnapshot(PlayersState.getDon);
   }
 
   ngOnInit() {
-    this.timeLeft = this.time * 1000;
-    this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
-    this.don = this.store.selectSnapshot(PlayersState.getDon);
-
     this.days$.subscribe((days) => this.dayNumber = days.length);
     this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 
   nextStage() {
-    this.pauseTimer();
+    this.sheriffTimer.pauseTimer();
+
     if (this.stage === NightStages.SHERIFF) {
+      this.store.dispatch(new SwitchDayPhase(DayPhase.DAY));
       return this.modalController.dismiss(null, 'cancel');
     }
 
@@ -92,31 +105,11 @@ export class NightModalComponent implements OnInit {
   }
 
   previousStage() {
-    this.pauseTimer();
+    this.sheriffTimer.pauseTimer();
     this.stage--;
   }
 
   switchTimer() {
-    if (this.timeLeft === 0) {
-      return;
-    }
-
-    if (!this.isTimerPaused) {
-      return this.pauseTimer();
-    }
-
-    this.isTimerPaused = false;
-    return this.interval = timer(100, 100).subscribe(() => {
-      if (this.timeLeft === 0) {
-        return;
-      }
-
-      this.timeLeft -= 100;
-    });
-  }
-
-  private pauseTimer() {
-    this.isTimerPaused = true;
-    return this.interval.unsubscribe();
+    this.sheriffTimer.switchTimer();
   }
 }

@@ -13,24 +13,29 @@ import { TimersService } from '@shared/services/timers.service';
 })
 export class ManagePlayerCardComponent implements OnInit {
   @Input() playerId: string;
+  @Input() showRole = false;
+  @Input() showProposedPlayer = false;
 
   constructor(
     private store: Store,
     private popoverController: PopoverController,
     private timersService: TimersService,
-    ) { }
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  async presentPlayerMenu() {
+  async presentPlayerMenu(event: MouseEvent) {
     const popover = await this.popoverController.create({
       component: PlayerMenuComponent,
+      componentProps: {
+        playerId: this.playerId,
+      },
       event,
       translucent: true,
     });
 
     await popover.present();
-    await this.awaitMenuOptionResult(popover);
+    this.awaitMenuOptionResult(popover);
   }
 
   private async awaitMenuOptionResult(popover: HTMLIonPopoverElement) {
@@ -58,5 +63,4 @@ export class ManagePlayerCardComponent implements OnInit {
     this.timersService.resetPlayerTimer(this.playerId);
     this.store.dispatch(new ResetPlayer(this.playerId));
   }
-
 }

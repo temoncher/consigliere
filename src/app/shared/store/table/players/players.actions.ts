@@ -24,6 +24,10 @@ export class ShufflePlayers {
   static readonly type = '[Table.Players] Shuffle players';
   constructor() { }
 }
+export class SetPlayersNumbers {
+  static readonly type = '[Table.Players] Set players\' numbers';
+  constructor() { }
+}
 export class AssignFall {
   static readonly type = '[Table.Players] Assign fall to a player';
   constructor(public playerId: string) { }

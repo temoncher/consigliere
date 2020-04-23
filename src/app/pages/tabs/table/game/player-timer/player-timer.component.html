@@ -28,7 +28,7 @@
 
       <ion-buttons class="ion-justify-content-between">
         <ion-button (click)="proposePlayer()"
-                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async)">
+                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async) || (isNextVotingDisabled$ | async)">
           <ion-icon slot="icon-only"
                     name="thumbs-up"
                     [color]="timer?.isSpeechEnded ? 'medium' : 'primary'">

@@ -1,3 +1,5 @@
+import { DayPhase } from '@shared/models/day-phase.enum';
+
 export class StopSpeech {
   static readonly type = '[Table.CurrentDay] Stop player speech';
   constructor(
@@ -24,10 +26,15 @@ export class KickPlayer {
   constructor(public playerId: string) { }
 }
 
+export class SwitchDayPhase {
+  static readonly type = '[Table.CurrentDay] Switch day phase';
+  constructor(public dayPhase: DayPhase) { }
+}
+
 export class VoteForCandidate {
   static readonly type = '[Table.CurrentDay] Vote for candidate';
   constructor(
-    public playerIds: string[],
+    public playerId: string,
     public proposedPlayerId: string,
   ) { }
 }
@@ -35,4 +42,14 @@ export class VoteForCandidate {
 export class StartNewDay {
   static readonly type = '[Table.CurrentDay] Start new day';
   constructor() { }
+}
+
+export class StartVote {
+  static readonly type = '[Table.CurrentDay] Start vote';
+  constructor() { }
+}
+
+export class ResetCurrentDayPlayerState {
+  static readonly type = '[Table.CurrentDay] Reset current day player state';
+  constructor(public playerId: string) { }
 }

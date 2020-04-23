@@ -10,7 +10,7 @@ export class Player {
   isGuest?: boolean;
   role?: Role;
   quitPhase?: QuitPhase;
-  nextSpeechTime?: number;
+  nextSpeechTime = 60;
 
   constructor(player: any) {
     this.nickname = player.nickname;

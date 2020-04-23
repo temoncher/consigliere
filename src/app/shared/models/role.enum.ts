@@ -3,4 +3,5 @@ export enum Role {
   CITIZEN = 'Мирный',
   DON = 'Дон',
   SHERIFF = 'Шериф',
+  HOST = 'Ведущий',
 }
