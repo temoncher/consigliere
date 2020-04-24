@@ -59,7 +59,6 @@
   display: grid;
   place-content: center;
 
-  background: rgba(0, 0, 0, 0.7);
   color: white;
 }
 
@@ -78,14 +77,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.ios ion-card {
-  margin: 10px 0;
-}
-
-.number-slider {
-  & > * {
-    margin: 8px 0;
-  }
 }

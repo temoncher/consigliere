@@ -1,9 +1,9 @@
-<ion-slides #numberSlider class="number-slider" [options]="numberSliderConfig">
+<ion-slides #numberSlider
+            [options]="numberSliderConfig">
   <ion-slide *ngFor="let player of players">
-    <app-manage-player-card
-      [playerId]="player.user.id"
-      [showRole]="showRoles"
-      [showProposedPlayer]="showProposedPlayers"
-    ></app-manage-player-card>
+    <app-manage-player-card [playerId]="player.user.id"
+                            [showRole]="showRoles"
+                            [showProposedPlayer]="showProposedPlayers"></app-manage-player-card>
   </ion-slide>
 </ion-slides>
+<div class="app-divider"></div>

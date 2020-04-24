@@ -1,6 +1,14 @@
 @import "~src/global.scss"; // to enable global styles in encapsulated component
 
-.full-parent-overlay span {
-  font-size: 1.2rem;
-  font-weight: bold;
+:host {
+  --card-margin: var(--app-default-card-margin);
+}
+
+.small-card {
+  margin: var(--card-margin);
+
+  .full-parent-overlay span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
 }

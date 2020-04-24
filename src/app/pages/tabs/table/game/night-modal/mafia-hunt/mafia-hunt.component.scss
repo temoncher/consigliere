@@ -13,6 +13,10 @@
       width: 110%;
       display: flex;
       justify-content: space-between;
+
+      app-small-player-card {
+        --card-margin: 0px;
+      }
     }
   }
 }

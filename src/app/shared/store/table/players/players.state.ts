@@ -66,7 +66,7 @@ export class PlayersState {
   constructor(
     private store: Store,
     private timersService: TimersService,
-    ) { }
+  ) { }
 
   @Selector()
   static getHost(state: PlayersStateModel) {
@@ -76,6 +76,13 @@ export class PlayersState {
   @Selector()
   static getPlayers(state: PlayersStateModel) {
     return state.players;
+  }
+
+  static getPlayersByRoles(roles: Role[]) {
+    return createSelector(
+      [PlayersState],
+      ({ players }: PlayersStateModel) => players.filter((player) => roles.includes(player.role)),
+    );
   }
 
   @Selector()

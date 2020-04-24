@@ -1,4 +1,5 @@
-<div *ngIf="player" class="card-container">
+<div *ngIf="player"
+     class="card-container">
   <ion-card class="player-card">
     <ion-card-header class="player-card__header">
       <div class="clip-button top-left text-only text-color-dark-contrast"
@@ -47,7 +48,7 @@
     </ion-card-content>
 
     <div *ngIf="player?.quitPhase"
-         class="full-parent-overlay grid-content-center">
+         class="full-parent-overlay background-color-transparent-dark grid-content-center">
       <span class="text-color-medium">{{ quitPhase }}</span>
     </div>
   </ion-card>

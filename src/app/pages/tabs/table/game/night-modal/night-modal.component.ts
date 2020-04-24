@@ -33,7 +33,7 @@ export class NightModalComponent implements OnInit {
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
 
-  dayNumber = 0;
+  dayNumber = 1;
   time = 20;
   sheriffTimer = new Timer({ time: this.time });
   stage = NightStages.MAFIA;
@@ -86,12 +86,10 @@ export class NightModalComponent implements OnInit {
     this.store.dispatch(new GiveRoles());
     this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
     this.don = this.store.selectSnapshot(PlayersState.getDon);
+    // this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 
-  ngOnInit() {
-    this.days$.subscribe((days) => this.dayNumber = days.length);
-    this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
-  }
+  ngOnInit() { }
 
   nextStage() {
     this.sheriffTimer.pauseTimer();

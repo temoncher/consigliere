@@ -1,4 +1,5 @@
 @import "./variables.scss";
+@import "./custom-variables.scss";
 
 .background-color {
   &-primary {
@@ -18,6 +19,9 @@
   }
   &-dark-contrast {
     background-color: var(--ion-color-dark-contrast);
+  }
+  &-transparent-dark {
+    background-color: var(--app-background-color-transparent-dark);
   }
 }
 

@@ -53,3 +53,11 @@ export class ResetCurrentDayPlayerState {
   static readonly type = '[Table.CurrentDay] Reset current day player state';
   constructor(public playerId: string) { }
 }
+
+export class ShootPlayer {
+  static readonly type = '[Table.CurrentDay] Shoot player';
+  constructor(
+    public mafiaId: string,
+    public victimId: string,
+  ) { }
+}

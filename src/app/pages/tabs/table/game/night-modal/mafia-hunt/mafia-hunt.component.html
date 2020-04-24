@@ -1,8 +1,9 @@
 <app-table-template class="mafia-hunt">
   <app-small-player-card *ngFor="let player of (players$ | async)"
+                         showRole="true"
                          [slot]="player.number"
                          [playerId]="player.user.id"
-                         showRole="true"></app-small-player-card>
+                         (click)="navigateToPlayer(player.number)"></app-small-player-card>
 
   <ion-card slot="center"
             class="center-item center-card">
@@ -23,8 +24,25 @@
 
     <div class="mafia-cards-container">
       <app-small-player-card *ngFor="let mafiaPlayer of mafia"
+                             showTeam="true"
                              [playerId]="mafiaPlayer.user.id"
-                             showTeam="true"></app-small-player-card>
+                             (click)="shootPlayer(mafiaPlayer.user.id)">
+        <div slot="overlay"
+             *ngIf="shotPlayerId(mafiaPlayer.user.id)"
+             class="full-parent-overlay grid-content-center"
+             [ngClass]="shotPlayerId(mafiaPlayer.user.id) === players[currentPlayerIndex].user.id ? 'background-color-danger' : 'background-color-medium'">
+          <ion-icon name="checkmark"></ion-icon>
+        </div>
+      </app-small-player-card>
     </div>
   </ion-card>
+
+  <div slot="under"
+       class="grid-content-center">
+    <ion-button size="large"
+                [disabled]="numberOfShots !== 3"
+                (click)="next()">
+      {{ nextStageButtonText }}
+    </ion-button>
+  </div>
 </app-table-template>

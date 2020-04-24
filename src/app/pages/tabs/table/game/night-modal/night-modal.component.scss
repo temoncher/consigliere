@@ -1,44 +1,41 @@
-.modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+.night-modal-content {
+  .modal-content {
+    .card-wrapper {
+      display: flex;
+      justify-content: center;
 
-  .card-wrapper {
-    display: flex;
-    justify-content: center;
+      .player-card {
+        width: 50vmin;
+        height: 75vmin;
 
-    .player-card {
-      width: 50vmin;
-      height: 75vmin;
-
-      &__content {
-        padding-top: 20px;
+        &__content {
+          padding-top: 20px;
+        }
       }
     }
-  }
 
-  .progress-container {
-    position: relative;
+    .progress-container {
+      position: relative;
 
-    .progress-circle {
-      background-size: contain;
-      border-radius: 100%;
+      .progress-circle {
+        background-size: contain;
+        border-radius: 100%;
+      }
+
+      .progress-badge {
+        position: absolute;
+        left: 75%;
+        top: 75%;
+
+        min-width: 12.8px;
+        padding: 4px 8px;
+        font-size: 1.8rem;
+      }
     }
 
-    .progress-badge {
-      position: absolute;
-      left: 75%;
-      top: 75%;
-
-      min-width: 12.8px;
-      padding: 4px 8px;
-      font-size: 1.8rem;
+    app-mafia-hunt {
+      position: relative;
+      height: 70%;
     }
-  }
-
-  app-mafia-hunt {
-    position: relative;
-    height: 70%;
   }
 }

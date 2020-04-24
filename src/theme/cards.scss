@@ -1,6 +1,9 @@
 @import "./custom-variables.scss";
 @import "./variables.scss";
 
+ion-card {
+  margin: var(--app-default-card-margin);
+}
 // Small card
 ion-card.small-card {
   position: relative;
@@ -11,41 +14,10 @@ ion-card.small-card {
   max-width: 60px;
   height: 19vmin;
   max-height: 90px;
-  margin-left: 0;
-  margin-right: 0;
 
   ion-card-content {
     font-size: 1.2rem;
     font-weight: bold;
-  }
-}
-
-// Cards list
-
-ion-list.cards-list {
-  .clip-button {
-    font-size: 0.8rem;
-  }
-
-  ion-item {
-    margin: 8px;
-    border-radius: var(--app-border-radius);
-    box-shadow: var(--app-box-shadow);
-
-    ion-label {
-      padding: 8px 0;
-    }
-  }
-
-  ion-item.add-new {
-    padding: 0;
-    border: var(--app-border-width) solid var(--ion-color-primary);
-    box-shadow: unset;
-  }
-
-  ion-label h3 {
-    font-weight: bold;
-    color: var(--ion-color-dark-tint);
   }
 }
 
@@ -75,5 +47,33 @@ ion-card.large-card {
     height: auto;
 
     padding: 16px;
+  }
+}
+
+// Cards list
+ion-list.cards-list {
+  .clip-button {
+    font-size: 0.8rem;
+  }
+
+  ion-item {
+    margin: 8px;
+    border-radius: var(--app-border-radius);
+    box-shadow: var(--app-box-shadow);
+
+    ion-label {
+      padding: 8px 0;
+    }
+  }
+
+  ion-item.add-new {
+    padding: 0;
+    border: var(--app-border-width) solid var(--ion-color-primary);
+    box-shadow: unset;
+  }
+
+  ion-label h3 {
+    font-weight: bold;
+    color: var(--ion-color-dark-tint);
   }
 }
