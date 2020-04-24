@@ -14,6 +14,7 @@ import {
   SwitchDayPhase,
   StartVote,
   ResetCurrentDayPlayerState,
+  ShootPlayer,
 } from './current-day.actions';
 import { KillPlayer } from '../players/players.actions';
 import { PlayersState, PlayersStateModel } from '../players/players.state';
@@ -37,6 +38,8 @@ export interface CurrentDayStateModel {
 })
 @Injectable()
 export class CurrentDayState {
+  thisMafiaAlreadyShotText = 'Эта мафия уже сделала выстрел';
+
   constructor() { }
 
   @Selector()
@@ -161,6 +164,31 @@ export class CurrentDayState {
     const proposedPlayers = new Map<string, string>();
 
     return patchState({ day, finishedPlayers, proposedPlayers });
+  }
+
+  @Action(ShootPlayer)
+  shootPlayer(
+    { patchState, getState }: StateContext<CurrentDayStateModel>,
+    { mafiaId, victimId }: ShootPlayer,
+  ) {
+    const { day } = cloneDeep(getState());
+
+    const thisMafiaVictim = day.shots.get(mafiaId);
+
+    if (thisMafiaVictim) {
+      const isShotThisVicitm = thisMafiaVictim === victimId;
+
+      if (!isShotThisVicitm) {
+        throw new Error(this.thisMafiaAlreadyShotText);
+      }
+
+      day.shots.delete(mafiaId);
+      return patchState({ day });
+    }
+
+    day.shots.set(mafiaId, victimId);
+
+    return patchState({ day });
   }
 
   @Action(StopSpeech)

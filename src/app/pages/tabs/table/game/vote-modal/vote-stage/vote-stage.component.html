@@ -1,68 +1,54 @@
 <div class="vote-stage">
   <div>
     <app-table-template>
-      <app-small-player-card
-        *ngFor="let player of players$ | async"
-        [slot]="player.number"
-        [playerId]="player.user.id"
-        [disabled]="player.quitPhase"
-        (click)="switchVote(player.user.id)"
-      >
-        <div
-          slot="overlay"
-          *ngIf="voteCandidateId(player.user.id)"
-          class="full-parent-overlay grid-content-center"
-          [ngClass]="voteCandidateId(player.user.id) === players[currentPlayerIndex].user.id ? 'vote-overlay-danger' : 'vote-overlay-medium'"
-        >
+      <app-small-player-card *ngFor="let player of players$ | async"
+                             [slot]="player.number"
+                             [playerId]="player.user.id"
+                             [disabled]="player.quitPhase"
+                             (click)="switchVote(player.user.id)">
+        <div slot="overlay"
+             *ngIf="voteCandidateId(player.user.id)"
+             class="full-parent-overlay grid-content-center"
+             [ngClass]="voteCandidateId(player.user.id) === players[currentPlayerIndex].user.id ? 'vote-overlay-danger' : 'vote-overlay-medium'">
           <ion-icon name="thumbs-up"></ion-icon>
         </div>
       </app-small-player-card>
 
-      <ion-card slot="center" class="player-card">
+      <ion-card slot="center"
+                class="player-card">
         <ion-card-header class="player-card__header">
-          <div
-            class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
-          >
+          <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
             {{ players[currentPlayerIndex].number }}
           </div>
-          <ion-card-title class="player-card__header__title text-color-dark"
-            >{{ players[currentPlayerIndex].nickname }}
+          <ion-card-title class="player-card__header__title text-color-dark">{{ players[currentPlayerIndex].nickname }}
           </ion-card-title>
         </ion-card-header>
         <ion-card-content class="player-card__content ion-text-center">
           <ion-avatar class="player-card__avatar">
-            <img
-              [src]="
+            <img [src]="
                 players[currentPlayerIndex].user?.avatar
                   ? players[currentPlayerIndex].user.avatar
                   : defaultAvatar
-              "
-            />
+              " />
           </ion-avatar>
         </ion-card-content>
       </ion-card>
 
-      <div slot="under" class="grid-content-center">
+      <div slot="under"
+           class="grid-content-center">
         <ion-button size="large">{{ "Some text" }} </ion-button>
       </div>
     </app-table-template>
   </div>
 
-  <ion-slides
-    #numberSlider
-    class="number-slider"
-    [options]="numberSliderConfig"
-  >
+  <ion-slides #numberSlider
+              [options]="numberSliderConfig">
     <ion-slide *ngFor="let proposedPlayer of proposedPlayers">
-      <app-small-player-card
-        useSlot
-        [playerId]="proposedPlayer.user.id"
-        (click)="navigateToPlayer(proposedPlayer.number)"
-      >
-        <div
-          slot="clips"
-          class="clip-button top-right text-only background-color-danger text-color-dark-contrast"
-        >
+      <app-small-player-card useSlot
+                             [playerId]="proposedPlayer.user.id"
+                             (click)="navigateToPlayer(proposedPlayer.number)">
+        <div slot="clips"
+             class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
           {{ vote.get(proposedPlayer.user.id).length }}
         </div>
       </app-small-player-card>

@@ -15,15 +15,15 @@
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">
         <ion-label color="primary">{{ nextStageButtonText }}</ion-label>
-        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+        <ion-icon color="primary"
+                  name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="night-modal-content">
   <app-player-controls></app-player-controls>
-  <h1 class="ion-text-center text-color-dark">{{ currentStageText }}</h1>
   <div class="modal-content">
     <ng-container [ngSwitch]="stage">
       <ng-container *ngSwitchCase="NightStages.MAFIA">
@@ -34,7 +34,7 @@
         </ng-template>
 
         <ng-template #mafiaHuntBlock>
-          <app-mafia-hunt></app-mafia-hunt>
+          <app-mafia-hunt (nextClick)="nextStage()"></app-mafia-hunt>
         </ng-template>
       </ng-container>
 
