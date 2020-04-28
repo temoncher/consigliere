@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ProfileComponent } from './profile.component';
 import { SharedModule } from '@shared/shared.module';
+import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { SharedModule } from '@shared/shared.module';
     SharedModule,
     RouterModule.forChild([{ path: '', component: ProfileComponent }]),
   ],
-  declarations: [ProfileComponent],
+  declarations: [
+    ProfileComponent,
+    SettingsMenuComponent,
+  ],
 })
-export class ProfileModule {}
+export class ProfileModule { }

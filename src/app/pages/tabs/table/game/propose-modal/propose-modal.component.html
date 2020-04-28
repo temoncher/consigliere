@@ -19,10 +19,14 @@
       <app-small-player-card *ngFor="let player of players"
                              [slot]="player.number"
                              [playerId]="player.user.id"
-                             [overlayCondition]="isAlreadyACandidate(player.user.id)"
                              [disabled]="isAlreadyACandidate(player.user.id) || player.quitPhase"
-                             (click)="navigateToPlayer(player)"></app-small-player-card>
-                             
+                             (click)="navigateToPlayer(player)">
+        <div slot="overlay"
+             *ngIf="isAlreadyACandidate(player.user.id)"
+             class="full-parent-overlay background-color-transparent-dark grid-content-center">
+        </div>
+      </app-small-player-card>
+
       <ion-card slot="center"
                 class="player-card">
         <ion-card-header class="player-card__header">
@@ -38,10 +42,11 @@
           </ion-avatar>
         </ion-card-content>
       </ion-card>
-  
+
       <div slot="under"
            class="grid-content-center">
         <ion-button size="large"
+                    [disabled]="isAlreadyACandidate(players[currentPlayerIndex].user.id)"
                     (click)="proposePlayer()">{{ proposeButtonText }}
         </ion-button>
       </div>

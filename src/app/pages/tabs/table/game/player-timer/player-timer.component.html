@@ -15,7 +15,7 @@
                         (click)="switchTimer()"
                         [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
                         [current]="timer?.time"
-                        [max]="time"
+                        [max]="maxTime"
                         [color]="colors[timeColor]"
                         [rounded]="true"
                         [responsive]="true"
@@ -29,7 +29,7 @@
 
       <ion-buttons class="ion-justify-content-between">
         <ion-button (click)="proposePlayer()"
-                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async) || (isNextVotingDisabled$ | async)">
+                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async) || (day$ | async)?.isVoteDisabled">
           <ion-icon slot="icon-only"
                     name="thumbs-up"
                     [color]="timer?.isSpeechEnded ? 'medium' : 'primary'">

@@ -1,0 +1,36 @@
+<div *ngIf="player"
+     class="card-container">
+  <ion-card class="player-card">
+    <ion-card-header class="player-card__header">
+      <div class="clip-button top-left text-only text-color-dark-contrast"
+           [ngClass]="timer?.isSpeechEnded ? 'background-color-medium': 'background-color-primary'">
+        {{ player?.number }}
+      </div>
+      <ion-card-title class="player-card__header__title text-color-dark">{{ player?.nickname }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content class="player-card__content">
+      <div class="progress-container">
+        <round-progress class="progress-circle"
+                        (click)="timer.switchTimer()"
+                        [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                        [current]="timer?.time"
+                        [max]="maxTime"
+                        [color]="colors[timeColor]"
+                        [rounded]="true"
+                        [responsive]="true"
+                        [duration]="500">
+        </round-progress>
+        <ion-badge class="progress-badge"
+                   [color]="timeColor">
+          {{ timer?.time }}
+        </ion-badge>
+      </div>
+    </ion-card-content>
+
+    <div *ngIf="player?.quitPhase"
+         class="full-parent-overlay background-color-transparent-dark grid-content-center">
+      <span class="text-color-medium">{{ quitPhase }}</span>
+    </div>
+  </ion-card>
+</div>

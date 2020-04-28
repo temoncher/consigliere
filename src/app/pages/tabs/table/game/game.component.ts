@@ -1,28 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, IonSlides, PopoverController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { ModalController, IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
-import { TableState } from '@shared/store/table/table.state';
-import { Day } from '@shared/models/day.model';
+import { GameState } from '@shared/store/game/game.state';
+import { Day } from '@shared/models/table/day.model';
 import { Player } from '@shared/models/player.model';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
 import { NightModalComponent } from './night-modal/night-modal.component';
 import { TimersService } from '@shared/services/timers.service';
-import { DayPhase } from '@shared/models/day-phase.enum';
+import { DayPhase } from '@shared/models/table/day-phase.enum';
 import { VoteModalComponent } from './vote-modal/vote-modal.component';
-import { StartVote } from '@shared/store/table/current-day/current-day.actions';
+import { takeUntil } from 'rxjs/operators';
+import { EndDay } from '@shared/store/game/current-day/current-day.actions';
+import { StartNight } from '@shared/store/game/game.actions';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
-  @Select(TableState.getDays) days$: Observable<Day[]>;
+  @Select(CurrentDayState.getPhase) currentPhase$: Observable<DayPhase>;
+  @Select(GameState.getDays) days$: Observable<Day[]>;
 
   dayText = 'День';
   voteText = 'Голосовать';
@@ -47,21 +51,25 @@ export class GameComponent implements OnInit {
     private modalController: ModalController,
     private timersService: TimersService,
   ) {
-    this.timersService.resetTimers();
     this.players = this.store.selectSnapshot(PlayersState.getPlayers);
+    this.currentPhase$
+      .pipe(takeUntil(this.destory))
+      .subscribe((newDayPhase) => {
+        switch (newDayPhase) {
+          case DayPhase.NIGHT:
+            this.timersService.resetTimers();
+            return this.presentNightModal();
+          case DayPhase.VOTE:
+            this.timersService.resetTimers();
+            return this.presentVoteModal();
+
+          default:
+            break;
+        }
+      });
   }
 
   ngOnInit() {
-    const dayPhase = this.store.selectSnapshot(CurrentDayState.getPhase);
-
-    if (dayPhase === DayPhase.NIGHT) {
-      this.presentNightModal();
-    }
-
-    if (dayPhase === DayPhase.VOTE) {
-      this.presentVoteModal();
-    }
-
     setTimeout(() => {
       // TODO: Remove crutch for slider config update
       this.playerSliderConfig = {
@@ -70,6 +78,11 @@ export class GameComponent implements OnInit {
         slidesPerView: 1.4,
       };
     }, 0);
+  }
+
+  ngOnDestroy() {
+    this.destory.next();
+    this.destory.unsubscribe();
   }
 
   navigateToSlide(index: number) {
@@ -82,7 +95,7 @@ export class GameComponent implements OnInit {
     const finishedPlayerIndex = players.findIndex((player) => player.user.id === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
-      const day = this.store.selectSnapshot<Day>(CurrentDayState.getDay);
+      const day = this.store.selectSnapshot(CurrentDayState.getDay);
       const slideIndex = players.findIndex(
         (player, index) => index > finishedPlayerIndex && !player.quitPhase && !day.timers[player.user.id],
       );
@@ -96,9 +109,8 @@ export class GameComponent implements OnInit {
     this.isRolesShown = !this.isRolesShown;
   }
 
-  startVote() {
-    this.store.dispatch(new StartVote());
-    this.presentVoteModal();
+  endDay() {
+    this.store.dispatch(new EndDay());
   }
 
   async presentNightModal() {

@@ -10,19 +10,19 @@ export class Player {
   isGuest?: boolean;
   role?: Role;
   quitPhase?: QuitPhase;
-  nextSpeechTime = 60;
+  disabledSpeechDayNumber?: number;
 
-  constructor(player: any) {
-    this.nickname = player.nickname;
-    this.number = player.number;
-    this.falls = player.falls || 0;
-    this.role = player.role;
-    this.quitPhase = player.quitPhase;
-    this.nextSpeechTime = typeof player.nextSpeechTime === 'undefined' ? 60 : player.nextSpeechTime;
+  constructor(partialPlayer: Partial<Player>) {
+    this.nickname = partialPlayer.nickname;
+    this.number = partialPlayer.number;
+    this.falls = partialPlayer.falls || 0;
+    this.role = partialPlayer.role;
+    this.quitPhase = partialPlayer.quitPhase;
+    this.disabledSpeechDayNumber = partialPlayer.disabledSpeechDayNumber;
 
-    if (player.user?.id) {
+    if (partialPlayer.user?.id) {
       this.isGuest = false;
-      this.user = player.user;
+      this.user = partialPlayer.user;
       return;
     }
 

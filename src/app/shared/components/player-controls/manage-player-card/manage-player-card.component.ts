@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { PlayerMenuComponent } from '../player-menu/player-menu.component';
-import { AssignFall, ResetPlayer } from '@shared/store/table/players/players.actions';
-import { KickPlayer } from '@shared/store/table/current-day/current-day.actions';
+import { AssignFall, ResetPlayer } from '@shared/store/game/players/players.actions';
+import { KickPlayer } from '@shared/store/game/current-day/current-day.actions';
 import { Store } from '@ngxs/store';
 import { TimersService } from '@shared/services/timers.service';
 
@@ -14,6 +14,7 @@ import { TimersService } from '@shared/services/timers.service';
 export class ManagePlayerCardComponent implements OnInit {
   @Input() playerId: string;
   @Input() showRole = false;
+  @Input() showFalls = false;
   @Input() showProposedPlayer = false;
 
   constructor(

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { SwitchDayPhase } from '@shared/store/table/current-day/current-day.actions';
-import { DayPhase } from '@shared/models/day-phase.enum';
-import { Store } from '@ngxs/store';
-import { ModalController } from '@ionic/angular';
+import { Select } from '@ngxs/store';
+import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
+import { Observable } from 'rxjs';
+import { Day } from '@shared/models/table/day.model';
+import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
 
 @Component({
   selector: 'app-vote-modal',
@@ -10,18 +12,15 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./vote-modal.component.scss'],
 })
 export class VoteModalComponent implements OnInit {
+  @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
+  @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
+  @Select(CurrentVoteState.getPhase) votePhase$: Observable<VotePhase>;
+
+  VotePhase = VotePhase;
   nextPhaseText = 'Далее';
   toolbarTitle = 'Голосование';
 
-  constructor(
-    private store: Store,
-    private modalController: ModalController,
-  ) { }
+  constructor() { }
 
   ngOnInit() { }
-
-  close() {
-    this.store.dispatch(new SwitchDayPhase(DayPhase.NIGHT));
-    this.modalController.dismiss();
-  }
 }

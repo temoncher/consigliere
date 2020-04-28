@@ -21,7 +21,7 @@ export class AuthService {
 
     loader.present();
     await this.firebaseAuth.signInWithEmailAndPassword(credentials.email, credentials.password);
-    await this.router.navigate(['/tabs/table']);
+    await this.router.navigate(['tabs', 'table']);
     loader.dismiss();
   }
   async registerByEmail({ email, password }) {
@@ -29,7 +29,7 @@ export class AuthService {
 
     loader.present();
     await this.firebaseAuth.createUserWithEmailAndPassword(email, password);
-    await this.router.navigate(['/login']);
+    await this.router.navigate(['login']);
     loader.dismiss();
   }
 

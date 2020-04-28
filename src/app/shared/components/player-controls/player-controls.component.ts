@@ -4,7 +4,9 @@ import { IonSlides } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
-import { PlayersState } from '@shared/store/table/players/players.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
+import { GameMenuState } from '@shared/store/game/menu/menu.state';
 @Component({
   selector: 'app-player-controls',
   templateUrl: './player-controls.component.html',
@@ -13,20 +15,26 @@ import { PlayersState } from '@shared/store/table/players/players.state';
 export class PlayerControlsComponent implements OnInit, OnChanges {
   @ViewChild('numberSlider') numberSlider: IonSlides;
 
+  isPlayerControlsOpened$: Observable<boolean>;
+
   @Input() showRoles = false;
+  @Input() showFalls = true;
   @Input() currentPlayerNumber = 0;
   @Input() showProposedPlayers = false;
 
   players: Player[];
+
   numberSliderConfig = {
     slidesPerView: 5.5,
     centeredSlides: true,
   };
+  menuPropName = 'isPlayerControlsVisible';
 
   constructor(
     private store: Store,
   ) {
     this.players = this.store.selectSnapshot(PlayersState.getPlayers);
+    this.isPlayerControlsOpened$ = this.store.select(GameMenuState.getBasicProp(this.menuPropName));
   }
 
   ngOnInit() {
@@ -43,6 +51,10 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
     if (currentPlayerNumber && this.numberSlider) {
       this.navigateToSlide(currentPlayerNumber.currentValue);
     }
+  }
+
+  toggleControlsVisibility() {
+    this.store.dispatch(new ToggleGameMenuBoolean(this.menuPropName));
   }
 
   navigateToSlide(index: number) {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
-import { TableState } from '@shared/store/table/table.state';
+import { GameState } from '@shared/store/game/game.state';
 
 @Component({
   selector: 'app-table',
@@ -14,7 +14,7 @@ export class TableComponent {
 
   constructor(private store: Store) { }
 
-  resetTableState() {
-    this.store.dispatch(new StateReset(TableState));
+  resetGameState() {
+    this.store.dispatch(new StateReset(GameState));
   }
 }

@@ -10,10 +10,10 @@ export class Timer {
         return Math.round(this.timeLeft / 1000);
     }
 
-    constructor(obj?: any) {
-        this.timeLeft = (obj?.time || 60) * 1000;
-        this.isSpeechEnded = typeof obj?.isSpeechEnded === 'undefined' ? false : obj.isSpeechEnded;
-        this.isTimerPaused = typeof obj?.isTimerPaused === 'undefined' ? true : obj.isSpeechEnded;
+    constructor(partialTimer?: Partial<Timer>) {
+        this.timeLeft = (partialTimer?.time || 60) * 1000;
+        this.isSpeechEnded = partialTimer?.isSpeechEnded || false;
+        this.isTimerPaused = typeof partialTimer?.isTimerPaused === 'undefined' ? true : partialTimer.isSpeechEnded;
     }
 
     switchTimer() {

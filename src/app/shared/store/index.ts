@@ -1,18 +1,11 @@
-import { TableState, TableStateModel } from './table/table.state';
-import { PlayersState, PlayersStateModel } from './table/players/players.state';
-import { CurrentDayState, CurrentDayStateModel } from './table/current-day/current-day.state';
 
-interface ExtendedTableStateModel extends TableStateModel {
-  players: PlayersStateModel;
-  currentDay: CurrentDayStateModel;
-}
+import { GameStates, ExtendedGameStateModel } from './game';
+
 export interface ApplicationStateModel {
-  table: ExtendedTableStateModel;
+  game: ExtendedGameStateModel;
 }
 
 export const ApplicationStates = [
-  TableState,
-  PlayersState,
-  CurrentDayState,
+  ...GameStates,
 ];
 

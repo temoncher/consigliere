@@ -1,0 +1,14 @@
+{
+  "TABS": {
+    "clubsTitle": "Клубы",
+    "profileTitle": "Профиль",
+    "searchTitle": "Поиск",
+    "tableTitle": "Стол",
+    "CLUBS": {},
+    "PROFILE": {
+      "header": "Привет, Андрей!"
+    },
+    "SEARCH": {},
+    "TABLE": {}
+  }
+}

@@ -1,29 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
-import { NightStages } from '@shared/constants/table';
+import { NightStages } from '@shared/constants/game';
 import { Role } from '@shared/models/role.enum';
-import { TableState } from '@shared/store/table/table.state';
+import { GameState } from '@shared/store/game/game.state';
 import { Player } from '@shared/models/player.model';
 import { colors } from '@shared/constants/colors';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { Day } from '@shared/models/day.model';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { GiveRoles } from '@shared/store/table/players/players.actions';
-import { Timer } from '@shared/models/timer.model';
-import { SwitchDayPhase } from '@shared/store/table/current-day/current-day.actions';
-import { DayPhase } from '@shared/models/day-phase.enum';
+import { Day } from '@shared/models/table/day.model';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { GiveRoles } from '@shared/store/game/players/players.actions';
+import { Timer } from '@shared/models/table/timer.model';
+import { SwitchDayPhase } from '@shared/store/game/current-day/current-day.actions';
+import { DayPhase } from '@shared/models/table/day-phase.enum';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-night-modal',
   templateUrl: './night-modal.component.html',
   styleUrls: ['./night-modal.component.scss'],
 })
-export class NightModalComponent implements OnInit {
+export class NightModalComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(TableState.getDays) days$: Observable<Day[]>;
+  @Select(GameState.getDays) days$: Observable<Day[]>;
 
   sheriff: Player;
   don: Player;
@@ -33,12 +35,11 @@ export class NightModalComponent implements OnInit {
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
 
-  dayNumber = 1;
+  dayNumber = 0;
   time = 20;
   sheriffTimer = new Timer({ time: this.time });
   stage = NightStages.MAFIA;
 
-  toolbarTitle = `Ночь ${this.dayNumber}`;
   mafiaHuntsText = 'Мафия выходит на охоту';
   giveRolesText = 'Игроки выбирают роли';
   donChecksText = 'Просыпается Дон';
@@ -48,6 +49,10 @@ export class NightModalComponent implements OnInit {
   donNextText = 'Дон';
   sheriffNextText = 'Шериф';
   dayNextText = 'Утро';
+
+  get toolbarTitle() {
+    return `Ночь ${this.dayNumber}`;
+  }
 
   get nextStageButtonText() {
     switch (this.stage) {
@@ -86,10 +91,18 @@ export class NightModalComponent implements OnInit {
     this.store.dispatch(new GiveRoles());
     this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
     this.don = this.store.selectSnapshot(PlayersState.getDon);
-    // this.store.select(TableState.getDayNumber).subscribe((dayNumber) => this.dayNumber = dayNumber);
+    this.store.select(GameState.getDayNumber)
+      .pipe(takeUntil(this.destory))
+      .subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 
   ngOnInit() { }
+
+  ngOnDestroy() {
+    this.sheriffTimer.pauseTimer();
+    this.destory.next();
+    this.destory.unsubscribe();
+  }
 
   nextStage() {
     this.sheriffTimer.pauseTimer();
