@@ -1,39 +1,39 @@
 import { Player } from '@shared/models/player.model';
 
 export class SetHost {
-  static readonly type = '[Table.Players] Set host';
+  static readonly type = '[Game.Players] Set host';
   constructor(public player: Player) { }
 }
 export class GiveRoles {
-  static readonly type = '[Table.Players] Give roles';
+  static readonly type = '[Game.Players] Give roles';
   constructor() { }
 }
 export class AddPlayer {
-  static readonly type = '[Table.Players] Add player';
+  static readonly type = '[Game.Players] Add player';
   constructor(public player: Player) { }
 }
 export class RemovePlayer {
-  static readonly type = '[Table.Players] Remove player';
+  static readonly type = '[Game.Players] Remove player';
   constructor(public userId: string) { }
 }
 export class KillPlayer {
-  static readonly type = '[Table.Players] Kill player';
+  static readonly type = '[Game.Players] Kill player';
   constructor(public playerId: string) { }
 }
 export class ShufflePlayers {
-  static readonly type = '[Table.Players] Shuffle players';
+  static readonly type = '[Game.Players] Shuffle players';
   constructor() { }
 }
 export class SetPlayersNumbers {
-  static readonly type = '[Table.Players] Set players\' numbers';
+  static readonly type = '[Game.Players] Set players\' numbers';
   constructor() { }
 }
 export class AssignFall {
-  static readonly type = '[Table.Players] Assign fall to a player';
+  static readonly type = '[Game.Players] Assign fall to a player';
   constructor(public playerId: string) { }
 }
 
 export class ResetPlayer {
-  static readonly type = '[Table.Players] Reset player';
+  static readonly type = '[Game.Players] Reset player';
   constructor(public playerId: string) { }
 }

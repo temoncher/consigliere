@@ -1,31 +1,34 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { Day } from '@shared/models/day.model';
-import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
-import { ShootPlayer } from '@shared/store/table/current-day/current-day.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { Day } from '@shared/models/table/day.model';
+import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
+import { ShootPlayer } from '@shared/store/game/current-day/current-day.actions';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mafia-hunt',
   templateUrl: './mafia-hunt.component.html',
   styleUrls: ['./mafia-hunt.component.scss'],
 })
-export class MafiaHuntComponent implements OnInit {
+export class MafiaHuntComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(CurrentDayState.getDay) day$: Observable<Day>;
+  @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
+
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
   mafia: Player[];
-  day: Day;
+  day: CurrentDayStateModel;
 
   currentPlayerIndex = 0;
   skipButtonText = 'Пропустить';
@@ -37,12 +40,22 @@ export class MafiaHuntComponent implements OnInit {
 
   constructor(private store: Store) {
     this.store.select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]))
+      .pipe(takeUntil(this.destory))
       .subscribe((mafiaPlayers) => this.mafia = mafiaPlayers);
-    this.players$.subscribe((players) => this.players = players);
-    this.day$.subscribe((day) => this.day = day);
+    this.players$
+      .pipe(takeUntil(this.destory))
+      .subscribe((players) => this.players = players);
+    this.day$
+      .pipe(takeUntil(this.destory))
+      .subscribe((day) => this.day = day);
   }
 
   ngOnInit() { }
+
+  ngOnDestroy() {
+    this.destory.next();
+    this.destory.unsubscribe();
+  }
 
   next() {
     this.nextClick.emit();

@@ -1,17 +1,25 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ toolbarTitle }}</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="close()">
-        <ion-label color="primary">{{ nextPhaseText }}</ion-label>
-        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="vote-modal">
+<ion-content>
+  <div class="vote-modal">
     <app-player-controls></app-player-controls>
-    <app-vote-stage></app-vote-stage>
+
+    <div class="vote-modal__content" [ngSwitch]="votePhase$ | async">
+      <ng-container *ngSwitchCase="VotePhase.VOTE">
+        <app-vote-stage></app-vote-stage>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="VotePhase.SPEECH">
+        <app-additional-speech></app-additional-speech>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="VotePhase.RESULT">
+        <app-vote-results></app-vote-results>
+      </ng-container>
+    </div>
+  </div>
 </ion-content>

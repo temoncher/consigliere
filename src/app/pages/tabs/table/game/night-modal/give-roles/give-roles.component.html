@@ -11,18 +11,19 @@
               (click)="isRoleVisible ? nextPlayer() : revealRole()">
       <ion-card-header class="player-card__header">
         <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-          {{ players[currentPlayerIndex].number }}
+          {{ (players$ | async)[currentPlayerIndex].number }}
         </div>
-        <ion-card-title class="player-card__header__title text-color-dark">{{ players[currentPlayerIndex].nickname }}
+        <ion-card-title class="player-card__header__title text-color-dark">
+          {{ (players$ | async)[currentPlayerIndex].nickname }}
         </ion-card-title>
       </ion-card-header>
       <ion-card-content [ngClass]="isRoleVisible ? '' : 'text-color-medium role-hidden'"
                         class="player-card__content role-card__content ion-text-center">
         <ion-avatar class="player-card__avatar">
           <img
-               [src]="players[currentPlayerIndex].user?.avatar ? players[currentPlayerIndex].user.avatar : defaultAvatar">
+               [src]="(players$ | async)[currentPlayerIndex].user?.avatar ? (players$ | async)[currentPlayerIndex].user.avatar : defaultAvatar">
         </ion-avatar>
-        {{ isRoleVisible ? players[currentPlayerIndex].role : hiddenRoleText}}
+        {{ isRoleVisible ? (players$ | async)[currentPlayerIndex].role : hiddenRoleText}}
       </ion-card-content>
     </ion-card>
 

@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { Observable } from 'rxjs';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { Observable, Subject } from 'rxjs';
 import { Player } from '@shared/models/player.model';
-import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { VoteForCandidate } from '@shared/store/table/current-day/current-day.actions';
+import { takeUntil } from 'rxjs/operators';
+import { ModalController } from '@ionic/angular';
+import { VoteForCandidate, EndVoteStage, StartVote } from '@shared/store/game/current-day/current-vote/current-vote.actions';
+import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
 
 @Component({
   selector: 'app-vote-stage',
   templateUrl: './vote-stage.component.html',
   styleUrls: ['./vote-stage.component.scss'],
 })
-export class VoteStageComponent implements OnInit {
+export class VoteStageComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(CurrentDayState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
+  @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -22,34 +25,59 @@ export class VoteStageComponent implements OnInit {
   proposedPlayers: Player[];
   vote: Map<string, string[]>;
 
+  voteInfoMap: Map<string, Player> = new Map<string, Player>();
   numberSliderConfig = {};
   currentPlayerIndex = 0;
+  numberOfLeaderVotes = 0;
+  numberOfPreviousVoteLeaders = 0;
+  isAllPlayersVoted = false;
+
+  nextButtonText = 'Далее';
+  endVoteText = 'Завершить';
 
   constructor(
     private store: Store,
   ) {
-    this.players$.subscribe((players) => this.players = players);
-    this.vote$.subscribe((voteMap) => {
-      // TODO: Rework mechanism to store real order of players proposal
-      const proposedPlayers = [];
+    const currentVote = this.store.selectSnapshot(CurrentVoteState.getCurrentVote);
+    const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
+    const proposedPlayers: Player[] = [];
+    // Implemented to keep players proposal order
+    for (const candidateId of currentVote.keys()) {
+      const candidate = alivePlayers.find((player) => player.user.id === candidateId);
 
-      if (voteMap) {
-        for (const candidateId of voteMap.keys()) {
-          const candidate = this.players.find((player) => player.user.id === candidateId);
+      proposedPlayers.push(candidate);
+    }
+    this.proposedPlayers = proposedPlayers;
 
-          if (candidate) {
-            proposedPlayers.push(candidate);
+    this.players$
+      .pipe(takeUntil(this.destory))
+      .subscribe((newPlayers) => this.players = newPlayers);
+    this.vote$
+      .pipe(takeUntil(this.destory))
+      .subscribe((voteMap) => {
+        this.vote = voteMap;
+        // TODO: Rework mechanism to store real order of players proposal
+        const newVoteInfoMap = new Map<string, Player>();
+        let newNumberOfLeaderVotes = 0;
+
+        if (voteMap) {
+          for (const candidateId of voteMap.keys()) {
+            const candidate = this.players.find((player) => player.user.id === candidateId);
+
+            if (voteMap.get(candidateId).length > newNumberOfLeaderVotes) {
+              newNumberOfLeaderVotes = voteMap.get(candidateId).length;
+            }
+
+            for (const playerId of voteMap.get(candidateId)) {
+              newVoteInfoMap.set(playerId, candidate);
+            }
           }
         }
-      }
 
-      this.proposedPlayers = proposedPlayers;
-      this.vote = voteMap;
-    });
-
-    if (this.proposedPlayers?.length) {
-      this.currentPlayerIndex = this.proposedPlayers[0].number - 1;
-    }
+        this.isAllPlayersVoted = alivePlayers.length === newVoteInfoMap.size;
+        this.voteInfoMap = newVoteInfoMap;
+        this.numberOfLeaderVotes = newNumberOfLeaderVotes;
+      });
   }
 
   ngOnInit() {
@@ -62,38 +90,44 @@ export class VoteStageComponent implements OnInit {
     }, 0);
   }
 
+  ngOnDestroy() {
+    this.destory.next();
+    this.destory.unsubscribe();
+  }
+
   switchVote(playerId: string) {
-    this.store.dispatch(new VoteForCandidate(playerId, this.players[this.currentPlayerIndex].user.id));
+    this.store.dispatch(new VoteForCandidate(playerId, this.proposedPlayers[this.currentPlayerIndex].user.id));
   }
 
-  voteCandidateId(playerId: string) {
-    let voteCandidateId = '';
+  next() {
+    if (this.currentPlayerIndex + 1 < this.proposedPlayers.length) {
+      this.currentPlayerIndex++;
+    }
+  }
 
+  previous() {
+    if (this.currentPlayerIndex > 0) {
+      this.currentPlayerIndex--;
+    }
+  }
+
+  endVote() {
+    const voteLeaders = [];
     for (const [candidateId, votedPlayersIds] of this.vote.entries()) {
-      if (votedPlayersIds.includes(playerId)) {
-        voteCandidateId = candidateId;
+      if (votedPlayersIds.length === this.numberOfLeaderVotes) {
+        voteLeaders.push(candidateId);
       }
     }
 
-    return voteCandidateId;
-  }
-
-  isAlreadyVotedForAnotherPlayer(playerId: string) {
-    let isAlreadyVoted = false;
-
-    for (const [candidateId, votedPlayersIds] of this.vote.entries()) {
-      if (candidateId !== this.players[this.currentPlayerIndex].user.id && votedPlayersIds.includes(playerId)) {
-        isAlreadyVoted = true;
-      }
+    if (voteLeaders.length === 1) {
+      this.store.dispatch(new EndVoteStage(voteLeaders));
+      return;
     }
 
-    return isAlreadyVoted;
+    this.store.dispatch(new StartVote(voteLeaders));
   }
 
-  previousPlayer() { }
-  nextPlayer() { }
-
-  navigateToPlayer(playerNumber: number) {
-    this.currentPlayerIndex = playerNumber - 1;
+  navigateToPlayer(playerIndex: number) {
+    this.currentPlayerIndex = playerIndex;
   }
 }

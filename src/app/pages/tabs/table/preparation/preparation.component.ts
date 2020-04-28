@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Player } from '@shared/models/player.model';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';
@@ -7,9 +7,9 @@ import { of, Observable } from 'rxjs';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { ShufflePlayers, SetHost } from '@shared/store/table/players/players.actions';
-import { StartGame } from '@shared/store/table/table.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.actions';
+import { StartGame } from '@shared/store/game/game.actions';
 import { Router } from '@angular/router';
 
 @Component({
@@ -105,6 +105,7 @@ export class PreparationComponent implements OnInit {
   private setHost(player: Player) {
     this.store.dispatch(new SetHost(player))
       .pipe(
+        first(),
         catchError((err) => {
           this.displayToast(err.message, 'danger');
           return of('');

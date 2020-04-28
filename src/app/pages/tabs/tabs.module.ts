@@ -6,14 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { TabsRoutingModule } from './tabs-routing.module';
 
 import { TabsComponent } from './tabs.component';
+import { SharedModule } from '@shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
+    IonicModule,
     FormsModule,
+    SharedModule,
     TabsRoutingModule,
   ],
   declarations: [TabsComponent],
 })
-export class TabsModule {}
+export class TabsModule { }

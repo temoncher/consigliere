@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/table/players/players.state';
-import { RemovePlayer, AddPlayer } from '@shared/store/table/players/players.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { RemovePlayer, AddPlayer } from '@shared/store/game/players/players.actions';
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
 
 @Component({
@@ -94,6 +94,7 @@ export class PlayersListComponent implements OnInit {
   private addNewPlayer(player: Player) {
     this.store.dispatch(new AddPlayer(player))
       .pipe(
+        first(),
         catchError((err) => {
           this.displayToast(err.message, 'danger');
           return of('');

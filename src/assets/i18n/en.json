@@ -1,0 +1,14 @@
+{
+  "TABS": {
+    "CLUBS": {},
+    "PROFILE": {
+      "header": "Hello, Андрей!"
+    },
+    "SEARCH": {},
+    "TABLE": {},
+    "clubsTitle": "Clubs",
+    "profileTitle": "Profile",
+    "searchTitle": "Search",
+    "tableTitle": "Table"
+  }
+}

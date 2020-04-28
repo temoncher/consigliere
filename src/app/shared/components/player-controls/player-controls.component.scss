@@ -1,0 +1,24 @@
+.player-controls {
+  position: relative;
+
+  .toggle-controls {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    --button-size: 20px;
+
+    &-button {
+      margin: 0;
+      max-height: var(--button-size);
+      --padding-start: var(--button-size);
+      --padding-end: var(--button-size);
+
+      &.close {
+        --border-radius: var(--button-size) var(--button-size) 0 0;
+      }
+      &.open {
+        --border-radius: 0 0 var(--button-size) var(--button-size);
+      }
+    }
+  }
+}

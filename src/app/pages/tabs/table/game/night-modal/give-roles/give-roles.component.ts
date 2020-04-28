@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/table/players/players.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
 
 @Component({
   selector: 'app-give-roles',
@@ -13,8 +13,6 @@ import { PlayersState } from '@shared/store/table/players/players.state';
 })
 export class GiveRolesComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-
-  players: Player[];
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -27,9 +25,7 @@ export class GiveRolesComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.players$.subscribe((players) => this.players = players);
-  }
+  ngOnInit() { }
 
   nextPlayer() {
     if (this.currentPlayerIndex < 9) {

@@ -20,18 +20,12 @@
               [name]="player.role === Role.DON ? 'rose' : 'star'"></ion-icon>
   </div>
 
-  <div *ngIf="useSlot; then slotBlock; else fallsBlock"></div>
+  <slot name="clips"></slot>
 
-  <ng-template #slotBlock>
-    <slot name="clips"></slot>
-  </ng-template>
-
-  <ng-template #fallsBlock>
-    <div *ngIf="showFalls && player.falls"
-         class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
-      {{ player.falls }}
-    </div>
-  </ng-template>
+  <div *ngIf="showFalls && player.falls"
+       class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
+    {{ player.falls }}
+  </div>
 
   <ion-card-content>{{ player.number }}</ion-card-content>
 
@@ -46,10 +40,4 @@
   </div>
 
   <slot name="overlay"></slot>
-
-  <div *ngIf="overlayCondition"
-       class="full-parent-overlay grid-content-center">
-    <span *ngIf="overlayText"
-          class="text-color-medium">{{ overlayText }}</span>
-  </div>
 </ion-card>

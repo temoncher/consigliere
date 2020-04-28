@@ -14,10 +14,11 @@ import {
   ResetPlayer,
   SetPlayersNumbers,
 } from './players.actions';
-import { KickPlayer, ResetCurrentDayPlayerState } from '../current-day/current-day.actions';
+import { KickPlayer, ResetCurrentDayPlayerState, StopSpeech } from '../current-day/current-day.actions';
 import { Injectable } from '@angular/core';
 import { ApplicationStateModel } from '@shared/store';
 import { TimersService } from '@shared/services/timers.service';
+import { DayPhase } from '@shared/models/table/day-phase.enum';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
@@ -59,9 +60,9 @@ export interface PlayersStateModel {
 })
 @Injectable()
 export class PlayersState {
-  private isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
-  private emptyNicknameText = 'У гостя должно быть имя.';
-  private isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
+  private readonly isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
+  private readonly emptyNicknameText = 'У гостя должно быть имя.';
+  private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
 
   constructor(
     private store: Store,
@@ -78,11 +79,9 @@ export class PlayersState {
     return state.players;
   }
 
-  static getPlayersByRoles(roles: Role[]) {
-    return createSelector(
-      [PlayersState],
-      ({ players }: PlayersStateModel) => players.filter((player) => roles.includes(player.role)),
-    );
+  @Selector()
+  static getAlivePlayers(state: PlayersStateModel) {
+    return state.players.filter((player) => !player.quitPhase);
   }
 
   @Selector()
@@ -99,6 +98,13 @@ export class PlayersState {
     return createSelector([PlayersState], ({ players }: PlayersStateModel) => {
       return players.find((player) => player.user.id === playerId);
     });
+  }
+
+  static getPlayersByRoles(roles: Role[]) {
+    return createSelector(
+      [PlayersState],
+      ({ players }: PlayersStateModel) => players.filter((player) => roles.includes(player.role)),
+    );
   }
 
   @Action(GiveRoles)
@@ -181,24 +187,29 @@ export class PlayersState {
     const { players } = cloneDeep(getState());
     const newPlayers = players.filter(({ user: { id } }) => id !== userId);
 
-    patchState({ players: newPlayers });
+    return patchState({ players: newPlayers });
   }
 
   @Action(KillPlayer)
-  killPlayer({ patchState, getState }: StateContext<PlayersStateModel>, { playerId }: KillPlayer) {
+  killPlayer(
+    { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
+    { playerId }: KillPlayer,
+  ) {
     const { players } = cloneDeep(getState());
     const foundPlayer = players.find((player) => player.user.id === playerId);
-    const days = this.store.selectSnapshot((state: ApplicationStateModel) => state.table.days);
-    const stage = this.store.selectSnapshot((state: ApplicationStateModel) => state.table.currentDay.currentPhase);
+    const days = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days);
+    const stage = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.currentDay.currentPhase);
 
     foundPlayer.quitPhase = {
       stage,
       number: days.length,
     };
 
-    this.timersService.getPlayerTimer(playerId).endSpeech();
+    if (stage === DayPhase.DAY) {
+      dispatch(new StopSpeech(playerId));
+    }
 
-    patchState({ players });
+    return patchState({ players });
   }
 
   @Action(ResetPlayer)
@@ -228,7 +239,15 @@ export class PlayersState {
     foundPlayer.falls++;
     switch (foundPlayer.falls) {
       case 3:
-        foundPlayer.nextSpeechTime = 0;
+        const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
+        const finishedTimers = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.currentDay.timers);
+        const playerTimer = this.timersService.getPlayerTimer(playerId);
+        const isPlayerAlreadySpoke = finishedTimers.get(playerId) || !playerTimer.isTimerPaused;
+
+        foundPlayer.disabledSpeechDayNumber = isPlayerAlreadySpoke ? currentDayNumber + 1 : currentDayNumber;
+        if (!isPlayerAlreadySpoke) {
+          this.timersService.setTimer(playerId, 0);
+        }
         break;
       case 4:
         dispatch(new KickPlayer(playerId));

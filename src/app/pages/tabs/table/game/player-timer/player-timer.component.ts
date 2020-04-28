@@ -1,23 +1,24 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { Day } from '@shared/models/day.model';
+import { Day } from '@shared/models/table/day.model';
 import { fadeSlide } from '@shared/animations';
 import { colors } from '@shared/constants/colors';
-import { CurrentDayState } from '@shared/store/table/current-day/current-day.state';
-import { PlayersState } from '@shared/store/table/players/players.state';
+import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import {
   ProposePlayer,
   WithdrawPlayer,
-} from '@shared/store/table/current-day/current-day.actions';
-import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
-import { DayPhase } from '@shared/models/day-phase.enum';
+} from '@shared/store/game/current-day/current-day.actions';
+import { DayPhase } from '@shared/models/table/day-phase.enum';
 import { TimersService } from '@shared/services/timers.service';
-import { Timer } from '@shared/models/timer.model';
+import { Timer } from '@shared/models/table/timer.model';
+import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
 
 @Component({
   selector: 'app-player-timer',
@@ -25,14 +26,13 @@ import { Timer } from '@shared/models/timer.model';
   styleUrls: ['./player-timer.component.scss'],
   animations: [fadeSlide],
 })
-export class PlayerTimerComponent implements OnInit {
+export class PlayerTimerComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
-  @Input() time = 60;
 
   @Output() speechEnd = new EventEmitter();
 
-  @Select(CurrentDayState.getDay) day$: Observable<Day>;
-  @Select(CurrentDayState.getIsNextVotingDisabled) isNextVotingDisabled$: Observable<boolean>;
+  @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   proposedPlayer$: Observable<Player>;
 
@@ -41,6 +41,8 @@ export class PlayerTimerComponent implements OnInit {
   timer: Timer;
 
   colors = colors;
+
+  maxTime = 60;
 
   get timeColor() {
     if (this.timer?.time === 0 || this.timer?.isSpeechEnded || this.player.quitPhase) {
@@ -74,9 +76,15 @@ export class PlayerTimerComponent implements OnInit {
 
   ngOnInit() {
     this.store.select(PlayersState.getPlayer(this.playerId))
+      .pipe(takeUntil(this.destory))
       .subscribe((player) => this.player = player);
     this.timer = this.timersService.getPlayerTimer(this.playerId);
     this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
+  }
+
+  ngOnDestroy() {
+    this.destory.next();
+    this.destory.unsubscribe();
   }
 
   switchTimer() {

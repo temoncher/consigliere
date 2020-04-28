@@ -1,17 +1,26 @@
 @import "~src/theme/variables.scss";
 
 .vote-stage {
-    .player-card {
-        height: 100%;
-        min-width: unset;
-    }
+  .player-card {
+    height: 100%;
+    min-width: unset;
+  }
 
-    .vote-overlay {
-        &-danger {
-            background-color: var(--ion-color-danger);
-        }
-        &-medium {
-            background-color: var(--ion-color-medium);
-        }
+  .vote-overlay {
+    &-danger {
+      background-color: var(--ion-color-danger);
     }
+    &-medium {
+      background-color: var(--ion-color-medium);
+    }
+  }
+
+  .proposed-player-clip {
+    font-size: 0.7rem;
+  }
+
+  .controls-block {
+    display: flex;
+    justify-content: space-around;
+  }
 }

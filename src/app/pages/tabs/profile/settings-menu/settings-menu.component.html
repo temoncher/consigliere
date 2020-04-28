@@ -1,0 +1,6 @@
+<ion-list>
+  <ion-item *ngFor="let language of supportedLanguages"
+            button
+            lines="none"
+            (click)="switchLanguage(language.code)">{{ language.text }}</ion-item>
+</ion-list>

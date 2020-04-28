@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
+import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
 
 @Component({
   selector: 'app-profile',
@@ -7,6 +9,15 @@ import { Component } from '@angular/core';
 })
 export class ProfileComponent {
 
-  constructor() {}
+  constructor(private popoverController: PopoverController) { }
 
+  async presentSettingsMenu() {
+    const popover = await this.popoverController.create({
+      component: SettingsMenuComponent,
+      event,
+      translucent: true,
+    });
+
+    await popover.present();
+  }
 }

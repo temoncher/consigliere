@@ -79,13 +79,13 @@
                                 [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
                                 [current]="sheriffTimer.time"
                                 [max]="time"
-                                [color]="colors['warning']"
+                                [color]="sheriffTimer.time > 0 ? colors['warning'] : colors['medium']"
                                 [rounded]="true"
                                 [responsive]="true"
                                 [duration]="500">
                 </round-progress>
                 <ion-badge class="progress-badge text-color-dark-contrast"
-                           color="warning">
+                           [color]="sheriffTimer.time > 0 ? 'warning' : 'medium'">
                   {{ sheriffTimer.time }}
                 </ion-badge>
               </div>

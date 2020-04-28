@@ -33,7 +33,7 @@
 @import "./theme/custom-variables.scss";
 
 .app-divider {
-  border-bottom: 1px solid var(--ion-color-light);
+  border-bottom: 2px solid var(--ion-color-light);
 }
 
 .d-flex {
@@ -58,8 +58,12 @@
   z-index: 2;
   display: grid;
   place-content: center;
-
   color: white;
+
+  span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
 }
 
 .quit-overlay {

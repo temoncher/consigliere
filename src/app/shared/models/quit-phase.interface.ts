@@ -1,4 +1,4 @@
-import { DayPhase } from './day-phase.enum';
+import { DayPhase } from './table/day-phase.enum';
 
 export interface QuitPhase {
   stage: DayPhase;
