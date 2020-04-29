@@ -30,6 +30,7 @@
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "@ngxs/logger-plugin": "^3.6.2",
+    "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
     "@types/lodash": "^4.14.149",
     "angular-svg-round-progressbar": "^3.0.1",

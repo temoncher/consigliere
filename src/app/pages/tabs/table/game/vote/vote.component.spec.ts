@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { VoteModalComponent } from './vote-modal.component';
+import { VoteComponent } from './vote.component';
 
 describe('VoteModalComponent', () => {
-  let component: VoteModalComponent;
-  let fixture: ComponentFixture<VoteModalComponent>;
+  let component: VoteComponent;
+  let fixture: ComponentFixture<VoteComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VoteModalComponent ],
+      declarations: [VoteComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VoteModalComponent);
+    fixture = TestBed.createComponent(VoteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -10,7 +10,8 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.actions';
 import { StartGame } from '@shared/store/game/game.actions';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { Navigate } from '@ngxs/router-plugin';
 
 @Component({
   selector: 'app-preparation',
@@ -36,7 +37,7 @@ export class PreparationComponent implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private store: Store,
   ) { }
 
@@ -49,7 +50,7 @@ export class PreparationComponent implements OnInit {
   async start() {
     this.store.dispatch(new StartGame())
       .pipe(first())
-      .subscribe(() => this.router.navigate(['tabs', 'table', 'game']));
+      .subscribe(() => this.store.dispatch(new Navigate(['../game'], undefined, { relativeTo: this.activatedRoute })));
   }
 
   async presentHostModal() {

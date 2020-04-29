@@ -33,6 +33,11 @@ export class EndDay {
   constructor() { }
 }
 
+export class EndNight {
+  static readonly type = '[Game.CurrentDay] End night';
+  constructor() { }
+}
+
 export class EndVote {
   static readonly type = '[Game.CurrentDay] End vote';
   constructor() { }

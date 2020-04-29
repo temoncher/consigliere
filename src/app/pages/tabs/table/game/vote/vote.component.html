@@ -5,10 +5,11 @@
 </ion-header>
 
 <ion-content>
-  <div class="vote-modal">
+  <div class="vote">
     <app-player-controls></app-player-controls>
 
-    <div class="vote-modal__content" [ngSwitch]="votePhase$ | async">
+    <div class="vote__content"
+         [ngSwitch]="votePhase$ | async">
       <ng-container *ngSwitchCase="VotePhase.VOTE">
         <app-vote-stage></app-vote-stage>
       </ng-container>

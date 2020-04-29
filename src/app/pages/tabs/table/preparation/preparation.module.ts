@@ -13,7 +13,6 @@ import { PlayersListComponent } from './players-list/players-list.component';
     CommonModule,
     IonicModule,
     SharedModule,
-    RouterModule.forChild([{ path: '', component: PreparationComponent }]),
   ],
   declarations: [
     PreparationComponent,
