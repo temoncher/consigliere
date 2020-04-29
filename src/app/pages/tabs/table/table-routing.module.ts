@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TableComponent } from './table.component';
+import { PreparationComponent } from './preparation/preparation.component';
 
 const routes: Routes = [
   {
@@ -10,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'preparation',
-    loadChildren: () => import('./preparation/preparation.module').then(m => m.PreparationModule),
+    component: PreparationComponent,
   },
   {
     path: 'game',
@@ -22,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TableRoutingModule {}
+export class TableRoutingModule { }

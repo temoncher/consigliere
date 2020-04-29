@@ -15,6 +15,7 @@ import {
   EndDay,
   EndVote,
   DisableVote,
+  EndNight,
 } from './current-day.actions';
 import { KillPlayer } from '../players/players.actions';
 import { PlayersState, PlayersStateModel } from '../players/players.state';
@@ -25,6 +26,8 @@ import { CurrentVoteState } from './current-vote/current-vote.state';
 import { ApplicationStateModel } from '@shared/store';
 import { StartNight, DisableNextVote } from '../game.actions';
 import { Vote } from '@shared/models/table/vote.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Navigate } from '@ngxs/router-plugin';
 
 export interface CurrentDayStateModel extends Partial<Day> {
   proposedPlayers: Map<string, string>;
@@ -218,16 +221,33 @@ export class CurrentDayState implements NgxsOnInit {
   ) {
     const { kickedPlayers, proposedPlayers } = cloneDeep(getState());
     const proposedPlayersList = [...proposedPlayers.keys()];
+    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
 
     this.timersService.resetTimers();
-    dispatch(new SwitchDayPhase(DayPhase.VOTE));
-
     if (!proposedPlayersList.length || kickedPlayers.length) {
-      return dispatch(new SwitchVotePhase(VotePhase.RESULT));
+      return dispatch([
+        new SwitchVotePhase(VotePhase.RESULT),
+        new Navigate(['tabs', 'table', 'game', currentDayNumber, 'vote']),
+      ]);
     }
 
-    dispatch(new SwitchVotePhase(VotePhase.VOTE));
-    return dispatch(new StartVote(proposedPlayersList));
+    return dispatch([
+      new SwitchVotePhase(VotePhase.VOTE),
+      new StartVote(proposedPlayersList),
+      new Navigate(['tabs', 'table', 'game', currentDayNumber, 'vote']),
+    ]);
+  }
+
+  @Action(EndNight)
+  endNight(
+    { dispatch }: StateContext<CurrentDayStateModel>,
+  ) {
+    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
+
+    return dispatch([
+      new SwitchDayPhase(DayPhase.DAY),
+      new Navigate(['tabs', 'table', 'game', currentDayNumber, 'day']),
+    ]);
   }
 
   @Action(DisableVote)

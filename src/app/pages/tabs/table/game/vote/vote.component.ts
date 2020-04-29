@@ -7,11 +7,11 @@ import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/cu
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
 
 @Component({
-  selector: 'app-vote-modal',
-  templateUrl: './vote-modal.component.html',
-  styleUrls: ['./vote-modal.component.scss'],
+  selector: 'app-vote',
+  templateUrl: './vote.component.html',
+  styleUrls: ['./vote.component.scss'],
 })
-export class VoteModalComponent implements OnInit {
+export class VoteComponent implements OnInit {
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
   @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
   @Select(CurrentVoteState.getPhase) votePhase$: Observable<VotePhase>;

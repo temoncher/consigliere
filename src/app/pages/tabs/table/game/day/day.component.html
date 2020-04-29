@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ dayText }} {{ (days$ | async).length }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="endDay()">
+        <ion-label color="primary">{{ voteButtonText }}</ion-label>
+        <ion-icon color="primary"
+                  name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-player-controls [showRoles]="isRolesShown"
+                       [showProposedPlayers]="true"
+                       [currentPlayerNumber]="controlSliderPlayerNumber"></app-player-controls>
+
+  <ion-slides #playerSlider
+              class="player-slider"
+              [options]="playerSliderConfig">
+    <ion-slide *ngFor="let player of players">
+      <app-player-timer [playerId]="player.user.id"
+                        (speechEnd)="endSpeech($event)"></app-player-timer>
+    </ion-slide>
+  </ion-slides>
+
+  <div class="felx-centralize">
+    <ion-button size="large"
+                (click)="switchIsRolesShown()">
+      {{ rolesButtonText }}
+    </ion-button>
+  </div>
+</ion-content>

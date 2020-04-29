@@ -1,35 +1,35 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>{{ dayText }} {{ (days$ | async).length }}</ion-title>
+<ion-split-pane contentId="main-content">
+  <ion-menu contentId="main-content"
+            type="overlay">
+    <ion-content>
+      <ion-list id="inbox-list">
+        <ion-list-header>Inbox</ion-list-header>
+        <ion-note>hi@ionicframework.com</ion-note>
 
-    <ion-buttons slot="end">
-      <ion-button (click)="endDay()">
-        <ion-label color="primary">{{ voteButtonText }}</ion-label>
-        <ion-icon color="primary"
-                  name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerDirection="root"
+                    lines="none"
+                    detail="false">
+            <ion-icon slot="start"
+                      name="settings"></ion-icon>
+            <ion-label>Some label</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
 
-<ion-content>
-  <app-player-controls [showRoles]="isRolesShown"
-                       [showProposedPlayers]="true"
-                       [currentPlayerNumber]="controlSliderPlayerNumber"></app-player-controls>
+      <ion-list id="labels-list">
+        <ion-list-header>Labels</ion-list-header>
 
-  <ion-slides #playerSlider
-              class="player-slider"
-              [options]="playerSliderConfig">
-    <ion-slide *ngFor="let player of players">
-      <app-player-timer [playerId]="player.user.id"
-                        (speechEnd)="endSpeech($event)"></app-player-timer>
-    </ion-slide>
-  </ion-slides>
+        <ion-item lines="none">
+          <ion-icon slot="start"
+                    ios="bookmark-outline"
+                    md="bookmark-sharp"></ion-icon>
+          <ion-label>Some label</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
 
-  <div class="felx-centralize">
-    <ion-button size="large"
-                (click)="switchIsRolesShown()">
-      {{ rolesButtonText }}
-    </ion-button>
-  </div>
-</ion-content>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-split-pane>

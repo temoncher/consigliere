@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { TableComponent } from './table.component';
 import { TableRoutingModule } from './table-routing.module';
+import { PreparationModule } from './preparation/preparation.module';
 
 @NgModule({
   imports: [
@@ -12,9 +13,10 @@ import { TableRoutingModule } from './table-routing.module';
     CommonModule,
     FormsModule,
     TableRoutingModule,
+    PreparationModule,
   ],
   declarations: [
     TableComponent,
   ],
 })
-export class TableModule {}
+export class TableModule { }

@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector, Store, NgxsOnInit } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { StateReset } from 'ngxs-reset-plugin';
@@ -13,10 +13,8 @@ import {
 import { PlayersState } from './players/players.state';
 import { SetPlayersNumbers } from './players/players.actions';
 import { CurrentDayState } from './current-day/current-day.state';
-import { CurrentVoteState } from './current-day/current-vote/current-vote.state';
 import { ApplicationStateModel } from '..';
 import { GameMenuState } from './menu/menu.state';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
 
 export interface GameStateModel {
   days: Day[];
@@ -36,7 +34,7 @@ export interface GameStateModel {
   ],
 })
 @Injectable()
-export class GameState implements NgxsOnInit {
+export class GameState {
   constructor(private store: Store) { }
 
   @Selector()
@@ -47,10 +45,6 @@ export class GameState implements NgxsOnInit {
   @Selector()
   static getDayNumber(state: GameStateModel) {
     return state.days.length;
-  }
-
-  ngxsOnInit({ dispatch }: StateContext<GameStateModel>) {
-    dispatch(new StartNight());
   }
 
   @Action(StartNight)

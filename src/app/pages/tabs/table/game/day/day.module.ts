@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
 import { SharedModule } from '@shared/shared.module';
-import { NightModalComponent } from './night-modal.component';
-import { MafiaHuntComponent } from './mafia-hunt/mafia-hunt.component';
-import { GiveRolesComponent } from './give-roles/give-roles.component';
+import { DayComponent } from './day.component';
+import { PlayerTimerComponent } from './player-timer/player-timer.component';
+import { ProposeModalComponent } from './propose-modal/propose-modal.component';
 
 @NgModule({
   imports: [
@@ -16,9 +16,9 @@ import { GiveRolesComponent } from './give-roles/give-roles.component';
     RoundProgressModule,
   ],
   declarations: [
-    NightModalComponent,
-    MafiaHuntComponent,
-    GiveRolesComponent,
+    DayComponent,
+    PlayerTimerComponent,
+    ProposeModalComponent,
   ],
 })
-export class NightModalModule { }
+export class DayModule { }

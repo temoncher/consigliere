@@ -13,16 +13,17 @@ import { Day } from '@shared/models/table/day.model';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { GiveRoles } from '@shared/store/game/players/players.actions';
 import { Timer } from '@shared/models/table/timer.model';
-import { SwitchDayPhase } from '@shared/store/game/current-day/current-day.actions';
+import { SwitchDayPhase, EndNight } from '@shared/store/game/current-day/current-day.actions';
 import { DayPhase } from '@shared/models/table/day-phase.enum';
 import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-night-modal',
-  templateUrl: './night-modal.component.html',
-  styleUrls: ['./night-modal.component.scss'],
+  selector: 'app-night',
+  templateUrl: './night.component.html',
+  styleUrls: ['./night.component.scss'],
 })
-export class NightModalComponent implements OnInit, OnDestroy {
+export class NightComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(GameState.getDays) days$: Observable<Day[]>;
@@ -86,7 +87,8 @@ export class NightModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private modalController: ModalController,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.store.dispatch(new GiveRoles());
     this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
@@ -96,7 +98,8 @@ export class NightModalComponent implements OnInit, OnDestroy {
       .subscribe((dayNumber) => this.dayNumber = dayNumber);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this.sheriffTimer.pauseTimer();
@@ -108,8 +111,8 @@ export class NightModalComponent implements OnInit, OnDestroy {
     this.sheriffTimer.pauseTimer();
 
     if (this.stage === NightStages.SHERIFF) {
-      this.store.dispatch(new SwitchDayPhase(DayPhase.DAY));
-      return this.modalController.dismiss(null, 'cancel');
+
+      this.store.dispatch(new EndNight());
     }
 
     this.stage++;
