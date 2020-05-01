@@ -1,5 +1,5 @@
 export enum DayPhase {
-  DAY = 'Day',
-  NIGHT = 'Night',
-  VOTE = 'Vote',
+  DAY = 'day',
+  NIGHT = 'night',
+  VOTE = 'vote',
 }

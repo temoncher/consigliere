@@ -9,9 +9,6 @@ import { GameState } from '@shared/store/game/game.state';
   styleUrls: ['table.component.scss'],
 })
 export class TableComponent {
-  newGameText = 'Открыть стол';
-  continueText = 'Продолжить';
-
   constructor(private store: Store) { }
 
   resetGameState() {

@@ -11,8 +11,6 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 })
 export class PreparationModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
-  addGuestText = 'Добавить гостя';
-  toolbarTitle = 'Выбор игрока';
   players: Player[] = [];
 
   constructor(private modalController: ModalController) { }

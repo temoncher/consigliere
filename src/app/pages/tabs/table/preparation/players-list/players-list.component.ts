@@ -9,6 +9,7 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { RemovePlayer, AddPlayer } from '@shared/store/game/players/players.actions';
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-players-list',
@@ -20,22 +21,23 @@ export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private playerPromptText = {
-    header: 'Как зовут гостя?',
-    namePlaceholder: 'Каспер',
-    cancelButton: 'Отмена',
-    confirmButton: 'Добавить',
+  playerPromptText: {
+    header: string,
+    namePlaceholder: string,
+    cancelButton: string,
+    confirmButton: string,
   };
-  addNewPlayerText = 'Добавить нового игрока';
-  guestText = 'Гость';
-  authorizedUserText = 'Участник';
 
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
+    private translate: TranslateService,
     private store: Store,
-  ) { }
+  ) {
+    this.translate.get('TABS.TABLE.PREPARATION.PLAYERS_LIST.playerPromptText')
+      .subscribe((playerPromptText) => this.playerPromptText = playerPromptText);
+  }
 
   ngOnInit() { }
 

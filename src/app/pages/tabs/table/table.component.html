@@ -1,11 +1,15 @@
 <ion-content>
   <div class="grid-content-center">
-    <ion-button shape="round"
-                routerLink="game"
-                routerDirection="forward">{{ continueText }}</ion-button>
-    <ion-button shape="round"
-                routerLink="preparation"
-                routerDirection="forward"
-                (click)="resetGameState()">{{ newGameText }}</ion-button>
+    <ion-button shape="round" routerLink="game" routerDirection="forward">
+      {{ "TABS.TABLE.continueText" | translate }}
+    </ion-button>
+    <ion-button
+      shape="round"
+      routerLink="preparation"
+      routerDirection="forward"
+      (click)="resetGameState()"
+    >
+      {{ "TABS.TABLE.newGameText" | translate }}
+    </ion-button>
   </div>
 </ion-content>

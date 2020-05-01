@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tabs/table"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ toolbarTitle }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.PREPARATION.toolbarTitle' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="outlined"
                   (click)="shufflePlayers()">
@@ -28,7 +28,7 @@
           </ion-avatar>
           <ion-label>
             <h3>{{ (host$ | async)?.nickname }}</h3>
-            <p>{{ hostTitle }}</p>
+            <p>{{ 'TABS.TABLE.PREPARATION.toolbarTitle' | translate }}</p>
           </ion-label>
           <ion-icon slot="end"
                     name="swap-vertical"
@@ -44,7 +44,7 @@
           <ion-icon slot="start"
                     name="add"
                     color="primary"></ion-icon>
-          <ion-label color="primary">{{ setHostText }}</ion-label>
+          <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.setHostText' | translate  }}</ion-label>
         </ion-item>
         <!-- END Add new host button -->
 

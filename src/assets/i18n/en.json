@@ -1,14 +1,43 @@
 {
   "TABS": {
+    "clubsTitle": "Клубы",
+    "profileTitle": "Профиль",
+    "searchTitle": "Поиск",
+    "tableTitle": "Стол",
     "CLUBS": {},
     "PROFILE": {
-      "header": "Hello, Андрей!"
+      "header": "Привет, Андрей!"
     },
     "SEARCH": {},
-    "TABLE": {},
-    "clubsTitle": "Clubs",
-    "profileTitle": "Profile",
-    "searchTitle": "Search",
-    "tableTitle": "Table"
+    "TABLE": {
+      "continueText": "Продолжить",
+      "newGameText": "Открыть стол",
+      "PREPARATION": {
+        "toolbarTitle": "Подбор игроков",
+        "setHostText": "Выбрать ведущего",
+        "hostTitle": "Ведущий",
+        "hostPropmptText": {
+          "header": "Как обращаться к новому ведущему?",
+          "namePlaceholder": "Каспер",
+          "cancelButton": "Отмена",
+          "confirmButton": "Подтвердить"
+        },
+        "PREPARATION_MODAL": {
+          "toolbarTitle": "Выбор игрока",
+          "addGuestText": "Добавить гостя"
+        },
+        "PLAYERS_LIST": {
+          "addNewPlayerText": "Добавить нового игрока",
+          "guestText": "Гость",
+          "authorizedUserText": "Участник",
+          "playerPromptText": {
+            "header": "Как зовут гостя?",
+            "namePlaceholder": "Каспер",
+            "cancelButton": "Отмена",
+            "confirmButton": "Добавить"
+          }
+        }
+      }
+    }
   }
 }

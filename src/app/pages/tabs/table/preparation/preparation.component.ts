@@ -12,6 +12,7 @@ import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.acti
 import { StartGame } from '@shared/store/game/game.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-preparation',
@@ -23,23 +24,24 @@ export class PreparationComponent implements OnInit {
   @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private hostPropmptText = {
-    header: 'Как обращаться к новому ведущему?',
-    namePlaceholder: 'Каспер',
-    cancelButton: 'Отмена',
-    confirmButton: 'Подтвердить',
+  private hostPropmptText: {
+    header: string,
+    namePlaceholder: string,
+    cancelButton: string,
+    confirmButton: string,
   };
-  setHostText = 'Выбрать ведущего';
-  toolbarTitle = 'Подбор игроков';
-  hostTitle = 'Ведущий';
 
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
     private activatedRoute: ActivatedRoute,
+    private translate: TranslateService,
     private store: Store,
-  ) { }
+  ) {
+    this.translate.get('TABS.TABLE.PREPARATION.hostPropmptText')
+      .subscribe((hostPropmptText) => this.hostPropmptText = hostPropmptText);
+  }
 
   ngOnInit() { }
 

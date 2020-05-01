@@ -9,6 +9,21 @@
       "header": "Привет, Андрей!"
     },
     "SEARCH": {},
-    "TABLE": {}
+    "TABLE": {
+      "continueText": "Продолжить",
+      "newGameText": "Открыть стол",
+      "PREPARATION": {
+        "toolbarTitle": "Подбор игроков",
+        "setHostText": "Выбрать ведущего",
+        "hostTitle": "Ведущий",
+        "hostPropmptText": {
+          "header": "Как обращаться к новому ведущему?",
+          "namePlaceholder": "Каспер",
+          "cancelButton": "Отмена",
+          "confirmButton": "Подтвердить"
+        }
+
+      }
+    }
   }
 }
