@@ -21,7 +21,7 @@ export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  playerPromptText: {
+  playerPrompt: {
     header: string,
     namePlaceholder: string,
     cancelButton: string,
@@ -35,8 +35,8 @@ export class PlayersListComponent implements OnInit {
     private translate: TranslateService,
     private store: Store,
   ) {
-    this.translate.get('TABS.TABLE.PREPARATION.PLAYERS_LIST.playerPromptText')
-      .subscribe((playerPromptText) => this.playerPromptText = playerPromptText);
+    this.translate.get('TABS.TABLE.PREPARATION.PLAYERS_LIST.playerPrompt')
+      .subscribe((playerPrompt) => this.playerPrompt = playerPrompt);
   }
 
   ngOnInit() { }
@@ -71,20 +71,20 @@ export class PlayersListComponent implements OnInit {
 
   async presentPlayerPrompt() {
     const prompt = await this.alertController.create({
-      header: this.playerPromptText.header,
+      header: this.playerPrompt.header,
       inputs: [
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.playerPromptText.namePlaceholder,
+          placeholder: this.playerPrompt.namePlaceholder,
         },
       ],
       buttons: [
         {
-          text: this.playerPromptText.cancelButton,
+          text: this.playerPrompt.cancelButton,
           role: 'cancel',
         }, {
-          text: this.playerPromptText.confirmButton,
+          text: this.playerPrompt.confirmButton,
           handler: (player) => this.addNewPlayer(player),
         },
       ],

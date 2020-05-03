@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 
@@ -15,7 +14,6 @@ import { GiveRoles } from '@shared/store/game/players/players.actions';
 import { Timer } from '@shared/models/table/timer.model';
 import { EndNight } from '@shared/store/game/current-day/current-day.actions';
 import { takeUntil } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -40,32 +38,27 @@ export class NightComponent implements OnInit, OnDestroy {
   time = 20;
   sheriffTimer = new Timer({ time: this.time });
   stage = NightStages.MAFIA;
-  toolbarTranslateParam = { dayNumber: this.dayNumber };
 
   nightTexts: {
-    mafiaHuntsText: string;
-    giveRolesText: string;
-    donChecksText: string;
-    hostMeetsDonText: string;
-    sheriffChecksText: string;
-    hostMeetsSheriffText: string;
-    donNextText: string;
-    sheriffNextText: string;
-    dayNextText: string;
+    mafiaHunts: string;
+    giveRoles: string;
+    donChecks: string;
+    hostMeetsDon: string;
+    sheriffChecks: string;
+    hostMeetsSheriff: string;
+    proceedToDon: string;
+    proceedToSheriff: string;
+    proceedToMorning: string;
   };
-
-  get toolbarTitle() {
-    return `Ночь ${this.dayNumber}`;
-  }
 
   get nextStageButtonText() {
     switch (this.stage) {
       case NightStages.DON:
-        return this.nightTexts.sheriffNextText;
+        return this.nightTexts.proceedToSheriff;
       case NightStages.MAFIA:
-        return this.nightTexts.donNextText;
+        return this.nightTexts.proceedToDon;
       case NightStages.SHERIFF:
-        return this.nightTexts.dayNextText;
+        return this.nightTexts.proceedToMorning;
       default:
         return 'Далее';
     }
@@ -78,11 +71,11 @@ export class NightComponent implements OnInit, OnDestroy {
   get currentStageText() {
     switch (this.stage) {
       case NightStages.MAFIA:
-        return this.dayNumber === 0 ? this.nightTexts.giveRolesText : this.nightTexts.mafiaHuntsText;
+        return this.dayNumber === 0 ? this.nightTexts.giveRoles : this.nightTexts.mafiaHunts;
       case NightStages.DON:
-        return this.dayNumber === 0 ? this.nightTexts.hostMeetsDonText : this.nightTexts.donChecksText;
+        return this.dayNumber === 0 ? this.nightTexts.hostMeetsDon : this.nightTexts.donChecks;
       case NightStages.SHERIFF:
-        return this.dayNumber === 0 ? this.nightTexts.hostMeetsSheriffText : this.nightTexts.sheriffChecksText;
+        return this.dayNumber === 0 ? this.nightTexts.hostMeetsSheriff : this.nightTexts.sheriffChecks;
       default:
         break;
     }
@@ -99,17 +92,13 @@ export class NightComponent implements OnInit, OnDestroy {
 
     this.store.select(GameState.getDayNumber)
       .pipe(takeUntil(this.destory))
-      .subscribe((dayNumber) => {
-        this.dayNumber = dayNumber;
-        this.toolbarTranslateParam.dayNumber = dayNumber;
-      });
+      .subscribe((dayNumber) => this.dayNumber = dayNumber);
 
     this.translate.get('TABS.TABLE.GAME.NIGHT')
       .subscribe((nightTexts) => this.nightTexts = nightTexts);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.sheriffTimer.pauseTimer();
@@ -121,7 +110,6 @@ export class NightComponent implements OnInit, OnDestroy {
     this.sheriffTimer.pauseTimer();
 
     if (this.stage === NightStages.SHERIFF) {
-
       this.store.dispatch(new EndNight());
     }
 

@@ -10,7 +10,7 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate:toolbarTranslateParam }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (days$ | async).length }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">

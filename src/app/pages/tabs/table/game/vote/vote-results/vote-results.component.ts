@@ -18,10 +18,6 @@ enum VoteResult {
   styleUrls: ['./vote-results.component.scss'],
 })
 export class VoteResultsComponent implements OnInit {
-  voteIsDisabledText = 'Игрок был удалён в течение дня';
-  noCandidatesText = 'Никто не был выставлен';
-  startNightText = 'Ночь';
-
   VoteResult = VoteResult;
   currentVoteResult = VoteResult.NO_CANDIDATES;
 

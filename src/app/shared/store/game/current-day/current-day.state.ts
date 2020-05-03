@@ -26,7 +26,6 @@ import { CurrentVoteState } from './current-vote/current-vote.state';
 import { ApplicationStateModel } from '@shared/store';
 import { StartNight, DisableNextVote } from '../game.actions';
 import { Vote } from '@shared/models/table/vote.model';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 
 export interface CurrentDayStateModel extends Partial<Day> {

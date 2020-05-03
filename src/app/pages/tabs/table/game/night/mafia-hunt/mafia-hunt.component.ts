@@ -6,7 +6,6 @@ import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { Day } from '@shared/models/table/day.model';
 import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
 import { ShootPlayer } from '@shared/store/game/current-day/current-day.actions';
 import { takeUntil } from 'rxjs/operators';
@@ -31,8 +30,6 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   day: CurrentDayStateModel;
 
   currentPlayerIndex = 0;
-  skipButtonText = 'Пропустить';
-  nextStageButtonText = 'Далее';
 
   get numberOfShots() {
     return this.day.shots.size;

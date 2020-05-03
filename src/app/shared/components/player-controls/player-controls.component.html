@@ -5,7 +5,7 @@
     <ion-slide *ngFor="let player of players">
       <app-manage-player-card [playerId]="player.user.id"
                               [showFalls]="showFalls"
-                              [showRole]="showRoles"
+                              [showRole]="(isRolesVisible$ | async)"
                               [showProposedPlayer]="showProposedPlayers"></app-manage-player-card>
     </ion-slide>
   </ion-slides>

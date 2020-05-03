@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { State, Selector, Action, StateContext, createSelector } from '@ngxs/store';
+import { State, Action, StateContext, createSelector } from '@ngxs/store';
 import { cloneDeep } from 'lodash';
 
 import { ToggleGameMenuBoolean } from './menu.actions';
@@ -31,7 +31,7 @@ export class GameMenuState {
   }
 
   @Action(ToggleGameMenuBoolean)
-  ToggleGameMenuBoolean(
+  toggleGameMenuBoolean(
     { patchState, getState }: StateContext<GameMenuStateModel>,
     { propName }: ToggleGameMenuBoolean,
   ) {

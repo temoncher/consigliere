@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Player } from '@shared/models/player.model';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';
@@ -24,7 +24,7 @@ export class PreparationComponent implements OnInit {
   @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private hostPropmptText: {
+  private hostPropmpt: {
     header: string,
     namePlaceholder: string,
     cancelButton: string,
@@ -39,8 +39,8 @@ export class PreparationComponent implements OnInit {
     private translate: TranslateService,
     private store: Store,
   ) {
-    this.translate.get('TABS.TABLE.PREPARATION.hostPropmptText')
-      .subscribe((hostPropmptText) => this.hostPropmptText = hostPropmptText);
+    this.translate.get('TABS.TABLE.PREPARATION.hostPropmpt')
+      .subscribe((hostPropmpt) => this.hostPropmpt = hostPropmpt);
   }
 
   ngOnInit() { }
@@ -83,20 +83,20 @@ export class PreparationComponent implements OnInit {
 
   async presentHostPrompt() {
     const prompt = await this.alertController.create({
-      header: this.hostPropmptText.header,
+      header: this.hostPropmpt.header,
       inputs: [
         {
           name: 'nickname',
           type: 'text',
-          placeholder: this.hostPropmptText.namePlaceholder,
+          placeholder: this.hostPropmpt.namePlaceholder,
         },
       ],
       buttons: [
         {
-          text: this.hostPropmptText.cancelButton,
+          text: this.hostPropmpt.cancelButton,
           role: 'cancel',
         }, {
-          text: this.hostPropmptText.confirmButton,
+          text: this.hostPropmpt.confirmButton,
           handler: (player) => this.setHost(player),
         },
       ],
