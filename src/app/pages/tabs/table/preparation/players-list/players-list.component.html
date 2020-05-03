@@ -24,7 +24,9 @@
 
   <ion-label>
     <h3>{{ player.nickname }}</h3>
-    <p>{{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.' + player.isGuest ? 'guestText' : 'authorizedUserText' | translate }}</p>
+    <p>
+      {{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.' + (player.isGuest ? 'guestText' : 'authorizedUserText') | translate }}
+    </p>
   </ion-label>
   <ion-icon slot="end"
             name="close"

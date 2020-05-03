@@ -37,6 +37,20 @@
             "confirmButton": "Добавить"
           }
         }
+      },
+      "GAME": {
+        "NIGHT": {
+          "toolbarTitle": "Ночь {{dayNumber}}",
+          "mafiaHuntsText": "Мафия выходит на охоту",
+          "giveRolesText": "'Игроки выбирают роли",
+          "donChecksText": "Просыпается Дон",
+          "hostMeetsDonText": "Ведущий знакомится с доном",
+          "sheriffChecksText": "Просыпается Шериф",
+          "hostMeetsSheriffText": "Просыпается Шериф",
+          "donNextText": "Дон",
+          "sheriffNextText": "Шериф",
+          "dayNextText": "Утро"
+        }
       }
     }
   }

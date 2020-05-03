@@ -45,8 +45,6 @@ export class DayComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private modalController: ModalController,
-    private timersService: TimersService,
   ) {
     this.players = this.store.selectSnapshot(PlayersState.getPlayers);
   }
