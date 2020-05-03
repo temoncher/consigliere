@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ toolbarTitle }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.GAME.DAY.PROPOSE_MODAL.toolbarTitle' | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button fill="outlined"
@@ -47,7 +47,8 @@
            class="grid-content-center">
         <ion-button size="large"
                     [disabled]="isAlreadyACandidate(players[currentPlayerIndex].user.id)"
-                    (click)="proposePlayer()">{{ proposeButtonText }}
+                    (click)="proposePlayer()">
+          {{ 'TABS.TABLE.GAME.DAY.PROPOSE_MODAL.proposeButton' | translate }}
         </ion-button>
       </div>
     </app-table-template>

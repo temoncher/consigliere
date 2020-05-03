@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
+import { GameMenuState } from '@shared/store/game/menu/menu.state';
+import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
 
 @Component({
   selector: 'app-give-roles',
@@ -13,17 +15,14 @@ import { PlayersState } from '@shared/store/game/players/players.state';
 })
 export class GiveRolesComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
 
   defaultAvatar = defaultAvatarSrc;
 
   currentPlayerIndex = 0;
   isRoleVisible = false;
-  isAllRolesVisible = false;
-  hiddenRoleText = 'Нажмите, чтобы увидеть роль';
-  showAllRolesText = 'Показать роли';
-  hideAllRolesText = 'Скрыть роли';
 
-  constructor() { }
+  constructor(private store: Store) { }
 
   ngOnInit() { }
 
@@ -39,7 +38,7 @@ export class GiveRolesComponent implements OnInit {
   }
 
   toggleAllRolesVisibility() {
-    this.isAllRolesVisible = !this.isAllRolesVisible;
+    this.store.dispatch(new ToggleGameMenuBoolean('isRolesVisible'));
   }
 
   navigateToPlayer(playerNumber: number) {

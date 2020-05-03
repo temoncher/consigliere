@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { Day } from '@shared/models/table/day.model';
 import { fadeSlide } from '@shared/animations';
 import { colors } from '@shared/constants/colors';
 import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
@@ -75,10 +74,11 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.timer = this.timersService.getPlayerTimer(this.playerId);
+
     this.store.select(PlayersState.getPlayer(this.playerId))
       .pipe(takeUntil(this.destory))
       .subscribe((player) => this.player = player);
-    this.timer = this.timersService.getPlayerTimer(this.playerId);
     this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
   }
 

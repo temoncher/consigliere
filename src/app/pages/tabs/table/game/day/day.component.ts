@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { IonSlides, ModalController } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { SwiperOptions } from 'swiper';
 
 import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
 import { DayPhase } from '@shared/models/table/day-phase.enum';
@@ -12,6 +12,8 @@ import { TimersService } from '@shared/services/timers.service';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
 import { EndDay } from '@shared/store/game/current-day/current-day.actions';
+import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
+import { GameMenuState } from '@shared/store/game/menu/menu.state';
 
 @Component({
   selector: 'app-day',
@@ -22,43 +24,27 @@ export class DayComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
+  @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
   @Select(CurrentDayState.getPhase) currentPhase$: Observable<DayPhase>;
   @Select(GameState.getDays) days$: Observable<Day[]>;
 
-  dayText = 'День';
-  voteText = 'Голосовать';
-  showRolesText = 'Показать роли';
-  hideRolesText = 'Скрыть роли';
-
-  playerSliderConfig = {};
+  playerSliderConfig: SwiperOptions = {
+    spaceBetween: 0,
+    centeredSlides: true,
+    slidesPerView: 1.4,
+  };
   controlSliderPlayerNumber = 0;
-  isRolesShown = false;
   players = [];
-
-  get rolesButtonText() {
-    return this.isRolesShown ? this.hideRolesText : this.showRolesText;
-  }
-
-  get voteButtonText() {
-    return this.voteText;
-  }
 
   constructor(
     private store: Store,
+    private timersService: TimersService,
   ) {
     this.players = this.store.selectSnapshot(PlayersState.getPlayers);
+    this.timersService.resetTimers();
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      // TODO: Remove crutch for slider config update
-      this.playerSliderConfig = {
-        spaceBetween: 0,
-        centeredSlides: true,
-        slidesPerView: 1.4,
-      };
-    }, 0);
-  }
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.destory.next();
@@ -86,7 +72,7 @@ export class DayComponent implements OnInit, OnDestroy {
   }
 
   switchIsRolesShown() {
-    this.isRolesShown = !this.isRolesShown;
+    this.store.dispatch(new ToggleGameMenuBoolean('isRolesVisible'));
   }
 
   endDay() {

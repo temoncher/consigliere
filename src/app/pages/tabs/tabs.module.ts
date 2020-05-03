@@ -7,7 +7,6 @@ import { TabsRoutingModule } from './tabs-routing.module';
 
 import { TabsComponent } from './tabs.component';
 import { SharedModule } from '@shared/shared.module';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [

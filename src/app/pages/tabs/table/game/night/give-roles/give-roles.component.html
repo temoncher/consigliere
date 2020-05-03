@@ -3,7 +3,6 @@
     <app-small-player-card *ngFor="let player of (players$ | async)"
                            [slot]="player.number"
                            [playerId]="player.user.id"
-                           [showRole]="isAllRolesVisible"
                            (click)="navigateToPlayer(player.number)"></app-small-player-card>
 
     <ion-card slot="center"
@@ -23,14 +22,17 @@
           <img
                [src]="(players$ | async)[currentPlayerIndex].user?.avatar ? (players$ | async)[currentPlayerIndex].user.avatar : defaultAvatar">
         </ion-avatar>
-        {{ isRoleVisible ? (players$ | async)[currentPlayerIndex].role : hiddenRoleText}}
+        {{ isRoleVisible ? 
+           (players$ | async)[currentPlayerIndex].role : 
+           'TABS.TABLE.GAME.NIGHT.GIVE_ROLES.hiddenRole' | translate}}
       </ion-card-content>
     </ion-card>
 
     <div slot="under"
          class="grid-content-center">
       <ion-button size="large"
-                  (click)="toggleAllRolesVisibility()">{{ isAllRolesVisible ? hideAllRolesText : showAllRolesText }}
+                  (click)="toggleAllRolesVisibility()">
+        {{ 'TABS.TABLE.GAME.NIGHT.GIVE_ROLES' + ((isRolesVisible$ | async) ? '.hideAllRoles' : '.showAllRoles') | translate }}
       </ion-button>
     </div>
   </app-table-template>

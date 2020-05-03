@@ -1,32 +1,26 @@
 <div class="vote-stage">
   <div>
     <app-table-template>
-      <app-small-player-card
-        *ngFor="let player of players$ | async"
-        [slot]="player.number"
-        [playerId]="player.user.id"
-        [disabled]="player.quitPhase"
-        (click)="switchVote(player.user.id)"
-      >
-        <div
-          slot="overlay"
-          *ngIf="voteInfoMap.get(player.user.id)"
-          class="full-parent-overlay grid-content-center"
-          [ngClass]="
+      <app-small-player-card *ngFor="let player of players$ | async"
+                             [slot]="player.number"
+                             [playerId]="player.user.id"
+                             [disabled]="player.quitPhase"
+                             (click)="switchVote(player.user.id)">
+        <div slot="overlay"
+             *ngIf="voteInfoMap.get(player.user.id)"
+             class="full-parent-overlay grid-content-center"
+             [ngClass]="
             voteInfoMap.get(player.user.id).user.id ===
             proposedPlayers[currentPlayerIndex].user.id
               ? 'vote-overlay-danger'
               : 'vote-overlay-medium'
-          "
-        >
-          <ng-container
-            *ngIf="
+          ">
+          <ng-container *ngIf="
               voteInfoMap.get(player.user.id).user.id ===
                 proposedPlayers[currentPlayerIndex].user.id;
               then iconBlock;
               else numberBlock
-            "
-          ></ng-container>
+            "></ng-container>
           <ng-template #iconBlock>
             <ion-icon name="thumbs-up"></ion-icon>
           </ng-template>
@@ -36,58 +30,52 @@
         </div>
       </app-small-player-card>
 
-      <ion-card slot="center" class="player-card">
+      <ion-card slot="center"
+                class="player-card">
         <ion-card-header class="player-card__header">
-          <div
-            class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
-          >
+          <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
             {{ proposedPlayers[currentPlayerIndex].number }}
           </div>
-          <ion-card-title class="player-card__header__title text-color-dark"
-            >{{ proposedPlayers[currentPlayerIndex].nickname }}
+          <ion-card-title class="player-card__header__title text-color-dark">
+            {{ proposedPlayers[currentPlayerIndex].nickname }}
           </ion-card-title>
         </ion-card-header>
         <ion-card-content class="player-card__content ion-text-center">
           <ion-avatar class="player-card__avatar">
-            <img
-              [src]="
+            <img [src]="
                 proposedPlayers[currentPlayerIndex].user?.avatar
                   ? proposedPlayers[currentPlayerIndex].user.avatar
                   : defaultAvatar
-              "
-            />
+              " />
           </ion-avatar>
         </ion-card-content>
       </ion-card>
 
       <div slot="under">
-        <ng-container
-          *ngIf="isAllPlayersVoted; then endVoteBlock; else controlsBlock"
-        ></ng-container>
+        <ng-container *ngIf="isAllPlayersVoted; then endVoteBlock; else controlsBlock"></ng-container>
 
         <ng-template #endVoteBlock>
           <div class="grid-content-center">
-            <ion-button size="large" (click)="endVote()"
-              >{{ endVoteText }}
+            <ion-button size="large"
+                        (click)="endVote()">
+              {{ 'TABS.TABLE.GAME.VOTE.VOTE_STAGE.endVote' | translate }}
             </ion-button>
           </div>
         </ng-template>
 
         <ng-template #controlsBlock>
           <div class="controls-block">
-            <ion-button
-              [disabled]="currentPlayerIndex === 0"
-              (click)="previous()"
-            >
-              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            <ion-button [disabled]="currentPlayerIndex === 0"
+                        (click)="previous()">
+              <ion-icon slot="icon-only"
+                        name="chevron-back"></ion-icon>
             </ion-button>
-            <ion-button
-              [disabled]="
+            <ion-button [disabled]="
                 this.currentPlayerIndex + 1 === this.proposedPlayers.length
               "
-              (click)="next()"
-            >
-              <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+                        (click)="next()">
+              <ion-icon slot="icon-only"
+                        name="chevron-forward"></ion-icon>
             </ion-button>
           </div>
         </ng-template>
@@ -96,23 +84,20 @@
   </div>
   <div class="app-divider"></div>
 
-  <ion-slides #numberSlider [options]="numberSliderConfig">
+  <ion-slides #numberSlider
+              [options]="numberSliderConfig">
     <ion-slide *ngFor="let proposedPlayer of proposedPlayers; let i = index">
-      <app-small-player-card
-        [showFalls]="false"
-        [playerId]="proposedPlayer.user.id"
-        (click)="navigateToPlayer(i)"
-      >
-        <div
-          *ngIf="vote.get(proposedPlayer.user.id)?.length"
-          slot="clips"
-          class="proposed-player-clip clip-button top-right text-only text-color-dark-contrast"
-          [ngClass]="
+      <app-small-player-card [showFalls]="false"
+                             [playerId]="proposedPlayer.user.id"
+                             (click)="navigateToPlayer(i)">
+        <div *ngIf="vote.get(proposedPlayer.user.id)?.length"
+             slot="clips"
+             class="proposed-player-clip clip-button top-right text-only text-color-dark-contrast"
+             [ngClass]="
             numberOfLeaderVotes === vote.get(proposedPlayer.user.id)?.length
               ? 'background-color-danger'
               : 'background-color-medium'
-          "
-        >
+          ">
           {{ vote.get(proposedPlayer.user.id)?.length }}
         </div>
       </app-small-player-card>

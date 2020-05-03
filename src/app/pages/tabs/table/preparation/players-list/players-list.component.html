@@ -6,7 +6,7 @@
   <ion-icon slot="start"
             name="add"
             color="primary"></ion-icon>
-  <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.addNewPlayerText' | translate }}</ion-label>
+  <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.addNewPlayer' | translate }}</ion-label>
 </ion-item>
 <!-- END Add new player button-->
 
@@ -25,7 +25,7 @@
   <ion-label>
     <h3>{{ player.nickname }}</h3>
     <p>
-      {{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.' + (player.isGuest ? 'guestText' : 'authorizedUserText') | translate }}
+      {{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST' + (player.isGuest ? '.guest' : '.authorizedUser') | translate }}
     </p>
   </ion-label>
   <ion-icon slot="end"

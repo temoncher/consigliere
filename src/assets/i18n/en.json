@@ -10,13 +10,13 @@
     },
     "SEARCH": {},
     "TABLE": {
-      "continueText": "Продолжить",
-      "newGameText": "Открыть стол",
+      "continue": "Продолжить",
+      "newGame": "Открыть стол",
       "PREPARATION": {
         "toolbarTitle": "Подбор игроков",
-        "setHostText": "Выбрать ведущего",
+        "setHost": "Выбрать ведущего",
         "hostTitle": "Ведущий",
-        "hostPropmptText": {
+        "hostPropmpt": {
           "header": "Как обращаться к новому ведущему?",
           "namePlaceholder": "Каспер",
           "cancelButton": "Отмена",
@@ -24,13 +24,13 @@
         },
         "PREPARATION_MODAL": {
           "toolbarTitle": "Выбор игрока",
-          "addGuestText": "Добавить гостя"
+          "addGuest": "Добавить гостя"
         },
         "PLAYERS_LIST": {
-          "addNewPlayerText": "Добавить нового игрока",
-          "guestText": "Гость",
-          "authorizedUserText": "Участник",
-          "playerPromptText": {
+          "addNewPlayer": "Добавить нового игрока",
+          "guest": "Гость",
+          "authorizedUser": "Участник",
+          "playerPrompt": {
             "header": "Как зовут гостя?",
             "namePlaceholder": "Каспер",
             "cancelButton": "Отмена",
@@ -40,16 +40,45 @@
       },
       "GAME": {
         "NIGHT": {
-          "toolbarTitle": "Ночь {{dayNumber}}",
-          "mafiaHuntsText": "Мафия выходит на охоту",
-          "giveRolesText": "'Игроки выбирают роли",
-          "donChecksText": "Просыпается Дон",
-          "hostMeetsDonText": "Ведущий знакомится с доном",
-          "sheriffChecksText": "Просыпается Шериф",
-          "hostMeetsSheriffText": "Просыпается Шериф",
-          "donNextText": "Дон",
-          "sheriffNextText": "Шериф",
-          "dayNextText": "Утро"
+          "toolbarTitle": "Ночь",
+          "mafiaHunts": "Мафия выходит на охоту",
+          "giveRoles": "'Игроки выбирают роли",
+          "donChecks": "Просыпается Дон",
+          "hostMeetsDon": "Ведущий знакомится с доном",
+          "sheriffChecks": "Просыпается Шериф",
+          "hostMeetsSheriff": "Просыпается Шериф",
+          "proceedToDon": "Дон",
+          "proceedToSheriff": "Шериф",
+          "proceedToMorning": "Утро",
+          "GIVE_ROLES": {
+            "hiddenRole": "Нажмите, чтобы увидеть роль",
+            "showAllRoles": "Показать роли",
+            "hideAllRoles": "Скрыть роли"
+          },
+          "MAFIA_HUNTS": {
+            "nextStageButton": "Далее"
+          }
+        },
+        "DAY": {
+          "toolbarTitle": "День",
+          "proceedToVote": "Голосовать",
+          "showRoles": "Показать роли",
+          "hideRoles": "Скрыть роли",
+          "PROPOSE_MODAL": {
+            "toolbarTitle": "Выставить игрока",
+            "proposeButton": "Выставить"
+          }
+        },
+        "VOTE": {
+          "toolbarTitle": "Голосование",
+          "VOTE_RESULT": {
+            "voteIsDisabled": "Игрок был удалён в течение дня",
+            "noCandidates": "Никто не был выставлен",
+            "startNight": "Ночь"
+          },
+          "VOTE_STAGE": {
+            "endVote": "Завершить"
+          }
         }
       }
     }

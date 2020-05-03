@@ -26,9 +26,6 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
 
   currentPlayerIndex = 0;
 
-  toolbarTitle = 'Выставить игрока';
-  proposeButtonText = 'Выставить';
-
   constructor(
     private modalController: ModalController,
   ) { }

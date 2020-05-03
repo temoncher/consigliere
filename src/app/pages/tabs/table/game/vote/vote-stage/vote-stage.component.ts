@@ -5,9 +5,9 @@ import { Observable, Subject } from 'rxjs';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { takeUntil } from 'rxjs/operators';
-import { ModalController } from '@ionic/angular';
 import { VoteForCandidate, EndVoteStage, StartVote } from '@shared/store/game/current-day/current-vote/current-vote.actions';
 import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'app-vote-stage',
@@ -26,14 +26,14 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   vote: Map<string, string[]>;
 
   voteInfoMap: Map<string, Player> = new Map<string, Player>();
-  numberSliderConfig = {};
+  numberSliderConfig: SwiperOptions = {
+    slidesPerView: 5.5,
+    centeredSlides: true,
+  };
   currentPlayerIndex = 0;
   numberOfLeaderVotes = 0;
   numberOfPreviousVoteLeaders = 0;
   isAllPlayersVoted = false;
-
-  nextButtonText = 'Далее';
-  endVoteText = 'Завершить';
 
   constructor(
     private store: Store,
@@ -80,15 +80,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      // TODO: Remove crutch for slider config update
-      this.numberSliderConfig = {
-        slidesPerView: 5.5,
-        centeredSlides: true,
-      };
-    }, 0);
-  }
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.destory.next();
