@@ -17,3 +17,8 @@ export class DisableNextVote {
   static readonly type = '[Game] Disable next vote';
   constructor() { }
 }
+
+export class DropGame {
+  static readonly type = '[Game] Drop game';
+  constructor() { }
+}

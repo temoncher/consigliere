@@ -27,13 +27,5 @@
            'TABS.TABLE.GAME.NIGHT.GIVE_ROLES.hiddenRole' | translate}}
       </ion-card-content>
     </ion-card>
-
-    <div slot="under"
-         class="grid-content-center">
-      <ion-button size="large"
-                  (click)="toggleAllRolesVisibility()">
-        {{ 'TABS.TABLE.GAME.NIGHT.GIVE_ROLES' + ((isRolesVisible$ | async) ? '.hideAllRoles' : '.showAllRoles') | translate }}
-      </ion-button>
-    </div>
   </app-table-template>
 </div>

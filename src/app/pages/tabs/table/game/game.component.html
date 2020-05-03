@@ -1,31 +1,35 @@
 <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content"
+            menuId="game-menu"
             type="overlay">
-    <ion-content>
-      <ion-list id="inbox-list">
-        <ion-list-header>Inbox</ion-list-header>
-        <ion-note>hi@ionicframework.com</ion-note>
+    <ion-list-header>
+      <ion-toolbar>
+        <ion-title>{{ 'TABS.TABLE.GAME.menuHeader' | translate }}</ion-title>
+      </ion-toolbar>
+    </ion-list-header>
 
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerDirection="root"
-                    lines="none"
-                    detail="false">
-            <ion-icon slot="start"
-                      name="settings"></ion-icon>
-            <ion-label>Some label</ion-label>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false"
+                         menu="game-menu">
+          <ion-item lines="none"
+                    detail="false"
+                    (click)="switchIsRolesVisible()">
+            <ion-label>
+              {{ 'TABS.TABLE.GAME' + ((isRolesVisible$ | async) ? '.hideRoles' : '.showRoles') | translate }}
+            </ion-label>
+          </ion-item>
+
+          <div class="app-divider"></div>
+
+          <ion-item lines="none"
+                    detail="false"
+                    (click)="dropGame()">
+            <ion-label color="danger">
+              {{ 'TABS.TABLE.GAME.dropGame' | translate }}
+            </ion-label>
           </ion-item>
         </ion-menu-toggle>
-      </ion-list>
-
-      <ion-list id="labels-list">
-        <ion-list-header>Labels</ion-list-header>
-
-        <ion-item lines="none">
-          <ion-icon slot="start"
-                    ios="bookmark-outline"
-                    md="bookmark-sharp"></ion-icon>
-          <ion-label>Some label</ion-label>
-        </ion-item>
       </ion-list>
     </ion-content>
   </ion-menu>

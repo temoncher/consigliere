@@ -1,13 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button fill="outlined"
-                  [disabled]="stage === NightStages.MAFIA"
-                  (click)="previousStage()">
-        <ion-icon slot="icon-only"
-                  color="primary"
-                  name="chevron-back"></ion-icon>
-      </ion-button>
+      <ion-menu-button menu="game-menu"></ion-menu-button>
     </ion-buttons>
 
     <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (days$ | async).length }}</ion-title>

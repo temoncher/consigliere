@@ -1,5 +1,9 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="game-menu"></ion-menu-button>
+    </ion-buttons>
+
     <ion-title>{{ 'TABS.TABLE.GAME.DAY.toolbarTitle' | translate }} {{ (days$ | async).length }}</ion-title>
 
     <ion-buttons slot="end">
@@ -24,11 +28,4 @@
                         (speechEnd)="endSpeech($event)"></app-player-timer>
     </ion-slide>
   </ion-slides>
-
-  <div class="felx-centralize">
-    <ion-button size="large"
-                (click)="switchIsRolesShown()">
-      {{ 'TABS.TABLE.GAME.DAY' + ((isRolesVisible$ | async) ? '.hideRoles' : '.showRoles') | translate }}
-    </ion-button>
-  </div>
 </ion-content>

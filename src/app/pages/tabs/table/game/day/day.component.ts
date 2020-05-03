@@ -12,8 +12,6 @@ import { TimersService } from '@shared/services/timers.service';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
 import { EndDay } from '@shared/store/game/current-day/current-day.actions';
-import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
-import { GameMenuState } from '@shared/store/game/menu/menu.state';
 
 @Component({
   selector: 'app-day',
@@ -24,7 +22,6 @@ export class DayComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
-  @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
   @Select(CurrentDayState.getPhase) currentPhase$: Observable<DayPhase>;
   @Select(GameState.getDays) days$: Observable<Day[]>;
 
@@ -69,10 +66,6 @@ export class DayComponent implements OnInit, OnDestroy {
       this.navigateToSlide(slideIndex);
       return;
     }
-  }
-
-  switchIsRolesShown() {
-    this.store.dispatch(new ToggleGameMenuBoolean('isRolesVisible'));
   }
 
   endDay() {
