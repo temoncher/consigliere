@@ -116,11 +116,6 @@ export class NightComponent implements OnInit, OnDestroy {
     this.stage++;
   }
 
-  previousStage() {
-    this.sheriffTimer.pauseTimer();
-    this.stage--;
-  }
-
   switchTimer() {
     this.sheriffTimer.switchTimer();
   }

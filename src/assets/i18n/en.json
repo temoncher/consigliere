@@ -39,6 +39,10 @@
         }
       },
       "GAME": {
+        "menuHeader": "Меню",
+        "showRoles": "Показать роли",
+        "hideRoles": "Скрыть роли",
+        "dropGame": "Отменить игру",
         "NIGHT": {
           "toolbarTitle": "Ночь",
           "mafiaHunts": "Мафия выходит на охоту",
@@ -51,9 +55,7 @@
           "proceedToSheriff": "Шериф",
           "proceedToMorning": "Утро",
           "GIVE_ROLES": {
-            "hiddenRole": "Нажмите, чтобы увидеть роль",
-            "showAllRoles": "Показать роли",
-            "hideAllRoles": "Скрыть роли"
+            "hiddenRole": "Нажмите, чтобы увидеть роль"
           },
           "MAFIA_HUNTS": {
             "nextStageButton": "Далее"
@@ -62,8 +64,6 @@
         "DAY": {
           "toolbarTitle": "День",
           "proceedToVote": "Голосовать",
-          "showRoles": "Показать роли",
-          "hideRoles": "Скрыть роли",
           "PROPOSE_MODAL": {
             "toolbarTitle": "Выставить игрока",
             "proposeButton": "Выставить"

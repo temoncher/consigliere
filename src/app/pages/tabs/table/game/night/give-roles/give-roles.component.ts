@@ -6,7 +6,6 @@ import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { GameMenuState } from '@shared/store/game/menu/menu.state';
-import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
 
 @Component({
   selector: 'app-give-roles',
@@ -35,10 +34,6 @@ export class GiveRolesComponent implements OnInit {
 
   revealRole() {
     this.isRoleVisible = true;
-  }
-
-  toggleAllRolesVisibility() {
-    this.store.dispatch(new ToggleGameMenuBoolean('isRolesVisible'));
   }
 
   navigateToPlayer(playerNumber: number) {

@@ -9,16 +9,19 @@ import {
   StartNight,
   DisableNextVote,
   ResetIsNextVotingDisabled,
+  DropGame,
 } from './game.actions';
 import { PlayersState } from './players/players.state';
 import { SetPlayersNumbers } from './players/players.actions';
 import { CurrentDayState } from './current-day/current-day.state';
 import { ApplicationStateModel } from '..';
 import { GameMenuState } from './menu/menu.state';
+import { Navigate } from '@ngxs/router-plugin';
 
 export interface GameStateModel {
   days: Day[];
   isNextVotingDisabled: boolean;
+  isGameStarted: boolean;
 }
 
 @State<GameStateModel>({
@@ -26,6 +29,7 @@ export interface GameStateModel {
   defaults: {
     days: [],
     isNextVotingDisabled: false,
+    isGameStarted: false,
   },
   children: [
     PlayersState,
@@ -40,6 +44,11 @@ export class GameState {
   @Selector()
   static getDays(state: GameStateModel) {
     return state.days;
+  }
+
+  @Selector()
+  static getIsGameStarted(state: GameStateModel) {
+    return state.isGameStarted;
   }
 
   @Selector()
@@ -63,8 +72,10 @@ export class GameState {
 
 
   @Action(StartGame)
-  startGame({ dispatch }: StateContext<GameStateModel>) {
-    return dispatch(new SetPlayersNumbers());
+  startGame({ dispatch, patchState }: StateContext<GameStateModel>) {
+    dispatch(new SetPlayersNumbers());
+
+    return patchState({ isGameStarted: true });
   }
 
   @Action(ResetIsNextVotingDisabled)
@@ -75,5 +86,13 @@ export class GameState {
   @Action(DisableNextVote)
   disableNextVote({ patchState }: StateContext<GameStateModel>) {
     return patchState({ isNextVotingDisabled: true });
+  }
+
+  @Action(DropGame)
+  dropGame({ dispatch }: StateContext<GameStateModel>) {
+    return dispatch([
+      new StateReset(GameState),
+      new Navigate(['tabs', 'table']),
+    ]);
   }
 }

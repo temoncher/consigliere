@@ -1,11 +1,13 @@
 <ion-content>
   <div class="grid-content-center">
-    <ion-button shape="round"
+    <ion-button *ngIf="(isGameStarted$ | async)"
+                shape="round"
                 routerLink="game"
                 routerDirection="forward">
       {{ "TABS.TABLE.continue" | translate }}
     </ion-button>
-    <ion-button shape="round"
+    <ion-button *ngIf="!(isGameStarted$ | async)"
+                shape="round"
                 routerLink="preparation"
                 routerDirection="forward"
                 (click)="resetGameState()">

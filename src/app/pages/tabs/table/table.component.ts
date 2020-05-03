@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 import { GameState } from '@shared/store/game/game.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-table',
@@ -9,6 +10,8 @@ import { GameState } from '@shared/store/game/game.state';
   styleUrls: ['table.component.scss'],
 })
 export class TableComponent {
+  @Select(GameState.getIsGameStarted) isGameStarted$: Observable<boolean>;
+
   constructor(private store: Store) { }
 
   resetGameState() {
