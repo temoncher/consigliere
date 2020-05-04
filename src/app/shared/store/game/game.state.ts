@@ -17,6 +17,9 @@ import { CurrentDayState } from './current-day/current-day.state';
 import { ApplicationStateModel } from '..';
 import { GameMenuState } from './menu/menu.state';
 import { Navigate } from '@ngxs/router-plugin';
+import { CurrentVoteState } from './current-day/current-vote/current-vote.state';
+import { DayPhase } from '@shared/models/table/day-phase.enum';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
 
 export interface GameStateModel {
   days: Day[];
@@ -39,7 +42,9 @@ export interface GameStateModel {
 })
 @Injectable()
 export class GameState {
-  constructor(private store: Store) { }
+  constructor(
+    private store: Store,
+  ) { }
 
   @Selector()
   static getDays(state: GameStateModel) {
@@ -50,6 +55,22 @@ export class GameState {
   static getIsGameStarted(state: GameStateModel) {
     return state.isGameStarted;
   }
+
+  @Selector([CurrentDayState.getPhase, CurrentVoteState.getPhase])
+  static getCurrentGameStage(
+    { days }: GameStateModel,
+    dayPhase: DayPhase,
+    votePhase: VotePhase,
+  ) {
+    const dayNumber = days.length;
+
+    return {
+      dayNumber,
+      dayPhase,
+      votePhase,
+    };
+  }
+
 
   @Selector()
   static getDayNumber(state: GameStateModel) {
