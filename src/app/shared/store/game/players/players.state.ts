@@ -13,6 +13,7 @@ import {
   KillPlayer,
   ResetPlayer,
   SetPlayersNumbers,
+  ReorderPlayer,
 } from './players.actions';
 import { KickPlayer, ResetCurrentDayPlayerState, StopSpeech } from '../current-day/current-day.actions';
 import { Injectable } from '@angular/core';
@@ -208,6 +209,18 @@ export class PlayersState {
     if (stage === DayPhase.DAY) {
       dispatch(new StopSpeech(playerId));
     }
+
+    return patchState({ players });
+  }
+
+  @Action(ReorderPlayer)
+  reorderPlayer(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { previoustIndex, newIndex }: ReorderPlayer,
+  ) {
+    const { players } = cloneDeep(getState());
+    const playerToReorder = players.splice(previoustIndex, 1)[0];
+    players.splice(newIndex, 0, playerToReorder);
 
     return patchState({ players });
   }

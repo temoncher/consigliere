@@ -1,17 +1,23 @@
 <ion-content>
-  <div class="grid-content-center">
-    <ion-button *ngIf="(isGameStarted$ | async)"
-                shape="round"
-                routerLink="game"
-                routerDirection="forward">
-      {{ "TABS.TABLE.continue" | translate }}
-    </ion-button>
-    <ion-button *ngIf="!(isGameStarted$ | async)"
-                shape="round"
-                routerLink="preparation"
-                routerDirection="forward"
-                (click)="resetGameState()">
-      {{ "TABS.TABLE.newGame" | translate }}
-    </ion-button>
+  <div class="main-menu">
+    <div class="image-container">
+      <ion-img src="assets/icon/favicon.png"></ion-img>
+      <ion-title>Consigliere</ion-title>
+    </div>
+    <div class="grid-content-center">
+      <ion-button *ngIf="(isGameStarted$ | async)"
+                  shape="round"
+                  routerLink="game"
+                  routerDirection="forward">
+        {{ "TABS.TABLE.continue" | translate }}
+      </ion-button>
+      <ion-button *ngIf="!(isGameStarted$ | async)"
+                  shape="round"
+                  routerLink="preparation"
+                  routerDirection="forward"
+                  (click)="resetGameState()">
+        {{ "TABS.TABLE.newGame" | translate }}
+      </ion-button>
+    </div>
   </div>
 </ion-content>
