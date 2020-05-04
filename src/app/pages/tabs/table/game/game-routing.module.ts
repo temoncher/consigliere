@@ -33,7 +33,15 @@ const routes: Routes = [
         redirectTo: 'night',
         pathMatch: 'full',
       },
+      {
+        path: '**',
+        redirectTo: '',
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
 

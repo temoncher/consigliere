@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
+
 import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
 import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
 import { EndVote } from '@shared/store/game/current-day/current-day.actions';
-
-enum VoteResult {
-  NO_CANDIDATES = 'NO_CANDIDATES',
-  SINGLE_CANDIDATE_AND_ZERO_DAY = 'SINGLE_CANDIDATE_AND_ZERO_DAY',
-  VOTE_IS_DISABLED = 'VOTE_IS_DISABLED',
-  PLAYERS_ELIMINATED = 'PLAYERS_ELIMINATED',
-}
+import { VoteResult } from '@shared/models/table/vote-result.enum';
 
 @Component({
   selector: 'app-vote-results',

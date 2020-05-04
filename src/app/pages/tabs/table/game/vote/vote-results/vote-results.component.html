@@ -1,7 +1,27 @@
-<div class="grid-content-center">
-  <ion-label>{{ currentVoteResult }}</ion-label>
-  <ion-button size="large"
-              (click)="startNight()">
-    {{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.startNight' | translate }}
-  </ion-button>
+<div class="felx-centralize">
+  <div class="result-container"
+       [ngSwitch]="currentVoteResult">
+    <ng-container *ngSwitchCase="VoteResult.NO_CANDIDATES">
+      <ion-label>{{ currentVoteResult }}</ion-label>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="VoteResult.VOTE_IS_DISABLED">
+      <ion-label>{{ currentVoteResult }}</ion-label>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="VoteResult.PLAYERS_ELIMINATED">
+      <ion-label>{{ currentVoteResult }}</ion-label>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY">
+      <ion-label>{{ currentVoteResult }}</ion-label>
+    </ng-container>
+  </div>
+
+  <div>
+    <ion-button size="large"
+                (click)="startNight()">
+      {{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.startNight' | translate }}
+    </ion-button>
+  </div>
 </div>
