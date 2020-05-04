@@ -37,3 +37,11 @@ export class ResetPlayer {
   static readonly type = '[Game.Players] Reset player';
   constructor(public playerId: string) { }
 }
+
+export class ReorderPlayer {
+  static readonly type = '[Game.Players] Reorder player';
+  constructor(
+    public previoustIndex: number,
+    public newIndex: number,
+  ) { }
+}

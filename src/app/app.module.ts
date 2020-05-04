@@ -13,12 +13,12 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 
-import { environment } from '../environments/environment';
+import { ApplicationStates } from '@shared/store';
 import { SharedModule } from '@shared/shared.module';
+import { LanguageModule } from '@shared/language.module';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApplicationStates } from '@shared/store';
-import { LanguageModule } from '@shared/language.module';
 
 const devModules = environment.production ? [] : [
   NgxsReduxDevtoolsPluginModule.forRoot(),
