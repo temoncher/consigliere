@@ -40,7 +40,7 @@
   <div slot="under"
        class="grid-content-center">
     <ion-button size="large"
-                [disabled]="numberOfShots !== 3"
+                [disabled]="shots.size !== 3"
                 (click)="next()">
       {{ 'TABS.TABLE.GAME.NIGHT.MAFIA_HUNTS.nextStageButton' | translate }}
     </ion-button>

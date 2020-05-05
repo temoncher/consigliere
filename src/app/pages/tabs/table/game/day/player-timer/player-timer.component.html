@@ -3,7 +3,7 @@
   <ion-card class="player-card">
     <ion-card-header class="player-card__header">
       <div class="clip-button top-left text-only text-color-dark-contrast"
-           [ngClass]="timer?.isSpeechEnded ? 'background-color-medium': 'background-color-primary'">
+           [ngClass]="timer?.isSpeechEnded || playerQuitPhase ? 'background-color-medium': 'background-color-primary'">
         {{ player?.number }}
       </div>
       <ion-card-title class="player-card__header__title text-color-dark">{{ player?.nickname }}</ion-card-title>
@@ -13,7 +13,7 @@
       <div class="progress-container">
         <round-progress class="progress-circle"
                         (click)="switchTimer()"
-                        [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                        [ngStyle]="{ 'background-image' : 'url(' + (this.player?.user.avatar || defaultAvatar) + ')' }"
                         [current]="timer?.time"
                         [max]="maxTime"
                         [color]="colors[timeColor]"
@@ -29,27 +29,27 @@
 
       <ion-buttons class="ion-justify-content-between">
         <ion-button (click)="proposePlayer()"
-                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async) || (day$ | async)?.isVoteDisabled">
+                    [disabled]="timer?.isSpeechEnded || !!(proposedPlayer$ | async) || (isVoteDisabled$ | async) || playerQuitPhase">
           <ion-icon slot="icon-only"
                     name="thumbs-up"
-                    [color]="timer?.isSpeechEnded ? 'medium' : 'primary'">
+                    [color]="timer?.isSpeechEnded || playerQuitPhase ? 'medium' : 'primary'">
           </ion-icon>
         </ion-button>
 
         <ion-button (click)="endPlayerSpeech()"
-                    [disabled]="timer?.isSpeechEnded">
+                    [disabled]="timer?.isSpeechEnded || playerQuitPhase">
           <ion-icon slot="icon-only"
                     name="time"
-                    [color]="timer?.isSpeechEnded ? 'medium' : 'primary'">
+                    [color]="timer?.isSpeechEnded || playerQuitPhase ? 'medium' : 'primary'">
           </ion-icon>
         </ion-button>
 
       </ion-buttons>
     </ion-card-content>
 
-    <div *ngIf="player?.quitPhase"
+    <div *ngIf="playerQuitPhase"
          class="full-parent-overlay background-color-transparent-dark grid-content-center">
-      <span class="text-color-medium">{{ quitPhase }}</span>
+      <span class="text-color-medium">{{ playerQuitPhase }}</span>
     </div>
   </ion-card>
 

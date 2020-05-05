@@ -12,13 +12,14 @@ import { DropGame } from '@shared/store/game/game.actions';
 })
 export class GameComponent implements OnInit {
   @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
+  @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
 
   constructor(private store: Store) { }
 
   ngOnInit() { }
 
-  switchIsRolesVisible() {
-    this.store.dispatch(new ToggleGameMenuBoolean('isRolesVisible'));
+  switchSettingsBoolean(settingName: string) {
+    this.store.dispatch(new ToggleGameMenuBoolean(settingName));
   }
 
   dropGame() {

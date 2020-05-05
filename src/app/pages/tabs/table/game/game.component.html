@@ -15,7 +15,15 @@
 
           <ion-item lines="none"
                     detail="false"
-                    (click)="switchIsRolesVisible()">
+                    (click)="switchSettingsBoolean('isQuittedHidden')">
+            <ion-label>
+              {{ 'TABS.TABLE.GAME' + ((isQuittedHidden$ | async) ? '.hideQuitted' : '.showQuitted') | translate }}
+            </ion-label>
+          </ion-item>
+
+          <ion-item lines="none"
+                    detail="false"
+                    (click)="switchSettingsBoolean('isRolesVisible')">
             <ion-label>
               {{ 'TABS.TABLE.GAME' + ((isRolesVisible$ | async) ? '.hideRoles' : '.showRoles') | translate }}
             </ion-label>

@@ -1,8 +1,13 @@
+import { Injectable } from '@angular/core';
 import { Action, State, Selector, StateContext, Store, createSelector } from '@ngxs/store';
 import { shuffle, cloneDeep } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
+import { ApplicationStateModel } from '@shared/store';
+import { TimersService } from '@shared/services/timers.service';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 import {
   GiveRoles,
   SetHost,
@@ -15,11 +20,8 @@ import {
   SetPlayersNumbers,
   ReorderPlayer,
 } from './players.actions';
-import { KickPlayer, ResetCurrentDayPlayerState, StopSpeech } from '../current-day/current-day.actions';
-import { Injectable } from '@angular/core';
-import { ApplicationStateModel } from '@shared/store';
-import { TimersService } from '@shared/services/timers.service';
-import { DayPhase } from '@shared/models/table/day-phase.enum';
+import { ResetPlayerTimer, StopSpeech } from '../round/current-day/current-day.actions';
+import { ResetKickedPlayer, KickPlayer } from '../round/round.actions';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
@@ -50,6 +52,9 @@ const rolesArray = [
 export interface PlayersStateModel {
   host: Player;
   players: Player[];
+  falls: Map<string, number>; // <playerId, numberOfFalls>
+  quitPhases: Map<string, QuitPhase>; // <playerId, quitPhase>
+  speechSkips: Map<string, number>; // <playerId, roundNumber>
 }
 
 @State<PlayersStateModel>({
@@ -57,6 +62,9 @@ export interface PlayersStateModel {
   defaults: {
     host: dummyHost,
     players: dummyPlayers,
+    falls: new Map<string, number>(),
+    quitPhases: new Map<string, QuitPhase>(),
+    speechSkips: new Map<string, number>(),
   },
 })
 @Injectable()
@@ -71,33 +79,55 @@ export class PlayersState {
   ) { }
 
   @Selector()
-  static getHost(state: PlayersStateModel) {
-    return state.host;
+  static getHost({ host }: PlayersStateModel) {
+    return host;
   }
 
   @Selector()
-  static getPlayers(state: PlayersStateModel) {
-    return state.players;
+  static getPlayers({ players }: PlayersStateModel) {
+    return players;
   }
 
   @Selector()
-  static getAlivePlayers(state: PlayersStateModel) {
-    return state.players.filter((player) => !player.quitPhase);
+  static getQuitPhases({ quitPhases }: PlayersStateModel) {
+    return quitPhases;
   }
 
   @Selector()
-  static getSheriff(state: PlayersStateModel) {
-    return state.players.find((player) => player.role === Role.SHERIFF);
+  static getAlivePlayers({ players, quitPhases }: PlayersStateModel) {
+    return players.filter(({ user: { id } }) => !quitPhases.has(id));
   }
 
   @Selector()
-  static getDon(state: PlayersStateModel) {
-    return state.players.find((player) => player.role === Role.DON);
+  static getSheriff({ players }: PlayersStateModel) {
+    return players.find((player) => player.role === Role.SHERIFF);
+  }
+
+  @Selector()
+  static getDon({ players }: PlayersStateModel) {
+    return players.find((player) => player.role === Role.DON);
   }
 
   static getPlayer(playerId: string) {
     return createSelector([PlayersState], ({ players }: PlayersStateModel) => {
       return players.find((player) => player.user.id === playerId);
+    });
+  }
+
+  static getPlayerFalls(playerId: string) {
+    return createSelector([PlayersState], ({ falls }: PlayersStateModel) => {
+      return falls.get(playerId);
+    });
+  }
+
+  static getPlayerQuitPhase(playerId: string) {
+    return createSelector([PlayersState], ({ quitPhases }: PlayersStateModel) => {
+      const quitPhase = quitPhases.get(playerId);
+      if (quitPhase) {
+        return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
+      }
+
+      return null;
     });
   }
 
@@ -196,21 +226,21 @@ export class PlayersState {
     { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: KillPlayer,
   ) {
-    const { players } = cloneDeep(getState());
-    const foundPlayer = players.find((player) => player.user.id === playerId);
-    const days = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days);
-    const stage = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.currentDay.currentPhase);
+    const { quitPhases } = cloneDeep(getState());
+    const days = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds);
+    const stage = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round.currentPhase);
 
-    foundPlayer.quitPhase = {
+    const quitPhase = {
       stage,
       number: days.length,
     };
+    quitPhases.set(playerId, quitPhase);
 
-    if (stage === DayPhase.DAY) {
+    if (stage === RoundPhase.DAY) {
       dispatch(new StopSpeech(playerId));
     }
 
-    return patchState({ players });
+    return patchState({ quitPhases });
   }
 
   @Action(ReorderPlayer)
@@ -230,15 +260,17 @@ export class PlayersState {
     { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: ResetPlayer,
   ) {
-    const { players } = cloneDeep(getState());
-    const foundPlayer = players.find((player) => player.user.id === playerId);
+    const { quitPhases, falls } = cloneDeep(getState());
 
-    foundPlayer.falls = 0;
-    foundPlayer.quitPhase = null;
+    falls.set(playerId, 0);
+    quitPhases.set(playerId, null);
 
-    dispatch(new ResetCurrentDayPlayerState(playerId));
+    dispatch([
+      new ResetPlayerTimer(playerId),
+      new ResetKickedPlayer(playerId),
+    ]);
 
-    return patchState({ players });
+    return patchState({ quitPhases, falls });
   }
 
   @Action(AssignFall)
@@ -246,18 +278,25 @@ export class PlayersState {
     { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: AssignFall,
   ) {
-    const { players } = cloneDeep(getState());
-    const foundPlayer = players.find((player) => player.user.id === playerId);
+    const { falls, speechSkips } = cloneDeep(getState());
+    const playerFallsNumber = falls.get(playerId);
+    falls.set(playerId, playerFallsNumber ? playerFallsNumber + 1 : 1);
 
-    foundPlayer.falls++;
-    switch (foundPlayer.falls) {
+    const newFallsNumber = falls.get(playerId);
+
+    switch (newFallsNumber) {
       case 3:
-        const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
-        const finishedTimers = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.currentDay.timers);
+        const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
+        const finishedTimers = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round.currentDay.timers);
         const playerTimer = this.timersService.getPlayerTimer(playerId);
-        const isPlayerAlreadySpoke = finishedTimers.get(playerId) || !playerTimer.isTimerPaused;
+        let isPlayerAlreadySpoke = Boolean(finishedTimers.get(playerId));
 
-        foundPlayer.disabledSpeechDayNumber = isPlayerAlreadySpoke ? currentDayNumber + 1 : currentDayNumber;
+        if (playerTimer) {
+          isPlayerAlreadySpoke = isPlayerAlreadySpoke && !playerTimer?.isTimerPaused;
+        }
+
+        speechSkips.set(playerId, isPlayerAlreadySpoke ? currentDayNumber + 1 : currentDayNumber);
+
         if (!isPlayerAlreadySpoke) {
           this.timersService.setTimer(playerId, 0);
         }
@@ -270,6 +309,6 @@ export class PlayersState {
         break;
     }
 
-    return patchState({ players });
+    return patchState({ falls });
   }
 }

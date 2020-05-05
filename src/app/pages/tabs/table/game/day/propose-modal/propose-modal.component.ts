@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { ModalController } from '@ionic/angular';
-import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { takeUntil } from 'rxjs/operators';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-propose-modal',
@@ -18,6 +19,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
 
   players: Player[];
   proposedPlayers: Map<string, string> = new Map<string, string>();
@@ -28,6 +30,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private modalController: ModalController,
+    private store: Store,
   ) { }
 
   ngOnInit() {
@@ -37,8 +40,9 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
     this.players$
       .pipe(takeUntil(this.destory))
       .subscribe((players) => this.players = players);
+    const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
 
-    this.currentPlayerIndex = this.players.findIndex((player) => !player.quitPhase && !this.isAlreadyACandidate(player.user.id));
+    this.currentPlayerIndex = this.players.findIndex(({ user: { id } }) => !quitPhases.has(id) && !this.isAlreadyACandidate(id));
   }
 
   ngOnDestroy() {

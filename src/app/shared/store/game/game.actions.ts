@@ -1,24 +1,26 @@
+export const gameActionsPrefix = 'Game';
+
 export class StartGame {
-  static readonly type = '[Game] Start game';
+  static readonly type = `[${gameActionsPrefix}] Start game`;
   constructor() { }
 }
 
 export class ResetIsNextVotingDisabled {
-  static readonly type = '[Game] Reset next voting disabled';
+  static readonly type = `[${gameActionsPrefix}] Reset next voting disabled`;
   constructor() { }
 }
 
-export class StartNight {
-  static readonly type = '[Game] Start new night';
+export class StartNewRound {
+  static readonly type = `[${gameActionsPrefix}] Start new night`;
   constructor() { }
 }
 
-export class DisableNextVote {
-  static readonly type = '[Game] Disable next vote';
+export class DisableVote {
+  static readonly type = `[${gameActionsPrefix}] Disable vote`;
   constructor() { }
 }
 
 export class DropGame {
-  static readonly type = '[Game] Drop game';
+  static readonly type = `[${gameActionsPrefix}] Drop game`;
   constructor() { }
 }

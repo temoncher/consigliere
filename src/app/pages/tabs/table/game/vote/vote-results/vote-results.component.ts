@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 
-import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
-import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
-import { EndVote } from '@shared/store/game/current-day/current-day.actions';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
+import { EndVote } from '@shared/store/game/round/current-vote/current-vote.actions';
 
 @Component({
   selector: 'app-vote-results',
@@ -22,9 +22,9 @@ export class VoteResultsComponent implements OnInit {
   ) {
     const vote = this.store.selectSnapshot(CurrentVoteState.getCurrentVote);
     const proposedPlayers = this.store.selectSnapshot(CurrentDayState.getProposedPlayers);
-    const day = this.store.selectSnapshot(CurrentDayState.getDay);
+    const isVoteDisabled = this.store.selectSnapshot(CurrentVoteState.getIsVoteDisabled);
 
-    if (day.isVoteDisabled) {
+    if (isVoteDisabled) {
       this.currentVoteResult = VoteResult.VOTE_IS_DISABLED;
       return;
     }

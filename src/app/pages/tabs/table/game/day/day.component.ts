@@ -4,14 +4,15 @@ import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
 import { SwiperOptions } from 'swiper';
 
-import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
-import { DayPhase } from '@shared/models/table/day-phase.enum';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
 import { GameState } from '@shared/store/game/game.state';
-import { Day } from '@shared/models/table/day.model';
+import { Round } from '@shared/models/table/round.model';
 import { TimersService } from '@shared/services/timers.service';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
-import { EndDay } from '@shared/store/game/current-day/current-day.actions';
+import { EndDay } from '@shared/store/game/round/current-day/current-day.actions';
+import { GameMenuState } from '@shared/store/game/menu/menu.state';
+import { RoundState } from '@shared/store/game/round/round.state';
 
 @Component({
   selector: 'app-day',
@@ -22,8 +23,10 @@ export class DayComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
-  @Select(CurrentDayState.getPhase) currentPhase$: Observable<DayPhase>;
-  @Select(GameState.getDays) days$: Observable<Day[]>;
+  @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
+  @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
+  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
   playerSliderConfig: SwiperOptions = {
     spaceBetween: 0,
@@ -31,15 +34,11 @@ export class DayComponent implements OnInit, OnDestroy {
     slidesPerView: 1.4,
   };
   controlSliderPlayerNumber = 0;
-  players = [];
 
   constructor(
     private store: Store,
     private timersService: TimersService,
-  ) {
-    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
-    this.timersService.resetTimers();
-  }
+  ) { }
 
   ngOnInit() { }
 
@@ -54,14 +53,13 @@ export class DayComponent implements OnInit, OnDestroy {
   }
 
   endSpeech(playerId: string) {
-    const players = this.store.selectSnapshot<Player[]>(PlayersState.getPlayers);
+    const players = this.store.selectSnapshot(PlayersState.getPlayers);
+    const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const finishedPlayerIndex = players.findIndex((player) => player.user.id === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
-      const day = this.store.selectSnapshot(CurrentDayState.getDay);
-      const slideIndex = players.findIndex(
-        (player, index) => index > finishedPlayerIndex && !player.quitPhase && !day.timers[player.user.id],
-      );
+      const slideIndex = players.findIndex(({ user: { id } }) => !quitPhases.has(id) &&
+        !this.timersService.getPlayerTimer(id).isSpeechEnded);
 
       this.navigateToSlide(slideIndex);
       return;

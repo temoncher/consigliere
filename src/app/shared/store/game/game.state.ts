@@ -1,28 +1,30 @@
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store, NgxsOnInit } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { StateReset } from 'ngxs-reset-plugin';
 
-import { Day } from '@shared/models/table/day.model';
+import { Round } from '@shared/models/table/round.model';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
+import { TimersService } from '@shared/services/timers.service';
 import {
-  StartGame,
-  StartNight,
-  DisableNextVote,
+  StartNewRound,
   ResetIsNextVotingDisabled,
   DropGame,
+  DisableVote,
+  StartGame,
 } from './game.actions';
 import { PlayersState } from './players/players.state';
-import { SetPlayersNumbers } from './players/players.actions';
-import { CurrentDayState } from './current-day/current-day.state';
+import { CurrentDayState } from './round/current-day/current-day.state';
 import { ApplicationStateModel } from '..';
 import { GameMenuState } from './menu/menu.state';
-import { Navigate } from '@ngxs/router-plugin';
-import { CurrentVoteState } from './current-day/current-vote/current-vote.state';
-import { DayPhase } from '@shared/models/table/day-phase.enum';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
+import { CurrentVoteState } from './round/current-vote/current-vote.state';
+import { DisableCurrentVote } from './round/current-vote/current-vote.actions';
+import { RoundState } from './round/round.state';
+import { SetPlayersNumbers } from './players/players.actions';
 
 export interface GameStateModel {
-  days: Day[];
+  rounds: Round[];
   isNextVotingDisabled: boolean;
   isGameStarted: boolean;
 }
@@ -30,67 +32,56 @@ export interface GameStateModel {
 @State<GameStateModel>({
   name: 'game',
   defaults: {
-    days: [],
+    rounds: [],
     isNextVotingDisabled: false,
     isGameStarted: false,
   },
   children: [
     PlayersState,
-    CurrentDayState,
     GameMenuState,
+    RoundState,
   ],
 })
 @Injectable()
-export class GameState {
+export class GameState implements NgxsOnInit {
   constructor(
+    private timersService: TimersService,
     private store: Store,
   ) { }
 
   @Selector()
-  static getDays(state: GameStateModel) {
-    return state.days;
+  static getRounds({ rounds }: GameStateModel) {
+    return rounds;
   }
 
   @Selector()
-  static getIsGameStarted(state: GameStateModel) {
-    return state.isGameStarted;
+  static getIsGameStarted({ isGameStarted }: GameStateModel) {
+    return isGameStarted;
   }
 
-  @Selector([CurrentDayState.getPhase, CurrentVoteState.getPhase])
+  @Selector([RoundState.getRoundPhase, CurrentVoteState.getPhase])
   static getCurrentGameStage(
-    { days }: GameStateModel,
-    dayPhase: DayPhase,
+    { rounds }: GameStateModel,
+    roundPhase: RoundPhase,
     votePhase: VotePhase,
   ) {
-    const dayNumber = days.length;
+    const roundNumber = rounds.length;
 
     return {
-      dayNumber,
-      dayPhase,
+      roundNumber,
+      roundPhase,
       votePhase,
     };
   }
 
-
   @Selector()
-  static getDayNumber(state: GameStateModel) {
-    return state.days.length;
+  static getRoundNumber(state: GameStateModel) {
+    return state.rounds.length;
   }
 
-  @Action(StartNight)
-  startNight({ dispatch, patchState, getState }: StateContext<GameStateModel>) {
-    const { days } = cloneDeep(getState());
-    const finishedDay = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.currentDay);
-
-    if (finishedDay) {
-      days.push(new Day(finishedDay));
-    }
-
-    dispatch(new StateReset(CurrentDayState));
-
-    return patchState({ days });
+  ngxsOnInit() {
+    this.timersService.resetTimers();
   }
-
 
   @Action(StartGame)
   startGame({ dispatch, patchState }: StateContext<GameStateModel>) {
@@ -99,21 +90,44 @@ export class GameState {
     return patchState({ isGameStarted: true });
   }
 
+  @Action(StartNewRound)
+  startNewRound({ dispatch, patchState, getState }: StateContext<GameStateModel>) {
+    const { rounds: days } = cloneDeep(getState());
+    const roundSnapshot = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round);
+
+    days.push(new Round({
+      ...roundSnapshot.currentNight,
+      ...roundSnapshot.currentDay,
+      ...roundSnapshot.currentVote,
+    }));
+    this.timersService.resetTimers();
+
+    dispatch(new StateReset(CurrentDayState));
+
+    return patchState({ rounds: days });
+  }
+
   @Action(ResetIsNextVotingDisabled)
   resetIsNextVotingDisabled({ patchState }: StateContext<GameStateModel>) {
     return patchState({ isNextVotingDisabled: false });
   }
 
-  @Action(DisableNextVote)
-  disableNextVote({ patchState }: StateContext<GameStateModel>) {
-    return patchState({ isNextVotingDisabled: true });
+  @Action(DisableVote)
+  disableVote(
+    { dispatch, patchState }: StateContext<GameStateModel>,
+  ) {
+    const roundPhase = this.store.selectSnapshot(RoundState.getRoundPhase);
+    const isResultClear = this.store.selectSnapshot(CurrentVoteState.isResultClear);
+
+    if (roundPhase === RoundPhase.VOTE && isResultClear) {
+      return patchState({ isNextVotingDisabled: true });
+    }
+
+    return dispatch(new DisableCurrentVote());
   }
 
   @Action(DropGame)
   dropGame({ dispatch }: StateContext<GameStateModel>) {
-    return dispatch([
-      new StateReset(GameState),
-      new Navigate(['tabs', 'table']),
-    ]);
+    return dispatch(new StateReset(GameState));
   }
 }

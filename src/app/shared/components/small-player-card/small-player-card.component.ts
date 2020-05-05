@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, OnDestroy } from '@angular/core';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
-import { DayPhase } from '@shared/models/table/day-phase.enum';
 import { Store } from '@ngxs/store';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { CurrentDayState } from '@shared/store/game/current-day/current-day.state';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-small-player-card',
@@ -13,7 +14,8 @@ import { CurrentDayState } from '@shared/store/game/current-day/current-day.stat
   styleUrls: ['./small-player-card.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class SmallPlayerCardComponent implements OnInit {
+export class SmallPlayerCardComponent implements OnInit, OnDestroy {
+  private destory: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
   @Input() showRole = false;
   @Input() showFalls = false;
@@ -25,24 +27,35 @@ export class SmallPlayerCardComponent implements OnInit {
 
   player: Player;
   proposedPlayer: Player;
+  playerQuitPhase: string;
 
   Role = Role;
 
-  get quitPhase() {
-    if (this.player.quitPhase) {
-      return `${this.player.quitPhase.number}${(this.player.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
-    }
-
-    return '';
-  }
+  fallsNumber = 0;
 
   constructor(private store: Store) { }
 
   ngOnInit() {
     this.store.select(PlayersState.getPlayer(this.playerId))
+      .pipe(takeUntil(this.destory))
       .subscribe((player) => this.player = player);
+
     this.store.select(CurrentDayState.getProposedPlayer(this.playerId))
+      .pipe(takeUntil(this.destory))
       .subscribe((proposedPlayer) => this.proposedPlayer = proposedPlayer);
+
+    this.store.select(PlayersState.getPlayerQuitPhase(this.playerId))
+      .pipe(takeUntil(this.destory))
+      .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
+
+    this.store.select(PlayersState.getPlayerFalls(this.playerId))
+      .pipe(takeUntil(this.destory))
+      .subscribe((falls) => this.fallsNumber = falls);
+  }
+
+  ngOnDestroy() {
+    this.destory.next();
+    this.destory.unsubscribe();
   }
 
   onClick(event: MouseEvent) {
