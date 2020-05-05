@@ -7,6 +7,7 @@ import { ToggleGameMenuBoolean } from './menu.actions';
 export interface GameMenuStateModel {
   isPlayerControlsVisible: boolean;
   isRolesVisible: boolean;
+  isQuittedHidden: boolean;
 }
 
 @State<GameMenuStateModel>({
@@ -14,6 +15,7 @@ export interface GameMenuStateModel {
   defaults: {
     isPlayerControlsVisible: true,
     isRolesVisible: false,
+    isQuittedHidden: false,
   },
 })
 @Injectable()

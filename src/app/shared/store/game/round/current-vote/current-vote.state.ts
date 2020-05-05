@@ -1,55 +1,57 @@
-import { State, Selector, StateContext, Action, Store } from '@ngxs/store';
+import { State, Selector, StateContext, Action, Store, NgxsOnInit } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { TimersService } from '@shared/services/timers.service';
 import { cloneDeep } from 'lodash';
 
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { Vote } from '@shared/models/table/vote.model';
-import { VoteStage } from '@shared/models/table/vote-stage.model';
 import { Player } from '@shared/models/player.model';
 import { ApplicationStateModel } from '@shared/store';
-import { VoteForCandidate, StartVote, EndVoteStage, SwitchVotePhase } from './current-vote.actions';
+import { VoteForCandidate, StartVote, EndVoteStage, SwitchVotePhase, DisableCurrentVote, EndVote } from './current-vote.actions';
 import { KillPlayer } from '../../players/players.actions';
 import { PlayersState } from '../../players/players.state';
+import { Vote } from '@shared/models/table/vote.interface';
 
-
-export interface CurrentVoteStateModel extends Partial<Vote> {
+export interface CurrentVoteStateModel extends Vote {
   currentPhase?: VotePhase;
 }
 
 @State<CurrentVoteStateModel>({
   name: 'currentVote',
   defaults: {
-    stages: [],
+    isVoteDisabled: false,
   },
 })
 @Injectable()
-export class CurrentVoteState {
+export class CurrentVoteState implements NgxsOnInit {
   constructor(
     private store: Store,
-    private timersService: TimersService,
   ) { }
 
   @Selector()
-  static getPhase(state: CurrentVoteStateModel) {
-    return state.currentPhase;
+  static getPhase({ currentPhase }: CurrentVoteStateModel) {
+    return currentPhase;
+  }
+
+  @Selector()
+  static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel) {
+    return isVoteDisabled;
+  }
+
+  @Selector()
+  static getCurrentVote({ votes }: CurrentVoteStateModel) {
+    return votes[votes.length - 1];
   }
 
   @Selector([PlayersState.getAlivePlayers])
   static isResultClear(
-    { stages, currentPhase }: CurrentVoteStateModel,
+    { votes, currentPhase }: CurrentVoteStateModel,
     alivePlayers: Player[],
   ) {
-    if (!currentPhase) {
-      return true;
-    }
-
-    if (currentPhase === VotePhase.RESULT) {
+    if (!currentPhase || currentPhase === VotePhase.RESULT) {
       return true;
     }
 
     if (currentPhase === VotePhase.VOTE) {
-      const currentVote = stages[stages.length - 1].votes;
+      const currentVote = votes[votes.length - 1];
       const votedPlayersIdsArrays = [...currentVote.values()];
 
       return Boolean(votedPlayersIdsArrays.find((playersIds) => playersIds.length > alivePlayers.length / 2));
@@ -58,14 +60,10 @@ export class CurrentVoteState {
     return false;
   }
 
-  @Selector()
-  static getVoteObject(state: CurrentVoteStateModel) {
-    return state;
-  }
+  ngxsOnInit({ patchState }: StateContext<CurrentVoteStateModel>) {
+    const isVoteDisabled = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.isNextVotingDisabled);
 
-  @Selector()
-  static getCurrentVote({ stages }: CurrentVoteStateModel) {
-    return stages[stages.length - 1].votes;
+    return patchState({ isVoteDisabled });
   }
 
   @Action(VoteForCandidate)
@@ -76,24 +74,24 @@ export class CurrentVoteState {
       proposedPlayerId,
     }: VoteForCandidate,
   ) {
-    const { stages } = cloneDeep(getState());
-    const votes = stages[stages.length - 1].votes;
-    const isAlreadyVotedForThisPlayer = votes.get(proposedPlayerId).includes(playerId);
+    const { votes } = cloneDeep(getState());
+    const vote = votes[votes.length - 1];
+    const isAlreadyVotedForThisPlayer = vote.get(proposedPlayerId).includes(playerId);
 
     if (isAlreadyVotedForThisPlayer) {
-      votes.set(proposedPlayerId, votes.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
+      vote.set(proposedPlayerId, vote.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
 
-      return patchState({ stages });
+      return patchState({ votes });
     }
 
-    for (const [candidateId, votedPlayers] of votes.entries()) {
+    for (const [candidateId, votedPlayers] of vote.entries()) {
       const newVotedPlayers = votedPlayers.filter((votedPlayerId) => playerId !== votedPlayerId);
-      votes.set(candidateId, newVotedPlayers);
+      vote.set(candidateId, newVotedPlayers);
     }
 
-    votes.get(proposedPlayerId).push(playerId);
+    vote.get(proposedPlayerId).push(playerId);
 
-    return patchState({ stages });
+    return patchState({ votes });
   }
 
   @Action(StartVote)
@@ -101,28 +99,33 @@ export class CurrentVoteState {
     { dispatch, patchState, getState }: StateContext<CurrentVoteStateModel>,
     { proposedPlayers }: StartVote,
   ) {
-    const { stages } = cloneDeep(getState());
+    const { votes } = cloneDeep(getState());
 
-    stages.push(new VoteStage());
-    const votes = stages[stages.length - 1].votes;
+    votes.push(new Map<string, string[]>());
+    const vote = votes[votes.length - 1];
 
     if (proposedPlayers.length === 1) {
       const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.players);
-      votes.set(proposedPlayers[0], players.map(({ user: { id } }) => id));
+      vote.set(proposedPlayers[0], players.map(({ user: { id } }) => id));
 
       dispatch(new SwitchVotePhase(VotePhase.RESULT));
-      return patchState({ stages });
+      return patchState({ votes });
     }
 
     for (const candidateId of proposedPlayers) {
-      votes.set(candidateId, []);
+      vote.set(candidateId, []);
     }
 
-    if (stages.length > 1) {
+    if (votes.length > 1) {
       dispatch(new SwitchVotePhase(VotePhase.SPEECH));
     }
 
-    return patchState({ stages });
+    return patchState({ votes });
+  }
+
+  @Action(DisableCurrentVote)
+  disableCurrentVote({ patchState }: StateContext<CurrentVoteStateModel>) {
+    return patchState({ isVoteDisabled: true });
   }
 
   @Action(EndVoteStage)
@@ -131,7 +134,6 @@ export class CurrentVoteState {
     { leadersIds }: EndVoteStage,
   ) {
     const { eliminateAllVote } = cloneDeep(getState());
-    this.timersService.resetTimers();
 
     if (!leadersIds?.length) {
       throw new Error('Leader candidates not found');
@@ -177,5 +179,12 @@ export class CurrentVoteState {
         break;
     }
     return patchState({ eliminateAllVote, currentPhase: newVotePhase });
+  }
+
+  @Action(EndVote)
+  endVote(
+    { }: StateContext<CurrentVoteStateModel>,
+  ) {
+    throw new Error('Not implemented yet');
   }
 }

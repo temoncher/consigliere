@@ -8,16 +8,16 @@ import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { fadeSlide } from '@shared/animations';
 import { colors } from '@shared/constants/colors';
-import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
+import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/round/current-day/current-day.state';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import {
   ProposePlayer,
   WithdrawPlayer,
-} from '@shared/store/game/current-day/current-day.actions';
-import { DayPhase } from '@shared/models/table/day-phase.enum';
+} from '@shared/store/game/round/current-day/current-day.actions';
 import { TimersService } from '@shared/services/timers.service';
 import { Timer } from '@shared/models/table/timer.model';
 import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 
 @Component({
   selector: 'app-player-timer',
@@ -31,20 +31,20 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
 
   @Output() speechEnd = new EventEmitter();
 
-  @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
-  @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(CurrentVoteState.getIsVoteDisabled) isVoteDisabled$: Observable<boolean>;
   proposedPlayer$: Observable<Player>;
 
   player: Player;
-  players: Player[] = null;
   timer: Timer;
+  playerQuitPhase: string;
 
+  defaultAvatar = defaultAvatarSrc;
   colors = colors;
 
   maxTime = 60;
 
   get timeColor() {
-    if (this.timer?.time === 0 || this.timer?.isSpeechEnded || this.player.quitPhase) {
+    if (this.timer?.time === 0 || this.timer?.isSpeechEnded || this.playerQuitPhase) {
       return 'medium';
     }
     if (this.timer?.time < 10) {
@@ -53,25 +53,11 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     return 'primary';
   }
 
-  get playerAvatar() {
-    return this.player?.user.avatar || defaultAvatarSrc;
-  }
-
-  get quitPhase() {
-    if (this.player?.quitPhase) {
-      return `${this.player?.quitPhase.number}${(this.player?.quitPhase.stage === DayPhase.NIGHT ? 'н' : 'д')}`;
-    }
-
-    return '';
-  }
-
   constructor(
     private store: Store,
     private modalController: ModalController,
     private timersService: TimersService,
-  ) {
-    this.players = this.store.selectSnapshot(PlayersState.getPlayers);
-  }
+  ) { }
 
   ngOnInit() {
     this.timer = this.timersService.getPlayerTimer(this.playerId);
@@ -79,6 +65,11 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     this.store.select(PlayersState.getPlayer(this.playerId))
       .pipe(takeUntil(this.destory))
       .subscribe((player) => this.player = player);
+
+    this.store.select(PlayersState.getPlayerQuitPhase(this.playerId))
+      .pipe(takeUntil(this.destory))
+      .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
+
     this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
   }
 
@@ -88,7 +79,22 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
   }
 
   switchTimer() {
-    this.timer.switchTimer();
+    const wasTimerPaused = this.timer.isTimerPaused;
+    this.timersService.pauseAll();
+
+    if (wasTimerPaused) {
+      this.timer.switchTimer();
+    }
+  }
+
+  withdrawPlayer() {
+    this.store.dispatch(new WithdrawPlayer(this.playerId));
+  }
+
+  endPlayerSpeech() {
+    this.timer.endSpeech();
+    this.timersService.pauseAll();
+    this.speechEnd.emit(this.playerId);
   }
 
   async proposePlayer() {
@@ -112,14 +118,5 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
       default:
         break;
     }
-  }
-
-  withdrawPlayer() {
-    this.store.dispatch(new WithdrawPlayer(this.playerId));
-  }
-
-  endPlayerSpeech() {
-    this.timer.endSpeech();
-    this.speechEnd.emit(this.playerId);
   }
 }

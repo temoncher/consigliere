@@ -13,7 +13,7 @@
       <div class="progress-container">
         <round-progress class="progress-circle"
                         (click)="timer.switchTimer()"
-                        [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                        [ngStyle]="{ 'background-image' : 'url(' + (player?.user.avatar || defaultAvatar) + ')' }"
                         [current]="timer?.time"
                         [max]="maxTime"
                         [color]="colors[timeColor]"
@@ -28,9 +28,9 @@
       </div>
     </ion-card-content>
 
-    <div *ngIf="player?.quitPhase"
+    <div *ngIf="playerQuitPhase"
          class="full-parent-overlay background-color-transparent-dark grid-content-center">
-      <span class="text-color-medium">{{ quitPhase }}</span>
+      <span class="text-color-medium">{{ playerQuitPhase }}</span>
     </div>
   </ion-card>
 </div>

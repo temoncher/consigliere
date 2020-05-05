@@ -19,7 +19,7 @@
       <app-small-player-card *ngFor="let player of players"
                              [slot]="player.number"
                              [playerId]="player.user.id"
-                             [disabled]="isAlreadyACandidate(player.user.id) || player.quitPhase"
+                             [disabled]="isAlreadyACandidate(player.user.id) || (quitPhases$ | async).has(player.user.id)"
                              (click)="navigateToPlayer(player)">
         <div slot="overlay"
              *ngIf="isAlreadyACandidate(player.user.id)"

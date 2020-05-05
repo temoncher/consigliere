@@ -4,7 +4,7 @@
       <app-small-player-card *ngFor="let player of players$ | async"
                              [slot]="player.number"
                              [playerId]="player.user.id"
-                             [disabled]="player.quitPhase"
+                             [disabled]="(quitPhases$ | async).has(player.user.id)"
                              (click)="switchVote(player.user.id)">
         <div slot="overlay"
              *ngIf="voteInfoMap.get(player.user.id)"

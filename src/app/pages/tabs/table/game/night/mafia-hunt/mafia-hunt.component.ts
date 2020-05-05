@@ -1,14 +1,14 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { CurrentDayState, CurrentDayStateModel } from '@shared/store/game/current-day/current-day.state';
-import { ShootPlayer } from '@shared/store/game/current-day/current-day.actions';
-import { takeUntil } from 'rxjs/operators';
+import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
+import { ShootPlayer } from '@shared/store/game/round/current-night/current-night.actions';
 
 @Component({
   selector: 'app-mafia-hunt',
@@ -20,20 +20,16 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(CurrentDayState.getDay) day$: Observable<CurrentDayStateModel>;
+  @Select(CurrentNightState.getShots) shots$: Observable<Map<string, string>>;
 
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
   mafia: Player[];
-  day: CurrentDayStateModel;
+  shots: Map<string, string>;
 
   currentPlayerIndex = 0;
-
-  get numberOfShots() {
-    return this.day.shots.size;
-  }
 
   constructor(private store: Store) {
     this.store.select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]))
@@ -42,9 +38,9 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
     this.players$
       .pipe(takeUntil(this.destory))
       .subscribe((players) => this.players = players);
-    this.day$
+    this.shots$
       .pipe(takeUntil(this.destory))
-      .subscribe((day) => this.day = day);
+      .subscribe((shots) => this.shots = shots);
   }
 
   ngOnInit() { }
@@ -67,6 +63,6 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   }
 
   shotPlayerId(mafiaPlayerId: string) {
-    return this.day.shots.get(mafiaPlayerId);
+    return this.shots.get(mafiaPlayerId);
   }
 }

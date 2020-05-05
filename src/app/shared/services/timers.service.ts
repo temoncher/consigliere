@@ -34,22 +34,22 @@ export class TimersService {
 
   resetTimers() {
     const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.players);
-    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
+    const speechSkips = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.speechSkips);
+    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
 
     this.pauseAll();
 
     for (const player of players) {
-      const time = player.disabledSpeechDayNumber === currentDayNumber ? 0 : 60;
+      const time = speechSkips.get(player.user.id) === currentDayNumber ? 0 : 60;
       this.timers.set(player.user.id, new Timer({ time }));
     }
   }
 
   resetPlayerTimer(playerId: string) {
-    const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.players);
-    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.days).length;
-    const foundPlayer = players.find((player) => player.user.id === playerId);
+    const speechSkips = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.speechSkips);
+    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
 
-    const time = foundPlayer.disabledSpeechDayNumber === currentDayNumber ? 0 : 60;
+    const time = speechSkips.get(playerId) === currentDayNumber ? 0 : 60;
     this.timers.get(playerId).resetTimer(time);
   }
 }

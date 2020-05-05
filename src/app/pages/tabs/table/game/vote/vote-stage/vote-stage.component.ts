@@ -5,9 +5,10 @@ import { Observable, Subject } from 'rxjs';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { takeUntil } from 'rxjs/operators';
-import { VoteForCandidate, EndVoteStage, StartVote } from '@shared/store/game/current-day/current-vote/current-vote.actions';
-import { CurrentVoteState } from '@shared/store/game/current-day/current-vote/current-vote.state';
+import { VoteForCandidate, EndVoteStage, StartVote } from '@shared/store/game/round/current-vote/current-vote.actions';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { SwiperOptions } from 'swiper';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-vote-stage',
@@ -18,6 +19,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   private destory: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -52,6 +54,11 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     this.players$
       .pipe(takeUntil(this.destory))
       .subscribe((newPlayers) => this.players = newPlayers);
+
+    this.players$
+      .pipe(takeUntil(this.destory))
+      .subscribe((newPlayers) => this.players = newPlayers);
+
     this.vote$
       .pipe(takeUntil(this.destory))
       .subscribe((voteMap) => {

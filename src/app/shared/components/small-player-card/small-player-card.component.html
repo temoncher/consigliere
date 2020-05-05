@@ -22,9 +22,9 @@
 
   <slot name="clips"></slot>
 
-  <div *ngIf="showFalls && player.falls"
+  <div *ngIf="showFalls && fallsNumber"
        class="clip-button top-right text-only background-color-danger text-color-dark-contrast">
-    {{ player.falls }}
+    {{ fallsNumber }}
   </div>
 
   <ion-card-content>{{ player.number }}</ion-card-content>
@@ -34,9 +34,9 @@
     {{ proposedPlayer?.number }}
   </div>
 
-  <div *ngIf="quitPhase"
+  <div *ngIf="playerQuitPhase"
        class="quit-overlay full-parent-overlay background-color-transparent-dark grid-content-center">
-    <span class="text-color-medium">{{ quitPhase }}</span>
+    <span class="text-color-medium">{{ playerQuitPhase }}</span>
   </div>
 
   <slot name="overlay"></slot>

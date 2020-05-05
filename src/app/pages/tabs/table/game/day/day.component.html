@@ -4,7 +4,7 @@
       <ion-menu-button menu="game-menu"></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.DAY.toolbarTitle' | translate }} {{ (days$ | async).length }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.GAME.DAY.toolbarTitle' | translate }} {{ (rounds$ | async).length }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="endDay()">
@@ -23,9 +23,12 @@
   <ion-slides #playerSlider
               class="player-slider"
               [options]="playerSliderConfig">
-    <ion-slide *ngFor="let player of players">
-      <app-player-timer [playerId]="player.user.id"
-                        (speechEnd)="endSpeech($event)"></app-player-timer>
-    </ion-slide>
+    <ng-container *ngFor="let player of (players$ | async)">
+      <ion-slide>
+        <app-player-timer [playerId]="player.user.id"
+                          (speechEnd)="endSpeech($event)"></app-player-timer>
+      </ion-slide>
+
+    </ng-container>
   </ion-slides>
 </ion-content>

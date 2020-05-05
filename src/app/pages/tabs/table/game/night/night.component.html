@@ -4,7 +4,7 @@
       <ion-menu-button menu="game-menu"></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (days$ | async).length }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (rounds$ | async).length }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">
@@ -21,7 +21,7 @@
   <div class="modal-content">
     <ng-container [ngSwitch]="stage">
       <ng-container *ngSwitchCase="NightStages.MAFIA">
-        <div *ngIf="dayNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
+        <div *ngIf="roundNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
 
         <ng-template #giveRolesBlock>
           <app-give-roles></app-give-roles>

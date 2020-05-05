@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { PlayerMenuComponent } from '../player-menu/player-menu.component';
-import { AssignFall, ResetPlayer } from '@shared/store/game/players/players.actions';
-import { KickPlayer } from '@shared/store/game/current-day/current-day.actions';
 import { Store } from '@ngxs/store';
+
+import { AssignFall, ResetPlayer } from '@shared/store/game/players/players.actions';
 import { TimersService } from '@shared/services/timers.service';
+import { PlayerMenuComponent } from '../player-menu/player-menu.component';
+import { KickPlayer } from '@shared/store/game/round/round.actions';
 
 @Component({
   selector: 'app-manage-player-card',

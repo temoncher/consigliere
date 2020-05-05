@@ -45,6 +45,8 @@
         "showRoles": "Показать роли",
         "hideRoles": "Скрыть роли",
         "dropGame": "Отменить игру",
+        "showQuitted": "Показать выбывших",
+        "hideQuitted": "Скрыть выбывших",
         "NIGHT": {
           "toolbarTitle": "Ночь",
           "mafiaHunts": "Мафия выходит на охоту",
