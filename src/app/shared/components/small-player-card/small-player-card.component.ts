@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class SmallPlayerCardComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
   @Input() showRole = false;
   @Input() showFalls = false;
@@ -37,25 +37,25 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.select(PlayersState.getPlayer(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);
 
     this.store.select(CurrentDayState.getProposedPlayer(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((proposedPlayer) => this.proposedPlayer = proposedPlayer);
 
     this.store.select(PlayersState.getPlayerQuitPhase(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
 
     this.store.select(PlayersState.getPlayerFalls(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((falls) => this.fallsNumber = falls);
   }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   onClick(event: MouseEvent) {

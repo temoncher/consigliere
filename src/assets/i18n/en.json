@@ -75,9 +75,12 @@
         },
         "VOTE": {
           "toolbarTitle": "Голосование",
+          "nextButton": "Далее",
           "VOTE_RESULT": {
-            "voteIsDisabled": "Игрок был удалён в течение дня",
-            "noCandidates": "Никто не был выставлен",
+            "playerWasKicked": "Игрок был удалён в течение дня",
+            "noCandidates": "Этим днём никто не был выставлен",
+            "singleCandidate": "Выставлен лишь один игрок",
+            "voteIsDisabled": "Голосование не проводится",
             "startNight": "Ночь"
           },
           "VOTE_STAGE": {

@@ -1,0 +1,16 @@
+@import "~src/theme/custom-variables";
+
+.votes-number-card-container {
+  height: 100%;
+  padding: var(--app-default-card-margin);
+
+  .votes-number-card {
+    margin: 0;
+    min-width: unset;
+
+    span {
+      font-size: 5rem;
+      font-weight: bold;
+    }
+  }
+}

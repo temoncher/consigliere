@@ -13,7 +13,7 @@
       <div class="progress-container">
         <round-progress class="progress-circle"
                         (click)="switchTimer()"
-                        [ngStyle]="{ 'background-image' : 'url(' + (this.player?.user.avatar || defaultAvatar) + ')' }"
+                        [ngStyle]="{ backgroundImage: 'url(' + (this.player?.user.avatar || defaultAvatar) + ')' }"
                         [current]="timer?.time"
                         [max]="maxTime"
                         [color]="colors[timeColor]"
