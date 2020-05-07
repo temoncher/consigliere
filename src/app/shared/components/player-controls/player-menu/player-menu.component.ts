@@ -13,7 +13,7 @@ import { QuitPhase } from '@shared/models/quit-phase.interface';
   styleUrls: ['./player-menu.component.scss'],
 })
 export class PlayerMenuComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
 
   player: Player;
@@ -31,17 +31,17 @@ export class PlayerMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.select(PlayersState.getPlayer(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);
 
     this.store.select(PlayersState.getPlayerQuitPhase(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
   }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   chooseOption(role: string) {

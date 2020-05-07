@@ -16,7 +16,7 @@ import { QuitPhase } from '@shared/models/quit-phase.interface';
   styleUrls: ['./propose-modal.component.scss'],
 })
 export class ProposeModalComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
@@ -35,10 +35,10 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proposedPlayers$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((proposedPlayers) => this.proposedPlayers = proposedPlayers);
     this.players$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((players) => this.players = players);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
 
@@ -46,8 +46,8 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   navigateToPlayer(player: Player) {

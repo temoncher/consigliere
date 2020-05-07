@@ -8,6 +8,7 @@ import { PlayersState } from '@shared/store/game/players/players.state';
 import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
 import { GameMenuState } from '@shared/store/game/menu/menu.state';
 import { SwiperOptions } from 'swiper';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-player-controls',
@@ -18,6 +19,8 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   @ViewChild('numberSlider') numberSlider: IonSlides;
   @Select(GameMenuState.getBasicProp('isPlayerControlsVisible')) isPlayerControlsOpened$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
+  @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
 
   @Input() showFalls = true;
   @Input() currentPlayerNumber = 0;

@@ -1,6 +1,7 @@
 import { Night } from './night.interface';
 import { Day } from './day.interface';
 import { Vote } from './vote.interface';
+import { VoteResult } from './vote-result.enum';
 
 export class Round implements Night, Day, Vote {
   kickedPlayers: string[];
@@ -16,8 +17,9 @@ export class Round implements Night, Day, Vote {
 
   // Vote
   isVoteDisabled = false;
-  votes?: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
+  votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
   eliminateAllVote?: Map<string, boolean>;
+  voteResult: VoteResult;
 
   constructor(partialDay?: Partial<Round>) {
     this.kickedPlayers = partialDay?.kickedPlayers || [];
@@ -31,7 +33,8 @@ export class Round implements Night, Day, Vote {
     this.proposedPlayers = partialDay?.proposedPlayers;
 
     this.isVoteDisabled = partialDay?.isVoteDisabled || false;
-    this.votes = partialDay?.votes;
+    this.votes = partialDay?.votes || [];
     this.eliminateAllVote = partialDay?.eliminateAllVote;
+    this.voteResult = partialDay?.voteResult || VoteResult.NO_CANDIDATES;
   }
 }

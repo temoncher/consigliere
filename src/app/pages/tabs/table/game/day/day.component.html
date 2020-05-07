@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button menu="game-menu"></ion-menu-button>
+      <ion-button (click)="openMenu()">
+        <ion-icon slot="icon-only"
+                  name="menu"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
     <ion-title>{{ 'TABS.TABLE.GAME.DAY.toolbarTitle' | translate }} {{ (rounds$ | async).length }}</ion-title>
@@ -21,10 +24,9 @@
                        [currentPlayerNumber]="controlSliderPlayerNumber"></app-player-controls>
 
   <ion-slides #playerSlider
-              class="player-slider"
               [options]="playerSliderConfig">
     <ng-container *ngFor="let player of (players$ | async)">
-      <ion-slide>
+      <ion-slide [hidden]="(isQuittedHidden$ | async) && (quitPhases$ | async).has(player.user.id)">
         <app-player-timer [playerId]="player.user.id"
                           (speechEnd)="endSpeech($event)"></app-player-timer>
       </ion-slide>

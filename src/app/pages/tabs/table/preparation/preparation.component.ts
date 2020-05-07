@@ -49,10 +49,8 @@ export class PreparationComponent implements OnInit {
     this.store.dispatch(new ShufflePlayers());
   }
 
-  async start() {
-    this.store.dispatch(new StartGame())
-      .pipe(first())
-      .subscribe(() => this.store.dispatch(new Navigate(['../game'], undefined, { relativeTo: this.activatedRoute })));
+  start() {
+    this.store.dispatch(new StartGame());
   }
 
   async presentHostModal() {

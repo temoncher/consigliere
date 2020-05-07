@@ -26,7 +26,7 @@ import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-
   animations: [fadeSlide],
 })
 export class PlayerTimerComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
 
   @Output() speechEnd = new EventEmitter();
@@ -63,19 +63,19 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     this.timer = this.timersService.getPlayerTimer(this.playerId);
 
     this.store.select(PlayersState.getPlayer(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);
 
     this.store.select(PlayersState.getPlayerQuitPhase(this.playerId))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
 
     this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
   }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   switchTimer() {

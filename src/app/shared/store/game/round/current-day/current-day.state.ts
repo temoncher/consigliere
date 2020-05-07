@@ -143,14 +143,6 @@ export class CurrentDayState {
     const { proposedPlayers } = cloneDeep(getState());
     const proposedPlayersList = [...proposedPlayers.keys()];
     const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
-    const isVoteDisabled = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round.currentVote.isVoteDisabled);
-
-    if (!proposedPlayersList.length || isVoteDisabled) {
-      return dispatch([
-        new SwitchVotePhase(VotePhase.RESULT),
-        new Navigate(['tabs', 'table', 'game', currentDayNumber, 'vote']),
-      ]);
-    }
 
     return dispatch([
       new SwitchVotePhase(VotePhase.VOTE),

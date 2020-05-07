@@ -6,21 +6,17 @@
     min-width: unset;
   }
 
-  .vote-overlay {
-    &-danger {
-      background-color: var(--ion-color-danger);
-    }
-    &-medium {
-      background-color: var(--ion-color-medium);
-    }
-  }
-
   .proposed-player-clip {
     font-size: 0.7rem;
   }
 
   .controls-block {
-    display: flex;
-    justify-content: space-around;
+    height: 100%;
+
+    &__buttons {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
   }
 }

@@ -15,6 +15,7 @@ import { PlayersState } from '@shared/store/game/players/players.state';
 import { GiveRoles } from '@shared/store/game/players/players.actions';
 import { Timer } from '@shared/models/table/timer.model';
 import { EndNight } from '@shared/store/game/round/current-night/current-night.actions';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-night',
@@ -22,7 +23,7 @@ import { EndNight } from '@shared/store/game/round/current-night/current-night.a
   styleUrls: ['./night.component.scss'],
 })
 export class NightComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
@@ -84,6 +85,7 @@ export class NightComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private translate: TranslateService,
+    private menuController: MenuController,
   ) {
     this.store.dispatch(new GiveRoles());
 
@@ -91,7 +93,7 @@ export class NightComponent implements OnInit, OnDestroy {
     this.don = this.store.selectSnapshot(PlayersState.getDon);
 
     this.store.select(GameState.getRoundNumber)
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((roundNumber) => this.roundNumber = roundNumber);
 
     this.translate.get('TABS.TABLE.GAME.NIGHT')
@@ -102,8 +104,12 @@ export class NightComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sheriffTimer.pauseTimer();
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
+
+  openMenu() {
+    this.menuController.open('game-menu');
   }
 
   nextStage() {

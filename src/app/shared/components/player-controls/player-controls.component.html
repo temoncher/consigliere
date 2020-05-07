@@ -2,13 +2,16 @@
   <ion-slides #numberSlider
               *ngIf="(isPlayerControlsOpened$ | async)"
               [options]="numberSliderConfig">
-    <ion-slide *ngFor="let player of players">
-      <app-manage-player-card [playerId]="player.user.id"
-                              [showFalls]="showFalls"
-                              [showRole]="(isRolesVisible$ | async)"
-                              [showProposedPlayer]="showProposedPlayers"></app-manage-player-card>
-    </ion-slide>
+    <ng-container *ngFor="let player of players">
+      <ion-slide [hidden]="(isQuittedHidden$ | async) && (quitPhases$ | async).has(player.user.id)">
+        <app-manage-player-card [playerId]="player.user.id"
+                                [showFalls]="showFalls"
+                                [showRole]="(isRolesVisible$ | async)"
+                                [showProposedPlayer]="showProposedPlayers"></app-manage-player-card>
+      </ion-slide>
+    </ng-container>
   </ion-slides>
+
   <div *ngIf="(isPlayerControlsOpened$ | async)"
        class="toggle-controls">
     <ion-button size="small"

@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button menu="game-menu"></ion-menu-button>
+      <ion-button (click)="openMenu()">
+        <ion-icon slot="icon-only"
+                  name="menu"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
     <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (rounds$ | async).length }}</ion-title>
@@ -70,7 +73,7 @@
               <div class="progress-container">
                 <round-progress class="progress-circle"
                                 (click)="switchTimer()"
-                                [ngStyle]="{ 'background-image' : 'url(' + playerAvatar + ')' }"
+                                [ngStyle]="{ backgroundImage: 'url(' + playerAvatar + ')' }"
                                 [current]="sheriffTimer.time"
                                 [max]="time"
                                 [color]="sheriffTimer.time > 0 ? colors['warning'] : colors['medium']"

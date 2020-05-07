@@ -1,5 +1,6 @@
 import { State, Action, StateContext, Selector, Store, NgxsOnInit } from '@ngxs/store';
 import { Injectable } from '@angular/core';
+import { Navigate } from '@ngxs/router-plugin';
 import { cloneDeep } from 'lodash';
 import { StateReset } from 'ngxs-reset-plugin';
 
@@ -85,26 +86,33 @@ export class GameState implements NgxsOnInit {
 
   @Action(StartGame)
   startGame({ dispatch, patchState }: StateContext<GameStateModel>) {
-    dispatch(new SetPlayersNumbers());
+    dispatch([
+      new SetPlayersNumbers(),
+      new Navigate(['tabs', 'table', 'game']),
+    ]);
 
     return patchState({ isGameStarted: true });
   }
 
   @Action(StartNewRound)
   startNewRound({ dispatch, patchState, getState }: StateContext<GameStateModel>) {
-    const { rounds: days } = cloneDeep(getState());
+    const { rounds } = cloneDeep(getState());
     const roundSnapshot = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round);
+    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
 
-    days.push(new Round({
+    rounds.push(new Round({
       ...roundSnapshot.currentNight,
       ...roundSnapshot.currentDay,
       ...roundSnapshot.currentVote,
     }));
     this.timersService.resetTimers();
 
-    dispatch(new StateReset(CurrentDayState));
+    dispatch([
+      new StateReset(CurrentDayState),
+      new Navigate(['tabs', 'table', 'game', currentDayNumber + 1, 'night']),
+    ]);
 
-    return patchState({ rounds: days });
+    return patchState({ rounds });
   }
 
   @Action(ResetIsNextVotingDisabled)

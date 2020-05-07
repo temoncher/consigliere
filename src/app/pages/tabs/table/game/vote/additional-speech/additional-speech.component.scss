@@ -1,0 +1,27 @@
+.additional-speech {
+  height: 100%;
+  display: grid;
+
+  .player-card {
+    margin: 0;
+
+    &__header {
+      text-align: center;
+      padding-bottom: 0;
+
+      &__title {
+        font-size: 1.2rem;
+      }
+    }
+
+    &__content {
+      padding-top: 12px;
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+  }
+}

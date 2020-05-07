@@ -16,7 +16,7 @@ import { QuitPhase } from '@shared/models/quit-phase.interface';
   styleUrls: ['./vote-stage.component.scss'],
 })
 export class VoteStageComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
@@ -52,15 +52,15 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     this.proposedPlayers = proposedPlayers;
 
     this.players$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((newPlayers) => this.players = newPlayers);
 
     this.players$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((newPlayers) => this.players = newPlayers);
 
     this.vote$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((voteMap) => {
         this.vote = voteMap;
         // TODO: Rework mechanism to store real order of players proposal
@@ -90,8 +90,8 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   switchVote(playerId: string) {
@@ -111,19 +111,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   }
 
   endVote() {
-    const voteLeaders = [];
-    for (const [candidateId, votedPlayersIds] of this.vote.entries()) {
-      if (votedPlayersIds.length === this.numberOfLeaderVotes) {
-        voteLeaders.push(candidateId);
-      }
-    }
-
-    if (voteLeaders.length === 1) {
-      this.store.dispatch(new EndVoteStage(voteLeaders));
-      return;
-    }
-
-    this.store.dispatch(new StartVote(voteLeaders));
+    this.store.dispatch(new EndVoteStage());
   }
 
   navigateToPlayer(playerIndex: number) {

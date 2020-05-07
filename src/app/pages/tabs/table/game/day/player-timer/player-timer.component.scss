@@ -20,28 +20,9 @@
     }
 
     &__content {
-      padding-top: 13px;
+      padding-top: 12px;
     }
 
-    .progress-container {
-      position: relative;
-      padding-bottom: 24px;
-
-      .progress-circle {
-        background-size: contain;
-        border-radius: 100%;
-      }
-
-      .progress-badge {
-        position: absolute;
-        left: 70%;
-        top: 70%;
-
-        min-width: 12.8px;
-        padding: 4px 8px;
-        font-size: 1.8rem;
-      }
-    }
     .full-parent-overlay span {
       font-size: 5rem;
       font-weight: bold;

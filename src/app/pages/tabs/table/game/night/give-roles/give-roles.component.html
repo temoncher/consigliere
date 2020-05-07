@@ -5,27 +5,28 @@
                            [playerId]="player.user.id"
                            (click)="navigateToPlayer(player.number)"></app-small-player-card>
 
-    <ion-card slot="center"
-              class="player-card"
-              (click)="isRoleVisible ? nextPlayer() : revealRole()">
-      <ion-card-header class="player-card__header">
-        <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-          {{ (players$ | async)[currentPlayerIndex].number }}
-        </div>
-        <ion-card-title class="player-card__header__title text-color-dark">
-          {{ (players$ | async)[currentPlayerIndex].nickname }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content [ngClass]="isRoleVisible ? '' : 'text-color-medium role-hidden'"
-                        class="player-card__content role-card__content ion-text-center">
-        <ion-avatar class="player-card__avatar">
-          <img
-               [src]="(players$ | async)[currentPlayerIndex].user?.avatar ? (players$ | async)[currentPlayerIndex].user.avatar : defaultAvatar">
-        </ion-avatar>
-        {{ isRoleVisible ? 
+    <div slot="center">
+      <ion-card class="player-card"
+                (click)="isRoleVisible ? nextPlayer() : revealRole()">
+        <ion-card-header class="player-card__header">
+          <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+            {{ (players$ | async)[currentPlayerIndex].number }}
+          </div>
+          <ion-card-title class="player-card__header__title text-color-dark">
+            {{ (players$ | async)[currentPlayerIndex].nickname }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content [ngClass]="isRoleVisible ? '' : 'text-color-medium role-hidden'"
+                          class="player-card__content role-card__content ion-text-center">
+          <ion-avatar class="player-card__avatar">
+            <img
+                 [src]="(players$ | async)[currentPlayerIndex].user?.avatar ? (players$ | async)[currentPlayerIndex].user.avatar : defaultAvatar">
+          </ion-avatar>
+          {{ isRoleVisible ? 
            (players$ | async)[currentPlayerIndex].role : 
            'TABS.TABLE.GAME.NIGHT.GIVE_ROLES.hiddenRole' | translate}}
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </app-table-template>
 </div>

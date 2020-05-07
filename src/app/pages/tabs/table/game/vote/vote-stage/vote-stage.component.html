@@ -12,8 +12,8 @@
              [ngClass]="
             voteInfoMap.get(player.user.id).user.id ===
             proposedPlayers[currentPlayerIndex].user.id
-              ? 'vote-overlay-danger'
-              : 'vote-overlay-medium'
+            ? 'background-color-danger'
+            : 'background-color-medium'
           ">
           <ng-container *ngIf="
               voteInfoMap.get(player.user.id).user.id ===
@@ -30,41 +30,42 @@
         </div>
       </app-small-player-card>
 
-      <ion-card slot="center"
-                class="player-card">
-        <ion-card-header class="player-card__header">
-          <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-            {{ proposedPlayers[currentPlayerIndex].number }}
-          </div>
-          <ion-card-title class="player-card__header__title text-color-dark">
-            {{ proposedPlayers[currentPlayerIndex].nickname }}
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content class="player-card__content ion-text-center">
-          <ion-avatar class="player-card__avatar">
-            <img [src]="
-                proposedPlayers[currentPlayerIndex].user?.avatar
-                  ? proposedPlayers[currentPlayerIndex].user.avatar
-                  : defaultAvatar
-              " />
-          </ion-avatar>
-        </ion-card-content>
-      </ion-card>
+      <div slot="center">
+        <ion-card class="player-card">
+          <ion-card-header class="player-card__header">
+            <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+              {{ proposedPlayers[currentPlayerIndex].number }}
+            </div>
+            <ion-card-title class="player-card__header__title text-color-dark">
+              {{ proposedPlayers[currentPlayerIndex].nickname }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="player-card__content ion-text-center">
+            <ion-avatar class="player-card__avatar">
+              <img [src]="
+                  proposedPlayers[currentPlayerIndex].user?.avatar
+                    ? proposedPlayers[currentPlayerIndex].user.avatar
+                    : defaultAvatar
+                " />
+            </ion-avatar>
+          </ion-card-content>
+        </ion-card>
 
-      <div slot="under">
+      </div>
+
+      <div slot="under"
+           class="controls-block flex-centralize">
         <ng-container *ngIf="isAllPlayersVoted; then endVoteBlock; else controlsBlock"></ng-container>
 
         <ng-template #endVoteBlock>
-          <div class="grid-content-center">
-            <ion-button size="large"
-                        (click)="endVote()">
-              {{ 'TABS.TABLE.GAME.VOTE.VOTE_STAGE.endVote' | translate }}
-            </ion-button>
-          </div>
+          <ion-button size="large"
+                      (click)="endVote()">
+            {{ 'TABS.TABLE.GAME.VOTE.VOTE_STAGE.endVote' | translate }}
+          </ion-button>
         </ng-template>
 
         <ng-template #controlsBlock>
-          <div class="controls-block">
+          <div class="controls-block__buttons">
             <ion-button [disabled]="currentPlayerIndex === 0"
                         (click)="previous()">
               <ion-icon slot="icon-only"

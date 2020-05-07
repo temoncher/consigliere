@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, MenuController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
 import { SwiperOptions } from 'swiper';
@@ -13,6 +13,7 @@ import { Player } from '@shared/models/player.model';
 import { EndDay } from '@shared/store/game/round/current-day/current-day.actions';
 import { GameMenuState } from '@shared/store/game/menu/menu.state';
 import { RoundState } from '@shared/store/game/round/round.state';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-day',
@@ -20,11 +21,12 @@ import { RoundState } from '@shared/store/game/round/round.state';
   styleUrls: ['./day.component.scss'],
 })
 export class DayComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
   @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
@@ -38,13 +40,18 @@ export class DayComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private timersService: TimersService,
+    private menuController: MenuController,
   ) { }
 
   ngOnInit() { }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
+
+  openMenu() {
+    this.menuController.open('game-menu');
   }
 
   navigateToSlide(index: number) {

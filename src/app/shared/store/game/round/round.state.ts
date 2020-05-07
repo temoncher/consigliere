@@ -19,6 +19,10 @@ export interface RoundStateModel extends Round {
 
 @State({
   name: 'round',
+  defaults: {
+    kickedPlayers: [],
+    currentPhase: RoundPhase.NIGHT,
+  },
   children: [
     CurrentNightState,
     CurrentDayState,

@@ -16,7 +16,7 @@ import { ShootPlayer } from '@shared/store/game/round/current-night/current-nigh
   styleUrls: ['./mafia-hunt.component.scss'],
 })
 export class MafiaHuntComponent implements OnInit, OnDestroy {
-  private destory: Subject<boolean> = new Subject<boolean>();
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
@@ -33,21 +33,21 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store) {
     this.store.select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]))
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((mafiaPlayers) => this.mafia = mafiaPlayers);
     this.players$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((players) => this.players = players);
     this.shots$
-      .pipe(takeUntil(this.destory))
+      .pipe(takeUntil(this.destroy))
       .subscribe((shots) => this.shots = shots);
   }
 
   ngOnInit() { }
 
   ngOnDestroy() {
-    this.destory.next();
-    this.destory.unsubscribe();
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   next() {
@@ -63,6 +63,6 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   }
 
   shotPlayerId(mafiaPlayerId: string) {
-    return this.shots.get(mafiaPlayerId);
+    return this.shots?.get(mafiaPlayerId);
   }
 }

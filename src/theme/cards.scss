@@ -33,6 +33,10 @@ ion-card.large-card {
   min-width: 59.5vmin;
   max-width: 59.5vmin;
 
+  &__content {
+    padding-top: 12px;
+  }
+
   &__header {
     text-align: center;
     padding-bottom: 0;
@@ -47,6 +51,31 @@ ion-card.large-card {
     height: auto;
 
     padding: 16px;
+  }
+
+  .progress-container {
+    position: relative;
+    padding-bottom: 24px;
+
+    .progress-circle {
+      background-size: contain;
+      border-radius: 100%;
+    }
+
+    .progress-badge {
+      position: absolute;
+      left: 70%;
+      top: 70%;
+
+      min-width: 12.8px;
+      padding: 4px 8px;
+      font-size: 1.8rem;
+    }
+  }
+
+  .full-parent-overlay span {
+    font-size: 5rem;
+    font-weight: bold;
   }
 }
 
