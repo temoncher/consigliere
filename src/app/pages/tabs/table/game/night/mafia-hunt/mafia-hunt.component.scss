@@ -9,22 +9,18 @@
     font-size: 0.7rem;
   }
 
-  .center-item {
-    height: 90%;
-    overflow: initial;
+  .mafia-cards-container {
+    position: absolute;
+    left: -4%;
+    bottom: -8%;
+    z-index: 1;
 
-    .mafia-cards-container {
-      position: absolute;
-      left: -5%;
-      bottom: -15%;
+    width: 108%;
+    display: flex;
+    justify-content: space-around;
 
-      width: 110%;
-      display: flex;
-      justify-content: space-between;
-
-      app-small-player-card {
-        --card-margin: 0px;
-      }
+    app-small-player-card {
+      --card-margin: 0px;
     }
   }
 }

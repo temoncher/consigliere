@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@shared/models/player.model';
@@ -9,6 +9,7 @@ import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
 import { ShootPlayer } from '@shared/store/game/round/current-night/current-night.actions';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-mafia-hunt',
@@ -20,6 +21,8 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+  @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON])) mafiaPlayers$: Observable<Player[]>;
   @Select(CurrentNightState.getShots) shots$: Observable<Map<string, string>>;
   @Select(CurrentNightState.getVictims) victimsMap$: Observable<Map<string, string[]>>;
 
@@ -27,14 +30,14 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
-  mafia: Player[];
+  aliveMafia: Player[];
 
   currentPlayerIndex = 0;
 
   constructor(private store: Store) {
-    this.store.select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]))
+    combineLatest([this.mafiaPlayers$, this.qutiPhases$])
       .pipe(takeUntil(this.destroy))
-      .subscribe((mafiaPlayers) => this.mafia = mafiaPlayers);
+      .subscribe(([mafiaPlayers, quitPhases]) => this.aliveMafia = mafiaPlayers.filter(({ user: { id } }) => !quitPhases.has(id)));
 
     this.players$
       .pipe(takeUntil(this.destroy))

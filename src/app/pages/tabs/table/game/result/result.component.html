@@ -1,0 +1,9 @@
+<div class="result-container"
+     [ngSwitch]="(gameResult$ | async)">
+  <ng-container *ngSwitchCase="GameResult.MAFIA">
+    <span>Mafia won</span>
+  </ng-container>
+  <ng-container *ngSwitchCase="GameResult.CIVILIANS">
+    <span>Civilians won</span>
+  </ng-container>
+</div>

@@ -179,7 +179,10 @@ export class CurrentVoteState {
     if (proposedPlayers.length === 1) {
       vote.set(proposedPlayers[0], players.map(({ user: { id } }) => id));
 
-      dispatch(new SwitchVotePhase(VotePhase.RESULT));
+      dispatch([
+        new KillPlayer(proposedPlayers[0]),
+        new SwitchVotePhase(VotePhase.RESULT),
+      ]);
       return patchState({ votes });
     }
 
@@ -331,6 +334,8 @@ export class CurrentVoteState {
   endVote(
     { dispatch }: StateContext<CurrentVoteStateModel>,
   ) {
-    dispatch([new StartNewRound()]);
+    dispatch([
+      new StartNewRound(),
+    ]);
   }
 }

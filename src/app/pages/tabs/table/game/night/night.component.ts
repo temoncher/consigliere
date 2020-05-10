@@ -8,10 +8,8 @@ import { NightStages } from '@shared/constants/game';
 import { Role } from '@shared/models/role.enum';
 import { GameState } from '@shared/store/game/game.state';
 import { Player } from '@shared/models/player.model';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { Round } from '@shared/models/table/round.model';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { GiveRoles } from '@shared/store/game/players/players.actions';
 import { EndNight } from '@shared/store/game/round/current-night/current-night.actions';
 import { MenuController } from '@ionic/angular';
 
@@ -74,8 +72,6 @@ export class NightComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private menuController: MenuController,
   ) {
-    this.store.dispatch(new GiveRoles());
-
     this.store.select(GameState.getRoundNumber)
       .pipe(takeUntil(this.destroy))
       .subscribe((roundNumber) => this.roundNumber = roundNumber);

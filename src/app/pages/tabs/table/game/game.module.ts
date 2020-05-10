@@ -9,6 +9,7 @@ import { GameRoutingModule } from './game-routing.module';
 import { DayModule } from './day/day.module';
 import { NightModule } from './night/night.module';
 import { VoteModule } from './vote/vote.module';
+import { ResultComponent } from './result/result.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { VoteModule } from './vote/vote.module';
   ],
   declarations: [
     GameComponent,
+    ResultComponent,
   ],
 })
 export class GameModule { }

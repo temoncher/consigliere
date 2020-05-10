@@ -15,6 +15,11 @@ export class StartNewRound {
   constructor() { }
 }
 
+export class CheckGameEndingConditions {
+  static readonly type = `[${gameActionsPrefix}] Check game ending conditions`;
+  constructor() { }
+}
+
 export class DisableVote {
   static readonly type = `[${gameActionsPrefix}] Disable vote`;
   constructor() { }
@@ -22,5 +27,10 @@ export class DisableVote {
 
 export class DropGame {
   static readonly type = `[${gameActionsPrefix}] Drop game`;
+  constructor() { }
+}
+
+export class EndGame {
+  static readonly type = `[${gameActionsPrefix}] End game`;
   constructor() { }
 }

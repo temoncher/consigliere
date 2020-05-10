@@ -1,6 +1,7 @@
 <app-table-template class="mafia-hunt">
   <app-small-player-card *ngFor="let player of (players$ | async)"
                          [slot]="player.number"
+                         [disabled]="(qutiPhases$ | async).has(player.user.id)"
                          [playerId]="player.user.id"
                          (click)="navigateToPlayer(player.number)">
     <div *ngIf="(victimsMap$ | async).get(player.user.id)?.length"
@@ -11,25 +12,27 @@
     </div>
   </app-small-player-card>
 
-  <ion-card slot="center"
-            class="center-item center-card">
-    <ion-card-header class="player-card__header">
-      <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
-        {{ players[currentPlayerIndex].number }}
-      </div>
-      <ion-card-title class="player-card__header__title text-color-dark">
-        {{ players[currentPlayerIndex].nickname }}
-      </ion-card-title>
-    </ion-card-header>
+  <div slot="center"
+       class="card-container">
+    <ion-card class="center-card">
+      <ion-card-header class="player-card__header">
+        <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
+          {{ players[currentPlayerIndex].number }}
+        </div>
+        <ion-card-title class="player-card__header__title text-color-dark">
+          {{ players[currentPlayerIndex].nickname }}
+        </ion-card-title>
+      </ion-card-header>
 
-    <ion-card-content class="player-card__content">
-      <ion-avatar class="player-card__avatar">
-        <img [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar">
-      </ion-avatar>
-    </ion-card-content>
+      <ion-card-content class="player-card__content">
+        <ion-avatar class="player-card__avatar">
+          <img [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar">
+        </ion-avatar>
+      </ion-card-content>
+    </ion-card>
 
     <div class="mafia-cards-container">
-      <app-small-player-card *ngFor="let mafiaPlayer of mafia"
+      <app-small-player-card *ngFor="let mafiaPlayer of aliveMafia"
                              showTeam="true"
                              [playerId]="mafiaPlayer.user.id"
                              (click)="shootPlayer(mafiaPlayer.user.id)">
@@ -41,12 +44,12 @@
         </div>
       </app-small-player-card>
     </div>
-  </ion-card>
+  </div>
 
   <div slot="under"
        class="grid-content-center">
     <ion-button size="large"
-                [disabled]="(shots$ | async).size !== 3"
+                [disabled]="(shots$ | async).size !== aliveMafia.length"
                 (click)="next()">
       {{ 'TABS.TABLE.GAME.NIGHT.MAFIA_HUNTS.nextStageButton' | translate }}
     </ion-button>

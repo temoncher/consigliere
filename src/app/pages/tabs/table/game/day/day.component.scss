@@ -1,0 +1,10 @@
+.day-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .slides-container {
+    flex: 1;
+    display: flex;
+  }
+}

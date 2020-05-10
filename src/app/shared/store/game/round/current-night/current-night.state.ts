@@ -41,6 +41,7 @@ export class CurrentNightState {
     for (const [shooterId, victimId] of shots) {
       victimsMap.set(victimId, [...victimsMap.get(victimId) || [], shooterId]);
     }
+
     return victimsMap;
   }
 
@@ -60,22 +61,15 @@ export class CurrentNightState {
     { mafiaId, victimId }: ShootPlayer,
   ) {
     const { shots } = cloneDeep(getState());
-
     const thisMafiaVictim = shots.get(mafiaId);
+    const isShotThisVicitm = thisMafiaVictim === victimId;
 
-    if (thisMafiaVictim) {
-      const isShotThisVicitm = thisMafiaVictim === victimId;
-
-      if (!isShotThisVicitm) {
-        throw new Error(this.thisMafiaAlreadyShotText);
-      }
-
+    if (isShotThisVicitm) {
       shots.delete(mafiaId);
       return patchState({ shots });
     }
 
     shots.set(mafiaId, victimId);
-
     patchState({ shots });
   }
 
