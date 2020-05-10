@@ -1,9 +1,15 @@
 <app-table-template class="mafia-hunt">
   <app-small-player-card *ngFor="let player of (players$ | async)"
-                         showRole="true"
                          [slot]="player.number"
                          [playerId]="player.user.id"
-                         (click)="navigateToPlayer(player.number)"></app-small-player-card>
+                         (click)="navigateToPlayer(player.number)">
+    <div *ngIf="(victimsMap$ | async).get(player.user.id)?.length"
+         slot="clips">
+      <div class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast">
+        {{ (victimsMap$ | async).get(player.user.id)?.length }}
+      </div>
+    </div>
+  </app-small-player-card>
 
   <ion-card slot="center"
             class="center-item center-card">
@@ -18,7 +24,7 @@
 
     <ion-card-content class="player-card__content">
       <ion-avatar class="player-card__avatar">
-        <img [src]="players[currentPlayerIndex].user?.avatar ? players[currentPlayerIndex].user.avatar : defaultAvatar">
+        <img [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar">
       </ion-avatar>
     </ion-card-content>
 
@@ -28,9 +34,9 @@
                              [playerId]="mafiaPlayer.user.id"
                              (click)="shootPlayer(mafiaPlayer.user.id)">
         <div slot="overlay"
-             *ngIf="shotPlayerId(mafiaPlayer.user.id)"
+             *ngIf="(shots$ | async).get(mafiaPlayer.user.id)"
              class="full-parent-overlay grid-content-center"
-             [ngClass]="shotPlayerId(mafiaPlayer.user.id) === players[currentPlayerIndex].user.id ? 'background-color-danger' : 'background-color-medium'">
+             [ngClass]="(shots$ | async).get(mafiaPlayer.user.id) === players[currentPlayerIndex].user.id ? 'background-color-danger' : 'background-color-medium'">
           <ion-icon name="checkmark"></ion-icon>
         </div>
       </app-small-player-card>
@@ -40,7 +46,7 @@
   <div slot="under"
        class="grid-content-center">
     <ion-button size="large"
-                [disabled]="shots?.size !== 3"
+                [disabled]="(shots$ | async).size !== 3"
                 (click)="next()">
       {{ 'TABS.TABLE.GAME.NIGHT.MAFIA_HUNTS.nextStageButton' | translate }}
     </ion-button>

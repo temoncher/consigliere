@@ -1,41 +1,9 @@
 .night-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   .modal-content {
-    .card-wrapper {
-      display: flex;
-      justify-content: center;
-
-      .player-card {
-        width: 50vmin;
-        height: 75vmin;
-
-        &__content {
-          padding-top: 20px;
-        }
-      }
-    }
-
-    .progress-container {
-      position: relative;
-
-      .progress-circle {
-        background-size: contain;
-        border-radius: 100%;
-      }
-
-      .progress-badge {
-        position: absolute;
-        left: 75%;
-        top: 75%;
-
-        min-width: 12.8px;
-        padding: 4px 8px;
-        font-size: 1.8rem;
-      }
-    }
-
-    app-mafia-hunt {
-      position: relative;
-      height: 70%;
-    }
+    flex: 1;
   }
 }

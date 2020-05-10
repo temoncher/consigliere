@@ -21,13 +21,13 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentNightState.getShots) shots$: Observable<Map<string, string>>;
+  @Select(CurrentNightState.getVictims) victimsMap$: Observable<Map<string, string[]>>;
 
   Role = Role;
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
   mafia: Player[];
-  shots: Map<string, string>;
 
   currentPlayerIndex = 0;
 
@@ -35,12 +35,10 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
     this.store.select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]))
       .pipe(takeUntil(this.destroy))
       .subscribe((mafiaPlayers) => this.mafia = mafiaPlayers);
+
     this.players$
       .pipe(takeUntil(this.destroy))
       .subscribe((players) => this.players = players);
-    this.shots$
-      .pipe(takeUntil(this.destroy))
-      .subscribe((shots) => this.shots = shots);
   }
 
   ngOnInit() { }
@@ -60,9 +58,5 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
 
   shootPlayer(mafiaPlayerId: string) {
     this.store.dispatch(new ShootPlayer(mafiaPlayerId, this.players[this.currentPlayerIndex].user.id));
-  }
-
-  shotPlayerId(mafiaPlayerId: string) {
-    return this.shots?.get(mafiaPlayerId);
   }
 }

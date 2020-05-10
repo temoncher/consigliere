@@ -10,6 +10,16 @@ export class ShootPlayer {
   ) { }
 }
 
+export class CheckByDon {
+  static readonly type = `[${nightActionsPrefix}] Don check`;
+  constructor(public playerId: string) { }
+}
+
+export class CheckBySheriff {
+  static readonly type = `[${nightActionsPrefix}] Sheriff check`;
+  constructor(public playerId: string) { }
+}
+
 export class EndNight {
   static readonly type = `[${nightActionsPrefix}] End night`;
   constructor() { }

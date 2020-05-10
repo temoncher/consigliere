@@ -58,6 +58,12 @@
           "proceedToDon": "Дон",
           "proceedToSheriff": "Шериф",
           "proceedToMorning": "Утро",
+          "DON": {
+            "checkButton": "Проверить"
+          },
+          "SHERIFF": {
+            "checkButton": "Проверить"
+          },
           "GIVE_ROLES": {
             "hiddenRole": "Нажмите, чтобы увидеть роль"
           },
@@ -78,6 +84,7 @@
           "nextButton": "Далее",
           "VOTE_RESULT": {
             "playerWasKicked": "Игрок был удалён в течение дня",
+            "playersKeptAlive": "Все игроки оставлены за столом",
             "noCandidates": "Этим днём никто не был выставлен",
             "singleCandidate": "Выставлен лишь один игрок",
             "voteIsDisabled": "Голосование не проводится",
@@ -86,6 +93,15 @@
           "VOTE_STAGE": {
             "endVote": "Завершить"
           }
+        }
+      }
+    }
+  },
+  "STORE": {
+    "GAME": {
+      "ROUND": {
+        "NIGHT": {
+          "thisMafiaAlreadyShot": "Эта мафия уже сделала выстрел"
         }
       }
     }

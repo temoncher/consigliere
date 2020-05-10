@@ -1,28 +1,6 @@
 <div class="vote-result">
-  <div class="vote-result__container"
-       [ngSwitch]="(voteResult$ | async)">
-    <ng-container *ngSwitchCase="VoteResult.NO_CANDIDATES">
-      <p class="text-color-dark ion-text-center">
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.noCandidates' | translate }}</span>
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
-      </p>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="VoteResult.VOTE_IS_DISABLED">
-      <p class="text-color-dark ion-text-center">
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.playerWasKicked' | translate }}</span>
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
-      </p>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY">
-      <p class="text-color-dark ion-text-center">
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.singleCandidate' | translate }}</span>
-        <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
-      </p>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="VoteResult.PLAYERS_ELIMINATED">
+  <div class="vote-result__container">
+    <ng-container *ngIf="(voteResult$ | async) === VoteResult.PLAYERS_ELIMINATED">
       <ion-slides [options]="playerSliderConfig">
         <ion-slide *ngFor="let player of eliminatedPlayers">
           <ion-card class="player-card">
@@ -39,9 +17,33 @@
               </ion-avatar>
             </ion-card-content>
           </ion-card>
-
         </ion-slide>
       </ion-slides>
+    </ng-container>
+
+    <ng-container *ngIf="(voteResult$ | async) !== VoteResult.PLAYERS_ELIMINATED">
+      <div [ngSwitch]="(voteResult$ | async)"
+           class="text-container text-color-dark ion-text-center">
+        <ng-container *ngSwitchCase="VoteResult.NO_CANDIDATES">
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.noCandidates' | translate }}</span>
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="VoteResult.VOTE_IS_DISABLED">
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.playerWasKicked' | translate }}</span>
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY">
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.singleCandidate' | translate }}</span>
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.voteIsDisabled' | translate }}</span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="VoteResult.PLAYERS_KEPT_ALIVE">
+          <span>{{ 'TABS.TABLE.GAME.VOTE.VOTE_RESULT.playersKeptAlive' | translate }}</span>
+        </ng-container>
+
+      </div>
     </ng-container>
   </div>
 
