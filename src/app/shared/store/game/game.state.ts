@@ -136,6 +136,9 @@ export class GameState implements NgxsOnInit {
 
   @Action(DropGame)
   dropGame({ dispatch }: StateContext<GameStateModel>) {
-    return dispatch(new StateReset(GameState));
+    return dispatch([
+      new StateReset(GameState),
+      new Navigate(['tabs', 'table']),
+    ]);
   }
 }

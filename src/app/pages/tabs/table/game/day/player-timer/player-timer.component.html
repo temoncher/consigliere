@@ -10,10 +10,10 @@
     </ion-card-header>
 
     <ion-card-content class="player-card__content">
-      <div class="progress-container">
-        <round-progress class="progress-circle"
+      <div class="progress">
+        <round-progress class="progress__circle"
                         (click)="switchTimer()"
-                        [ngStyle]="{ backgroundImage: 'url(' + (this.player?.user.avatar || defaultAvatar) + ')' }"
+                        [ngStyle]="{ backgroundImage: 'url(' + (player?.user.avatar || defaultAvatar) + ')' }"
                         [current]="timer?.time"
                         [max]="maxTime"
                         [color]="colors[timeColor]"
@@ -21,7 +21,7 @@
                         [responsive]="true"
                         [duration]="500">
         </round-progress>
-        <ion-badge class="progress-badge"
+        <ion-badge class="progress__badge"
                    [color]="timeColor">
           {{ timer?.time }}
         </ion-badge>

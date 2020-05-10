@@ -6,7 +6,7 @@ import { VoteResult } from './vote-result.enum';
 export class Round implements Night, Day, Vote {
   kickedPlayers: string[];
   // Night
-  shots?: Map<string, string>; // <mafiaId, playerId>
+  shots: Map<string, string>; // <mafiaId, playerId>
   murderedPlayer?: string; // murdered player id
   donCheck?: string; // id of player checked by Don
   sheriffCheck?: string; // id of player checked by Sheriff

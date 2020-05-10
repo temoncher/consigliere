@@ -6,7 +6,7 @@
                            (click)="navigateToPlayer(player.number)"></app-small-player-card>
 
     <div slot="center">
-      <ion-card class="player-card"
+      <ion-card class="player-card player-card--template"
                 (click)="isRoleVisible ? nextPlayer() : revealRole()">
         <ion-card-header class="player-card__header">
           <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
@@ -16,7 +16,7 @@
             {{ (players$ | async)[currentPlayerIndex].nickname }}
           </ion-card-title>
         </ion-card-header>
-        <ion-card-content [ngClass]="isRoleVisible ? '' : 'text-color-medium role-hidden'"
+        <ion-card-content [class.role-hidden]="!isRoleVisible"
                           class="player-card__content role-card__content ion-text-center">
           <ion-avatar class="player-card__avatar">
             <img

@@ -19,77 +19,31 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="night-content">
-  <app-player-controls></app-player-controls>
-  <div class="modal-content">
-    <ng-container [ngSwitch]="stage">
-      <ng-container *ngSwitchCase="NightStages.MAFIA">
-        <div *ngIf="roundNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
+<ion-content>
+  <div class="night-content">
+    <app-player-controls></app-player-controls>
+    <div class="modal-content">
+      <ng-container [ngSwitch]="stage">
+        <ng-container *ngSwitchCase="NightStages.MAFIA">
+          <div *ngIf="roundNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
 
-        <ng-template #giveRolesBlock>
-          <app-give-roles></app-give-roles>
-        </ng-template>
+          <ng-template #giveRolesBlock>
+            <app-give-roles></app-give-roles>
+          </ng-template>
 
-        <ng-template #mafiaHuntBlock>
-          <app-mafia-hunt (nextClick)="nextStage()"></app-mafia-hunt>
-        </ng-template>
+          <ng-template #mafiaHuntBlock>
+            <app-mafia-hunt (nextClick)="nextStage()"></app-mafia-hunt>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="NightStages.DON">
+          <app-don></app-don>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="NightStages.SHERIFF">
+          <app-sheriff></app-sheriff>
+        </ng-container>
       </ng-container>
-
-      <ng-container *ngSwitchCase="NightStages.DON">
-        <div class="card-wrapper">
-          <ion-card class="don-card player-card">
-
-            <ion-card-header class="player-card__header">
-              <div class="clip-button top-left background-color-danger">
-                <ion-icon class="text-color-dark-contrast"
-                          name="rose"></ion-icon>
-              </div>
-              <ion-card-title class="player-card__header__title text-color-dark">{{ don.nickname }}</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content class="player-card__content">
-              <ion-avatar class="player-card__avatar">
-                <img [src]="don.user?.avatar ? don.user.avatar : defaultAvatar">
-              </ion-avatar>
-            </ion-card-content>
-          </ion-card>
-        </div>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="NightStages.SHERIFF">
-        <div class="card-wrapper">
-          <ion-card class="player-card">
-
-            <ion-card-header class="player-card__header">
-              <div class="clip-button top-left background-color-warning">
-                <ion-icon class="text-color-dark-contrast"
-                          name="star"></ion-icon>
-              </div>
-              <ion-card-title class="player-card__header__title text-color-dark">
-                {{ sheriff.nickname }}</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content class="player-card__content">
-              <div class="progress-container">
-                <round-progress class="progress-circle"
-                                (click)="switchTimer()"
-                                [ngStyle]="{ backgroundImage: 'url(' + playerAvatar + ')' }"
-                                [current]="sheriffTimer.time"
-                                [max]="time"
-                                [color]="sheriffTimer.time > 0 ? colors['warning'] : colors['medium']"
-                                [rounded]="true"
-                                [responsive]="true"
-                                [duration]="500">
-                </round-progress>
-                <ion-badge class="progress-badge text-color-dark-contrast"
-                           [color]="sheriffTimer.time > 0 ? 'warning' : 'medium'">
-                  {{ sheriffTimer.time }}
-                </ion-badge>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </div>
-      </ng-container>
-    </ng-container>
+    </div>
   </div>
 </ion-content>

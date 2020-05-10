@@ -1,0 +1,63 @@
+<div class="don flex-centralize">
+  <div *ngIf="(rounds$ | async).length === 0; then zeroNightBlock else nightBlock"></div>
+  <ng-template #zeroNightBlock>
+    <ion-card class="don-card player-card">
+      <ion-card-header class="player-card__header">
+        <div class="clip-button top-left background-color-danger">
+          <ion-icon class="text-color-dark-contrast"
+                    name="rose"></ion-icon>
+        </div>
+        <ion-card-title class="player-card__header__title text-color-dark">{{ (don$ | async).nickname }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="player-card__content">
+        <ion-avatar class="player-card__avatar">
+          <img [src]="(don$ | async).user?.avatar || defaultAvatar">
+        </ion-avatar>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-template #nightBlock>
+    <app-table-template>
+      <app-small-player-card *ngFor="let player of (players$ | async)"
+                             [slot]="player.number"
+                             [playerId]="player.user.id"
+                             (click)="navigateToPlayer(player.number)">
+        <div *ngIf="(donCheck$ | async) === player.user.id"
+             slot="overlay"
+             class="full-parent-overlay grid-content-center background-color-danger">
+          <ion-icon name="rose"></ion-icon>
+        </div>
+
+      </app-small-player-card>
+
+      <div slot="center">
+        <ion-card class="player-card player-card--template">
+          <ion-card-header class="player-card__header">
+            <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+              {{ (players$ | async)[currentPlayerIndex].number }}
+            </div>
+            <ion-card-title class="player-card__header__title text-color-dark">
+              {{ (players$ | async)[currentPlayerIndex].nickname }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="player-card__content role-card__content ion-text-center">
+            <ion-avatar class="player-card__avatar">
+              <img [src]="(players$ | async)[currentPlayerIndex].user?.avatar || defaultAvatar">
+            </ion-avatar>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div slot="under"
+           class="grid-content-center">
+        <ion-button size="large"
+                    (click)="check()">
+          {{ 'TABS.TABLE.GAME.NIGHT.DON.checkButton' | translate }}
+        </ion-button>
+      </div>
+    </app-table-template>
+  </ng-template>
+</div>

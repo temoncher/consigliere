@@ -1,0 +1,76 @@
+<div class="sheriff flex-centralize">
+  <div *ngIf="(rounds$ | async).length === 0; then zeroNightBlock else nightBlock"></div>
+  <ng-template #zeroNightBlock>
+    <ion-card class="player-card">
+      <ion-card-header class="player-card__header">
+        <div class="clip-button top-left background-color-warning">
+          <ion-icon class="text-color-dark-contrast"
+                    name="star"></ion-icon>
+        </div>
+        <ion-card-title class="player-card__header__title text-color-dark">
+          {{ (sheriff$ | async).nickname }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="player-card__content">
+        <div class="progress">
+          <round-progress class="progress__circle"
+                          (click)="switchTimer()"
+                          [ngStyle]="{ backgroundImage: 'url(' + ((sheriff$ | async).user?.avatar || defaultAvatar) + ')' }"
+                          [current]="sheriffTimer.time"
+                          [max]="time"
+                          [color]="sheriffTimer.time > 0 ? colors['warning'] : colors['medium']"
+                          [rounded]="true"
+                          [responsive]="true"
+                          [duration]="500">
+          </round-progress>
+          <ion-badge class="progress__badge text-color-dark-contrast"
+                     [color]="sheriffTimer.time > 0 ? 'warning' : 'medium'">
+            {{ sheriffTimer.time }}
+          </ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-template #nightBlock>
+    <app-table-template>sheriffCheck$
+      <app-small-player-card *ngFor="let player of (players$ | async)"
+                             [slot]="player.number"
+                             [playerId]="player.user.id"
+                             (click)="navigateToPlayer(player.number)">
+        <div *ngIf="(sheriffCheck$ | async) === player.user.id"
+             slot="overlay"
+             class="full-parent-overlay grid-content-center background-color-warning">
+          <ion-icon name="star"></ion-icon>
+        </div>
+
+      </app-small-player-card>
+
+      <div slot="center">
+        <ion-card class="player-card player-card--template">
+          <ion-card-header class="player-card__header">
+            <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
+              {{ (players$ | async)[currentPlayerIndex].number }}
+            </div>
+            <ion-card-title class="player-card__header__title text-color-dark">
+              {{ (players$ | async)[currentPlayerIndex].nickname }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="player-card__content role-card__content ion-text-center">
+            <ion-avatar class="player-card__avatar">
+              <img [src]="(players$ | async)[currentPlayerIndex].user?.avatar || defaultAvatar">
+            </ion-avatar>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div slot="under"
+           class="grid-content-center">
+        <ion-button size="large"
+                    (click)="check()">
+          {{ 'TABS.TABLE.GAME.NIGHT.SHERIFF.checkButton' | translate }}
+        </ion-button>
+      </div>
+    </app-table-template>
+  </ng-template>
+</div>

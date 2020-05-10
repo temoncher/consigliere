@@ -7,6 +7,8 @@ import { SharedModule } from '@shared/shared.module';
 import { NightComponent } from './night.component';
 import { MafiaHuntComponent } from './mafia-hunt/mafia-hunt.component';
 import { GiveRolesComponent } from './give-roles/give-roles.component';
+import { DonComponent } from './don/don.component';
+import { SheriffComponent } from './sheriff/sheriff.component';
 
 @NgModule({
   imports: [
@@ -19,6 +21,8 @@ import { GiveRolesComponent } from './give-roles/give-roles.component';
     NightComponent,
     MafiaHuntComponent,
     GiveRolesComponent,
+    DonComponent,
+    SheriffComponent,
   ],
 })
 export class NightModule { }

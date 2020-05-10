@@ -8,12 +8,10 @@ import { NightStages } from '@shared/constants/game';
 import { Role } from '@shared/models/role.enum';
 import { GameState } from '@shared/store/game/game.state';
 import { Player } from '@shared/models/player.model';
-import { colors } from '@shared/constants/colors';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { Round } from '@shared/models/table/round.model';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { GiveRoles } from '@shared/store/game/players/players.actions';
-import { Timer } from '@shared/models/table/timer.model';
 import { EndNight } from '@shared/store/game/round/current-night/current-night.actions';
 import { MenuController } from '@ionic/angular';
 
@@ -27,17 +25,10 @@ export class NightComponent implements OnInit, OnDestroy {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
-  sheriff: Player;
-  don: Player;
-
-  colors = colors;
   NightStages = NightStages;
   Role = Role;
-  defaultAvatar = defaultAvatarSrc;
 
   roundNumber = 0;
-  time = 20;
-  sheriffTimer = new Timer({ time: this.time });
   stage = NightStages.MAFIA;
 
   nightTexts: {
@@ -65,10 +56,6 @@ export class NightComponent implements OnInit, OnDestroy {
     }
   }
 
-  get playerAvatar() {
-    return this.sheriff.user.avatar || this.defaultAvatar;
-  }
-
   get currentStageText() {
     switch (this.stage) {
       case NightStages.MAFIA:
@@ -89,9 +76,6 @@ export class NightComponent implements OnInit, OnDestroy {
   ) {
     this.store.dispatch(new GiveRoles());
 
-    this.sheriff = this.store.selectSnapshot(PlayersState.getSheriff);
-    this.don = this.store.selectSnapshot(PlayersState.getDon);
-
     this.store.select(GameState.getRoundNumber)
       .pipe(takeUntil(this.destroy))
       .subscribe((roundNumber) => this.roundNumber = roundNumber);
@@ -103,7 +87,6 @@ export class NightComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ngOnDestroy() {
-    this.sheriffTimer.pauseTimer();
     this.destroy.next();
     this.destroy.unsubscribe();
   }
@@ -113,16 +96,10 @@ export class NightComponent implements OnInit, OnDestroy {
   }
 
   nextStage() {
-    this.sheriffTimer.pauseTimer();
-
     if (this.stage === NightStages.SHERIFF) {
       this.store.dispatch(new EndNight());
     }
 
     this.stage++;
-  }
-
-  switchTimer() {
-    this.sheriffTimer.switchTimer();
   }
 }

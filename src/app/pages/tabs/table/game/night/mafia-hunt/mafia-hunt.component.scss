@@ -1,5 +1,13 @@
 .mafia-hunt {
   position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .victim-clip {
+    font-size: 0.7rem;
+  }
 
   .center-item {
     height: 90%;
@@ -8,7 +16,7 @@
     .mafia-cards-container {
       position: absolute;
       left: -5%;
-      bottom: -20%;
+      bottom: -15%;
 
       width: 110%;
       display: flex;
