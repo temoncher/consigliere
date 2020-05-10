@@ -18,6 +18,8 @@ import {
 } from './current-day.actions';
 import { PlayersState, PlayersStateModel } from '../../players/players.state';
 import { StartVote, SwitchVotePhase } from '../current-vote/current-vote.actions';
+import { SwitchRoundPhase } from '../round.actions';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
 
 // tslint:disable-next-line: no-empty-interface
 export interface CurrentDayStateModel extends Day { }
@@ -145,6 +147,7 @@ export class CurrentDayState {
     const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
 
     return dispatch([
+      new SwitchRoundPhase(RoundPhase.DAY),
       new SwitchVotePhase(VotePhase.VOTE),
       new StartVote(proposedPlayersList),
       new Navigate(['tabs', 'table', 'game', currentDayNumber, 'vote']),

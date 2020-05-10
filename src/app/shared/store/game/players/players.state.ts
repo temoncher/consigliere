@@ -22,6 +22,7 @@ import {
 } from './players.actions';
 import { ResetPlayerTimer, StopSpeech } from '../round/current-day/current-day.actions';
 import { ResetKickedPlayer, KickPlayer } from '../round/round.actions';
+import { CheckGameEndingConditions } from '../game.actions';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
@@ -148,7 +149,7 @@ export class PlayersState {
       player.role = roles[index];
     }
 
-    return patchState({ players, host });
+    patchState({ players, host });
   }
 
   @Action(SetHost)
@@ -169,7 +170,7 @@ export class PlayersState {
       throw new Error(this.isPlayerAlreadyPresentText);
     }
 
-    return patchState({ host: player });
+    patchState({ host: player });
   }
 
   @Action(ShufflePlayers)
@@ -177,7 +178,7 @@ export class PlayersState {
     const { players } = cloneDeep(getState());
     const newPlayers = shuffle(players);
 
-    return patchState({ players: newPlayers });
+    patchState({ players: newPlayers });
   }
 
   @Action(SetPlayersNumbers)
@@ -185,7 +186,7 @@ export class PlayersState {
     const { players } = cloneDeep(getState());
     const newPlayers = players.map((player, index) => new Player({ ...player, number: index + 1 }));
 
-    return patchState({ players: newPlayers });
+    patchState({ players: newPlayers });
   }
 
   @Action(AddPlayer)
@@ -210,7 +211,7 @@ export class PlayersState {
     const newPlayer = new Player({ ...player, number: players.length });
     const newPlayers = [...players, newPlayer];
 
-    return patchState({ players: newPlayers });
+    patchState({ players: newPlayers });
   }
 
   @Action(RemovePlayer)
@@ -218,7 +219,7 @@ export class PlayersState {
     const { players } = cloneDeep(getState());
     const newPlayers = players.filter(({ user: { id } }) => id !== userId);
 
-    return patchState({ players: newPlayers });
+    patchState({ players: newPlayers });
   }
 
   @Action(KillPlayer)
@@ -227,12 +228,16 @@ export class PlayersState {
     { playerId }: KillPlayer,
   ) {
     const { quitPhases } = cloneDeep(getState());
-    const days = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds);
-    const stage = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round.currentPhase);
+    const {
+      rounds,
+      round: {
+        currentPhase: stage,
+      },
+    } = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game);
 
     const quitPhase = {
       stage,
-      number: days.length,
+      number: rounds.length,
     };
     quitPhases.set(playerId, quitPhase);
 
@@ -240,7 +245,8 @@ export class PlayersState {
       dispatch(new StopSpeech(playerId));
     }
 
-    return patchState({ quitPhases });
+    dispatch(new CheckGameEndingConditions());
+    patchState({ quitPhases });
   }
 
   @Action(ReorderPlayer)
@@ -252,7 +258,7 @@ export class PlayersState {
     const playerToReorder = players.splice(previoustIndex, 1)[0];
     players.splice(newIndex, 0, playerToReorder);
 
-    return patchState({ players });
+    patchState({ players });
   }
 
   @Action(ResetPlayer)
@@ -270,7 +276,7 @@ export class PlayersState {
       new ResetKickedPlayer(playerId),
     ]);
 
-    return patchState({ quitPhases, falls });
+    patchState({ quitPhases, falls });
   }
 
   @Action(AssignFall)
@@ -309,6 +315,6 @@ export class PlayersState {
         break;
     }
 
-    return patchState({ falls });
+    patchState({ falls });
   }
 }

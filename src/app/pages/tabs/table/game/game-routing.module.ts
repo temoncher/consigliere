@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { GameStartGuard } from '@shared/guards/game-start.guard';
 import { GameComponent } from './game.component';
 import { NightComponent } from './night/night.component';
 import { DayComponent } from './day/day.component';
 import { VoteComponent } from './vote/vote.component';
+import { ResultComponent } from './result/result.component';
 
 const routes: Routes = [
   {
@@ -14,9 +14,12 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'result',
+    component: ResultComponent,
+  },
+  {
     path: ':roundNumber',
     component: GameComponent,
-    canActivate: [GameStartGuard],
     children: [
       {
         path: 'night',

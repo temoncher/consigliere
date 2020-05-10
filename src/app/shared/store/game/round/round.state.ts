@@ -42,7 +42,7 @@ export class RoundState {
     { patchState }: StateContext<RoundStateModel>,
     { roundPhase }: SwitchRoundPhase,
   ) {
-    return patchState({ currentPhase: roundPhase });
+    patchState({ currentPhase: roundPhase });
   }
 
   @Action(KickPlayer)
@@ -60,7 +60,7 @@ export class RoundState {
       new DisableVote(),
     ]);
 
-    return patchState({ kickedPlayers });
+    patchState({ kickedPlayers });
   }
 
   @Action(ResetKickedPlayer)
@@ -72,6 +72,6 @@ export class RoundState {
 
     kickedPlayers.filter((kickedPlayerId) => kickedPlayerId !== playerId);
 
-    return patchState({ kickedPlayers });
+    patchState({ kickedPlayers });
   }
 }

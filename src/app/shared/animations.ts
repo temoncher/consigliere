@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate, state, useAnimation } from '@angular/animations';
-import { fadeInUp } from 'ng-animate';
+import { fadeInUp, fadeOutDown } from 'ng-animate';
 
 export const oldFadeSlide = trigger('fadeSlide', [
   state('void', style({ opacity: 0, transform: 'translateY(1em)' })),
@@ -9,10 +9,17 @@ export const oldFadeSlide = trigger('fadeSlide', [
 ]);
 
 export const fadeSlide = trigger('fadeSlide', [
-  transition(':enter, :leave', useAnimation(fadeInUp, {
+  transition(':enter', useAnimation(fadeInUp, {
     params: {
       timing: 0.35,
       a: '1em',
+    },
+  })),
+  transition(':leave', useAnimation(fadeOutDown, {
+    params: {
+      timing: 0.35,
+      a: 0,
+      b: '1em',
     },
   })),
 ]);

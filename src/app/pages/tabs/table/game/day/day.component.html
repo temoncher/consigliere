@@ -20,17 +20,21 @@
 </ion-header>
 
 <ion-content>
-  <app-player-controls [showProposedPlayers]="true"
-                       [currentPlayerNumber]="controlSliderPlayerNumber"></app-player-controls>
+  <div class="day-container">
+    <app-player-controls [showProposedPlayers]="true"
+                         [currentPlayerNumber]="controlSliderPlayerNumber"></app-player-controls>
 
-  <ion-slides #playerSlider
-              [options]="playerSliderConfig">
-    <ng-container *ngFor="let player of (players$ | async)">
-      <ion-slide [hidden]="(isQuittedHidden$ | async) && (quitPhases$ | async).has(player.user.id)">
-        <app-player-timer [playerId]="player.user.id"
-                          (speechEnd)="endSpeech($event)"></app-player-timer>
-      </ion-slide>
+    <div class="slides-container">
+      <ion-slides #playerSlider
+                  [options]="playerSliderConfig">
+        <ng-container *ngFor="let player of (players$ | async)">
+          <ion-slide [hidden]="(isQuittedHidden$ | async) && (quitPhases$ | async).has(player.user.id)">
+            <app-player-timer [playerId]="player.user.id"
+                              (speechEnd)="endSpeech($event)"></app-player-timer>
+          </ion-slide>
 
-    </ng-container>
-  </ion-slides>
+        </ng-container>
+      </ion-slides>
+    </div>
+  </div>
 </ion-content>
