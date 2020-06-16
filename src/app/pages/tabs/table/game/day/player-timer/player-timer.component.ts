@@ -79,7 +79,8 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
   }
 
   switchTimer() {
-    const wasTimerPaused = this.timer.isTimerPaused;
+    const wasTimerPaused = this.timer.isPaused;
+
     this.timersService.pauseAll();
 
     if (wasTimerPaused) {

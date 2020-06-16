@@ -4,8 +4,6 @@ import { shuffle, cloneDeep } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
-import { ApplicationStateModel } from '@shared/store';
-import { TimersService } from '@shared/services/timers.service';
 import { RoundPhase } from '@shared/models/table/day-phase.enum';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
 import {
@@ -19,10 +17,8 @@ import {
   ResetPlayer,
   SetPlayersNumbers,
   ReorderPlayer,
+  SkipSpeech,
 } from './players.actions';
-import { ResetPlayerTimer, StopSpeech } from '../round/current-day/current-day.actions';
-import { ResetKickedPlayer, KickPlayer } from '../round/round.actions';
-import { CheckGameEndingConditions } from '../game.actions';
 
 const dummyPlayers = [
   new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
@@ -74,14 +70,14 @@ export class PlayersState {
   private readonly emptyNicknameText = 'У гостя должно быть имя.';
   private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
 
-  constructor(
-    private store: Store,
-    private timersService: TimersService,
-  ) { }
-
   @Selector()
   static getHost({ host }: PlayersStateModel) {
     return host;
+  }
+
+  @Selector()
+  static getSpeechSkips({ speechSkips }: PlayersStateModel) {
+    return speechSkips;
   }
 
   @Selector()
@@ -224,28 +220,13 @@ export class PlayersState {
 
   @Action(KillPlayer)
   killPlayer(
-    { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
-    { playerId }: KillPlayer,
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { playerId, quitPhase }: KillPlayer,
   ) {
     const { quitPhases } = cloneDeep(getState());
-    const {
-      rounds,
-      round: {
-        currentPhase: stage,
-      },
-    } = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game);
 
-    const quitPhase = {
-      stage,
-      number: rounds.length,
-    };
     quitPhases.set(playerId, quitPhase);
 
-    if (stage === RoundPhase.DAY) {
-      dispatch(new StopSpeech(playerId));
-    }
-
-    dispatch(new CheckGameEndingConditions());
     patchState({ quitPhases });
   }
 
@@ -256,6 +237,7 @@ export class PlayersState {
   ) {
     const { players } = cloneDeep(getState());
     const playerToReorder = players.splice(previoustIndex, 1)[0];
+
     players.splice(newIndex, 0, playerToReorder);
 
     patchState({ players });
@@ -263,7 +245,7 @@ export class PlayersState {
 
   @Action(ResetPlayer)
   resetPlayer(
-    { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
+    { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: ResetPlayer,
   ) {
     const { quitPhases, falls } = cloneDeep(getState());
@@ -271,49 +253,30 @@ export class PlayersState {
     falls.set(playerId, 0);
     quitPhases.set(playerId, null);
 
-    dispatch([
-      new ResetPlayerTimer(playerId),
-      new ResetKickedPlayer(playerId),
-    ]);
-
     patchState({ quitPhases, falls });
+  }
+
+  @Action(SkipSpeech)
+  skipSpeech(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { playerId, roundNumber }: SkipSpeech,
+  ) {
+    const { speechSkips } = cloneDeep(getState());
+
+    speechSkips.set(playerId, roundNumber);
+
+    patchState({ speechSkips });
   }
 
   @Action(AssignFall)
   assignFall(
-    { dispatch, patchState, getState }: StateContext<PlayersStateModel>,
+    { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: AssignFall,
   ) {
-    const { falls, speechSkips } = cloneDeep(getState());
+    const { falls } = cloneDeep(getState());
     const playerFallsNumber = falls.get(playerId);
+
     falls.set(playerId, playerFallsNumber ? playerFallsNumber + 1 : 1);
-
-    const newFallsNumber = falls.get(playerId);
-
-    switch (newFallsNumber) {
-      case 3:
-        const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
-        const finishedTimers = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.round.currentDay.timers);
-        const playerTimer = this.timersService.getPlayerTimer(playerId);
-        let isPlayerAlreadySpoke = Boolean(finishedTimers.get(playerId));
-
-        if (playerTimer) {
-          isPlayerAlreadySpoke = isPlayerAlreadySpoke && !playerTimer?.isTimerPaused;
-        }
-
-        speechSkips.set(playerId, isPlayerAlreadySpoke ? currentDayNumber + 1 : currentDayNumber);
-
-        if (!isPlayerAlreadySpoke) {
-          this.timersService.setTimer(playerId, 0);
-        }
-        break;
-      case 4:
-        dispatch(new KickPlayer(playerId));
-        break;
-
-      default:
-        break;
-    }
 
     patchState({ falls });
   }

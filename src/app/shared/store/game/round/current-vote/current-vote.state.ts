@@ -4,25 +4,20 @@ import { cloneDeep } from 'lodash';
 
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { Player } from '@shared/models/player.model';
-import { ApplicationStateModel } from '@shared/store';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
 import { Vote } from '@shared/models/table/vote.interface';
 import {
   VoteForCandidate,
-  StartVote,
-  EndVoteStage,
-  SwitchVotePhase,
   DisableCurrentVote,
-  EndVote,
-  EndEliminateVote,
-  EndAdditionalSpeech,
-  VoteForEliminateAll,
+  SetPreviousLeadersIds,
+  VoteForElimination,
   SetIsVoteDisabled,
-  SwitchVoteResult,
+  SetEliminateAllVote,
+  SetVotes,
+  SetCurrentVotePhase,
+  SetVoteResult,
 } from './current-vote.actions';
-import { KillPlayer } from '../../players/players.actions';
 import { PlayersState } from '../../players/players.state';
-import { StartNewRound } from '../../game.actions';
 
 export interface CurrentVoteStateModel extends Vote {
   currentPhase?: VotePhase;
@@ -39,18 +34,25 @@ export interface CurrentVoteStateModel extends Vote {
 })
 @Injectable()
 export class CurrentVoteState {
-  constructor(
-    private store: Store,
-  ) { }
-
+  // TODO: Refactor state to remove unnecessary getters
   @Selector()
   static getPhase({ currentPhase }: CurrentVoteStateModel) {
     return currentPhase;
   }
 
   @Selector()
+  static getPreviousLeadersIds({ previousLeadersIds }: CurrentVoteStateModel) {
+    return previousLeadersIds;
+  }
+
+  @Selector()
   static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel) {
     return isVoteDisabled;
+  }
+
+  @Selector()
+  static getVotes({ votes }: CurrentVoteStateModel) {
+    return votes;
   }
 
   @Selector()
@@ -109,16 +111,25 @@ export class CurrentVoteState {
   }
 
   @Action(SetIsVoteDisabled)
-  setIsVoteDisabled({ patchState }: StateContext<CurrentVoteStateModel>) {
-    const isVoteDisabled = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.isNextVotingDisabled);
-
-    return patchState({ isVoteDisabled });
+  setIsVoteDisabled(
+    { patchState }: StateContext<CurrentVoteStateModel>,
+    { isVoteDisabled }: SetIsVoteDisabled,
+  ) {
+    patchState({ isVoteDisabled });
   }
 
-  @Action(VoteForEliminateAll)
-  voteForEliminateAll(
+  @Action(SetEliminateAllVote)
+  setEliminateAllVote(
+    { patchState }: StateContext<CurrentVoteStateModel>,
+    { eliminateAllVote }: SetEliminateAllVote,
+  ) {
+    patchState({ eliminateAllVote });
+  }
+
+  @Action(VoteForElimination)
+  voteForElimination(
     { patchState, getState }: StateContext<CurrentVoteStateModel>,
-    { playerId }: VoteForEliminateAll,
+    { playerId }: VoteForElimination,
   ) {
     const { eliminateAllVote } = cloneDeep(getState());
     const previousDecision = eliminateAllVote.get(playerId);
@@ -126,10 +137,10 @@ export class CurrentVoteState {
     if (previousDecision) {
       eliminateAllVote.delete(playerId);
     } else {
-      eliminateAllVote.set(playerId, previousDecision);
+      eliminateAllVote.set(playerId, true);
     }
 
-    return patchState({ eliminateAllVote });
+    patchState({ eliminateAllVote });
   }
 
   @Action(VoteForCandidate)
@@ -147,7 +158,8 @@ export class CurrentVoteState {
     if (isAlreadyVotedForThisPlayer) {
       vote.set(proposedPlayerId, vote.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
 
-      return patchState({ votes });
+      patchState({ votes });
+      return;
     }
 
     for (const [candidateId, votedPlayers] of vote.entries()) {
@@ -157,185 +169,43 @@ export class CurrentVoteState {
 
     vote.get(proposedPlayerId).push(playerId);
 
-    return patchState({ votes });
+    patchState({ votes });
   }
 
-  @Action(StartVote)
-  startVote(
-    { dispatch, patchState, getState }: StateContext<CurrentVoteStateModel>,
-    { proposedPlayers }: StartVote,
+  @Action(SetVotes)
+  setVotes(
+    { patchState }: StateContext<CurrentVoteStateModel>,
+    { votes }: SetVotes,
   ) {
-    const { votes, isVoteDisabled } = cloneDeep(getState());
-    const { rounds, players: { players } } = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game);
-    const currentRoundNumber = rounds.length;
-
-    if (proposedPlayers.length === 1 && currentRoundNumber === 0 || !proposedPlayers.length || isVoteDisabled) {
-      return dispatch(new SwitchVotePhase(VotePhase.RESULT));
-    }
-
-    votes.push(new Map<string, string[]>());
-    const vote = votes[votes.length - 1];
-
-    if (proposedPlayers.length === 1) {
-      vote.set(proposedPlayers[0], players.map(({ user: { id } }) => id));
-
-      dispatch([
-        new KillPlayer(proposedPlayers[0]),
-        new SwitchVotePhase(VotePhase.RESULT),
-      ]);
-      return patchState({ votes });
-    }
-
-    for (const candidateId of proposedPlayers) {
-      vote.set(candidateId, []);
-    }
-
-    return patchState({ votes });
+    patchState({ votes });
   }
 
   @Action(DisableCurrentVote)
   disableCurrentVote({ patchState }: StateContext<CurrentVoteStateModel>) {
-    return patchState({ isVoteDisabled: true });
+    patchState({ isVoteDisabled: true });
   }
 
-  @Action(EndAdditionalSpeech)
-  endAdditionalSpeech({ dispatch, patchState, getState }: StateContext<CurrentVoteStateModel>) {
-    const { votes } = cloneDeep(getState());
-    const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
-
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
-
-    votes.push(new Map<string, string[]>());
-    const vote = votes[votes.length - 1];
-
-    for (const candidateId of leadersIds) {
-      vote.set(candidateId, []);
-    }
-
-    patchState({ votes, previousLeadersIds: leadersIds });
-    return dispatch(new SwitchVotePhase(VotePhase.VOTE));
-  }
-
-  @Action(EndVoteStage)
-  endVoteStage({ dispatch, patchState, getState }: StateContext<CurrentVoteStateModel>) {
-    const { previousLeadersIds } = cloneDeep(getState());
-    const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
-
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
-
-    if (leadersIds.length === 1) {
-      dispatch(new KillPlayer(leadersIds[0]));
-
-      return dispatch(new SwitchVotePhase(VotePhase.RESULT));
-    }
-
-    if (previousLeadersIds?.length === leadersIds.length) {
-      patchState({ eliminateAllVote: new Map<string, boolean>() });
-      return dispatch(new SwitchVotePhase(VotePhase.ELIMINATE_VOTE));
-    }
-
-    return dispatch(new SwitchVotePhase(VotePhase.SPEECH));
-  }
-
-  @Action(EndEliminateVote)
-  endEliminateVote({ dispatch, getState }: StateContext<CurrentVoteStateModel>) {
-    const { eliminateAllVote } = cloneDeep(getState());
-    const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
-
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
-
-    if (eliminateAllVote) {
-      const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
-      const isEliminateAll = eliminateAllVote.size > alivePlayers.length / 2;
-
-      if (isEliminateAll) {
-        for (const leaderId of leadersIds) {
-          dispatch(new KillPlayer(leaderId));
-        }
-      }
-
-      return dispatch(new SwitchVotePhase(VotePhase.RESULT));
-    }
-
-    throw new Error('Eliminate vote is falsy');
-  }
-
-  @Action(SwitchVotePhase)
-  switchVotePhase(
-    { patchState, getState }: StateContext<CurrentVoteStateModel>,
-    { newVotePhase }: SwitchVotePhase,
-  ) {
-    const { isVoteDisabled, eliminateAllVote } = cloneDeep(getState());
-
-    if (newVotePhase === VotePhase.RESULT) {
-      const proposedPlayers = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game.round.currentDay.proposedPlayers);
-      const players = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game.players.players);
-      const currentRoundNumber = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game.rounds).length;
-
-      if (isVoteDisabled) {
-        return patchState({
-          currentPhase: newVotePhase,
-          voteResult: VoteResult.VOTE_IS_DISABLED,
-        });
-      }
-
-      if (!proposedPlayers.size) {
-        return patchState({
-          currentPhase: newVotePhase,
-          voteResult: VoteResult.NO_CANDIDATES,
-        });
-      }
-
-      if (proposedPlayers.size === 1 && currentRoundNumber === 0) {
-        return patchState({
-          currentPhase: newVotePhase,
-          voteResult: VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY,
-        });
-      }
-
-      if (eliminateAllVote?.size <= players.length / 2) {
-        return patchState({
-          currentPhase: newVotePhase,
-          voteResult: VoteResult.PLAYERS_KEPT_ALIVE,
-        });
-      }
-
-      return patchState({
-        currentPhase: newVotePhase,
-        voteResult: VoteResult.PLAYERS_ELIMINATED,
-      });
-    }
-
-    if (newVotePhase !== VotePhase.ELIMINATE_VOTE) {
-      return patchState({ currentPhase: newVotePhase });
-    }
-
-    return patchState({
-      eliminateAllVote: new Map<string, false>(),
-      currentPhase: newVotePhase,
-    });
-  }
-
-  @Action(SwitchVoteResult)
-  switchVoteResult(
+  @Action(SetPreviousLeadersIds)
+  SetPreviousLeadersIds(
     { patchState }: StateContext<CurrentVoteStateModel>,
-    { voteResult }: SwitchVoteResult,
+    { previousLeadersIds }: SetPreviousLeadersIds,
   ) {
-    return patchState({ voteResult });
+    patchState({ previousLeadersIds });
   }
 
-  @Action(EndVote)
-  endVote(
-    { dispatch }: StateContext<CurrentVoteStateModel>,
+  @Action(SetCurrentVotePhase)
+  setCurrentVotePhase(
+    { patchState }: StateContext<CurrentVoteStateModel>,
+    { currentPhase }: SetCurrentVotePhase,
   ) {
-    dispatch([
-      new StartNewRound(),
-    ]);
+    patchState({ currentPhase });
+  }
+
+  @Action(SetVoteResult)
+  setVoteResult(
+    { patchState }: StateContext<CurrentVoteStateModel>,
+    { voteResult }: SetVoteResult,
+  ) {
+    patchState({ voteResult });
   }
 }

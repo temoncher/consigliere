@@ -1,31 +1,21 @@
-import { State, Action, StateContext, Selector, Store, NgxsOnInit } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { Navigate } from '@ngxs/router-plugin';
 import { cloneDeep } from 'lodash';
-import { StateReset } from 'ngxs-reset-plugin';
 
 import { Round } from '@shared/models/table/round.model';
 import { RoundPhase } from '@shared/models/table/day-phase.enum';
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { TimersService } from '@shared/services/timers.service';
 import {
-  StartNewRound,
   ResetIsNextVotingDisabled,
-  DropGame,
-  DisableVote,
-  StartGame,
-  CheckGameEndingConditions,
+  SetIsNextVotingDisabled,
+  SetIsGameStarted,
   EndGame,
+  AddRound,
 } from './game.actions';
 import { PlayersState } from './players/players.state';
-import { ApplicationStateModel } from '..';
 import { GameMenuState } from './menu/menu.state';
 import { CurrentVoteState } from './round/current-vote/current-vote.state';
-import { DisableCurrentVote } from './round/current-vote/current-vote.actions';
 import { RoundState } from './round/round.state';
-import { SetPlayersNumbers, GiveRoles } from './players/players.actions';
-import { SwitchRoundPhase } from './round/round.actions';
-import { Role } from '@shared/models/role.enum';
 import { GameResult } from '@shared/models/table/game-result.enum';
 
 export interface GameStateModel {
@@ -50,15 +40,15 @@ export interface GameStateModel {
   ],
 })
 @Injectable()
-export class GameState implements NgxsOnInit {
-  constructor(
-    private timersService: TimersService,
-    private store: Store,
-  ) { }
-
+export class GameState {
   @Selector()
   static getRounds({ rounds }: GameStateModel) {
     return rounds;
+  }
+
+  @Selector()
+  static getIsNextVotingDisabled({ isNextVotingDisabled }: GameStateModel) {
+    return isNextVotingDisabled;
   }
 
   @Selector()
@@ -91,56 +81,22 @@ export class GameState implements NgxsOnInit {
     return gameResult;
   }
 
-  ngxsOnInit() {
-    this.timersService.resetTimers();
+  @Action(SetIsGameStarted)
+  startGame(
+    { patchState }: StateContext<GameStateModel>,
+    { isGameStarted }: SetIsGameStarted,
+  ) {
+    patchState({ isGameStarted });
   }
 
-  @Action(StartGame)
-  startGame({ dispatch, patchState }: StateContext<GameStateModel>) {
-    dispatch([
-      new SetPlayersNumbers(),
-      new GiveRoles(),
-      new Navigate(['tabs', 'table', 'game']),
-    ]);
-
-    patchState({ isGameStarted: true });
-  }
-
-  @Action(CheckGameEndingConditions)
-  checkGameEndingConditions({ dispatch, patchState }: StateContext<GameStateModel>) {
-    const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
-    const mafiaPlayers = this.store.selectSnapshot(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]));
-    const qutiPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
-    const aliveMafia = mafiaPlayers.filter(({ user: { id } }) => !qutiPhases.has(id));
-
-    if (aliveMafia.length >= alivePlayers.length / 2) {
-      patchState({ gameResult: GameResult.MAFIA });
-      dispatch(new EndGame());
-    }
-
-    if (!aliveMafia.length) {
-      patchState({ gameResult: GameResult.CIVILIANS });
-      dispatch(new EndGame());
-    }
-  }
-
-  @Action(StartNewRound)
-  startNewRound({ dispatch, patchState, getState }: StateContext<GameStateModel>) {
+  @Action(AddRound)
+  addRound(
+    { patchState, getState }: StateContext<GameStateModel>,
+    { round }: AddRound,
+  ) {
     const { rounds } = cloneDeep(getState());
-    const { round } = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game);
 
-    rounds.push(new Round({
-      ...round.currentNight,
-      ...round.currentDay,
-      ...round.currentVote,
-    }));
-    this.timersService.resetTimers();
-
-    dispatch([
-      new StateReset(RoundState),
-      new SwitchRoundPhase(RoundPhase.NIGHT),
-      new Navigate(['tabs', 'table', 'game', rounds.length + 1, 'night']),
-    ]);
+    rounds.push(round);
 
     patchState({ rounds });
   }
@@ -150,30 +106,19 @@ export class GameState implements NgxsOnInit {
     patchState({ isNextVotingDisabled: false });
   }
 
-  @Action(DisableVote)
-  disableVote(
-    { dispatch, patchState }: StateContext<GameStateModel>,
+  @Action(SetIsNextVotingDisabled)
+  setIsNextVotingDisabled(
+    { patchState }: StateContext<GameStateModel>,
+    { isNextVotingDisabled }: SetIsNextVotingDisabled,
   ) {
-    const roundPhase = this.store.selectSnapshot(RoundState.getRoundPhase);
-    const isResultClear = this.store.selectSnapshot(CurrentVoteState.isResultClear);
-
-    if (roundPhase === RoundPhase.VOTE && isResultClear) {
-      return patchState({ isNextVotingDisabled: true });
-    }
-
-    dispatch(new DisableCurrentVote());
-  }
-
-  @Action(DropGame)
-  dropGame({ dispatch }: StateContext<GameStateModel>) {
-    dispatch([
-      new StateReset(GameState),
-      new Navigate(['tabs', 'table']),
-    ]);
+    patchState({ isNextVotingDisabled });
   }
 
   @Action(EndGame)
-  endGame({ dispatch }: StateContext<GameStateModel>) {
-    dispatch(new Navigate(['tabs', 'table', 'game', 'result']));
+  endGame(
+    { patchState }: StateContext<GameStateModel>,
+    { gameResult }: EndGame,
+  ) {
+    patchState({ gameResult });
   }
 }

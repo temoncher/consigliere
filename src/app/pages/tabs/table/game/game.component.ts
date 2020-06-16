@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Select, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
 import { GameMenuState } from '@shared/store/game/menu/menu.state';
 import { Observable } from 'rxjs';
 import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
-import { DropGame, StartNewRound } from '@shared/store/game/game.actions';
-import { SetIsVoteDisabled } from '@shared/store/game/round/current-vote/current-vote.actions';
+import { GameService } from '@shared/services/game.service';
 
 @Component({
   selector: 'app-game',
@@ -17,11 +16,8 @@ export class GameComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private actions$: Actions,
-  ) {
-    this.actions$.pipe(ofActionSuccessful(StartNewRound))
-      .subscribe(() => this.store.dispatch(new SetIsVoteDisabled()));
-  }
+    private gameService: GameService,
+  ) { }
 
   ngOnInit() { }
 
@@ -30,6 +26,6 @@ export class GameComponent implements OnInit {
   }
 
   dropGame() {
-    this.store.dispatch(new DropGame());
+    this.gameService.dropGame();
   }
 }

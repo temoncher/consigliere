@@ -6,10 +6,10 @@ import { SwiperOptions } from 'swiper';
 
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
-import { EndVote } from '@shared/store/game/round/current-vote/current-vote.actions';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { GameService } from '@shared/services/game.service';
 
 @Component({
   selector: 'app-vote-results',
@@ -34,7 +34,7 @@ export class VoteResultsComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private store: Store,
+    private gameService: GameService,
   ) {
     combineLatest([this.players$, this.leaders$])
       .pipe(takeUntil(this.destroy))
@@ -49,6 +49,6 @@ export class VoteResultsComponent implements OnInit, OnDestroy {
   }
 
   endVote() {
-    this.store.dispatch(new EndVote());
+    this.gameService.endVote();
   }
 }

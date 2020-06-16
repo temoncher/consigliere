@@ -1,25 +1,16 @@
-import { State, Action, StateContext, Selector, createSelector, Store } from '@ngxs/store';
+import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { Navigate } from '@ngxs/router-plugin';
 import { cloneDeep } from 'lodash';
 
 import { Day } from '@shared/models/table/day.interface';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { ApplicationStateModel } from '@shared/store';
-import { TimersService } from '@shared/services/timers.service';
-
 import {
-  StopSpeech,
+  SetPlayerTimer,
   ProposePlayer,
   WithdrawPlayer,
   ResetPlayerTimer,
-  EndDay,
   ResetProposedPlayers,
 } from './current-day.actions';
 import { PlayersState, PlayersStateModel } from '../../players/players.state';
-import { StartVote, SwitchVotePhase } from '../current-vote/current-vote.actions';
-import { SwitchRoundPhase } from '../round.actions';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
 
 // tslint:disable-next-line: no-empty-interface
 export interface CurrentDayStateModel extends Day { }
@@ -33,14 +24,9 @@ export interface CurrentDayStateModel extends Day { }
 })
 @Injectable()
 export class CurrentDayState {
-  constructor(
-    private timersService: TimersService,
-    private store: Store,
-  ) { }
-
   @Selector()
-  static getDay(state: CurrentDayStateModel) {
-    return state;
+  static getFinishedTimers({ timers }: CurrentDayStateModel) {
+    return timers;
   }
 
   @Selector()
@@ -82,7 +68,7 @@ export class CurrentDayState {
       proposedPlayers.set(candidateId, playerId);
     }
 
-    return patchState({ proposedPlayers });
+    patchState({ proposedPlayers });
   }
 
   @Action(ResetPlayerTimer)
@@ -94,12 +80,12 @@ export class CurrentDayState {
 
     timers.delete(playerId);
 
-    return patchState({ timers });
+    patchState({ timers });
   }
 
   @Action(ResetProposedPlayers)
   resetProposedPlayers({ patchState }: StateContext<CurrentDayStateModel>) {
-    return patchState({ proposedPlayers: new Map<string, string>() });
+    patchState({ proposedPlayers: new Map<string, string>() });
   }
 
   @Action(WithdrawPlayer)
@@ -120,37 +106,18 @@ export class CurrentDayState {
       proposedPlayers.delete(foundCandidateId);
     }
 
-    return patchState({ proposedPlayers });
+    patchState({ proposedPlayers });
   }
 
-  @Action(StopSpeech)
-  stopSpeech(
+  @Action(SetPlayerTimer)
+  setPlayerTimer(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
-    { playerId }: StopSpeech,
+    { playerId, timeLeft }: SetPlayerTimer,
   ) {
     const { timers } = cloneDeep(getState());
-    const playerTimer = this.timersService.getPlayerTimer(playerId);
-    playerTimer.endSpeech();
-    const timeLeft = playerTimer.time;
 
     timers.set(playerId, timeLeft);
 
-    return patchState({ timers });
-  }
-
-  @Action(EndDay)
-  endDay(
-    { dispatch, getState }: StateContext<CurrentDayStateModel>,
-  ) {
-    const { proposedPlayers } = cloneDeep(getState());
-    const proposedPlayersList = [...proposedPlayers.keys()];
-    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
-
-    return dispatch([
-      new SwitchRoundPhase(RoundPhase.DAY),
-      new SwitchVotePhase(VotePhase.VOTE),
-      new StartVote(proposedPlayersList),
-      new Navigate(['tabs', 'table', 'game', currentDayNumber, 'vote']),
-    ]);
+    patchState({ timers });
   }
 }

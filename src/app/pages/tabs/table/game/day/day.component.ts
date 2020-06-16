@@ -10,10 +10,10 @@ import { Round } from '@shared/models/table/round.model';
 import { TimersService } from '@shared/services/timers.service';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
-import { EndDay } from '@shared/store/game/round/current-day/current-day.actions';
 import { GameMenuState } from '@shared/store/game/menu/menu.state';
 import { RoundState } from '@shared/store/game/round/round.state';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { GameService } from '@shared/services/game.service';
 
 @Component({
   selector: 'app-day',
@@ -41,6 +41,7 @@ export class DayComponent implements OnInit, OnDestroy {
     private store: Store,
     private timersService: TimersService,
     private menuController: MenuController,
+    private gameService: GameService,
   ) { }
 
   ngOnInit() { }
@@ -74,6 +75,6 @@ export class DayComponent implements OnInit, OnDestroy {
   }
 
   endDay() {
-    this.store.dispatch(new EndDay());
+    this.gameService.endDay();
   }
 }

@@ -2,9 +2,12 @@ import { roundActionsPrefix } from '../round.actions';
 
 const dayActionsPrefix = `${roundActionsPrefix}.CurrentDay`;
 
-export class StopSpeech {
-  static readonly type = `[${dayActionsPrefix}] Stop player speech`;
-  constructor(public playerId: string) { }
+export class SetPlayerTimer {
+  static readonly type = `[${dayActionsPrefix}] Set player timer`;
+  constructor(
+    public playerId: string,
+    public timeLeft: number,
+  ) { }
 }
 
 export class ProposePlayer {
@@ -28,9 +31,4 @@ export class ResetProposedPlayers {
 export class ResetPlayerTimer {
   static readonly type = `[${dayActionsPrefix}] Reset current day player timer`;
   constructor(public playerId: string) { }
-}
-
-export class EndDay {
-  static readonly type = `[${dayActionsPrefix}] End day`;
-  constructor() { }
 }
