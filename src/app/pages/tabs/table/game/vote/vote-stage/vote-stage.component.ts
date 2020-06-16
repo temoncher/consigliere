@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { PlayersState } from '@shared/store/game/players/players.state';
 import { Observable, Subject } from 'rxjs';
-import { Player } from '@shared/models/player.model';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { takeUntil } from 'rxjs/operators';
-import { VoteForCandidate, EndVoteStage, StartVote } from '@shared/store/game/round/current-vote/current-vote.actions';
-import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { SwiperOptions } from 'swiper';
+
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { VoteForCandidate } from '@shared/store/game/round/current-vote/current-vote.actions';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { Player } from '@shared/models/player.model';
+import { VoteService } from '@shared/services/vote.service';
 
 @Component({
   selector: 'app-vote-stage',
@@ -39,6 +41,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
+    private voteService: VoteService,
   ) {
     const currentVote = this.store.selectSnapshot(CurrentVoteState.getCurrentVote);
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
@@ -111,7 +114,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   }
 
   endVote() {
-    this.store.dispatch(new EndVoteStage());
+    this.voteService.endVoteStage();
   }
 
   navigateToPlayer(playerIndex: number) {

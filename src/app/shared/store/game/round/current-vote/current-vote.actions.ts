@@ -4,14 +4,14 @@ import { VoteResult } from '@shared/models/table/vote-result.enum';
 
 const voteActionsPrefix = `${roundActionsPrefix}.CurrentVote`;
 
-export class StartVote {
-    static readonly type = `[${voteActionsPrefix}] Start vote`;
-    constructor(public proposedPlayers: string[]) { }
+export class SetVotes {
+    static readonly type = `[${voteActionsPrefix}] Set votes`;
+    constructor(public votes: Map<string, string[]>[]) { }
 }
 
 export class SetIsVoteDisabled {
     static readonly type = `[${voteActionsPrefix}] Check if this round's vote is disabled`;
-    constructor() { }
+    constructor(public isVoteDisabled: boolean) { }
 }
 
 export class VoteForCandidate {
@@ -22,42 +22,32 @@ export class VoteForCandidate {
     ) { }
 }
 
-export class EndVoteStage {
-    static readonly type = `[${voteActionsPrefix}] End vote stage`;
-    constructor() { }
+export class SetPreviousLeadersIds {
+    static readonly type = `[${voteActionsPrefix}] Set previous leaders ids`;
+    constructor(public previousLeadersIds: string[]) { }
 }
 
-export class EndAdditionalSpeech {
-    static readonly type = `[${voteActionsPrefix}] End additional speech`;
-    constructor() { }
-}
-
-export class EndEliminateVote {
-    static readonly type = `[${voteActionsPrefix}] End eliminate vote`;
-    constructor() { }
-}
-
-export class VoteForEliminateAll {
+export class VoteForElimination {
     static readonly type = `[${voteActionsPrefix}] Vote for eliminate all`;
     constructor(public playerId: string) { }
 }
 
-export class SwitchVotePhase {
-    static readonly type = `[${voteActionsPrefix}] Switch vote phase`;
-    constructor(public newVotePhase: VotePhase) { }
+export class SetCurrentVotePhase {
+    static readonly type = `[${voteActionsPrefix}] Set current vote phase`;
+    constructor(public currentPhase: VotePhase) { }
 }
 
-export class SwitchVoteResult {
-    static readonly type = `[${voteActionsPrefix}] Switch vote result`;
+export class SetVoteResult {
+    static readonly type = `[${voteActionsPrefix}] Set vote result`;
     constructor(public voteResult: VoteResult) { }
+}
+
+export class SetEliminateAllVote {
+    static readonly type = `[${voteActionsPrefix}] Set eliminate all vote phase`;
+    constructor(public eliminateAllVote: Map<string, boolean>) { }
 }
 
 export class DisableCurrentVote {
     static readonly type = `[${voteActionsPrefix}] Disable current vote`;
-    constructor() { }
-}
-
-export class EndVote {
-    static readonly type = `[${voteActionsPrefix}] End vote`;
     constructor() { }
 }

@@ -20,8 +20,6 @@ export interface GameMenuStateModel {
 })
 @Injectable()
 export class GameMenuState {
-  constructor() { }
-
   static getBasicProp(propName: string) {
     return createSelector([GameMenuState], (state: GameMenuStateModel) => {
       if (typeof state[propName] === undefined) {

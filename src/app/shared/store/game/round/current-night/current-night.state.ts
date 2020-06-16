@@ -2,15 +2,9 @@
 import { Injectable } from '@angular/core';
 import { State, Store, StateContext, Action, Selector } from '@ngxs/store';
 import { cloneDeep } from 'lodash';
-import { Navigate } from '@ngxs/router-plugin';
 
 import { Night } from '@shared/models/table/night.interface';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { ApplicationStateModel } from '@shared/store';
-import { ShootPlayer, EndNight, CheckByDon, CheckBySheriff } from './current-night.actions';
-import { SwitchRoundPhase } from '../round.actions';
-import { Role } from '@shared/models/role.enum';
-import { KillPlayer } from '../../players/players.actions';
+import { ShootPlayer, CheckByDon, CheckBySheriff, SetMurderedPlayer } from './current-night.actions';
 
 // tslint:disable-next-line: no-empty-interface
 export interface CurrentNightStateModel extends Night { }
@@ -24,10 +18,6 @@ export interface CurrentNightStateModel extends Night { }
 @Injectable()
 export class CurrentNightState {
   private readonly thisMafiaAlreadyShotText = 'Эта мафия уже сделала выстрел';
-
-  constructor(
-    private store: Store,
-  ) { }
 
   @Selector()
   static getShots({ shots }: CurrentNightStateModel) {
@@ -66,7 +56,8 @@ export class CurrentNightState {
 
     if (isShotThisVicitm) {
       shots.delete(mafiaId);
-      return patchState({ shots });
+      patchState({ shots });
+      return;
     }
 
     shots.set(mafiaId, victimId);
@@ -89,36 +80,11 @@ export class CurrentNightState {
     patchState({ sheriffCheck: playerId });
   }
 
-  @Action(EndNight)
-  endNight(
-    { dispatch, patchState }: StateContext<CurrentNightStateModel>,
+  @Action(SetMurderedPlayer)
+  setMurderedPlayer(
+    { patchState }: StateContext<CurrentNightStateModel>,
+    { playerId }: SetMurderedPlayer,
   ) {
-    const {
-      rounds,
-      players: {
-        players,
-        quitPhases,
-      },
-    } = this.store.selectSnapshot(({ game }: ApplicationStateModel) => game);
-    const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
-    const aliveMafia = players.filter((player) => !quitPhases.has(player.user.id) &&
-      (player.role === Role.DON || player.role === Role.MAFIA));
-    let murderedPlayer: string;
-
-    for (const [victimId, mafiaIds] of victimsMap) {
-      if (mafiaIds.length === aliveMafia.length) {
-        murderedPlayer = victimId;
-      }
-    }
-
-    if (murderedPlayer) {
-      dispatch(new KillPlayer(murderedPlayer));
-      patchState({ murderedPlayer });
-    }
-
-    dispatch([
-      new SwitchRoundPhase(RoundPhase.DAY),
-      new Navigate(['tabs', 'table', 'game', rounds.length, 'day']),
-    ]);
+    patchState({ murderedPlayer: playerId });
   }
 }

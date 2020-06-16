@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Timer } from '@shared/models/table/timer.model';
 import { Store } from '@ngxs/store';
-import { ApplicationStateModel } from '@shared/store';
+
+import { Timer } from '@shared/models/table/timer.model';
+import { GameState } from '@shared/store/game/game.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
 
 @Injectable({
   providedIn: 'root',
@@ -33,23 +35,23 @@ export class TimersService {
   }
 
   resetTimers() {
-    const players = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.players);
-    const speechSkips = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.speechSkips);
-    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
+    const players = this.store.selectSnapshot(PlayersState.getPlayers);
+    const speechSkips = this.store.selectSnapshot(PlayersState.getSpeechSkips);
+    const currentRoundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
 
     this.pauseAll();
 
     for (const player of players) {
-      const time = speechSkips.get(player.user.id) === currentDayNumber ? 0 : 60;
+      const time = speechSkips.get(player.user.id) === currentRoundNumber ? 0 : 60;
       this.timers.set(player.user.id, new Timer({ time }));
     }
   }
 
   resetPlayerTimer(playerId: string) {
-    const speechSkips = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.players.speechSkips);
-    const currentDayNumber = this.store.selectSnapshot((state: ApplicationStateModel) => state.game.rounds).length;
+    const speechSkips = this.store.selectSnapshot(PlayersState.getSpeechSkips);
+    const currentRoundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
 
-    const time = speechSkips.get(playerId) === currentDayNumber ? 0 : 60;
+    const time = speechSkips.get(playerId) === currentRoundNumber ? 0 : 60;
     this.timers.get(playerId).resetTimer(time);
   }
 }

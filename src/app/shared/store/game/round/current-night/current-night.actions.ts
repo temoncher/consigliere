@@ -20,7 +20,7 @@ export class CheckBySheriff {
   constructor(public playerId: string) { }
 }
 
-export class EndNight {
-  static readonly type = `[${nightActionsPrefix}] End night`;
-  constructor() { }
+export class SetMurderedPlayer {
+  static readonly type = `[${nightActionsPrefix}] Set murdered player`;
+  constructor(public playerId: string) { }
 }

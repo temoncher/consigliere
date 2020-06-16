@@ -4,14 +4,10 @@ import { Observable, Subject } from 'rxjs';
 
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import {
-  EndVoteStage,
-  EndEliminateVote,
-  EndVote,
-  EndAdditionalSpeech,
-} from '@shared/store/game/round/current-vote/current-vote.actions';
 import { takeUntil } from 'rxjs/operators';
 import { MenuController } from '@ionic/angular';
+import { GameService } from '@shared/services/game.service';
+import { VoteService } from '@shared/services/vote.service';
 
 @Component({
   selector: 'app-vote',
@@ -27,8 +23,9 @@ export class VoteComponent implements OnInit, OnDestroy {
   VotePhase = VotePhase;
 
   constructor(
-    private store: Store,
     private menuController: MenuController,
+    private voteService: VoteService,
+    private gameService: GameService,
   ) {
     this.votePhase$.pipe(takeUntil(this.destroy))
       .subscribe((newVotePhase) => this.currentVotePhase = newVotePhase);
@@ -48,16 +45,16 @@ export class VoteComponent implements OnInit, OnDestroy {
   nextStage() {
     switch (this.currentVotePhase) {
       case VotePhase.ELIMINATE_VOTE:
-        this.store.dispatch(new EndEliminateVote());
+        this.voteService.endEliminateVote();
         return;
       case VotePhase.RESULT:
-        this.store.dispatch(new EndVote());
+        this.gameService.endVote();
         return;
       case VotePhase.SPEECH:
-        this.store.dispatch(new EndAdditionalSpeech());
+        this.voteService.endAdditionalSpeech();
         return;
       case VotePhase.VOTE:
-        this.store.dispatch(new EndVoteStage());
+        this.voteService.endVoteStage();
         return;
       default:
         return;

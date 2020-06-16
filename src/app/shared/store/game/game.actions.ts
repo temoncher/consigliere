@@ -1,8 +1,11 @@
+import { Round } from '@shared/models/table/round.model';
+import { GameResult } from '@shared/models/table/game-result.enum';
+
 export const gameActionsPrefix = 'Game';
 
-export class StartGame {
-  static readonly type = `[${gameActionsPrefix}] Start game`;
-  constructor() { }
+export class SetIsGameStarted {
+  static readonly type = `[${gameActionsPrefix}] Set game started flag`;
+  constructor(public isGameStarted: boolean) { }
 }
 
 export class ResetIsNextVotingDisabled {
@@ -10,27 +13,17 @@ export class ResetIsNextVotingDisabled {
   constructor() { }
 }
 
-export class StartNewRound {
-  static readonly type = `[${gameActionsPrefix}] Start new night`;
-  constructor() { }
+export class AddRound {
+  static readonly type = `[${gameActionsPrefix}] Add round`;
+  constructor(public round: Round) { }
 }
 
-export class CheckGameEndingConditions {
-  static readonly type = `[${gameActionsPrefix}] Check game ending conditions`;
-  constructor() { }
-}
-
-export class DisableVote {
-  static readonly type = `[${gameActionsPrefix}] Disable vote`;
-  constructor() { }
-}
-
-export class DropGame {
-  static readonly type = `[${gameActionsPrefix}] Drop game`;
-  constructor() { }
+export class SetIsNextVotingDisabled {
+  static readonly type = `[${gameActionsPrefix}] Set next voting disabling condition`;
+  constructor(public isNextVotingDisabled: boolean) { }
 }
 
 export class EndGame {
   static readonly type = `[${gameActionsPrefix}] End game`;
-  constructor() { }
+  constructor(public gameResult: GameResult) { }
 }

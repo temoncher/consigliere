@@ -10,8 +10,8 @@ import { GameState } from '@shared/store/game/game.state';
 import { Player } from '@shared/models/player.model';
 import { Round } from '@shared/models/table/round.model';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { EndNight } from '@shared/store/game/round/current-night/current-night.actions';
 import { MenuController } from '@ionic/angular';
+import { GameService } from '@shared/services/game.service';
 
 @Component({
   selector: 'app-night',
@@ -71,6 +71,7 @@ export class NightComponent implements OnInit, OnDestroy {
     private store: Store,
     private translate: TranslateService,
     private menuController: MenuController,
+    private gameService: GameService,
   ) {
     this.store.select(GameState.getRoundNumber)
       .pipe(takeUntil(this.destroy))
@@ -93,7 +94,7 @@ export class NightComponent implements OnInit, OnDestroy {
 
   nextStage() {
     if (this.stage === NightStages.SHERIFF) {
-      this.store.dispatch(new EndNight());
+      this.gameService.endNight();
     }
 
     this.stage++;
