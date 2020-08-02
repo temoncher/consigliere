@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { NightStages } from '@shared/constants/game';
+import { NightStages } from '@shared/models/table/night-stages.enum';
 import { Role } from '@shared/models/role.enum';
 import { GameState } from '@shared/store/game/game.state';
 import { Player } from '@shared/models/player.model';

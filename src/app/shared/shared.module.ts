@@ -7,7 +7,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ExploreContainerComponent } from '@shared/components/explore-container/explore-container.component';
-import { AuthService } from '@shared/services/auth.service';
 import { TimersService } from '@shared/services/timers.service';
 import { LanguageService } from '@shared/services/language.service';
 import { PlayersService } from '@shared/services/players.service';
@@ -47,7 +46,6 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        AuthService,
         TimersService,
         LanguageService,
         PlayersService,
