@@ -39,7 +39,7 @@ unit:
 
 e2e:
   stage: e2e
-  image: trion/ng-cli-karma:${CLI_VERSION}
+  image: cypress/base
   script:
     - npm run ci:cy-run
   rules:
