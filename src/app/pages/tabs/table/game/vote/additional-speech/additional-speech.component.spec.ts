@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { AdditionalSpeechComponent } from './additional-speech.component';
+import { imports } from 'src/test';
+import { VoteModule } from '../vote.module';
 
 describe('AdditionalSpeechComponent', () => {
   let component: AdditionalSpeechComponent;
@@ -10,7 +11,10 @@ describe('AdditionalSpeechComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AdditionalSpeechComponent ],
-      imports: [IonicModule.forRoot()],
+      imports: [
+        ...imports,
+        VoteModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdditionalSpeechComponent);

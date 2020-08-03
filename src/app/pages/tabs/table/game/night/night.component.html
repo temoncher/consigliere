@@ -7,7 +7,7 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (rounds$ | async).length }}</ion-title>
+    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (rounds$ | async)?.length }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { PlayerControlsComponent } from './player-controls.component';
+import { imports } from 'src/test';
 
 describe('PlayerControlsComponent', () => {
   let component: PlayerControlsComponent;
@@ -10,7 +10,7 @@ describe('PlayerControlsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PlayerControlsComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(PlayerControlsComponent);

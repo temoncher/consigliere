@@ -1,5 +1,5 @@
 <div class="sheriff flex-centralize">
-  <div *ngIf="(rounds$ | async).length === 0; then zeroNightBlock else nightBlock"></div>
+  <div *ngIf="(rounds$ | async)?.length === 0; then zeroNightBlock else nightBlock"></div>
   <ng-template #zeroNightBlock>
     <ion-card class="player-card">
       <ion-card-header class="player-card__header">
@@ -8,14 +8,14 @@
                     name="star"></ion-icon>
         </div>
         <ion-card-title class="player-card__header__title text-color-dark">
-          {{ (sheriff$ | async).nickname }}</ion-card-title>
+          {{ (sheriff$ | async)?.nickname }}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content class="player-card__content">
         <div class="progress">
           <round-progress class="progress__circle"
                           (click)="switchTimer()"
-                          [ngStyle]="{ backgroundImage: 'url(' + ((sheriff$ | async).user?.avatar || defaultAvatar) + ')' }"
+                          [ngStyle]="{ backgroundImage: 'url(' + ((sheriff$ | async)?.user?.avatar || defaultAvatar) + ')' }"
                           [current]="sheriffTimer.time"
                           [max]="time"
                           [color]="sheriffTimer.time > 0 ? colors['warning'] : colors['medium']"
@@ -50,10 +50,10 @@
         <ion-card class="player-card player-card--template">
           <ion-card-header class="player-card__header">
             <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-              {{ (players$ | async)[currentPlayerIndex].number }}
+              {{ (players$ | async)[currentPlayerIndex]?.number }}
             </div>
             <ion-card-title class="player-card__header__title text-color-dark">
-              {{ (players$ | async)[currentPlayerIndex].nickname }}
+              {{ (players$ | async)[currentPlayerIndex]?.nickname }}
             </ion-card-title>
           </ion-card-header>
           <ion-card-content class="player-card__content role-card__content ion-text-center">

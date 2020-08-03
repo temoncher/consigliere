@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { PreparationComponent } from './preparation.component';
+import { imports } from 'src/test';
+import { PreparationModule } from './preparation.module';
 
 describe('PreparationComponent', () => {
   let component: PreparationComponent;
@@ -10,7 +11,10 @@ describe('PreparationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PreparationComponent ],
-      imports: [IonicModule.forRoot()],
+      imports: [
+        ...imports,
+        PreparationModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PreparationComponent);

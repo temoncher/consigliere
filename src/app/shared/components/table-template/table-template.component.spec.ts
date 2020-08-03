@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { TableTemplateComponent } from './table-template.component';
+import { imports } from 'src/test';
 
 describe('TableTemplateComponent', () => {
   let component: TableTemplateComponent;
@@ -10,7 +10,7 @@ describe('TableTemplateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TableTemplateComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(TableTemplateComponent);

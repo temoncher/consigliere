@@ -6,8 +6,30 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { IonicModule } from '@ionic/angular';
+import { IonicStorageModule } from '@ionic/storage';
+import { NgxsModule } from '@ngxs/store';
 
-declare const require: any;
+import { SharedModule } from '@shared/shared.module';
+import { LanguageModule } from '@shared/language.module';
+import { ApplicationStates } from '@shared/store';
+
+export const imports = [
+  SharedModule,
+  LanguageModule,
+  RouterTestingModule,
+  IonicModule.forRoot({ _testing: true }),
+  IonicStorageModule.forRoot(),
+  NgxsModule.forRoot(ApplicationStates),
+];
+
+declare const require: {
+  context(path: string, deep?: boolean, filter?: RegExp): {
+    keys(): string[];
+    <T>(id: string): T;
+  };
+};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(

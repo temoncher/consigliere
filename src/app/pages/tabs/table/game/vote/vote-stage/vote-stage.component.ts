@@ -26,7 +26,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
-  proposedPlayers: Player[];
+  proposedPlayers: Player[] = [];
   vote: Map<string, string[]>;
 
   voteInfoMap: Map<string, Player> = new Map<string, Player>();
@@ -47,12 +47,14 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const proposedPlayers: Player[] = [];
     // Implemented to keep players proposal order
-    for (const candidateId of currentVote.keys()) {
-      const candidate = alivePlayers.find((player) => player.user.id === candidateId);
+    if (currentVote) {
+      for (const candidateId of currentVote.keys()) {
+        const candidate = alivePlayers.find((player) => player.user.id === candidateId);
 
-      proposedPlayers.push(candidate);
+        proposedPlayers.push(candidate);
+      }
+      this.proposedPlayers = proposedPlayers;
     }
-    this.proposedPlayers = proposedPlayers;
 
     this.players$
       .pipe(takeUntil(this.destroy))

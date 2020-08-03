@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { SettingsMenuComponent } from './settings-menu.component';
+import { imports } from 'src/test';
 
 describe('SettingsMenuComponent', () => {
   let component: SettingsMenuComponent;
@@ -10,7 +10,7 @@ describe('SettingsMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SettingsMenuComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsMenuComponent);
