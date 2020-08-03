@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { SearchComponent } from './search.component';
+import { imports } from 'src/test';
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -10,7 +10,7 @@ describe('SearchComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SearchComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(SearchComponent);

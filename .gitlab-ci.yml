@@ -1,5 +1,8 @@
 image: node:latest
 
+variables:
+  CLI_VERSION: 9.1.1
+
 # Cache modules in between jobs
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -10,6 +13,7 @@ cache:
 stages:
   - lint
   - build
+  - unit
   - deploy
 
 before_script:
@@ -18,7 +22,16 @@ before_script:
 lint:
   stage: lint
   script:
-    - npm run lint --fix
+    - npm run lint
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
+    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
+
+unit:
+  stage: unit
+  image: trion/ng-cli-karma:${CLI_VERSION}
+  script:
+    - npm run unit
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
     - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { EliminateAllVoteComponent } from './eliminate-all-vote.component';
+import { imports } from 'src/test';
 
 describe('EliminateAllVoteComponent', () => {
   let component: EliminateAllVoteComponent;
@@ -10,7 +10,7 @@ describe('EliminateAllVoteComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ EliminateAllVoteComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(EliminateAllVoteComponent);

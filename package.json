@@ -6,10 +6,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "build": "ng build",
+    "unit:watch": "ng test",
+    "unit": "ng test --sourceMap=false --browsers=ChromeHeadless --watch=false",
+    "e2e:watch": "ng e2e"
   },
   "private": true,
   "dependencies": {

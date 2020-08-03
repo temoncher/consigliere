@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { ManagePlayerCardComponent } from './manage-player-card.component';
+import { imports } from 'src/test';
 
 describe('ManagePlayerCardComponent', () => {
   let component: ManagePlayerCardComponent;
@@ -10,7 +10,7 @@ describe('ManagePlayerCardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ManagePlayerCardComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(ManagePlayerCardComponent);

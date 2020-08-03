@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { ProposeModalComponent } from './propose-modal.component';
+import { imports } from 'src/test';
 
 describe('ProposeModalComponent', () => {
   let component: ProposeModalComponent;
@@ -10,7 +10,7 @@ describe('ProposeModalComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ProposeModalComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProposeModalComponent);

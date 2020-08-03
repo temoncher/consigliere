@@ -34,17 +34,17 @@
         <ion-card class="player-card">
           <ion-card-header class="player-card__header">
             <div class="clip-button top-left text-only text-color-dark-contrast background-color-primary">
-              {{ proposedPlayers[currentPlayerIndex].number }}
+              {{ proposedPlayers[currentPlayerIndex]?.number }}
             </div>
             <ion-card-title class="player-card__header__title text-color-dark">
-              {{ proposedPlayers[currentPlayerIndex].nickname }}
+              {{ proposedPlayers[currentPlayerIndex]?.nickname }}
             </ion-card-title>
           </ion-card-header>
           <ion-card-content class="player-card__content ion-text-center">
             <ion-avatar class="player-card__avatar">
               <img [src]="
-                  proposedPlayers[currentPlayerIndex].user?.avatar
-                    ? proposedPlayers[currentPlayerIndex].user.avatar
+                  proposedPlayers[currentPlayerIndex]?.user?.avatar
+                    ? proposedPlayers[currentPlayerIndex]?.user.avatar
                     : defaultAvatar
                 " />
             </ion-avatar>

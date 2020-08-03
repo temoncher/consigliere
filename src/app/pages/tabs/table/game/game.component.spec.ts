@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { GameComponent } from './game.component';
+import { imports } from 'src/test';
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -10,7 +10,7 @@ describe('GameComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ GameComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(GameComponent);

@@ -1,5 +1,5 @@
 <div class="don flex-centralize">
-  <div *ngIf="(rounds$ | async).length === 0; then zeroNightBlock else nightBlock"></div>
+  <div *ngIf="(rounds$ | async)?.length === 0; then zeroNightBlock else nightBlock"></div>
   <ng-template #zeroNightBlock>
     <ion-card class="don-card player-card">
       <ion-card-header class="player-card__header">
@@ -7,13 +7,13 @@
           <ion-icon class="text-color-dark-contrast"
                     name="rose"></ion-icon>
         </div>
-        <ion-card-title class="player-card__header__title text-color-dark">{{ (don$ | async).nickname }}
+        <ion-card-title class="player-card__header__title text-color-dark">{{ (don$ | async)?.nickname }}
         </ion-card-title>
       </ion-card-header>
 
       <ion-card-content class="player-card__content">
         <ion-avatar class="player-card__avatar">
-          <img [src]="(don$ | async).user?.avatar || defaultAvatar">
+          <img [src]="(don$ | async)?.user?.avatar || defaultAvatar">
         </ion-avatar>
       </ion-card-content>
     </ion-card>

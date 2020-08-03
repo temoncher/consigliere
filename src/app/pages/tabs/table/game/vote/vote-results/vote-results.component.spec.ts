@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { VoteResultsComponent } from './vote-results.component';
+import { imports } from 'src/test';
 
 describe('VoteResultsComponent', () => {
   let component: VoteResultsComponent;
@@ -10,7 +10,7 @@ describe('VoteResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ VoteResultsComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(VoteResultsComponent);

@@ -38,7 +38,7 @@ export class VoteResultsComponent implements OnInit, OnDestroy {
   ) {
     combineLatest([this.players$, this.leaders$])
       .pipe(takeUntil(this.destroy))
-      .subscribe(([players, ledaerIds]) => this.eliminatedPlayers = players.filter(({ user: { id } }) => ledaerIds?.includes(id)));
+      .subscribe(([players, ledaerIds]) => this.eliminatedPlayers = players?.filter(({ user: { id } }) => ledaerIds?.includes(id)));
   }
 
   ngOnInit() { }

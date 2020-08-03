@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { PlayerTimerComponent } from './player-timer.component';
+import { imports } from 'src/test';
+import { DayModule } from '../day.module';
 
 describe('PlayerTimerComponent', () => {
   let component: PlayerTimerComponent;
@@ -10,7 +11,10 @@ describe('PlayerTimerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PlayerTimerComponent ],
-      imports: [IonicModule.forRoot()],
+      imports: [
+        ...imports,
+        DayModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PlayerTimerComponent);

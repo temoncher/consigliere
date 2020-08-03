@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { PlayerMenuComponent } from './player-menu.component';
+import { imports } from 'src/test';
 
 describe('PlayerMenuComponent', () => {
   let component: PlayerMenuComponent;
@@ -10,7 +10,7 @@ describe('PlayerMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PlayerMenuComponent ],
-      imports: [IonicModule.forRoot()],
+      imports,
     }).compileComponents();
 
     fixture = TestBed.createComponent(PlayerMenuComponent);

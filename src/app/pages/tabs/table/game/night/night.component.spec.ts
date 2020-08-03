@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { NightComponent } from './night.component';
+import { imports } from 'src/test';
+import { NightModule } from './night.module';
 
 describe('NightModalComponent', () => {
   let component: NightComponent;
@@ -10,7 +11,10 @@ describe('NightModalComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NightComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [
+        ...imports,
+        NightModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NightComponent);

@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 
 import { DayComponent } from './day.component';
+import { imports } from 'src/test';
+import { DayModule } from './day.module';
 
 describe('DayComponent', () => {
   let component: DayComponent;
@@ -10,7 +11,10 @@ describe('DayComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DayComponent ],
-      imports: [IonicModule.forRoot()],
+      imports: [
+        ...imports,
+        DayModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DayComponent);
