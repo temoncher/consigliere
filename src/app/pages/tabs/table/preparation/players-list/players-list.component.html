@@ -13,6 +13,7 @@
     </ion-item>
     <!-- END Add new player button-->
     <ion-item *ngFor="let player of (players$ | async); let i = index"
+              class="player-list__item"
               lines="none">
 
       <div slot="start">

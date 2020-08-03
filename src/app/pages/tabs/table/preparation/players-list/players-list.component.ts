@@ -88,6 +88,7 @@ export class PlayersListComponent implements OnInit {
       header: this.playerPrompt.header,
       inputs: [
         {
+          id: 'nickname-input',
           name: 'nickname',
           type: 'text',
           placeholder: this.playerPrompt.namePlaceholder,
@@ -97,7 +98,8 @@ export class PlayersListComponent implements OnInit {
         {
           text: this.playerPrompt.cancelButton,
           role: 'cancel',
-        }, {
+        },
+        {
           text: this.playerPrompt.confirmButton,
           handler: (player) => this.addNewPlayer(player),
         },
