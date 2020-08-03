@@ -39,7 +39,7 @@ unit:
 
 e2e:
   stage: e2e
-  image: cypress/base
+  image: cypress/browsers
   script:
     - npm run ci:cy-run
   rules:
