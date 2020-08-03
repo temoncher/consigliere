@@ -38,7 +38,7 @@ describe('Game lobby', () => {
       .click({ force: true }); // Workaround to click not visible element (scroll problem)
 
     cy.get('.add-new')
-      .should('contain', 'Добавить нового игрока')
+      .should('contain', 'Добавить нового игрока');
   });
 
   it('should add guest and change host', () => {
@@ -55,12 +55,13 @@ describe('Game lobby', () => {
       .click();
 
     /* Players list modal */
-    cy.wait(500); // Waait for modal to appear
+    cy.wait(1000);
     cy.get('.add-new')
       .should('contain', 'Добавить гостя')
       .click();
 
     /* Add guest prompt */
+    cy.wait(1000);
     cy.get('.alert-wrapper')
       .should('contain', 'Как обращаться к новому ведущему?');
     cy.get('#alert-input-2-0')
