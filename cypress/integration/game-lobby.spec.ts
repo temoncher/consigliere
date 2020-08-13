@@ -1,11 +1,15 @@
 import Chance from 'chance';
 
+import { localhost } from './urls';
+
 const chance = new Chance();
 
 describe('Game lobby', () => {
-  it('should render 4 tabs', () => {
-    cy.visit('http://localhost:4200/');
+  beforeEach(() => {
+    cy.visit(localhost);
+  });
 
+  it('should render 4 tabs', () => {
     cy.contains('Поиск');
     cy.contains('Клубы');
     cy.contains('Стол');
@@ -13,8 +17,6 @@ describe('Game lobby', () => {
   });
 
   it('should render preparation phase', () => {
-    cy.visit('http://localhost:4200/');
-
     cy.get('#new-game-button')
       .click();
 
@@ -25,8 +27,6 @@ describe('Game lobby', () => {
   });
 
   it('should remove player', () => {
-    cy.visit('http://localhost:4200/');
-
     /* Menu */
     cy.get('#new-game-button')
       .click();
@@ -44,8 +44,6 @@ describe('Game lobby', () => {
 
   it('should add guest and change host', () => {
     const name = chance.first();
-
-    cy.visit('http://localhost:4200/');
 
     /* Menu */
     cy.get('#new-game-button')
