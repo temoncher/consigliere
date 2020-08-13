@@ -1,5 +1,7 @@
-<app-small-player-card (click)="presentPlayerMenu($event)"
-                       [showFalls]="showFalls"
-                       [showRole]="showRole"
-                       [playerId]="playerId"
-                       [showProposedPlayer]="showProposedPlayer"></app-small-player-card>
+<app-small-player-card
+  (cardClick)="presentPlayerMenu($event)"
+  [showFalls]="showFalls"
+  [showRole]="showRole"
+  [playerId]="playerId"
+  [showProposedPlayer]="showProposedPlayer"
+></app-small-player-card>

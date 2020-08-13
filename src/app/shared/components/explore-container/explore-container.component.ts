@@ -9,5 +9,4 @@ export class ExploreContainerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {}
-
 }

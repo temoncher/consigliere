@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges,
+} from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { IonSlides } from '@ionic/angular';
 import { Observable } from 'rxjs';

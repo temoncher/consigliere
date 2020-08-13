@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action, State, Selector, StateContext, Store, createSelector } from '@ngxs/store';
+import { Action, State, Selector, StateContext, createSelector } from '@ngxs/store';
 import { shuffle, cloneDeep } from 'lodash';
 
 import { Player } from '@shared/models/player.model';
@@ -106,20 +106,17 @@ export class PlayersState {
   }
 
   static getPlayer(playerId: string) {
-    return createSelector([PlayersState], ({ players }: PlayersStateModel) => {
-      return players.find((player) => player.user.id === playerId);
-    });
+    return createSelector([PlayersState], ({ players }: PlayersStateModel) => players.find((player) => player.user.id === playerId));
   }
 
   static getPlayerFalls(playerId: string) {
-    return createSelector([PlayersState], ({ falls }: PlayersStateModel) => {
-      return falls.get(playerId);
-    });
+    return createSelector([PlayersState], ({ falls }: PlayersStateModel) => falls.get(playerId));
   }
 
   static getPlayerQuitPhase(playerId: string) {
     return createSelector([PlayersState], ({ quitPhases }: PlayersStateModel) => {
       const quitPhase = quitPhases.get(playerId);
+
       if (quitPhase) {
         return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
       }
@@ -139,6 +136,7 @@ export class PlayersState {
   giveRoles({ patchState, getState }: StateContext<PlayersStateModel>) {
     const { players, host } = cloneDeep(getState());
     const roles = shuffle([...rolesArray]);
+
     host.role = Role.HOST;
 
     for (const [index, player] of players.entries()) {
@@ -203,7 +201,6 @@ export class PlayersState {
       throw new Error(this.isPlayerAlreadyPresentText);
     }
 
-    player.number = players.length;
     const newPlayer = new Player({ ...player, number: players.length });
     const newPlayers = [...players, newPlayer];
 

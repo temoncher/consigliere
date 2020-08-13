@@ -65,5 +65,4 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   close() {
     this.modalController.dismiss(null, 'cancel');
   }
-
 }

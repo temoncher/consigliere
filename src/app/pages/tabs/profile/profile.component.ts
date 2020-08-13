@@ -8,7 +8,6 @@ import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
   styleUrls: ['profile.component.scss'],
 })
 export class ProfileComponent {
-
   constructor(private popoverController: PopoverController) { }
 
   async presentSettingsMenu() {

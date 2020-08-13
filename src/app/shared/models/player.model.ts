@@ -16,6 +16,7 @@ export class Player {
     if (partialPlayer.user?.id) {
       this.isGuest = false;
       this.user = partialPlayer.user;
+
       return;
     }
 

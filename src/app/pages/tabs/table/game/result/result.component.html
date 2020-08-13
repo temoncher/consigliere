@@ -1,5 +1,4 @@
-<div class="result-container"
-     [ngSwitch]="(gameResult$ | async)">
+<div class="result-container" [ngSwitch]="gameResult$ | async">
   <ng-container *ngSwitchCase="GameResult.MAFIA">
     <span>Mafia won</span>
   </ng-container>

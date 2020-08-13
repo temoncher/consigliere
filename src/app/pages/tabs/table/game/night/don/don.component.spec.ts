@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DonComponent } from './don.component';
 import { imports } from 'src/test';
+import { DonComponent } from './don.component';
 
 describe('DonComponent', () => {
   let component: DonComponent;

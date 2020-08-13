@@ -2,18 +2,19 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="openMenu()">
-        <ion-icon slot="icon-only"
-                  name="menu"></ion-icon>
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
       </ion-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.NIGHT.toolbarTitle' | translate }} {{ (rounds$ | async)?.length }}</ion-title>
+    <ion-title>
+      {{ "TABS.TABLE.GAME.NIGHT.toolbarTitle" | translate }}
+      {{ (rounds$ | async)?.length }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">
         <ion-label color="primary">{{ nextStageButtonText }}</ion-label>
-        <ion-icon color="primary"
-                  name="chevron-forward-outline"></ion-icon>
+        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -25,7 +26,9 @@
     <div class="modal-content">
       <ng-container [ngSwitch]="stage">
         <ng-container *ngSwitchCase="NightStages.MAFIA">
-          <div *ngIf="roundNumber === 0; then giveRolesBlock else mafiaHuntBlock"></div>
+          <div
+            *ngIf="roundNumber === 0; then giveRolesBlock; else mafiaHuntBlock"
+          ></div>
 
           <ng-template #giveRolesBlock>
             <app-give-roles></app-give-roles>

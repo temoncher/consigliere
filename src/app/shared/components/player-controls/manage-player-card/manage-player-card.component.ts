@@ -4,8 +4,8 @@ import { Store } from '@ngxs/store';
 
 import { AssignFall, ResetPlayer } from '@shared/store/game/players/players.actions';
 import { TimersService } from '@shared/services/timers.service';
-import { PlayerMenuComponent } from '../player-menu/player-menu.component';
 import { KickPlayer } from '@shared/store/game/round/round.actions';
+import { PlayerMenuComponent } from '../player-menu/player-menu.component';
 
 @Component({
   selector: 'app-manage-player-card',

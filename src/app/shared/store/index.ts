@@ -1,4 +1,3 @@
-
 import { GameStates, ExtendedGameStateModel } from './game';
 
 export interface ApplicationStateModel {
@@ -8,4 +7,3 @@ export interface ApplicationStateModel {
 export const ApplicationStates = [
   ...GameStates,
 ];
-

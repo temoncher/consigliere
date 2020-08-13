@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { SharedModule } from '@shared/shared.module';
 import { TableComponent } from './table.component';
 import { TableRoutingModule } from './table-routing.module';
 import { PreparationModule } from './preparation/preparation.module';
-import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [

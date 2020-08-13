@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerMenuComponent } from './player-menu.component';
 import { imports } from 'src/test';
+import { PlayerMenuComponent } from './player-menu.component';
 
 describe('PlayerMenuComponent', () => {
   let component: PlayerMenuComponent;
@@ -9,7 +9,7 @@ describe('PlayerMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerMenuComponent ],
+      declarations: [PlayerMenuComponent],
       imports,
     }).compileComponents();
 

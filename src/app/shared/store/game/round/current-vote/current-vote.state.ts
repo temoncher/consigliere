@@ -1,4 +1,4 @@
-import { State, Selector, StateContext, Action, Store } from '@ngxs/store';
+import { State, Selector, StateContext, Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
@@ -159,11 +159,13 @@ export class CurrentVoteState {
       vote.set(proposedPlayerId, vote.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
 
       patchState({ votes });
+
       return;
     }
 
     for (const [candidateId, votedPlayers] of vote.entries()) {
       const newVotedPlayers = votedPlayers.filter((votedPlayerId) => playerId !== votedPlayerId);
+
       vote.set(candidateId, newVotedPlayers);
     }
 

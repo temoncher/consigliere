@@ -53,8 +53,8 @@ export class GameService {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
-    const aliveMafia = players.filter((player) => !quitPhases.has(player.user.id) &&
-      (player.role === Role.DON || player.role === Role.MAFIA));
+    const aliveMafia = players.filter((player) => !quitPhases.has(player.user.id)
+      && (player.role === Role.DON || player.role === Role.MAFIA));
     let murderedPlayer: string;
 
     for (const [victimId, mafiaIds] of victimsMap) {

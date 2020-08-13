@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmallPlayerCardComponent } from './small-player-card.component';
 import { imports } from 'src/test';
+import { SmallPlayerCardComponent } from './small-player-card.component';
 
 describe('SmallPlayerCardComponent', () => {
   let component: SmallPlayerCardComponent;
@@ -9,7 +9,7 @@ describe('SmallPlayerCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SmallPlayerCardComponent ],
+      declarations: [SmallPlayerCardComponent],
       imports,
     }).compileComponents();
 

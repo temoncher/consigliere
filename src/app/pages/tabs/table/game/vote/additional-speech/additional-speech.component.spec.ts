@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdditionalSpeechComponent } from './additional-speech.component';
 import { imports } from 'src/test';
+import { AdditionalSpeechComponent } from './additional-speech.component';
 import { VoteModule } from '../vote.module';
 
 describe('AdditionalSpeechComponent', () => {
@@ -10,7 +10,7 @@ describe('AdditionalSpeechComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdditionalSpeechComponent ],
+      declarations: [AdditionalSpeechComponent],
       imports: [
         ...imports,
         VoteModule,

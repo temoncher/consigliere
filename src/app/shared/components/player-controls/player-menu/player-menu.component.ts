@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+  Component, OnInit, Input, OnDestroy,
+} from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Player } from '@shared/models/player.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-player-menu',

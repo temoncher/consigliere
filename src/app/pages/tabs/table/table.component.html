@@ -5,19 +5,23 @@
       <ion-title>Consigliere</ion-title>
     </div>
     <div class="grid-content-center">
-      <ion-button *ngIf="(isGameStarted$ | async)"
-                  shape="round"
-                  routerLink="game"
-                  id="continue-button"
-                  routerDirection="forward">
+      <ion-button
+        *ngIf="isGameStarted$ | async"
+        shape="round"
+        routerLink="game"
+        id="continue-button"
+        routerDirection="forward"
+      >
         {{ "TABS.TABLE.continue" | translate }}
       </ion-button>
-      <ion-button *ngIf="!(isGameStarted$ | async)"
-                  id="new-game-button"
-                  shape="round"
-                  routerLink="preparation"
-                  routerDirection="forward"
-                  (click)="resetGameState()">
+      <ion-button
+        *ngIf="(isGameStarted$ | async) === false"
+        id="new-game-button"
+        shape="round"
+        routerLink="preparation"
+        routerDirection="forward"
+        (click)="resetGameState()"
+      >
         {{ "TABS.TABLE.newGame" | translate }}
       </ion-button>
     </div>

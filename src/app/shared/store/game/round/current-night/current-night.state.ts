@@ -1,13 +1,14 @@
-
 import { Injectable } from '@angular/core';
-import { State, Store, StateContext, Action, Selector } from '@ngxs/store';
+import { State, StateContext, Action, Selector } from '@ngxs/store';
 import { cloneDeep } from 'lodash';
 
 import { Night } from '@shared/models/table/night.interface';
-import { ShootPlayer, CheckByDon, CheckBySheriff, SetMurderedPlayer } from './current-night.actions';
+import {
+  ShootPlayer, CheckByDon, CheckBySheriff, SetMurderedPlayer,
+} from './current-night.actions';
 
 // tslint:disable-next-line: no-empty-interface
-export interface CurrentNightStateModel extends Night { }
+export type CurrentNightStateModel = Night;
 
 @State<CurrentNightStateModel>({
   name: 'currentNight',
@@ -57,6 +58,7 @@ export class CurrentNightState {
     if (isShotThisVicitm) {
       shots.delete(mafiaId);
       patchState({ shots });
+
       return;
     }
 

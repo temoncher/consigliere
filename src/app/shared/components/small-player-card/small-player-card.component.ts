@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, OnDestroy } from '@angular/core';
+import {
+  Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, OnDestroy,
+} from '@angular/core';
 
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
@@ -23,7 +25,7 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
   @Input() showProposedPlayer = false;
   @Input() disabled = false;
 
-  @Output() click = new EventEmitter();
+  @Output() cardClick = new EventEmitter();
 
   player: Player;
   proposedPlayer: Player;
@@ -60,8 +62,9 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
 
   onClick(event: MouseEvent) {
     event.stopPropagation();
+
     if (!this.disabled) {
-      this.click.emit(event);
+      this.cardClick.emit(event);
     }
   }
 }

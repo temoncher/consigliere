@@ -17,5 +17,4 @@ export class TableTemplateComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() { }
-
 }

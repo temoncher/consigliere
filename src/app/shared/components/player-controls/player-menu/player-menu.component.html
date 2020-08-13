@@ -1,13 +1,21 @@
 <ion-list>
-  <ion-item button
-            lines="none"
-            (click)="chooseOption('refresh')">{{ refreshText }}</ion-item>
-  <ion-item button
-            lines="none"
-            [disabled]="playerQuitPhase"
-            (click)="chooseOption('fall')">{{ fallText }}</ion-item>
-  <ion-item button
-            lines="none"
-            [disabled]="playerQuitPhase"
-            (click)="chooseOption('kick')">{{ kickText }}</ion-item>
+  <ion-item button lines="none" (click)="chooseOption('refresh')">
+    {{ refreshText }}
+  </ion-item>
+  <ion-item
+    button
+    lines="none"
+    [disabled]="playerQuitPhase"
+    (click)="chooseOption('fall')"
+  >
+    {{ fallText }}
+  </ion-item>
+  <ion-item
+    button
+    lines="none"
+    [disabled]="playerQuitPhase"
+    (click)="chooseOption('kick')"
+  >
+    {{ kickText }}
+  </ion-item>
 </ion-list>

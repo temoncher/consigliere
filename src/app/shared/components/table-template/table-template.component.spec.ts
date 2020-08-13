@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableTemplateComponent } from './table-template.component';
 import { imports } from 'src/test';
+import { TableTemplateComponent } from './table-template.component';
 
 describe('TableTemplateComponent', () => {
   let component: TableTemplateComponent;
@@ -9,7 +9,7 @@ describe('TableTemplateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableTemplateComponent ],
+      declarations: [TableTemplateComponent],
       imports,
     }).compileComponents();
 

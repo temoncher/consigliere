@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabsComponent } from './tabs.component';
 import { imports } from 'src/test';
+import { TabsComponent } from './tabs.component';
 
 describe('TabsComponent', () => {
   let component: TabsComponent;

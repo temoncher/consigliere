@@ -46,6 +46,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     const currentVote = this.store.selectSnapshot(CurrentVoteState.getCurrentVote);
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const proposedPlayers: Player[] = [];
+
     // Implemented to keep players proposal order
     if (currentVote) {
       for (const candidateId of currentVote.keys()) {
@@ -105,13 +106,13 @@ export class VoteStageComponent implements OnInit, OnDestroy {
 
   next() {
     if (this.currentPlayerIndex + 1 < this.proposedPlayers.length) {
-      this.currentPlayerIndex++;
+      this.currentPlayerIndex += 1;
     }
   }
 
   previous() {
     if (this.currentPlayerIndex > 0) {
-      this.currentPlayerIndex--;
+      this.currentPlayerIndex -= 1;
     }
   }
 

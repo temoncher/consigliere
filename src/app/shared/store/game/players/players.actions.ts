@@ -38,7 +38,7 @@ export class ShufflePlayers {
 }
 
 export class SetPlayersNumbers {
-  static readonly type = `[${playersActionsPrefix}] Set players\' numbers`;
+  static readonly type = `[${playersActionsPrefix}] Set players' numbers`;
   constructor() { }
 }
 

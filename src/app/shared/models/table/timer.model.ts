@@ -1,58 +1,66 @@
 import { timer, Subscription } from 'rxjs';
 
 export class Timer {
-    private timeLeft: number;
-    interval: Subscription = Subscription.EMPTY;
-    isStarted = false;
-    isSpeechEnded = false;
-    isPaused = true;
+  private timeLeft: number;
+  interval: Subscription = Subscription.EMPTY;
+  isStarted = false;
+  isSpeechEnded = false;
+  isPaused = true;
 
-    get time() {
-        return Math.round(this.timeLeft / 1000);
+  get time() {
+    return Math.round(this.timeLeft / 1000);
+  }
+
+  constructor(partialTimer?: Partial<Timer>) {
+    this.timeLeft = (partialTimer?.time || 60) * 1000;
+    this.isSpeechEnded = partialTimer?.isSpeechEnded || false;
+    this.isPaused = typeof partialTimer?.isPaused === 'undefined' ? true : partialTimer.isSpeechEnded;
+  }
+
+  switchTimer() {
+    this.isStarted = true;
+
+    if (this.isSpeechEnded) {
+      return;
     }
 
-    constructor(partialTimer?: Partial<Timer>) {
-        this.timeLeft = (partialTimer?.time || 60) * 1000;
-        this.isSpeechEnded = partialTimer?.isSpeechEnded || false;
-        this.isPaused = typeof partialTimer?.isPaused === 'undefined' ? true : partialTimer.isSpeechEnded;
+    if (!this.isPaused) {
+      this.pauseTimer();
+
+      return;
     }
 
-    switchTimer() {
-        this.isStarted = true;
+    this.isPaused = false;
 
-        if (this.isSpeechEnded) {
-            return;
-        }
+    this.interval = timer(100, 100).subscribe(() => {
+      if (this.timeLeft === 0) {
+        this.pauseTimer();
 
-        if (!this.isPaused) {
-            return this.pauseTimer();
-        }
+        return;
+      }
 
-        this.isPaused = false;
-        return this.interval = timer(100, 100).subscribe(() => {
-            if (this.timeLeft === 0) {
-                return this.pauseTimer();
-            }
+      this.timeLeft -= 100;
+    });
+  }
 
-            this.timeLeft -= 100;
-        });
-    }
+  pauseTimer() {
+    this.isPaused = true;
 
-    pauseTimer() {
-        this.isPaused = true;
-        return this.interval.unsubscribe();
-    }
+    this.interval.unsubscribe();
+  }
 
-    resetTimer(time: number) {
-        this.isPaused = true;
-        this.isSpeechEnded = false;
-        this.timeLeft = time * 1000;
-        return this.interval.unsubscribe();
-    }
+  resetTimer(time: number) {
+    this.isPaused = true;
+    this.isSpeechEnded = false;
+    this.timeLeft = time * 1000;
 
-    endSpeech() {
-        this.isPaused = true;
-        this.isSpeechEnded = true;
-        return this.interval.unsubscribe();
-    }
+    this.interval.unsubscribe();
+  }
+
+  endSpeech() {
+    this.isPaused = true;
+    this.isSpeechEnded = true;
+
+    this.interval.unsubscribe();
+  }
 }

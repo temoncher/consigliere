@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { State, Selector, Action, StateContext } from '@ngxs/store';
+import {
+  State, Selector, Action, StateContext,
+} from '@ngxs/store';
 import { cloneDeep } from 'lodash';
 
 import { Round } from '@shared/models/table/round.model';

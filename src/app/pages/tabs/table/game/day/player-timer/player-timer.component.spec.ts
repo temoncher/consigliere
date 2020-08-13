@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerTimerComponent } from './player-timer.component';
 import { imports } from 'src/test';
+import { PlayerTimerComponent } from './player-timer.component';
 import { DayModule } from '../day.module';
 
 describe('PlayerTimerComponent', () => {
@@ -10,7 +10,7 @@ describe('PlayerTimerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerTimerComponent ],
+      declarations: [PlayerTimerComponent],
       imports: [
         ...imports,
         DayModule,
