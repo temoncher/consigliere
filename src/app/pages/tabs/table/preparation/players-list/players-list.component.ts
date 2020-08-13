@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { ModalController, AlertController, ToastController, IonReorderGroup } from '@ionic/angular';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
 
@@ -8,8 +8,8 @@ import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { RemovePlayer, AddPlayer, ReorderPlayer } from '@shared/store/game/players/players.actions';
-import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
 
 interface IonicReorderEvent {
   detail: {
@@ -31,10 +31,10 @@ export class PlayersListComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
 
   playerPrompt: {
-    header: string,
-    namePlaceholder: string,
-    cancelButton: string,
-    confirmButton: string,
+    header: string;
+    namePlaceholder: string;
+    cancelButton: string;
+    confirmButton: string;
   };
 
   constructor(
@@ -74,12 +74,12 @@ export class PlayersListComponent implements OnInit {
 
     if (role === 'authenticated') {
       this.addNewPlayer(player);
+
       return;
     }
 
     if (role === 'guest') {
       this.presentPlayerPrompt();
-      return;
     }
   }
 
@@ -115,6 +115,7 @@ export class PlayersListComponent implements OnInit {
         first(),
         catchError((err) => {
           this.displayToast(err.message, 'danger');
+
           return of('');
         }),
       ).subscribe();

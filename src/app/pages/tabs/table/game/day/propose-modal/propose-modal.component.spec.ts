@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProposeModalComponent } from './propose-modal.component';
 import { imports } from 'src/test';
+import { ProposeModalComponent } from './propose-modal.component';
 
 describe('ProposeModalComponent', () => {
   let component: ProposeModalComponent;
@@ -9,7 +9,7 @@ describe('ProposeModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProposeModalComponent ],
+      declarations: [ProposeModalComponent],
       imports,
     }).compileComponents();
 

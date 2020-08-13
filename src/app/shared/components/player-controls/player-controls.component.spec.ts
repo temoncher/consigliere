@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerControlsComponent } from './player-controls.component';
 import { imports } from 'src/test';
+import { PlayerControlsComponent } from './player-controls.component';
 
 describe('PlayerControlsComponent', () => {
   let component: PlayerControlsComponent;
@@ -9,7 +9,7 @@ describe('PlayerControlsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerControlsComponent ],
+      declarations: [PlayerControlsComponent],
       imports,
     }).compileComponents();
 

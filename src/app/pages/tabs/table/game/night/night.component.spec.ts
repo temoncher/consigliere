@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NightComponent } from './night.component';
 import { imports } from 'src/test';
+import { NightComponent } from './night.component';
 import { NightModule } from './night.module';
 
 describe('NightModalComponent', () => {

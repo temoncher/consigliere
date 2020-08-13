@@ -1,41 +1,52 @@
 <ion-list class="cards-list">
-  <ion-reorder-group disabled="false"
-                     (ionItemReorder)="doReorder($event)">
+  <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
     <!-- Add new player button-->
-    <ion-item *ngIf="(players$ | async)?.length < 10"
-              class="add-new"
-              lines="none"
-              (click)="presentPlayerModal()">
-      <ion-icon slot="start"
-                name="add"
-                color="primary"></ion-icon>
-      <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST.addNewPlayer' | translate }}</ion-label>
+    <ion-item
+      *ngIf="(players$ | async)?.length < 10"
+      class="add-new"
+      lines="none"
+      (click)="presentPlayerModal()"
+    >
+      <ion-icon slot="start" name="add" color="primary"></ion-icon>
+      <ion-label color="primary">
+        {{ "TABS.TABLE.PREPARATION.PLAYERS_LIST.addNewPlayer" | translate }}
+      </ion-label>
     </ion-item>
     <!-- END Add new player button-->
-    <ion-item *ngFor="let player of (players$ | async); let i = index"
-              class="player-list__item"
-              lines="none">
-
+    <ion-item
+      *ngFor="let player of players$ | async; let i = index"
+      class="player-list__item"
+      lines="none"
+    >
       <div slot="start">
-        <div class="clip-button top-left text-only background-color-primary text-color-dark-contrast">
+        <div
+          class="clip-button top-left text-only background-color-primary text-color-dark-contrast"
+        >
           {{ i + 1 }}
         </div>
         <ion-avatar>
-          <img [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar">
+          <img
+            [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar"
+          />
         </ion-avatar>
       </div>
 
       <ion-label>
         <h3>{{ player.nickname }}</h3>
         <p>
-          {{ 'TABS.TABLE.PREPARATION.PLAYERS_LIST' + (player.isGuest ? '.guest' : '.authorizedUser') | translate }}
+          {{
+            "TABS.TABLE.PREPARATION.PLAYERS_LIST" +
+              (player.isGuest ? ".guest" : ".authorizedUser") | translate
+          }}
         </p>
       </ion-label>
 
-      <ion-icon slot="end"
-                name="close"
-                color="medium"
-                (click)="removePlayer(player)"></ion-icon>
+      <ion-icon
+        slot="end"
+        name="close"
+        color="medium"
+        (click)="removePlayer(player)"
+      ></ion-icon>
       <ion-reorder slot="end"></ion-reorder>
     </ion-item>
   </ion-reorder-group>

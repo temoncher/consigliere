@@ -1,4 +1,6 @@
-import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
+import {
+  State, Action, StateContext, Selector, createSelector,
+} from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
@@ -13,7 +15,7 @@ import {
 import { PlayersState, PlayersStateModel } from '../../players/players.state';
 
 // tslint:disable-next-line: no-empty-interface
-export interface CurrentDayStateModel extends Day { }
+export type CurrentDayStateModel = Day;
 
 @State<CurrentDayStateModel>({
   name: 'currentDay',

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SwiperOptions } from 'swiper';
@@ -38,7 +38,9 @@ export class VoteResultsComponent implements OnInit, OnDestroy {
   ) {
     combineLatest([this.players$, this.leaders$])
       .pipe(takeUntil(this.destroy))
-      .subscribe(([players, ledaerIds]) => this.eliminatedPlayers = players?.filter(({ user: { id } }) => ledaerIds?.includes(id)));
+      .subscribe(([players, ledaerIds]) => {
+        this.eliminatedPlayers = players?.filter(({ user }) => ledaerIds?.includes(user.id));
+      });
   }
 
   ngOnInit() { }

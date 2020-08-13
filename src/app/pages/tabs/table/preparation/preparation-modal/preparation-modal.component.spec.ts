@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreparationModalComponent } from './preparation-modal.component';
 import { imports } from 'src/test';
+import { PreparationModalComponent } from './preparation-modal.component';
 
 describe('PreparationModalComponent', () => {
   let component: PreparationModalComponent;
@@ -9,7 +9,7 @@ describe('PreparationModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreparationModalComponent ],
+      declarations: [PreparationModalComponent],
       imports,
     }).compileComponents();
 

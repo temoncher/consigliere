@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManagePlayerCardComponent } from './manage-player-card.component';
 import { imports } from 'src/test';
+import { ManagePlayerCardComponent } from './manage-player-card.component';
 
 describe('ManagePlayerCardComponent', () => {
   let component: ManagePlayerCardComponent;
@@ -9,7 +9,7 @@ describe('ManagePlayerCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManagePlayerCardComponent ],
+      declarations: [ManagePlayerCardComponent],
       imports,
     }).compileComponents();
 

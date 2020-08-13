@@ -20,10 +20,9 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-const devModules = environment.production ? [] : [
-  NgxsReduxDevtoolsPluginModule.forRoot(),
-  NgxsLoggerPluginModule.forRoot(),
-];
+const devModules = environment.production
+  ? []
+  : [NgxsReduxDevtoolsPluginModule.forRoot(), NgxsLoggerPluginModule.forRoot()];
 
 @NgModule({
   declarations: [AppComponent],

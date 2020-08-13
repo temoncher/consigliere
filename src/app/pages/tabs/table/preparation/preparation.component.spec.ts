@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreparationComponent } from './preparation.component';
 import { imports } from 'src/test';
+import { PreparationComponent } from './preparation.component';
 import { PreparationModule } from './preparation.module';
 
 describe('PreparationComponent', () => {
@@ -10,7 +10,7 @@ describe('PreparationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreparationComponent ],
+      declarations: [PreparationComponent],
       imports: [
         ...imports,
         PreparationModule,

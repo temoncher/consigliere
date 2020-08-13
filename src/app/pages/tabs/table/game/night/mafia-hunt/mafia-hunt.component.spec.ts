@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MafiaHuntComponent } from './mafia-hunt.component';
 import { imports } from 'src/test';
+import { MafiaHuntComponent } from './mafia-hunt.component';
 
 describe('MafiaHuntComponent', () => {
   let component: MafiaHuntComponent;
@@ -9,7 +9,7 @@ describe('MafiaHuntComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MafiaHuntComponent ],
+      declarations: [MafiaHuntComponent],
       imports,
     }).compileComponents();
 

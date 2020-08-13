@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultComponent } from './result.component';
 import { imports } from 'src/test';
+import { ResultComponent } from './result.component';
 
 describe('ResultComponent', () => {
   let component: ResultComponent;

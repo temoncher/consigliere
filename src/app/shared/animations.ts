@@ -1,4 +1,6 @@
-import { trigger, transition, style, animate, state, useAnimation } from '@angular/animations';
+import {
+  trigger, transition, style, animate, state, useAnimation,
+} from '@angular/animations';
 import { fadeInUp, fadeOutDown } from 'ng-animate';
 
 export const oldFadeSlide = trigger('fadeSlide', [

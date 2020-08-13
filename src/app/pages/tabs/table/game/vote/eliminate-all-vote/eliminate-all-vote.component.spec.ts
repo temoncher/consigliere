@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EliminateAllVoteComponent } from './eliminate-all-vote.component';
 import { imports } from 'src/test';
+import { EliminateAllVoteComponent } from './eliminate-all-vote.component';
 
 describe('EliminateAllVoteComponent', () => {
   let component: EliminateAllVoteComponent;
@@ -9,7 +9,7 @@ describe('EliminateAllVoteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EliminateAllVoteComponent ],
+      declarations: [EliminateAllVoteComponent],
       imports,
     }).compileComponents();
 

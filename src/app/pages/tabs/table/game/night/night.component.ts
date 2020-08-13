@@ -63,7 +63,7 @@ export class NightComponent implements OnInit, OnDestroy {
       case NightStages.SHERIFF:
         return this.roundNumber === 0 ? this.nightTexts.hostMeetsSheriff : this.nightTexts.sheriffChecks;
       default:
-        break;
+        return 'Oops! Something went wrong';
     }
   }
 
@@ -97,6 +97,6 @@ export class NightComponent implements OnInit, OnDestroy {
       this.gameService.endNight();
     }
 
-    this.stage++;
+    this.stage += 1;
   }
 }

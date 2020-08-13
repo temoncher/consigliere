@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, OnDestroy,
+} from '@angular/core';
 import { IonSlides, MenuController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
@@ -66,11 +68,10 @@ export class DayComponent implements OnInit, OnDestroy {
     const finishedPlayerIndex = players.findIndex((player) => player.user.id === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
-      const slideIndex = players.findIndex(({ user: { id } }) => !quitPhases.has(id) &&
-        !this.timersService.getPlayerTimer(id).isSpeechEnded);
+      const slideIndex = players.findIndex(({ user: { id } }) => !quitPhases.has(id)
+        && !this.timersService.getPlayerTimer(id).isSpeechEnded);
 
       this.navigateToSlide(slideIndex);
-      return;
     }
   }
 

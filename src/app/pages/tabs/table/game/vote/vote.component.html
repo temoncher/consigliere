@@ -2,18 +2,18 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="openMenu()">
-        <ion-icon slot="icon-only"
-                  name="menu"></ion-icon>
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
       </ion-button>
     </ion-buttons>
 
-    <ion-title>{{ 'TABS.TABLE.GAME.VOTE.toolbarTitle' | translate }}</ion-title>
+    <ion-title>{{ "TABS.TABLE.GAME.VOTE.toolbarTitle" | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="nextStage()">
-        <ion-label color="primary">{{ 'TABS.TABLE.GAME.VOTE.nextButton' | translate }}</ion-label>
-        <ion-icon color="primary"
-                  name="chevron-forward-outline"></ion-icon>
+        <ion-label color="primary">
+          {{ "TABS.TABLE.GAME.VOTE.nextButton" | translate }}
+        </ion-label>
+        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -23,8 +23,7 @@
   <div class="vote">
     <app-player-controls></app-player-controls>
 
-    <div class="vote__content"
-         [ngSwitch]="votePhase$ | async">
+    <div class="vote__content" [ngSwitch]="votePhase$ | async">
       <ng-container *ngSwitchCase="VotePhase.VOTE">
         <app-vote-stage></app-vote-stage>
       </ng-container>

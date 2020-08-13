@@ -22,6 +22,7 @@ export class TimersService {
 
     if (!playerTimer) {
       this.timers.set(playerId, new Timer({ time }));
+
       return;
     }
 
@@ -43,6 +44,7 @@ export class TimersService {
 
     for (const player of players) {
       const time = speechSkips.get(player.user.id) === currentRoundNumber ? 0 : 60;
+
       this.timers.set(player.user.id, new Timer({ time }));
     }
   }
@@ -52,6 +54,7 @@ export class TimersService {
     const currentRoundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
 
     const time = speechSkips.get(playerId) === currentRoundNumber ? 0 : 60;
+
     this.timers.get(playerId).resetTimer(time);
   }
 }

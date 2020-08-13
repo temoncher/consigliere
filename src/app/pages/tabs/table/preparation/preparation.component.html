@@ -1,16 +1,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/table"
-                       [text]="'TABS.TABLE.PREPARATION.backButton' | translate"></ion-back-button>
+      <ion-back-button
+        defaultHref="tabs/table"
+        [text]="'TABS.TABLE.PREPARATION.backButton' | translate"
+      ></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'TABS.TABLE.PREPARATION.toolbarTitle' | translate }}</ion-title>
+    <ion-title>
+      {{ "TABS.TABLE.PREPARATION.toolbarTitle" | translate }}
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outlined"
-                  (click)="shufflePlayers()">
-        <ion-icon slot="icon-only"
-                  name="repeat"
-                  color="primary"></ion-icon>
+      <ion-button fill="outlined" (click)="shufflePlayers()">
+        <ion-icon slot="icon-only" name="repeat" color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,53 +19,70 @@
 
 <ion-content>
   <ion-list class="cards-list with-fixed-element">
-
     <div class="sticky top host-container">
       <div class="d-flex">
         <!-- Host card -->
-        <ion-item *ngIf="(host$ | async)"
-                  class="host-card"
-                  lines="none">
+        <ion-item *ngIf="host$ | async" class="host-card" lines="none">
           <ion-avatar slot="start">
-            <img [src]="(host$ | async)?.user?.avatar ? (host$ | async).user.avatar : defaultAvatar">
+            <img
+              [src]="
+                (host$ | async)?.user?.avatar
+                  ? (host$ | async).user.avatar
+                  : defaultAvatar
+              "
+            />
           </ion-avatar>
           <ion-label>
             <h3>{{ (host$ | async)?.nickname }}</h3>
-            <p>{{ 'TABS.TABLE.PREPARATION.hostTitle' | translate }}</p>
+            <p>{{ "TABS.TABLE.PREPARATION.hostTitle" | translate }}</p>
           </ion-label>
-          <ion-icon slot="end"
-                    id="change-host-button"
-                    name="swap-vertical"
-                    color="medium"
-                    (click)="presentHostModal()"></ion-icon>
+          <ion-icon
+            slot="end"
+            id="change-host-button"
+            name="swap-vertical"
+            color="medium"
+            (click)="presentHostModal()"
+          ></ion-icon>
         </ion-item>
         <!-- END Host card -->
 
         <!-- Add new host button-->
-        <ion-item class="add-new"
-                  *ngIf="!(host$ | async)"
-                  lines="none">
-          <ion-icon slot="start"
-                    name="add"
-                    color="primary"></ion-icon>
-          <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.setHost' | translate  }}</ion-label>
+        <ion-item
+          class="add-new"
+          *ngIf="(host$ | async) === undefined"
+          lines="none"
+        >
+          <ion-icon slot="start" name="add" color="primary"></ion-icon>
+          <ion-label color="primary">
+            {{ "TABS.TABLE.PREPARATION.setHost" | translate }}
+          </ion-label>
         </ion-item>
         <!-- END Add new host button -->
 
         <div class="proceed-button-container">
-          <ion-label *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) < 11"
-                     color="primary">{{ (players$ | async).length + (!!(host$ | async) ? 1 : 0) }}/11</ion-label>
+          <ion-label
+            *ngIf="
+              (players$ | async)?.length + (!!(host$ | async) ? 1 : 0) < 11
+            "
+            color="primary"
+          >
+            {{
+              (players$ | async).length + (!!(host$ | async) ? 1 : 0)
+            }}/11</ion-label
+          >
 
-          <ion-button *ngIf="(players$ | async)?.length + (!!(host$ | async) ? 1 : 0) === 11"
-                      id="proceed-button"
-                      fill="outlined"
-                      size="large"
-                      (click)="start()"
-                      routerLink="/tabs/game/game"
-                      routerDirection="forward">
-            <ion-icon slot="icon-only"
-                      name="play"
-                      color="primary"></ion-icon>
+          <ion-button
+            *ngIf="
+              (players$ | async)?.length + (!!(host$ | async) ? 1 : 0) === 11
+            "
+            id="proceed-button"
+            fill="outlined"
+            size="large"
+            (click)="start()"
+            routerLink="/tabs/game/game"
+            routerDirection="forward"
+          >
+            <ion-icon slot="icon-only" name="play" color="primary"></ion-icon>
           </ion-button>
         </div>
       </div>
@@ -73,6 +91,5 @@
     </div>
 
     <app-players-list></app-players-list>
-
   </ion-list>
 </ion-content>

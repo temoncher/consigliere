@@ -32,6 +32,7 @@ export class PreparationModalComponent implements OnInit {
 
   choosePlayer(player?: Player) {
     const role = player ? 'authenticated' : 'guest';
+
     this.modalController.dismiss(player, role);
   }
 

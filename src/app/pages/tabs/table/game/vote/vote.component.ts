@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
@@ -46,18 +46,22 @@ export class VoteComponent implements OnInit, OnDestroy {
     switch (this.currentVotePhase) {
       case VotePhase.ELIMINATE_VOTE:
         this.voteService.endEliminateVote();
+
         return;
       case VotePhase.RESULT:
         this.gameService.endVote();
+
         return;
       case VotePhase.SPEECH:
         this.voteService.endAdditionalSpeech();
+
         return;
       case VotePhase.VOTE:
         this.voteService.endVoteStage();
-        return;
+
+        break;
       default:
-        return;
+        break;
     }
   }
 }

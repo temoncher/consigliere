@@ -18,8 +18,8 @@ import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { RoundState } from '@shared/store/game/round/round.state';
-import { PlayersService } from './players.service';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
+import { PlayersService } from './players.service';
 
 @Injectable({
   providedIn: 'root',
@@ -37,8 +37,9 @@ export class VoteService {
     const roundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
-    if (proposedPlayers.length === 1 && roundNumber === 0 || !proposedPlayers.length || isVoteDisabled) {
+    if ((proposedPlayers.length === 1 && roundNumber === 0) || !proposedPlayers.length || isVoteDisabled) {
       this.switchVotePhase(VotePhase.RESULT);
+
       return;
     }
 
@@ -47,6 +48,7 @@ export class VoteService {
 
     if (proposedPlayers.length === 1) {
       const quitPhase = this.playersService.getQuitPhase();
+
       vote.set(proposedPlayers[0], players.map(({ user: { id } }) => id));
 
       this.store.dispatch([
@@ -54,6 +56,7 @@ export class VoteService {
         new SetVotes(votes),
       ]);
       this.switchVotePhase(VotePhase.RESULT);
+
       return;
     }
 
@@ -77,12 +80,14 @@ export class VoteService {
 
       this.store.dispatch(new KillPlayer(leadersIds[0], quitPhase));
       this.switchVotePhase(VotePhase.RESULT);
+
       return;
     }
 
     if (previousLeadersIds?.length === leadersIds.length) {
       this.store.dispatch(new SetEliminateAllVote(new Map<string, boolean>()));
       this.switchVotePhase(VotePhase.ELIMINATE_VOTE);
+
       return;
     }
 
@@ -110,6 +115,7 @@ export class VoteService {
       }
 
       this.switchVotePhase(VotePhase.RESULT);
+
       return;
     }
 
@@ -154,6 +160,7 @@ export class VoteService {
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.VOTE_IS_DISABLED),
         ]);
+
         return;
       }
 
@@ -162,6 +169,7 @@ export class VoteService {
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.NO_CANDIDATES),
         ]);
+
         return;
       }
 
@@ -170,6 +178,7 @@ export class VoteService {
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY),
         ]);
+
         return;
       }
 
@@ -178,6 +187,7 @@ export class VoteService {
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.PLAYERS_KEPT_ALIVE),
         ]);
+
         return;
       }
 
@@ -185,14 +195,15 @@ export class VoteService {
         new SetCurrentVotePhase(newVotePhase),
         new SetVoteResult(VoteResult.PLAYERS_ELIMINATED),
       ]);
+
       return;
     }
 
     if (newVotePhase !== VotePhase.ELIMINATE_VOTE) {
       this.store.dispatch(new SetCurrentVotePhase(newVotePhase));
+
       return;
     }
-
 
     this.store.dispatch([
       new SetCurrentVotePhase(newVotePhase),
@@ -206,6 +217,7 @@ export class VoteService {
 
     if (roundPhase === RoundPhase.VOTE && isResultClear) {
       this.store.dispatch(new SetIsNextVotingDisabled(true));
+
       return;
     }
 

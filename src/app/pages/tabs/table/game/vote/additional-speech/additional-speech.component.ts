@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import {
+  Component, OnInit, OnDestroy, ViewChild,
+} from '@angular/core';
+import { Select } from '@ngxs/store';
 import { Subject, Observable, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SwiperOptions } from 'swiper';
@@ -60,6 +62,7 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
 
   endPlayerSpeech(playerId: string) {
     const finishedPlayerIndex = this.leaders.findIndex((player) => player.user.id === playerId);
+
     this.timers.get(playerId).endSpeech();
 
     if (finishedPlayerIndex < this.leaders?.length - 1) {
@@ -75,9 +78,11 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
     if (timer?.time === 0 || timer?.isSpeechEnded) {
       return 'medium';
     }
+
     if (timer?.time < 10) {
       return 'danger';
     }
+
     return 'primary';
   }
 }

@@ -5,13 +5,19 @@ import { Store, Select } from '@ngxs/store';
 import { catchError, first } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
-import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.actions';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { GameService } from '@shared/services/game.service';
+import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+
+interface HostPropmt {
+  header: string;
+  namePlaceholder: string;
+  cancelButton: string;
+  confirmButton: string;
+}
 
 @Component({
   selector: 'app-preparation',
@@ -23,12 +29,7 @@ export class PreparationComponent implements OnInit {
   @Select(PlayersState.getHost) host$: Observable<Player>;
   defaultAvatar = defaultAvatarSrc;
 
-  private hostPropmpt: {
-    header: string,
-    namePlaceholder: string,
-    cancelButton: string,
-    confirmButton: string,
-  };
+  private hostPropmpt: HostPropmt;
 
   constructor(
     private modalController: ModalController,
@@ -68,11 +69,11 @@ export class PreparationComponent implements OnInit {
     switch (role) {
       case 'authenticated':
         this.setHost(player);
+
         return;
       case 'guest':
         this.presentHostPrompt();
-        return;
-
+        break;
       default:
         break;
     }
@@ -108,6 +109,7 @@ export class PreparationComponent implements OnInit {
         first(),
         catchError((err) => {
           this.displayToast(err.message, 'danger');
+
           return of('');
         }),
       ).subscribe();

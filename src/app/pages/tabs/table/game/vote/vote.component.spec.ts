@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VoteComponent } from './vote.component';
 import { imports } from 'src/test';
+import { VoteComponent } from './vote.component';
 
 describe('VoteModalComponent', () => {
   let component: VoteComponent;

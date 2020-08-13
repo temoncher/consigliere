@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 
-import { TimersService } from './timers.service';
 import { GameState } from '@shared/store/game/game.state';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { SkipSpeech, AssignFall, KillPlayer, ResetPlayer } from '@shared/store/game/players/players.actions';
+import {
+  SkipSpeech, AssignFall, KillPlayer, ResetPlayer,
+} from '@shared/store/game/players/players.actions';
 import { KickPlayer, ResetKickedPlayer } from '@shared/store/game/round/round.actions';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
 import { RoundPhase } from '@shared/models/table/day-phase.enum';
@@ -13,6 +14,7 @@ import { Role } from '@shared/models/role.enum';
 import { EndGame } from '@shared/store/game/game.actions';
 import { GameResult } from '@shared/models/table/game-result.enum';
 import { Navigate } from '@ngxs/router-plugin';
+import { TimersService } from './timers.service';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +57,6 @@ export class PlayersService {
     this.actions$.pipe(
       ofActionSuccessful(KillPlayer),
     ).subscribe(({ playerId, quitPhase }: KillPlayer) => {
-
       if (quitPhase.stage === RoundPhase.DAY) {
         this.stopSpeech(playerId);
       }
@@ -90,6 +91,7 @@ export class PlayersService {
 
   stopSpeech(playerId: string) {
     const playerTimer = this.timersService.getPlayerTimer(playerId);
+
     playerTimer.endSpeech();
     const timeLeft = playerTimer.time;
 

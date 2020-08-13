@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GiveRolesComponent } from './give-roles.component';
 import { imports } from 'src/test';
+import { GiveRolesComponent } from './give-roles.component';
 
 describe('GiveRolesComponent', () => {
   let component: GiveRolesComponent;
@@ -9,7 +9,7 @@ describe('GiveRolesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GiveRolesComponent ],
+      declarations: [GiveRolesComponent],
       imports,
     }).compileComponents();
 

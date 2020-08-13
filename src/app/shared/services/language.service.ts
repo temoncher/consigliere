@@ -24,6 +24,7 @@ export class LanguageService {
 
   async setInitialAppLanguage() {
     const browserLanguageCode = this.translate.getBrowserLang();
+
     if (this.supportedLanguages.find((supportedLanguage) => supportedLanguage.code === browserLanguageCode)) {
       this.translate.setDefaultLang(browserLanguageCode);
       this.selectedLanguageCode = browserLanguageCode;
@@ -33,6 +34,7 @@ export class LanguageService {
     }
 
     const storedLanuageCode: LanguageCode = await this.storage.get(LNG_KEY);
+
     if (storedLanuageCode) {
       this.setLanguage(storedLanuageCode);
       this.selectedLanguageCode = storedLanuageCode;

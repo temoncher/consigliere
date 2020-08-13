@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DayComponent } from './day.component';
 import { imports } from 'src/test';
+import { DayComponent } from './day.component';
 import { DayModule } from './day.module';
 
 describe('DayComponent', () => {
@@ -10,7 +10,7 @@ describe('DayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DayComponent ],
+      declarations: [DayComponent],
       imports: [
         ...imports,
         DayModule,

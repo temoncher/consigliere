@@ -28,7 +28,7 @@ export class GiveRolesComponent implements OnInit {
   nextPlayer() {
     if (this.currentPlayerIndex < 9) {
       this.isRoleVisible = false;
-      this.currentPlayerIndex++;
+      this.currentPlayerIndex += 1;
     }
   }
 

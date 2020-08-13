@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { State, Action, StateContext, createSelector } from '@ngxs/store';
+import {
+  State, Action, StateContext, createSelector,
+} from '@ngxs/store';
 import { cloneDeep } from 'lodash';
 
 import { ToggleGameMenuBoolean } from './menu.actions';
@@ -22,7 +24,7 @@ export interface GameMenuStateModel {
 export class GameMenuState {
   static getBasicProp(propName: string) {
     return createSelector([GameMenuState], (state: GameMenuStateModel) => {
-      if (typeof state[propName] === undefined) {
+      if (typeof state[propName] === 'undefined') {
         throw new Error(`Property '${propName}' does not exist on GameMenuStateModel`);
       }
 
@@ -37,6 +39,7 @@ export class GameMenuState {
   ) {
     const oldPropValue = cloneDeep(getState())[propName];
     const newState = {};
+
     newState[propName] = !oldPropValue;
 
     return patchState(newState);

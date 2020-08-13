@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExploreContainerComponent } from './explore-container.component';
 import { imports } from 'src/test';
+import { ExploreContainerComponent } from './explore-container.component';
 
 describe('ExploreContainerComponent', () => {
   let component: ExploreContainerComponent;
@@ -9,7 +9,7 @@ describe('ExploreContainerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExploreContainerComponent ],
+      declarations: [ExploreContainerComponent],
       imports,
     }).compileComponents();
 

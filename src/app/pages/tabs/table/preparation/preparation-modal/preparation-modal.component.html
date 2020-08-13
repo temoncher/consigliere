@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ 'TABS.TABLE.PREPARATION.PREPARATION_MODAL.toolbarTitle' | translate }}</ion-title>
+    <ion-title>
+      {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.toolbarTitle" | translate }}
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outlined"
-                  (click)="close()">
-        <ion-icon slot="icon-only"
-                  name="close"></ion-icon>
+      <ion-button fill="outlined" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,21 +14,21 @@
 <ion-content>
   <ion-list class="cards-list">
     <!-- Add unauthorized user button-->
-    <ion-item class="add-new"
-              lines="none"
-              (click)="choosePlayer()">
-      <ion-icon slot="start"
-                name="add"
-                color="primary"></ion-icon>
-      <ion-label color="primary">{{ 'TABS.TABLE.PREPARATION.PREPARATION_MODAL.addGuest' | translate }}</ion-label>
+    <ion-item class="add-new" lines="none" (click)="choosePlayer()">
+      <ion-icon slot="start" name="add" color="primary"></ion-icon>
+      <ion-label color="primary">
+        {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.addGuest" | translate }}
+      </ion-label>
     </ion-item>
     <!-- END Add unauthorized user button-->
 
-    <ion-item *ngFor="let player of players"
-              lines="none"
-              (click)="choosePlayer(player)">
+    <ion-item
+      *ngFor="let player of players"
+      lines="none"
+      (click)="choosePlayer(player)"
+    >
       <ion-avatar slot="start">
-        <img [src]="player.user?.avatar ? player.user.avatar : defaultAvatar">
+        <img [src]="player.user?.avatar ? player.user.avatar : defaultAvatar" />
       </ion-avatar>
       <ion-label>
         <h3>{{ player.nickname }}</h3>
