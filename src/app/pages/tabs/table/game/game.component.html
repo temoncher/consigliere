@@ -10,6 +10,7 @@
       <ion-list>
         <ion-menu-toggle auto-hide="false" menu="game-menu">
           <ion-item
+            class="toggle-quitted-option"
             lines="none"
             detail="false"
             (click)="switchSettingsBoolean('isQuittedHidden')"
@@ -25,6 +26,7 @@
           </ion-item>
 
           <ion-item
+            class="toggle-roles-option"
             lines="none"
             detail="false"
             (click)="switchSettingsBoolean('isRolesVisible')"
@@ -40,7 +42,12 @@
 
           <div class="app-divider"></div>
 
-          <ion-item lines="none" detail="false" (click)="dropGame()">
+          <ion-item
+            class="drop-game-option"
+            lines="none"
+            detail="false"
+            (click)="dropGame()"
+          >
             <ion-label color="danger">
               {{ "TABS.TABLE.GAME.dropGame" | translate }}
             </ion-label>
