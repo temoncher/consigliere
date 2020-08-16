@@ -13,6 +13,7 @@
     *ngIf="
       showRole && (player.role === Role.DON || player.role === Role.SHERIFF)
     "
+    [id]="player.role === Role.DON ? 'don-label' : 'sheriff-label'"
     class="clip-button top-left"
     [ngClass]="
       player.role === Role.DON
