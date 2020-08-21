@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -15,9 +16,12 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on, config) => {
+const cyConfig: Cypress.PluginConfig = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  config.ignoreTestFiles = "**/examples/*.spec.js";
+  config.ignoreTestFiles = '**/examples/*.spec.js';
+
   return config;
-}
+};
+
+export default cyConfig;

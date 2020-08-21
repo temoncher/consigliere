@@ -14,11 +14,11 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false
+  screenshotOnRunFailure: false,
 });

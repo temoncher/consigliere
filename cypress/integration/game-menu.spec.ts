@@ -28,8 +28,6 @@ describe('Game menu', () => {
 
     // find all mafia cards
     cy.get('.player-controls')
-      .find('#player-controls__slider')
-      .should('be.visible')
       .find('.background-color-dark', { includeShadowDom: true })
       .should('have.length', 3);
 
@@ -57,8 +55,6 @@ describe('Game menu', () => {
 
     // find all mafia cards
     cy.get('.player-controls')
-      .find('#player-controls__slider')
-      .should('be.visible')
       .find('.background-color-dark', { includeShadowDom: true })
       .should('have.length', 0);
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -25,3 +26,19 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import 'cypress-shadow-dom';
+import './player-controls.commands';
+import { PlayerControlsOptions } from '../models/player-controls-options.interface';
+
+// Must be declared global to be detected by typescript (allows import/export)
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      /**
+       * Pick one of player controls menu options.
+       *
+       * @param {PlayerControlsOptions} options - player number and action type.
+       */
+      playerControlsChoose(options: PlayerControlsOptions): void;
+    }
+  }
+}

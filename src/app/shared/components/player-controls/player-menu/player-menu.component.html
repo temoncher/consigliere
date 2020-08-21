@@ -1,10 +1,16 @@
 <ion-list>
-  <ion-item button lines="none" (click)="chooseOption('refresh')">
+  <ion-item
+    button
+    lines="none"
+    class="refresh-option"
+    (click)="chooseOption('refresh')"
+  >
     {{ refreshText }}
   </ion-item>
   <ion-item
     button
     lines="none"
+    class="assign-fall-option"
     [disabled]="playerQuitPhase"
     (click)="chooseOption('fall')"
   >
@@ -13,6 +19,7 @@
   <ion-item
     button
     lines="none"
+    class="kick-option"
     [disabled]="playerQuitPhase"
     (click)="chooseOption('kick')"
   >
