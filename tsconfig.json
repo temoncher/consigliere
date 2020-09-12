@@ -4,7 +4,9 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["src/app/shared/*"]
+      "@shared/*": [
+        "src/app/shared/*"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -26,5 +28,8 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
-  }
+  },
+  "exclude": [
+    "cypress"
+  ]
 }

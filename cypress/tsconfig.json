@@ -1,13 +1,20 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": "../node_modules",
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress"],
-    "esModuleInterop": true
+    "baseUrl": "../node_modules", // needed if your tests import npm modules
+    "paths": {
+      "@shared/*": [
+        "../src/app/shared/*"
+      ]
+    },
+    "types": [
+      "cypress",
+      "node"
+    ],
   },
+  "exclude": [],
   "include": [
+    "../node_modules/cypress/types",
     "**/*.ts"
   ]
 }

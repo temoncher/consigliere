@@ -7,8 +7,8 @@ variables:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-  - .npm/
-  - www
+    - .npm/
+    - www
 
 stages:
   - lint
@@ -25,8 +25,16 @@ lint:
   script:
     - npm run lint
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
-    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
+    - if: $CI_COMMIT_BRANCH == 'master' # Execute jobs when a new commit is pushed to master branch
+    - if: $CI_MERGE_REQUEST_ID # Execute jobs in merge request context
+
+build:
+  stage: build
+  script:
+    - npm run build
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master' # Execute jobs when a new commit is pushed to master branch
+    - if: $CI_MERGE_REQUEST_ID # Execute jobs in merge request context
 
 unit:
   stage: unit
@@ -34,25 +42,18 @@ unit:
   script:
     - npm run unit
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
-    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
+    - if: $CI_COMMIT_BRANCH == 'master' # Execute jobs when a new commit is pushed to master branch
+    - if: $CI_MERGE_REQUEST_ID # Execute jobs in merge request context
 
 e2e:
   stage: e2e
-  image: cypress/browsers
+  image: cypress/browsers:node11.13.0-chrome73
   script:
     - npm run ci:cy-run
   rules:
-    - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
-    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
-
-build:
-  stage: build
-  script:
-    - npm run build
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'master'   # Execute jobs when a new commit is pushed to master branch
-    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
+    - when: manual
+    - if: $CI_COMMIT_BRANCH == 'master' # Execute jobs when a new commit is pushed to master branch
+    - if: $CI_MERGE_REQUEST_ID # Execute jobs in merge request context
 
 deploy_dev:
   stage: deploy
@@ -78,5 +79,5 @@ deploy_prod:
   before_script:
     - npm i -g firebase-tools
   script:
-    - firebase use prod --token $FIREBASE_TOKEN 
+    - firebase use prod --token $FIREBASE_TOKEN
     - firebase deploy --only hosting -m "Branch $CI_COMMIT_REF_NAME, User $GITLAB_USER_EMAIL | Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN

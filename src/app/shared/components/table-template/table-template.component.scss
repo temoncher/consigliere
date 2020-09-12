@@ -1,4 +1,6 @@
 .table-template {
+  height: 460px; // to shirnk table when player controls open
+
   display: grid;
   grid-template:
     "g4 g5 g6 g7" 1fr

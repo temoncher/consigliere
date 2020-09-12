@@ -5,35 +5,42 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { LanguageModule } from '@shared/language.module';
-import { SharedModule } from '@shared/shared.module';
-import { IonicStorageModule } from '@ionic/storage';
+import { imports } from 'src/test';
 import { AppComponent } from './app.component';
 
+class MockBackButton {
+  constructor(public subscribeWithPriority: jasmine.Spy<any>) {}
+}
+
+class MockPlatform {
+  constructor(
+    public ready: jasmine.Spy<any>,
+    public backButton: any,
+  ) {}
+}
+
 describe('AppComponent', () => {
+  let mockBackButton: MockBackButton;
+  let mockPlatform: MockPlatform;
   let statusBarSpy;
   let splashScreenSpy;
   let platformReadySpy;
-  let platformSpy;
 
   beforeEach(async(() => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
     splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
+    platformReadySpy = jasmine.createSpy().and.returnValue(Promise.resolve());
+    mockBackButton = new MockBackButton(jasmine.createSpy('subscribeWithPriority', (priority, fn) => {}));
+    mockPlatform = new MockPlatform(platformReadySpy, mockBackButton);
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule,
-        LanguageModule,
-        IonicStorageModule.forRoot(),
-      ],
+      imports,
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy },
+        { provide: Platform, useValue: mockPlatform },
       ],
     }).compileComponents();
   }));
@@ -48,7 +55,7 @@ describe('AppComponent', () => {
   it('should initialize the app', async () => {
     TestBed.createComponent(AppComponent);
 
-    expect(platformSpy.ready).toHaveBeenCalled();
+    expect(mockPlatform.ready).toHaveBeenCalled();
     await platformReadySpy;
 
     expect(statusBarSpy.styleDefault).toHaveBeenCalled();

@@ -1,10 +1,10 @@
-import Chance from 'chance';
+import { Chance } from 'chance';
 
-import { localhost } from './urls';
+import { localhost } from '../../constants/urls';
 
 const chance = new Chance();
 
-describe('Game lobby', () => {
+describe('[Game] Lobby', () => {
   beforeEach(() => {
     cy.visit(localhost);
   });

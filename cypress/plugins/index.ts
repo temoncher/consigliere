@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-param-reassign */
 /// <reference types="cypress" />
 // ***********************************************************
@@ -12,6 +14,9 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+import { webpackOptions } from '../webpack.config';
+
+const webpackPreprocessor = require('@cypress/webpack-preprocessor');
 
 /**
  * @type {Cypress.PluginConfig}
@@ -20,6 +25,8 @@ const cyConfig: Cypress.PluginConfig = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   config.ignoreTestFiles = '**/examples/*.spec.js';
+
+  on('file:preprocessor', webpackPreprocessor({ webpackOptions }));
 
   return config;
 };

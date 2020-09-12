@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 /* eslint-disable @typescript-eslint/no-namespace */
 // ***********************************************
 // This example commands.js shows you how to
@@ -26,7 +27,10 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import 'cypress-shadow-dom';
+import './store.commands';
+import './general.commands';
 import './player-controls.commands';
+import { Store, ActionType } from '@ngxs/store';
 import { PlayerControlsOptions } from '../models/player-controls-options.interface';
 
 // Must be declared global to be detected by typescript (allows import/export)
@@ -34,11 +38,28 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       /**
+       * 1. Locate to application page.
+       * 2. Locate to table tab.
+       * 3. Click new game button.
+       * 4. Click proceed button.
+       *
+       */
+      startGame(): void;
+      /**
        * Pick one of player controls menu options.
        *
        * @param {PlayerControlsOptions} options - player number and action type.
        */
       playerControlsChoose(options: PlayerControlsOptions): void;
+      /**
+       * Dispatches store action.
+       *
+       * @param {ActionType} action - store action.
+       */
+      dispatch<T extends ActionType>(action: T): void;
     }
+  }
+  interface Window {
+    store: Store;
   }
 }
