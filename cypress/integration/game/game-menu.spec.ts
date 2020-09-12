@@ -1,16 +1,6 @@
-import { localhost } from './urls';
-
-describe('Game menu', () => {
+describe('[Game] Menu', () => {
   beforeEach(() => {
-    cy.visit(localhost);
-
-    cy.wait(500);
-    cy.get('#new-game-button')
-      .click();
-
-    cy.wait(500);
-    cy.get('#proceed-button')
-      .click();
+    cy.startGame();
   });
 
   it('should show/hide roles', () => {

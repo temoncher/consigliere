@@ -1,16 +1,6 @@
-import { localhost } from './urls';
-
-describe('Players bar', () => {
+describe('[Game] Players controls', () => {
   beforeEach(() => {
-    cy.visit(localhost);
-
-    cy.wait(500);
-    cy.get('#new-game-button')
-      .click();
-
-    cy.wait(500);
-    cy.get('#proceed-button')
-      .click();
+    cy.startGame();
   });
 
   it('should be visible and contain 10 cards with numbers from 1 to 10', () => {
