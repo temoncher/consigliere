@@ -59,10 +59,12 @@
           "proceedToSheriff": "Шериф",
           "proceedToMorning": "Утро",
           "DON": {
-            "checkButton": "Проверить"
+            "checkButton": "Проверить",
+            "nextButton": "Далее"
           },
           "SHERIFF": {
-            "checkButton": "Проверить"
+            "checkButton": "Проверить",
+            "nextButton": "Далее"
           },
           "GIVE_ROLES": {
             "hiddenRole": "Нажмите, чтобы увидеть роль"
@@ -73,7 +75,7 @@
         },
         "DAY": {
           "toolbarTitle": "День",
-          "proceedToVote": "Голосовать",
+          "proceedToVote": "Голосование",
           "PROPOSE_MODAL": {
             "toolbarTitle": "Выставить игрока",
             "proposeButton": "Выставить"
@@ -93,6 +95,14 @@
           "VOTE_STAGE": {
             "endVote": "Завершить"
           }
+        },
+        "RESULT": {
+          "mafia": "МАФИЯ",
+          "mafiaWon": "ПОБЕДИЛА",
+          "civilians": "МИРНЫЕ",
+          "civiliansWon": "ПОБЕДИЛИ",
+          "toolbarTitle": "Результат",
+          "menuButton": "Меню"
         }
       }
     }

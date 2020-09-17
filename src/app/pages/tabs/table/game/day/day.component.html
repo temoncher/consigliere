@@ -1,50 +1,24 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="openMenu()">
-        <ion-icon slot="icon-only" name="menu"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-    <ion-title>
-      {{ "TABS.TABLE.GAME.DAY.toolbarTitle" | translate }}
-      {{ (rounds$ | async)?.length }}
-    </ion-title>
-
-    <ion-buttons slot="end">
+<app-portal selector="#game-buttons-outlet">
       <ion-button (click)="endDay()">
         <ion-label color="primary">
           {{ "TABS.TABLE.GAME.DAY.proceedToVote" | translate }}
         </ion-label>
         <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
       </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+</app-portal>
 
-<ion-content>
-  <div class="day-container">
-    <app-player-controls
-      [showProposedPlayers]="true"
-      [currentPlayerNumber]="controlSliderPlayerNumber"
-    ></app-player-controls>
-
-    <div class="slides-container">
-      <ion-slides #playerSlider [options]="playerSliderConfig">
-        <ng-container *ngFor="let player of players$ | async">
-          <ion-slide
-            [hidden]="
-              (isQuittedHidden$ | async) &&
-              (quitPhases$ | async).has(player.user.id)
-            "
-          >
-            <app-player-timer
-              [playerId]="player.user.id"
-              (speechEnd)="endSpeech($event)"
-            ></app-player-timer>
-          </ion-slide>
-        </ng-container>
-      </ion-slides>
-    </div>
-  </div>
-</ion-content>
+<ion-slides #playerSlider [options]="playerSliderConfig">
+  <ng-container *ngFor="let player of players$ | async">
+    <ion-slide
+      [hidden]="
+        (isQuittedHidden$ | async) &&
+        (quitPhases$ | async).has(player.user.id)
+      "
+    >
+      <app-player-timer
+        [playerId]="player.user.id"
+        (speechEnd)="endSpeech($event)"
+      ></app-player-timer>
+    </ion-slide>
+  </ng-container>
+</ion-slides>

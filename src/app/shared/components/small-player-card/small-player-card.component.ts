@@ -1,14 +1,13 @@
 import {
   Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, OnDestroy,
 } from '@angular/core';
-
+import { Store } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
 import { Role } from '@shared/models/role.enum';
-import { Store } from '@ngxs/store';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-small-player-card',

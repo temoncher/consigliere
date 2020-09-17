@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { State, StateContext, Action, Selector } from '@ngxs/store';
+import { Night } from '@shared/models/table/night.interface';
 import { cloneDeep } from 'lodash';
 
-import { Night } from '@shared/models/table/night.interface';
 import {
   ShootPlayer, CheckByDon, CheckBySheriff, SetMurderedPlayer,
 } from './current-night.actions';

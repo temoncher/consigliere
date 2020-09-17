@@ -1,5 +1,5 @@
-import { User } from './user.model';
 import { Role } from './role.enum';
+import { User } from './user.model';
 
 export class Player {
   nickname: string;

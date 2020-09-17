@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { GameMenuState } from '@shared/store/game/menu/menu.state';
+import { MenuController } from '@ionic/angular';
+import { Select } from '@ngxs/store';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { GameResult } from '@shared/models/table/game-result.enum';
+import { Round } from '@shared/models/table/round.model';
+import { GameState } from '@shared/store/game/game.state';
+import { RoundState } from '@shared/store/game/round/round.state';
 import { Observable } from 'rxjs';
-import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
-import { GameService } from '@shared/services/game.service';
 
 @Component({
   selector: 'app-game',
@@ -11,21 +14,17 @@ import { GameService } from '@shared/services/game.service';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
-  @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
+  @Select(GameState.getGameResult) gameResult$: Observable<GameResult>;
+  @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
+  @Select(GameState.getRoundNumber) roundNumber$: Observable<number>;
 
-  constructor(
-    private store: Store,
-    private gameService: GameService,
-  ) { }
+  RoundPhase = RoundPhase;
+
+  constructor(private menuController: MenuController) { }
 
   ngOnInit() { }
 
-  switchSettingsBoolean(settingName: string) {
-    this.store.dispatch(new ToggleGameMenuBoolean(settingName));
-  }
-
-  dropGame() {
-    this.gameService.dropGame();
+  openMenu() {
+    this.menuController.open('game-menu');
   }
 }

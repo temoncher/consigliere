@@ -1,0 +1,25 @@
+@import "~src/theme/variables";
+
+.result-container {
+  overflow: scroll;
+
+  &__sticky {
+    background-color: var(--ion-color-primary-contrast);
+
+    &__text {
+      text-align: center;
+      font-weight: 900;
+      font-size: 32px;
+
+      padding: 16px;
+
+      span {
+        display: block;
+      }
+    }
+  }
+
+  &__list {
+    padding: 0 10%;
+  }
+}

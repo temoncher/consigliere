@@ -3,22 +3,22 @@ import {
 } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-
-import { Player } from '@shared/models/player.model';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { fadeSlide } from '@shared/animations';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { colors } from '@shared/constants/colors';
-import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
+import { Player } from '@shared/models/player.model';
+import { Timer } from '@shared/models/table/timer.model';
+import { TimersService } from '@shared/services/timers.service';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import {
   ProposePlayer,
   WithdrawPlayer,
 } from '@shared/store/game/round/current-day/current-day.actions';
-import { TimersService } from '@shared/services/timers.service';
-import { Timer } from '@shared/models/table/timer.model';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { ProposeModalComponent } from '../propose-modal/propose-modal.component';
 
 @Component({

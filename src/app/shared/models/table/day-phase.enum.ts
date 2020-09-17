@@ -1,5 +1,5 @@
 export enum RoundPhase {
-  DAY = 'day',
-  NIGHT = 'night',
-  VOTE = 'vote',
+  DAY = 'DAY',
+  NIGHT = 'NIGHT',
+  VOTE = 'VOTE',
 }

@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
-
+import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { Role } from '@shared/models/role.enum';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { GameResult } from '@shared/models/table/game-result.enum';
+import { EndGame } from '@shared/store/game/game.actions';
 import { GameState } from '@shared/store/game/game.state';
-import { PlayersState } from '@shared/store/game/players/players.state';
 import {
   SkipSpeech, AssignFall, KillPlayer, ResetPlayer,
 } from '@shared/store/game/players/players.actions';
-import { KickPlayer, ResetKickedPlayer } from '@shared/store/game/round/round.actions';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import { ResetPlayerTimer, SetPlayerTimer } from '@shared/store/game/round/current-day/current-day.actions';
-import { Role } from '@shared/models/role.enum';
-import { EndGame } from '@shared/store/game/game.actions';
-import { GameResult } from '@shared/models/table/game-result.enum';
-import { Navigate } from '@ngxs/router-plugin';
+import { KickPlayer, ResetKickedPlayer } from '@shared/store/game/round/round.actions';
+
 import { TimersService } from './timers.service';
 
 @Injectable({
@@ -114,10 +113,7 @@ export class PlayersService {
     }
 
     if (gameResult) {
-      this.store.dispatch([
-        new EndGame(GameResult.MAFIA),
-        new Navigate(['tabs', 'table', 'game', 'result']),
-      ]);
+      this.store.dispatch(new EndGame(gameResult));
     }
   }
 }

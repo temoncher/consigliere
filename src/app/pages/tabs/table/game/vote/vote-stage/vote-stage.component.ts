@@ -1,16 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { VoteService } from '@shared/services/vote.service';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { VoteForCandidate } from '@shared/store/game/round/current-vote/current-vote.actions';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SwiperOptions } from 'swiper';
-
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { VoteForCandidate } from '@shared/store/game/round/current-vote/current-vote.actions';
-import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
-import { Player } from '@shared/models/player.model';
-import { VoteService } from '@shared/services/vote.service';
 
 @Component({
   selector: 'app-vote-stage',

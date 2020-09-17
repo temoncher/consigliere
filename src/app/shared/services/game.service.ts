@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
-import { StateReset } from 'ngxs-reset-plugin';
-
-import { KickPlayer, SwitchRoundPhase } from '@shared/store/game/round/round.actions';
-import { KillPlayer, SetPlayersNumbers, GiveRoles } from '@shared/store/game/players/players.actions';
-import { ResetProposedPlayers } from '@shared/store/game/round/current-day/current-day.actions';
+import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Role } from '@shared/models/role.enum';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { Round } from '@shared/models/table/round.model';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { AddRound, SetIsGameStarted } from '@shared/store/game/game.actions';
 import { GameState } from '@shared/store/game/game.state';
-import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { SetIsVoteDisabled } from '@shared/store/game/round/current-vote/current-vote.actions';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
+import { KillPlayer, SetPlayersNumbers } from '@shared/store/game/players/players.actions';
 import { PlayersState } from '@shared/store/game/players/players.state';
-import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
-import { Role } from '@shared/models/role.enum';
+import { ResetProposedPlayers } from '@shared/store/game/round/current-day/current-day.actions';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
 import { SetMurderedPlayer } from '@shared/store/game/round/current-night/current-night.actions';
+import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
+import { SetIsVoteDisabled } from '@shared/store/game/round/current-vote/current-vote.actions';
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
-import { Round } from '@shared/models/table/round.model';
+import { KickPlayer, SwitchRoundPhase } from '@shared/store/game/round/round.actions';
 import { RoundState } from '@shared/store/game/round/round.state';
+import { StateReset } from 'ngxs-reset-plugin';
+
 import { PlayersService } from './players.service';
 import { TimersService } from './timers.service';
 import { VoteService } from './vote.service';
@@ -42,14 +42,13 @@ export class GameService {
 
     this.store.dispatch([
       new SetPlayersNumbers(),
-      new GiveRoles(),
+      // new GiveRoles(), // will be useful, when automatic roles shuffle will be implemented
       new Navigate(['tabs', 'table', 'game']),
       new SetIsGameStarted(true),
     ]);
   }
 
   endNight() {
-    const roundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
@@ -74,18 +73,15 @@ export class GameService {
 
     this.store.dispatch([
       new SwitchRoundPhase(RoundPhase.DAY),
-      new Navigate(['tabs', 'table', 'game', roundNumber, 'day']),
     ]);
   }
 
   endDay() {
-    const roundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
     const proposedPlayers = this.store.selectSnapshot(CurrentDayState.getProposedPlayers);
     const proposedPlayersIds = [...proposedPlayers.keys()];
 
     this.store.dispatch([
       new SwitchRoundPhase(RoundPhase.VOTE),
-      new Navigate(['tabs', 'table', 'game', roundNumber, 'vote']),
     ]);
 
     this.voteService.switchVotePhase(VotePhase.VOTE);
@@ -103,11 +99,17 @@ export class GameService {
     ]);
   }
 
+  saveGame() {
+    this.store.dispatch([
+      new StateReset(GameState),
+      new Navigate(['tabs', 'table']),
+    ]);
+  }
+
   private startNewRound() {
     const currentNight = this.store.selectSnapshot(CurrentNightState);
     const currentDay = this.store.selectSnapshot(CurrentDayState);
     const currentVote = this.store.selectSnapshot(CurrentVoteState);
-    const roundNumber = this.store.selectSnapshot(GameState.getRoundNumber);
     const isVoteDisabled = this.store.selectSnapshot(GameState.getIsNextVotingDisabled);
     const round = new Round({
       ...currentNight,
@@ -121,7 +123,6 @@ export class GameService {
       new AddRound(round),
       new StateReset(RoundState),
       new SwitchRoundPhase(RoundPhase.NIGHT),
-      new Navigate(['tabs', 'table', 'game', roundNumber + 1, 'night']),
       new SetIsVoteDisabled(isVoteDisabled),
     ]);
   }

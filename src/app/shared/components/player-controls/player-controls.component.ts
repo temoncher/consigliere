@@ -1,16 +1,15 @@
 import {
   Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges,
 } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
 import { IonSlides } from '@ionic/angular';
-import { Observable } from 'rxjs';
-
+import { Store, Select } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { ToggleGameMenuBoolean } from '@shared/store/game/menu/menu.actions';
-import { GameMenuState } from '@shared/store/game/menu/menu.state';
-import { SwiperOptions } from 'swiper';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { ToggleGameMenuBoolean } from '@shared/store/game/menu/game-menu.actions';
+import { GameMenuState } from '@shared/store/game/menu/game-menu.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { Observable } from 'rxjs';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'app-player-controls',
@@ -25,8 +24,8 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
 
   @Input() showFalls = true;
-  @Input() currentPlayerNumber = 0;
-  @Input() showProposedPlayers = false;
+  @Input() currentPlayerNumber = 0; // TODO: currently unused, implement sliding with speech end
+  @Input() showProposedPlayers = true; // TODO: hide proposed players on vote?
 
   players: Player[];
 

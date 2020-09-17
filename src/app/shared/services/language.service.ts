@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
-
+import { TranslateService } from '@ngx-translate/core';
 import { LanguageCode, Language } from '@shared/models/language.interface';
 
 const LNG_KEY = 'SELECTED_LANGUAGE';

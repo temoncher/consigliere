@@ -1,11 +1,13 @@
-import { State, Selector, StateContext, Action } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { cloneDeep } from 'lodash';
-
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
+import { State, Selector, StateContext, Action } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
 import { Vote } from '@shared/models/table/vote.interface';
+import { cloneDeep } from 'lodash';
+
+import { PlayersState } from '../../players/players.state';
+
 import {
   VoteForCandidate,
   DisableCurrentVote,
@@ -17,7 +19,6 @@ import {
   SetCurrentVotePhase,
   SetVoteResult,
 } from './current-vote.actions';
-import { PlayersState } from '../../players/players.state';
 
 export interface CurrentVoteStateModel extends Vote {
   currentPhase?: VotePhase;

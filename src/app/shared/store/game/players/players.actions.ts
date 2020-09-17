@@ -1,5 +1,7 @@
 import { Player } from '@shared/models/player.model';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { Role } from '@shared/models/role.enum';
+
 import { gameActionsPrefix } from '../game.actions';
 
 const playersActionsPrefix = `${gameActionsPrefix}.Players`;
@@ -65,5 +67,13 @@ export class ReorderPlayer {
   constructor(
     public previoustIndex: number,
     public newIndex: number,
+  ) { }
+}
+
+export class AssignRole {
+  static readonly type = `[${playersActionsPrefix}] Assign role to player`;
+  constructor(
+    public playerId: string,
+    public role: Role,
   ) { }
 }

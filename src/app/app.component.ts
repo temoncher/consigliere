@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-
-import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { LanguageService } from '@shared/services/language.service';
+import { Platform } from '@ionic/angular';
 import { Store } from '@ngxs/store';
+import { LanguageService } from '@shared/services/language.service';
 
 @Component({
   selector: 'app-root',

@@ -1,18 +1,17 @@
 import {
   Component, OnInit, OnDestroy, ViewChild,
 } from '@angular/core';
+import { IonSlides } from '@ionic/angular';
 import { Select } from '@ngxs/store';
-import { Subject, Observable, combineLatest } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { SwiperOptions } from 'swiper';
-
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { colors } from '@shared/constants/colors';
+import { playerSliderConfig } from '@shared/constants/slider';
 import { Player } from '@shared/models/player.model';
 import { Timer } from '@shared/models/table/timer.model';
-import { colors } from '@shared/constants/colors';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
-import { IonSlides } from '@ionic/angular';
+import { Subject, Observable, combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-additional-speech',
@@ -31,11 +30,7 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
 
   leaders: Player[];
 
-  playerSliderConfig: SwiperOptions = {
-    spaceBetween: 0,
-    centeredSlides: true,
-    slidesPerView: 1.4,
-  };
+  playerSliderConfig = playerSliderConfig;
   timers = new Map<string, Timer>();
   maxTime = 30;
 

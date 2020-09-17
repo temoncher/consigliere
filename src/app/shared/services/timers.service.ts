@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-
 import { Timer } from '@shared/models/table/timer.model';
 import { GameState } from '@shared/store/game/game.state';
 import { PlayersState } from '@shared/store/game/players/players.state';

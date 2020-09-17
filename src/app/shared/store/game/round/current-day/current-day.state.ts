@@ -1,10 +1,12 @@
+import { Injectable } from '@angular/core';
 import {
   State, Action, StateContext, Selector, createSelector,
 } from '@ngxs/store';
-import { Injectable } from '@angular/core';
+import { Day } from '@shared/models/table/day.interface';
 import { cloneDeep } from 'lodash';
 
-import { Day } from '@shared/models/table/day.interface';
+import { PlayersState, PlayersStateModel } from '../../players/players.state';
+
 import {
   SetPlayerTimer,
   ProposePlayer,
@@ -12,7 +14,6 @@ import {
   ResetPlayerTimer,
   ResetProposedPlayers,
 } from './current-day.actions';
-import { PlayersState, PlayersStateModel } from '../../players/players.state';
 
 // tslint:disable-next-line: no-empty-interface
 export type CurrentDayStateModel = Day;

@@ -1,44 +1,19 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="openMenu()">
-        <ion-icon slot="icon-only" name="menu"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+<app-portal selector="#game-buttons-outlet">
+  <ion-button (click)="nextStage()">
+    <ion-label color="primary">
+      {{ "TABS.TABLE.GAME.VOTE.nextButton" | translate }}
+    </ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</app-portal>
 
-    <ion-title>{{ "TABS.TABLE.GAME.VOTE.toolbarTitle" | translate }}</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="nextStage()">
-        <ion-label color="primary">
-          {{ "TABS.TABLE.GAME.VOTE.nextButton" | translate }}
-        </ion-label>
-        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <div class="vote">
-    <app-player-controls></app-player-controls>
-
-    <div class="vote__content" [ngSwitch]="votePhase$ | async">
-      <ng-container *ngSwitchCase="VotePhase.VOTE">
-        <app-vote-stage></app-vote-stage>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="VotePhase.SPEECH">
-        <app-additional-speech></app-additional-speech>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="VotePhase.ELIMINATE_VOTE">
-        <app-eliminate-all-vote></app-eliminate-all-vote>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="VotePhase.RESULT">
-        <app-vote-results></app-vote-results>
-      </ng-container>
-    </div>
-  </div>
-</ion-content>
+<ng-container [ngSwitch]="votePhase$ | async">
+  <app-vote-stage *ngSwitchCase="VotePhase.VOTE"></app-vote-stage>
+  <app-additional-speech
+    *ngSwitchCase="VotePhase.SPEECH"
+  ></app-additional-speech>
+  <app-eliminate-all-vote
+    *ngSwitchCase="VotePhase.ELIMINATE_VOTE"
+  ></app-eliminate-all-vote>
+  <app-vote-results *ngSwitchCase="VotePhase.RESULT"></app-vote-results>
+</ng-container>

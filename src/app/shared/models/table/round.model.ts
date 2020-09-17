@@ -1,7 +1,7 @@
-import { Night } from './night.interface';
 import { Day } from './day.interface';
-import { Vote } from './vote.interface';
+import { Night } from './night.interface';
 import { VoteResult } from './vote-result.enum';
+import { Vote } from './vote.interface';
 
 export class Round implements Night, Day, Vote {
   kickedPlayers: string[];

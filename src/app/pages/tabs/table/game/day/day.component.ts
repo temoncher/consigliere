@@ -1,26 +1,22 @@
 import {
   Component, OnInit, ViewChild, OnDestroy,
 } from '@angular/core';
-import { IonSlides, MenuController } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { Subject, Observable } from 'rxjs';
-import { SwiperOptions } from 'swiper';
-
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { GameState } from '@shared/store/game/game.state';
-import { Round } from '@shared/models/table/round.model';
-import { TimersService } from '@shared/services/timers.service';
-import { PlayersState } from '@shared/store/game/players/players.state';
+import { playerSliderConfig } from '@shared/constants/slider';
 import { Player } from '@shared/models/player.model';
-import { GameMenuState } from '@shared/store/game/menu/menu.state';
-import { RoundState } from '@shared/store/game/round/round.state';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
 import { GameService } from '@shared/services/game.service';
+import { TimersService } from '@shared/services/timers.service';
+import { GameMenuState } from '@shared/store/game/menu/game-menu.state';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { RoundState } from '@shared/store/game/round/round.state';
+import { Subject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-day',
   templateUrl: './day.component.html',
-  styleUrls: ['./day.component.scss'],
 })
 export class DayComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
@@ -30,19 +26,12 @@ export class DayComponent implements OnInit, OnDestroy {
   @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
-  playerSliderConfig: SwiperOptions = {
-    spaceBetween: 0,
-    centeredSlides: true,
-    slidesPerView: 1.4,
-  };
-  controlSliderPlayerNumber = 0;
+  playerSliderConfig = playerSliderConfig;
 
   constructor(
     private store: Store,
     private timersService: TimersService,
-    private menuController: MenuController,
     private gameService: GameService,
   ) { }
 
@@ -53,12 +42,7 @@ export class DayComponent implements OnInit, OnDestroy {
     this.destroy.unsubscribe();
   }
 
-  openMenu() {
-    this.menuController.open('game-menu');
-  }
-
   navigateToSlide(index: number) {
-    this.controlSliderPlayerNumber = index;
     this.playerSlider.slideTo(index);
   }
 

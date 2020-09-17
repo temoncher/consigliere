@@ -1,11 +1,11 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { GameResult } from '@shared/models/table/game-result.enum';
+import { Round } from '@shared/models/table/round.model';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { cloneDeep } from 'lodash';
 
-import { Round } from '@shared/models/table/round.model';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { GameResult } from '@shared/models/table/game-result.enum';
 import {
   ResetIsNextVotingDisabled,
   SetIsNextVotingDisabled,
@@ -13,8 +13,8 @@ import {
   EndGame,
   AddRound,
 } from './game.actions';
+import { GameMenuState } from './menu/game-menu.state';
 import { PlayersState } from './players/players.state';
-import { GameMenuState } from './menu/menu.state';
 import { CurrentVoteState } from './round/current-vote/current-vote.state';
 import { RoundState } from './round/round.state';
 
@@ -22,7 +22,7 @@ export interface GameStateModel {
   rounds: Round[];
   isNextVotingDisabled: boolean;
   isGameStarted: boolean;
-  gameResult: GameResult;
+  gameResult?: GameResult;
 }
 
 @State<GameStateModel>({
@@ -31,7 +31,6 @@ export interface GameStateModel {
     rounds: [],
     isNextVotingDisabled: false,
     isGameStarted: false,
-    gameResult: undefined,
   },
   children: [
     PlayersState,

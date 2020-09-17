@@ -1,5 +1,5 @@
-import { Round } from '@shared/models/table/round.model';
 import { GameResult } from '@shared/models/table/game-result.enum';
+import { Round } from '@shared/models/table/round.model';
 
 export const gameActionsPrefix = 'Game';
 

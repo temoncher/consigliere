@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   State, Selector, Action, StateContext,
 } from '@ngxs/store';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { Round } from '@shared/models/table/round.model';
 import { cloneDeep } from 'lodash';
 
-import { Round } from '@shared/models/table/round.model';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { CurrentVoteState } from './current-vote/current-vote.state';
-import { CurrentNightState } from './current-night/current-night.state';
 import { CurrentDayState } from './current-day/current-day.state';
+import { CurrentNightState } from './current-night/current-night.state';
+import { CurrentVoteState } from './current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer, ResetKickedPlayer } from './round.actions';
 
 export interface RoundStateModel extends Round {
