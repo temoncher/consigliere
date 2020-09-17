@@ -21,7 +21,7 @@
       <ion-header class="game__header">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="openMenu()">
+            <ion-button data-cy="game-menu-button" (click)="openMenu()">
               <ion-icon slot="icon-only" name="menu"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -45,7 +45,7 @@
 
       <ion-content>
         <div class="game__content h100">
-          <app-player-controls></app-player-controls>
+          <app-player-controls data-cy="player-controls"></app-player-controls>
 
           <app-day *ngSwitchCase="RoundPhase.DAY"></app-day>
           <app-night *ngSwitchCase="RoundPhase.NIGHT"></app-night>

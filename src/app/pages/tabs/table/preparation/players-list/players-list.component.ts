@@ -12,7 +12,7 @@ import { catchError, first } from 'rxjs/operators';
 
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
 
-import { RoleMenuComponent } from './role-menu/role-menu.component';
+import { RoleMenuComponent } from './role-menu.component';
 
 interface IonicReorderEvent {
   detail: {
@@ -25,7 +25,6 @@ interface IonicReorderEvent {
 @Component({
   selector: 'app-players-list',
   templateUrl: './players-list.component.html',
-  styleUrls: ['./players-list.component.scss'],
 })
 export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;

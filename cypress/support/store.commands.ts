@@ -1,11 +1,22 @@
 import { ActionType } from '@ngxs/store';
 
-// eslint-disable-next-line arrow-body-style
-Cypress.Commands.add('dispatch', <T extends ActionType>(action: T) => {
-  return cy.window()
-    .then((windowObject) => {
-      const { store } = windowObject;
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
+  namespace Cypress {
+    interface Chainable<Subject> {
+      /**
+       * Dispatches store action.
+       *
+       * @param {ActionType} action - store action.
+       */
+      dispatch<T extends ActionType>(action: T): void;
+    }
+  }
+}
 
-      store.dispatch(action);
-    });
-});
+Cypress.Commands.add('dispatch', <T extends ActionType>(action: T) => cy.window()
+  .then((windowObject) => {
+    const { store } = windowObject;
+
+    store.dispatch(action);
+  }));

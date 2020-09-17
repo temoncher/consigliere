@@ -5,7 +5,7 @@ describe('[Game] Menu', () => {
 
   it('should show/hide roles', () => {
     // open menu
-    cy.get('#menu-button')
+    cy.getCy('game-menu-button')
       .click();
 
     cy.wait(500);
@@ -17,22 +17,22 @@ describe('[Game] Menu', () => {
       .click();
 
     // find all mafia cards
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.background-color-dark', { includeShadowDom: true })
       .should('have.length', 3);
 
     // find don card
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#don-label', { includeShadowDom: true })
       .should('have.length', 1);
 
     // find sherrif card
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#sheriff-label', { includeShadowDom: true })
       .should('have.length', 1);
 
     // close menu
-    cy.get('#menu-button')
+    cy.getCy('game-menu-button')
       .click();
 
     cy.wait(500);
@@ -44,17 +44,17 @@ describe('[Game] Menu', () => {
       .click();
 
     // find all mafia cards
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.background-color-dark', { includeShadowDom: true })
       .should('have.length', 0);
 
     // find don card
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#don-label', { includeShadowDom: true })
       .should('have.length', 0);
 
     // find sherrif card
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#sheriff-label', { includeShadowDom: true })
       .should('have.length', 0);
   });

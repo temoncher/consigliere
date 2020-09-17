@@ -22,8 +22,11 @@
     <div class="sticky top host-container">
       <div class="d-flex">
         <!-- Host card -->
-        <ion-item *ngIf="host$ | async" class="host-card" lines="none"
-        (click)="presentHostModal()">
+        <ion-item
+          *ngIf="host$ | async"
+          class="host-card"
+          lines="none"
+        >
           <ion-avatar slot="start">
             <img
               [src]="
@@ -66,9 +69,7 @@
             *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) < 11"
             color="primary"
           >
-            {{
-              readyPlayersNumber + (!!(host$ | async) ? 1 : 0)
-            }}/11</ion-label
+            {{ readyPlayersNumber + (!!(host$ | async) ? 1 : 0) }}/11</ion-label
           >
 
           <ion-button

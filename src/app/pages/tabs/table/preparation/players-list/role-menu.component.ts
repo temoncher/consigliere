@@ -4,8 +4,21 @@ import { Role } from '@shared/models/role.enum';
 
 @Component({
   selector: 'app-role-menu',
-  templateUrl: './role-menu.component.html',
-  styleUrls: ['./role-menu.component.scss'],
+  template: `
+    <ion-list>
+      <ng-container *ngFor="let role of Role | keyvalue">
+        <ion-item
+          *ngIf="role.value !== Role.HOST"
+          button
+          lines="none"
+          (click)="chooseRole(role.value)"
+        >
+          <!-- TODO: translate this-->
+          {{ role.value }}
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  `,
 })
 export class RoleMenuComponent implements OnInit {
   Role = Role;

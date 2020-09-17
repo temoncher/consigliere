@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
 
 import { PlayersListComponent } from './players-list/players-list.component';
-import { RoleMenuComponent } from './players-list/role-menu/role-menu.component';
+import { RoleMenuComponent } from './players-list/role-menu.component';
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { PreparationComponent } from './preparation.component';
 
