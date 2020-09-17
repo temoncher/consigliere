@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
 
 import { ProfileComponent } from './profile.component';
-import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
+import { SettingsMenuComponent } from './settings-menu.component';
 
 @NgModule({
   imports: [

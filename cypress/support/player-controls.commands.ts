@@ -1,5 +1,19 @@
 import { PlayerControlsOptions } from '../models/player-controls-options.interface';
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
+  namespace Cypress {
+    interface Chainable<Subject> {
+      /**
+       * Pick one of player controls menu options.
+       *
+       * @param {PlayerControlsOptions} options - player number and action type.
+       */
+      playerControlsChoose(options: PlayerControlsOptions): void;
+    }
+  }
+}
+
 Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: PlayerControlsOptions) => {
   let isControlsStateChanged = false;
 
@@ -12,7 +26,7 @@ Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: PlayerCo
       }
     });
 
-  cy.get('.player-controls')
+  cy.getCy('player-controls')
     .find('app-small-player-card')
     .eq(playerNumber - 1)
     .find('ion-card', { includeShadowDom: true })

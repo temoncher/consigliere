@@ -12,7 +12,6 @@ export class LanguageService {
   DEFAULT_LANGUAGE = LanguageCode.RUSSIAN;
   selectedLanguageCode = '';
   supportedLanguages: Language[] = [
-    { text: 'English', code: LanguageCode.ENGLISH, img: 'assets/imgs/en.png' },
     { text: 'Русский', code: LanguageCode.RUSSIAN, img: 'assets/imgs/ru.png' },
   ];
 

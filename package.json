@@ -1,8 +1,7 @@
 {
-  "name": "test",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "consigliere",
+  "version": "0.1.0",
+  "author": "temoncher",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -40,7 +39,6 @@
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
     "angular-svg-round-progressbar": "^3.0.1",
-    "chance": "^1.1.6",
     "core-js": "^2.5.4",
     "firebase": "^7.14.0",
     "lodash": "^4.17.15",
@@ -76,7 +74,7 @@
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "2.31.0",
     "angular-http-server": "^1.9.0",
-    "codelyzer": "^5.1.2",
+    "chance": "^1.1.6",
     "cypress": "^4.11.0",
     "cypress-shadow-dom": "^1.4.1",
     "eslint": "^6.8.0",
@@ -98,5 +96,5 @@
     "typescript": "^3.7.5",
     "webpack": "^4.44.1"
   },
-  "description": "An Ionic project"
+  "description": "Mafia deduction game host assistant"
 }

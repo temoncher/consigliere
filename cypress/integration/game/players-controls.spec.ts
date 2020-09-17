@@ -4,7 +4,7 @@ describe('[Game] Players controls', () => {
   });
 
   it('should be visible and contain 10 cards with numbers from 1 to 10', () => {
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#player-controls__slider')
       .should('be.visible')
       .find('app-small-player-card')
@@ -30,7 +30,7 @@ describe('[Game] Players controls', () => {
       .find('ion-icon')
       .should('have.attr', 'name', 'chevron-down');
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#player-controls__slider')
       .should('not.be.visible');
 
@@ -38,13 +38,13 @@ describe('[Game] Players controls', () => {
     cy.get('.toggle-controls-button')
       .click();
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('#player-controls__slider')
       .should('be.visible');
   });
 
   it('should assign falls', () => {
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('falls-label', { includeShadowDom: true })
       .should('have.length', 0);
 
@@ -53,7 +53,7 @@ describe('[Game] Players controls', () => {
       action: 'assignFall',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('app-small-player-card')
       .first()
       .find('.falls-label', { includeShadowDom: true })
@@ -64,7 +64,7 @@ describe('[Game] Players controls', () => {
       action: 'assignFall',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('app-small-player-card')
       .first()
       .find('.falls-label', { includeShadowDom: true })
@@ -72,7 +72,7 @@ describe('[Game] Players controls', () => {
   });
 
   it('should kick players', () => {
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.quit-overlay', { includeShadowDom: true })
       .should('have.length', 0);
 
@@ -81,7 +81,7 @@ describe('[Game] Players controls', () => {
       action: 'kick',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.quit-overlay', { includeShadowDom: true })
       .should('have.length', 1)
       .first()
@@ -92,7 +92,7 @@ describe('[Game] Players controls', () => {
       action: 'kick',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.quit-overlay', { includeShadowDom: true })
       .should('have.length', 2)
       .last()
@@ -114,7 +114,7 @@ describe('[Game] Players controls', () => {
       action: 'refresh',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('falls-label', { includeShadowDom: true })
       .should('have.length', 0);
 
@@ -128,7 +128,7 @@ describe('[Game] Players controls', () => {
       action: 'refresh',
     });
 
-    cy.get('.player-controls')
+    cy.getCy('player-controls')
       .find('.quit-overlay', { includeShadowDom: true })
       .should('have.length', 0);
   });

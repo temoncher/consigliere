@@ -4,8 +4,18 @@ import { LanguageService } from '@shared/services/language.service';
 
 @Component({
   selector: 'app-settings-menu',
-  templateUrl: './settings-menu.component.html',
-  styleUrls: ['./settings-menu.component.scss'],
+  template: `
+    <ion-list>
+      <ion-item
+        *ngFor="let language of supportedLanguages"
+        button
+        lines="none"
+        (click)="switchLanguage(language.code)"
+      >
+        {{ language.text }}
+      </ion-item>
+    </ion-list>
+  `,
 })
 export class SettingsMenuComponent implements OnInit {
   supportedLanguages = [];

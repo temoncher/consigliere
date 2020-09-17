@@ -6,7 +6,6 @@ import { Player } from '@shared/models/player.model';
 @Component({
   selector: 'app-preparation-modal',
   templateUrl: './preparation-modal.component.html',
-  styleUrls: ['./preparation-modal.component.scss'],
 })
 export class PreparationModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
