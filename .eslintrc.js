@@ -63,6 +63,16 @@ module.exports = {
             devDependencies: true,
           },
         ],
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
         semi: ["error", "always"],
         "comma-dangle": ["error", "always-multiline"],
         "no-multiple-empty-lines": [

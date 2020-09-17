@@ -1,61 +1,57 @@
-<ion-split-pane contentId="main-content">
-  <ion-menu contentId="main-content" menuId="game-menu" type="overlay">
-    <ion-list-header>
-      <ion-toolbar>
-        <ion-title>{{ "TABS.TABLE.GAME.menuHeader" | translate }}</ion-title>
-      </ion-toolbar>
-    </ion-list-header>
+<ng-container
+  *ngIf="gameResult$ | async; then resultBlock; else gameBlock"
+></ng-container>
 
-    <ion-content>
-      <ion-list>
-        <ion-menu-toggle auto-hide="false" menu="game-menu">
-          <ion-item
-            class="toggle-quitted-option"
-            lines="none"
-            detail="false"
-            (click)="switchSettingsBoolean('isQuittedHidden')"
-          >
-            <ion-label>
-              {{
-                "TABS.TABLE.GAME" +
-                  ((isQuittedHidden$ | async)
-                    ? ".showQuitted"
-                    : ".hideQuitted") | translate
-              }}
-            </ion-label>
-          </ion-item>
+<ng-template #resultBlock>
+  <ion-content>
+    <app-result></app-result>
+  </ion-content>
+</ng-template>
+<ng-template #gameBlock>
+  <ion-split-pane contentId="game-content">
+    <ion-menu contentId="game-content" menuId="game-menu" type="overlay">
+      <app-game-menu class="h100"></app-game-menu>
+    </ion-menu>
 
-          <ion-item
-            class="toggle-roles-option"
-            lines="none"
-            detail="false"
-            (click)="switchSettingsBoolean('isRolesVisible')"
-          >
-            <ion-label>
-              {{
-                "TABS.TABLE.GAME" +
-                  ((isRolesVisible$ | async) ? ".hideRoles" : ".showRoles")
-                  | translate
-              }}
-            </ion-label>
-          </ion-item>
+    <ion-content
+      id="game-content"
+      class="game h100"
+      [ngSwitch]="currentPhase$ | async"
+    >
+      <ion-header class="game__header">
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="openMenu()">
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+          </ion-buttons>
 
-          <div class="app-divider"></div>
+          <ion-title>
+            <ng-container *ngSwitchCase="RoundPhase.DAY">
+              {{ "TABS.TABLE.GAME.DAY.toolbarTitle" | translate }}
+            </ng-container>
+            <ng-container *ngSwitchCase="RoundPhase.NIGHT">
+              {{ "TABS.TABLE.GAME.NIGHT.toolbarTitle" | translate }}
+            </ng-container>
+            <ng-container *ngSwitchCase="RoundPhase.VOTE">
+              {{ "TABS.TABLE.GAME.VOTE.toolbarTitle" | translate }}
+            </ng-container>
+            {{ roundNumber$ | async }}
+          </ion-title>
 
-          <ion-item
-            class="drop-game-option"
-            lines="none"
-            detail="false"
-            (click)="dropGame()"
-          >
-            <ion-label color="danger">
-              {{ "TABS.TABLE.GAME.dropGame" | translate }}
-            </ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
+          <ion-buttons id="game-buttons-outlet" slot="end"></ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <div class="game__content h100">
+          <app-player-controls></app-player-controls>
+
+          <app-day *ngSwitchCase="RoundPhase.DAY"></app-day>
+          <app-night *ngSwitchCase="RoundPhase.NIGHT"></app-night>
+          <app-vote *ngSwitchCase="RoundPhase.VOTE"></app-vote>
+        </div>
+      </ion-content>
     </ion-content>
-  </ion-menu>
-
-  <ion-router-outlet id="main-content"></ion-router-outlet>
-</ion-split-pane>
+  </ion-split-pane>
+</ng-template>

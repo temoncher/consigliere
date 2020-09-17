@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-
 import { Player } from '@shared/models/player.model';
 import { PlayersState } from '@shared/store/game/players/players.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-table-template',

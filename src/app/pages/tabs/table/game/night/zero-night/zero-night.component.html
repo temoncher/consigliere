@@ -1,0 +1,74 @@
+<app-portal selector="#game-buttons-outlet">
+  <ion-button id="next-stage-button" (click)="nextStage()">
+    <ion-label color="primary">{{
+      "TABS.TABLE.GAME.NIGHT.proceedToMorning" | translate
+    }}</ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</app-portal>
+
+<div>
+  <ion-slides #playerSlider [options]="playerSliderConfig">
+    <ion-slide>
+      <ion-card class="don-card player-card">
+        <ion-card-header class="player-card__header">
+          <div class="clip-button top-left background-color-danger">
+            <ion-icon class="text-color-dark-contrast" name="rose"></ion-icon>
+          </div>
+          <ion-card-title class="player-card__header__title text-color-dark"
+            >{{ (don$ | async)?.nickname }}
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content class="player-card__content">
+          <ion-avatar class="player-card__avatar">
+            <img [src]="(don$ | async)?.user?.avatar || defaultAvatar" />
+          </ion-avatar>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-card class="player-card">
+        <ion-card-header class="player-card__header">
+          <div class="clip-button top-left background-color-warning">
+            <ion-icon class="text-color-dark-contrast" name="star"></ion-icon>
+          </div>
+          <ion-card-title class="player-card__header__title text-color-dark">
+            {{ (sheriff$ | async)?.nickname }}
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content class="player-card__content">
+          <div class="progress">
+            <round-progress
+              class="progress__circle"
+              (click)="switchTimer()"
+              [ngStyle]="{
+                backgroundImage:
+                  'url(' +
+                  ((sheriff$ | async)?.user?.avatar || defaultAvatar) +
+                  ')'
+              }"
+              [current]="sheriffTimer.time"
+              [max]="time"
+              [color]="
+                sheriffTimer.time > 0 ? colors['warning'] : colors['medium']
+              "
+              [rounded]="true"
+              [responsive]="true"
+              [duration]="500"
+            >
+            </round-progress>
+            <ion-badge
+              class="progress__badge text-color-dark-contrast"
+              [color]="sheriffTimer.time > 0 ? 'warning' : 'medium'"
+            >
+              {{ sheriffTimer.time }}
+            </ion-badge>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+</div>

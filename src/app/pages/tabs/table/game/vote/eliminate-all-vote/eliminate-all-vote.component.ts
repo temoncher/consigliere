@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-
-import { VoteForElimination } from '@shared/store/game/round/current-vote/current-vote.actions';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
 import { Player } from '@shared/models/player.model';
-import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 import { VoteService } from '@shared/services/vote.service';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { VoteForElimination } from '@shared/store/game/round/current-vote/current-vote.actions';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-eliminate-all-vote',

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Action, State, Selector, StateContext, createSelector } from '@ngxs/store';
-import { shuffle, cloneDeep } from 'lodash';
-
+import { patch, updateItem } from '@ngxs/store/operators';
 import { Player } from '@shared/models/player.model';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
 import { Role } from '@shared/models/role.enum';
 import { RoundPhase } from '@shared/models/table/day-phase.enum';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { shuffle, cloneDeep } from 'lodash';
+
 import {
   GiveRoles,
   SetHost,
@@ -18,21 +19,22 @@ import {
   SetPlayersNumbers,
   ReorderPlayer,
   SkipSpeech,
+  AssignRole,
 } from './players.actions';
 
 const dummyPlayers = [
-  new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' } }),
-  new Player({ nickname: 'Cabby', number: 2, user: { id: 'cabby' } }),
-  new Player({ nickname: 'Булочка', number: 3, user: { id: 'bulochka' } }),
-  new Player({ nickname: 'Краснова', number: 4, user: { id: 'krasnova' } }),
-  new Player({ nickname: 'Олежа', number: 5, user: { id: 'olega' } }),
-  new Player({ nickname: 'Маффин', number: 6, user: { id: 'maffin' } }),
-  new Player({ nickname: 'Девяткин', number: 7, user: { id: 'devyatkin' } }),
-  new Player({ nickname: 'Одинаковый', number: 8, user: { id: 'odynakoviy' } }),
-  new Player({ nickname: 'Люба', number: 9, user: { id: 'lyba' } }),
-  new Player({ nickname: 'Углическая', number: 10, user: { id: 'uglicheskaya' } }),
+  new Player({ nickname: 'Воланд', number: 1, user: { id: 'voland' }, role: Role.DON }),
+  new Player({ nickname: 'Cabby', number: 2, user: { id: 'cabby' }, role: Role.SHERIFF }),
+  new Player({ nickname: 'Булочка', number: 3, user: { id: 'bulochka' }, role: Role.MAFIA }),
+  new Player({ nickname: 'Краснова', number: 4, user: { id: 'krasnova' }, role: Role.MAFIA }),
+  new Player({ nickname: 'Олежа', number: 5, user: { id: 'olega' }, role: Role.CITIZEN }),
+  new Player({ nickname: 'Маффин', number: 6, user: { id: 'maffin' }, role: Role.CITIZEN }),
+  new Player({ nickname: 'Девяткин', number: 7, user: { id: 'devyatkin' }, role: Role.CITIZEN }),
+  new Player({ nickname: 'Одинаковый', number: 8, user: { id: 'odynakoviy' }, role: Role.CITIZEN }),
+  new Player({ nickname: 'Люба', number: 9, user: { id: 'lyba' }, role: Role.CITIZEN }),
+  new Player({ nickname: 'Углическая', number: 10, user: { id: 'uglicheskaya' }, role: Role.CITIZEN }),
 ];
-const dummyHost = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' } });
+const dummyHost = new Player({ nickname: 'Temoncher', user: { id: 'temoncher' }, role: Role.HOST });
 const rolesArray = [
   Role.DON,
   Role.SHERIFF,
@@ -47,7 +49,7 @@ const rolesArray = [
 ];
 
 export interface PlayersStateModel {
-  host: Player;
+  host?: Player;
   players: Player[];
   falls: Map<string, number>; // <playerId, numberOfFalls>
   quitPhases: Map<string, QuitPhase>; // <playerId, quitPhase>
@@ -57,8 +59,8 @@ export interface PlayersStateModel {
 @State<PlayersStateModel>({
   name: 'players',
   defaults: {
-    host: dummyHost,
     players: dummyPlayers,
+    host: dummyHost,
     falls: new Map<string, number>(),
     quitPhases: new Map<string, QuitPhase>(),
     speechSkips: new Map<string, number>(),
@@ -105,24 +107,75 @@ export class PlayersState {
     return players.find((player) => player.role === Role.DON);
   }
 
+  @Selector()
+  static getRolesNumbers({ players }: PlayersStateModel) {
+    const initial: Partial<Record<keyof typeof Role, number>> = {};
+
+    return players.reduce((accumulator, player) => {
+      if (!player.role) return accumulator;
+
+      return {
+        ...accumulator,
+        [player.role]: accumulator[player.role] + 1 || 1,
+      };
+    }, initial);
+  }
+
+  @Selector([PlayersState.getRolesNumbers])
+  static getValidRoles(ctx: PlayersStateModel, rolesNumbers: Partial<Record<keyof typeof Role, number>>) {
+    const validRoles: Partial<Record<keyof typeof Role, boolean>> = {};
+
+    Object.keys(rolesNumbers).forEach((role) => {
+      switch (role) {
+        case Role.CITIZEN:
+          validRoles[role] = rolesNumbers[role] === 6;
+          break;
+        case Role.DON:
+          validRoles[role] = rolesNumbers[role] === 1;
+          break;
+        case Role.MAFIA:
+          validRoles[role] = rolesNumbers[role] === 2;
+          break;
+        case Role.SHERIFF:
+          validRoles[role] = rolesNumbers[role] === 1;
+          break;
+
+        default:
+          validRoles[role] = false;
+          break;
+      }
+    });
+
+    return validRoles;
+  }
+
   static getPlayer(playerId: string) {
-    return createSelector([PlayersState], ({ players }: PlayersStateModel) => players.find((player) => player.user.id === playerId));
+    return createSelector(
+      [PlayersState],
+      ({ players }: PlayersStateModel) => players.find((player) => player.user.id === playerId),
+    );
   }
 
   static getPlayerFalls(playerId: string) {
-    return createSelector([PlayersState], ({ falls }: PlayersStateModel) => falls.get(playerId));
+    return createSelector(
+      [PlayersState],
+      ({ falls }: PlayersStateModel) => falls.get(playerId),
+    );
   }
 
   static getPlayerQuitPhase(playerId: string) {
-    return createSelector([PlayersState], ({ quitPhases }: PlayersStateModel) => {
-      const quitPhase = quitPhases.get(playerId);
+    return createSelector(
+      [PlayersState],
+      ({ quitPhases }: PlayersStateModel) => {
+        const quitPhase = quitPhases.get(playerId);
 
-      if (quitPhase) {
-        return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
-      }
+        if (quitPhase) {
+          return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
+        }
 
-      return null;
-    });
+        return null;
+      },
+    );
   }
 
   static getPlayersByRoles(roles: Role[]) {
@@ -276,5 +329,23 @@ export class PlayersState {
     falls.set(playerId, playerFallsNumber ? playerFallsNumber + 1 : 1);
 
     patchState({ falls });
+  }
+
+  @Action(AssignRole)
+  assignRole(
+    { setState }: StateContext<PlayersStateModel>,
+    { playerId, role }: AssignRole,
+  ) {
+    setState(
+      patch<PlayersStateModel>({
+        players: updateItem(
+          (player) => player.user.id === playerId,
+          (player) => ({
+            ...player,
+            role,
+          }),
+        ),
+      }),
+    );
   }
 }

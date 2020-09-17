@@ -1,15 +1,17 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
-import { GameComponent } from './game.component';
-import { GameRoutingModule } from './game-routing.module';
 import { DayModule } from './day/day.module';
+import { GameMenuComponent } from './game-menu/game-menu.component';
+import { GameComponent } from './game.component';
 import { NightModule } from './night/night.module';
-import { VoteModule } from './vote/vote.module';
+import { ResultListComponent } from './result/result-list/result-list.component';
 import { ResultComponent } from './result/result.component';
+import { VoteModule } from './vote/vote.module';
 
 @NgModule({
   imports: [
@@ -20,11 +22,13 @@ import { ResultComponent } from './result/result.component';
     DayModule,
     NightModule,
     VoteModule,
-    GameRoutingModule,
+    RouterModule.forChild([{ path: '', component: GameComponent }]),
   ],
   declarations: [
     GameComponent,
+    GameMenuComponent,
     ResultComponent,
+    ResultListComponent,
   ],
 })
 export class GameModule { }

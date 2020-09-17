@@ -1,5 +1,6 @@
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
 import { VoteResult } from '@shared/models/table/vote-result.enum';
+
 import { roundActionsPrefix } from '../round.actions';
 
 const voteActionsPrefix = `${roundActionsPrefix}.CurrentVote`;

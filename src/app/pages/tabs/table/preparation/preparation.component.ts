@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Player } from '@shared/models/player.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
-import { Store, Select } from '@ngxs/store';
-import { catchError, first } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
-
-import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.actions';
 import { TranslateService } from '@ngx-translate/core';
+import { Store, Select } from '@ngxs/store';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
+import { Role } from '@shared/models/role.enum';
 import { GameService } from '@shared/services/game.service';
+import { ShufflePlayers, SetHost } from '@shared/store/game/players/players.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { of, Observable, Subject, combineLatest } from 'rxjs';
+import { catchError, first, takeUntil } from 'rxjs/operators';
+
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 
 interface HostPropmt {
@@ -24,12 +25,17 @@ interface HostPropmt {
   templateUrl: './preparation.component.html',
   styleUrls: ['./preparation.component.scss'],
 })
-export class PreparationComponent implements OnInit {
+export class PreparationComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
+
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(PlayersState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getRolesNumbers) rolesNumbers$: Observable<Partial<Record<keyof typeof Role, number>>>;
+  @Select(PlayersState.getValidRoles) validRoles$: Observable<Partial<Record<keyof typeof Role, boolean>>>;
   defaultAvatar = defaultAvatarSrc;
 
   private hostPropmpt: HostPropmt;
+  readyPlayersNumber = 0;
 
   constructor(
     private modalController: ModalController,
@@ -40,10 +46,27 @@ export class PreparationComponent implements OnInit {
     private store: Store,
   ) {
     this.translate.get('TABS.TABLE.PREPARATION.hostPropmpt')
+      .pipe(takeUntil(this.destroy))
       .subscribe((hostPropmpt) => this.hostPropmpt = hostPropmpt);
+
+    combineLatest([this.rolesNumbers$, this.validRoles$])
+      .pipe(takeUntil(this.destroy))
+      .subscribe(([rolesNumbers, validRoles]) => {
+        this.readyPlayersNumber = Object.entries(rolesNumbers)
+          .reduce((readyPlayersNumber, [role, playersNumber]) => (
+            validRoles[role]
+              ? readyPlayersNumber + playersNumber
+              : readyPlayersNumber
+          ), 0);
+      });
   }
 
   ngOnInit() { }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
 
   shufflePlayers() {
     this.store.dispatch(new ShufflePlayers());

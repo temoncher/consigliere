@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-
-import { KillPlayer } from '@shared/store/game/players/players.actions';
+import { RoundPhase } from '@shared/models/table/day-phase.enum';
+import { VotePhase } from '@shared/models/table/vote-phase.enum';
+import { VoteResult } from '@shared/models/table/vote-result.enum';
 import { SetIsNextVotingDisabled } from '@shared/store/game/game.actions';
 import { GameState } from '@shared/store/game/game.state';
+import { KillPlayer } from '@shared/store/game/players/players.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
-import { RoundPhase } from '@shared/models/table/day-phase.enum';
 import {
   SetEliminateAllVote,
   SetVotes,
@@ -14,11 +16,9 @@ import {
   SetVoteResult,
   SetPreviousLeadersIds,
 } from '@shared/store/game/round/current-vote/current-vote.actions';
-import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { PlayersState } from '@shared/store/game/players/players.state';
 import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { RoundState } from '@shared/store/game/round/round.state';
-import { VoteResult } from '@shared/models/table/vote-result.enum';
+
 import { PlayersService } from './players.service';
 
 @Injectable({

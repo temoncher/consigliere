@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { StateReset } from 'ngxs-reset-plugin';
 import { GameState } from '@shared/store/game/game.state';
+import { StateReset } from 'ngxs-reset-plugin';
 import { Observable } from 'rxjs';
 
 @Component({

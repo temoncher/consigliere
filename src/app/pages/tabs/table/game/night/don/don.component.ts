@@ -1,14 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { Player } from '@shared/models/player.model';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { GameState } from '@shared/store/game/game.state';
-import { Round } from '@shared/models/table/round.model';
+import { Player } from '@shared/models/player.model';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import { CheckByDon } from '@shared/store/game/round/current-night/current-night.actions';
 import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-don',
@@ -16,16 +13,26 @@ import { CurrentNightState } from '@shared/store/game/round/current-night/curren
   styleUrls: ['./don.component.scss'],
 })
 export class DonComponent implements OnInit {
+  @Output() nextClick = new EventEmitter();
+
   @Select(PlayersState.getDon) don$: Observable<Player>;
   @Select(CurrentNightState.getDonCheck) donCheck$: Observable<string>;
-  @Select(GameState.getRounds) rounds$: Observable<Round[]>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
+  checkedPlayerIndex?: number;
   currentPlayerIndex = 0;
 
   defaultAvatar = defaultAvatarSrc;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {
+    this.donCheck$.subscribe((checkedPlayerId) => {
+      if (checkedPlayerId) {
+        const checkedPlayer = this.store.selectSnapshot(PlayersState.getPlayer(checkedPlayerId));
+
+        this.checkedPlayerIndex = checkedPlayer.number - 1;
+      }
+    });
+  }
 
   ngOnInit() { }
 
@@ -33,6 +40,10 @@ export class DonComponent implements OnInit {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
     this.store.dispatch(new CheckByDon(players[this.currentPlayerIndex].user.id));
+  }
+
+  next() {
+    this.nextClick.emit();
   }
 
   navigateToPlayer(playerNumber: number) {

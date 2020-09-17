@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { Player } from '@shared/models/player.model';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { ModalController } from '@ionic/angular';
-import { CurrentDayState } from '@shared/store/game/round/current-day/current-day.state';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-propose-modal',

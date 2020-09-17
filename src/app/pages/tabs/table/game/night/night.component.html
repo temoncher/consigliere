@@ -1,52 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button id="menu-button" (click)="openMenu()">
-        <ion-icon slot="icon-only" name="menu"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+<ng-container
+  *ngIf="(roundNumber$ | async) === 0; then zeroNightBlock; else nightBlock"
+></ng-container>
 
-    <ion-title>
-      {{ "TABS.TABLE.GAME.NIGHT.toolbarTitle" | translate }}
-      {{ (rounds$ | async)?.length }}
-    </ion-title>
+<ng-template #zeroNightBlock>
+  <app-zero-night (nextClick)="endNight()"></app-zero-night>
+</ng-template>
 
-    <ion-buttons slot="end">
-      <ion-button id="next-stage-button" (click)="nextStage()">
-        <ion-label color="primary">{{ nextStageButtonText }}</ion-label>
-        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ng-template #nightBlock>
+  <ng-container [ngSwitch]="stage">
+    <app-mafia-hunt
+      *ngSwitchCase="NightStages.MAFIA"
+      (nextClick)="nextStage()"
+    ></app-mafia-hunt>
 
-<ion-content>
-  <div class="night-content">
-    <app-player-controls></app-player-controls>
-    <div class="modal-content flex-centralize">
-      <ng-container [ngSwitch]="stage">
-        <ng-container *ngSwitchCase="NightStages.MAFIA">
-          <div
-            *ngIf="roundNumber === 0; then giveRolesBlock; else mafiaHuntBlock"
-          ></div>
+    <app-don
+      *ngSwitchCase="NightStages.DON"
+      (nextClick)="nextStage()"
+    ></app-don>
 
-          <ng-template #giveRolesBlock>
-            <app-give-roles></app-give-roles>
-          </ng-template>
-
-          <ng-template #mafiaHuntBlock>
-            <app-mafia-hunt (nextClick)="nextStage()"></app-mafia-hunt>
-          </ng-template>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="NightStages.DON">
-          <app-don></app-don>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="NightStages.SHERIFF">
-          <app-sheriff></app-sheriff>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-</ion-content>
+    <app-sheriff
+      *ngSwitchCase="NightStages.SHERIFF"
+      (nextClick)="nextStage()"
+    ></app-sheriff>
+  </ng-container>
+</ng-template>

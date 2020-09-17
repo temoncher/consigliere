@@ -1,3 +1,10 @@
+<app-portal selector="#game-buttons-outlet">
+  <ion-button id="next-stage-button" (click)="next()">
+    <ion-label color="primary">{{ 'TABS.TABLE.GAME.NIGHT.proceedToDon' | translate }}</ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</app-portal>
+
 <app-table-template class="mafia-hunt">
   <app-small-player-card
     *ngFor="let player of players$ | async"

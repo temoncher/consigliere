@@ -1,0 +1,29 @@
+<ion-list class="cards-list">
+  <ion-item
+    *ngFor="let player of players"
+    class="player-list__item"
+    lines="none"
+  >
+    <div slot="start">
+      <div
+        class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
+      >
+        {{ player.number }}
+      </div>
+      <ion-avatar>
+        <img
+          [src]="
+            player.user?.avatar
+              ? player.user?.avatar
+              : defaultAvatar
+          "
+        />
+      </ion-avatar>
+    </div>
+
+    <ion-label>
+      <h3>{{ player.nickname }}</h3>
+      <p>{{ player.role }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>

@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
-import { PreparationComponent } from './preparation.component';
-import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+
 import { PlayersListComponent } from './players-list/players-list.component';
+import { RoleMenuComponent } from './players-list/role-menu/role-menu.component';
+import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+import { PreparationComponent } from './preparation.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { PlayersListComponent } from './players-list/players-list.component';
     PreparationComponent,
     PreparationModalComponent,
     PlayersListComponent,
+    RoleMenuComponent,
   ],
 })
 export class PreparationModule { }

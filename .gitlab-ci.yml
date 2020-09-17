@@ -17,6 +17,7 @@ stages:
   - e2e
   - deploy
 
+
 before_script:
   - npm ci --cache .npm --prefer-offline
 
@@ -48,12 +49,11 @@ unit:
 e2e:
   stage: e2e
   image: cypress/browsers:node11.13.0-chrome73
+  only:
+    - master
+    - /^release-.*$/
   script:
     - npm run ci:cy-run
-  rules:
-    - when: manual
-    - if: $CI_COMMIT_BRANCH == 'master' # Execute jobs when a new commit is pushed to master branch
-    - if: $CI_MERGE_REQUEST_ID # Execute jobs in merge request context
 
 deploy_dev:
   stage: deploy

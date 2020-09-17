@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
+import { Role } from '@shared/models/role.enum';
+import { RemovePlayer, AddPlayer, ReorderPlayer, AssignRole } from '@shared/store/game/players/players.actions';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import { Observable, of } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
 
-import { Player } from '@shared/models/player.model';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { RemovePlayer, AddPlayer, ReorderPlayer } from '@shared/store/game/players/players.actions';
-import { TranslateService } from '@ngx-translate/core';
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
+
+import { RoleMenuComponent } from './role-menu/role-menu.component';
 
 interface IonicReorderEvent {
   detail: {
@@ -27,6 +30,7 @@ interface IonicReorderEvent {
 export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(PlayersState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getValidRoles) validRoles$: Observable<Partial<Record<keyof typeof Role, boolean>>>;
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -41,6 +45,7 @@ export class PlayersListComponent implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
+    private popoverController: PopoverController,
     private translate: TranslateService,
     private store: Store,
   ) {
@@ -55,8 +60,25 @@ export class PlayersListComponent implements OnInit {
     complete();
   }
 
-  removePlayer({ user: { id } }: Player) {
-    this.store.dispatch(new RemovePlayer(id));
+  removePlayer(playerId: string) {
+    this.store.dispatch(new RemovePlayer(playerId));
+  }
+
+  changeRole(playerId: string) {
+    this.store.dispatch(new AssignRole(playerId, Role.DON));
+  }
+
+  async presentRolesMenu(playerId: string) {
+    const popover = await this.popoverController.create({
+      component: RoleMenuComponent,
+      event,
+      translucent: true,
+    });
+
+    await popover.present();
+    const { data: role } = await popover.onWillDismiss();
+
+    this.store.dispatch(new AssignRole(playerId, role));
   }
 
   async presentPlayerModal() {

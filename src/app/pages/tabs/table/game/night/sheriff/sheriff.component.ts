@@ -1,16 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { Player } from '@shared/models/player.model';
-import { Timer } from '@shared/models/table/timer.model';
-import { colors } from '@shared/constants/colors';
 import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
-import { GameState } from '@shared/store/game/game.state';
-import { Round } from '@shared/models/table/round.model';
+import { Player } from '@shared/models/player.model';
+import { PlayersState } from '@shared/store/game/players/players.state';
 import { CheckBySheriff } from '@shared/store/game/round/current-night/current-night.actions';
+import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-sheriff',
@@ -18,24 +13,30 @@ import { CheckBySheriff } from '@shared/store/game/round/current-night/current-n
   styleUrls: ['./sheriff.component.scss'],
 })
 export class SheriffComponent implements OnInit, OnDestroy {
+  @Output() nextClick = new EventEmitter();
+
   @Select(PlayersState.getSheriff) sheriff$: Observable<Player>;
   @Select(CurrentNightState.getSheriffCheck) sheriffCheck$: Observable<string>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(GameState.getRounds) rounds$: Observable<Round[]>;
 
-  colors = colors;
   defaultAvatar = defaultAvatarSrc;
 
+  checkedPlayerIndex?: number;
   currentPlayerIndex = 0;
-  time = 20;
-  sheriffTimer = new Timer({ time: this.time });
 
   constructor(private store: Store) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.sheriffCheck$.subscribe((checkedPlayerId) => {
+      if (checkedPlayerId) {
+        const checkedPlayer = this.store.selectSnapshot(PlayersState.getPlayer(checkedPlayerId));
+
+        this.checkedPlayerIndex = checkedPlayer.number - 1;
+      }
+    });
+  }
 
   ngOnDestroy() {
-    this.sheriffTimer.pauseTimer();
   }
 
   check() {
@@ -46,11 +47,11 @@ export class SheriffComponent implements OnInit, OnDestroy {
     }
   }
 
-  navigateToPlayer(playerNumber: number) {
-    this.currentPlayerIndex = playerNumber - 1;
+  next() {
+    this.nextClick.emit();
   }
 
-  switchTimer() {
-    this.sheriffTimer.switchTimer();
+  navigateToPlayer(playerNumber: number) {
+    this.currentPlayerIndex = playerNumber - 1;
   }
 }

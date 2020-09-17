@@ -1,18 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-
-import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
 import { VotePhase } from '@shared/models/table/vote-phase.enum';
-import { takeUntil } from 'rxjs/operators';
-import { MenuController } from '@ionic/angular';
 import { GameService } from '@shared/services/game.service';
 import { VoteService } from '@shared/services/vote.service';
+import { CurrentVoteState } from '@shared/store/game/round/current-vote/current-vote.state';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vote',
   templateUrl: './vote.component.html',
-  styleUrls: ['./vote.component.scss'],
+  styles: [`
+    :host {
+      flex: 1;
+    }
+  `],
 })
 export class VoteComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
@@ -23,7 +25,6 @@ export class VoteComponent implements OnInit, OnDestroy {
   VotePhase = VotePhase;
 
   constructor(
-    private menuController: MenuController,
     private voteService: VoteService,
     private gameService: GameService,
   ) {
@@ -32,10 +33,6 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() { }
-
-  openMenu() {
-    this.menuController.open('game-menu');
-  }
 
   ngOnDestroy() {
     this.destroy.next();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LanguageService } from '@shared/services/language.service';
 import { LanguageCode } from '@shared/models/language.interface';
+import { LanguageService } from '@shared/services/language.service';
 
 @Component({
   selector: 'app-settings-menu',

@@ -22,7 +22,8 @@
     <div class="sticky top host-container">
       <div class="d-flex">
         <!-- Host card -->
-        <ion-item *ngIf="host$ | async" class="host-card" lines="none">
+        <ion-item *ngIf="host$ | async" class="host-card" lines="none"
+        (click)="presentHostModal()">
           <ion-avatar slot="start">
             <img
               [src]="
@@ -51,6 +52,7 @@
           class="add-new"
           *ngIf="(host$ | async) === undefined"
           lines="none"
+          (click)="presentHostModal()"
         >
           <ion-icon slot="start" name="add" color="primary"></ion-icon>
           <ion-label color="primary">
@@ -61,20 +63,16 @@
 
         <div class="proceed-button-container">
           <ion-label
-            *ngIf="
-              (players$ | async)?.length + (!!(host$ | async) ? 1 : 0) < 11
-            "
+            *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) < 11"
             color="primary"
           >
             {{
-              (players$ | async).length + (!!(host$ | async) ? 1 : 0)
+              readyPlayersNumber + (!!(host$ | async) ? 1 : 0)
             }}/11</ion-label
           >
 
           <ion-button
-            *ngIf="
-              (players$ | async)?.length + (!!(host$ | async) ? 1 : 0) === 11
-            "
+            *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) === 11"
             id="proceed-button"
             fill="outlined"
             size="large"

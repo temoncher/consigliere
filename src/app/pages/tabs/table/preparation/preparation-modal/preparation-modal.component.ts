@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from '@shared/models/player.model';
 import { ModalController } from '@ionic/angular';
-
 import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
 
 @Component({
   selector: 'app-preparation-modal',

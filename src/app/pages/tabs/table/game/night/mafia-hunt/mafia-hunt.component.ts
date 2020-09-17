@@ -2,16 +2,15 @@ import {
   Component, OnInit, Output, EventEmitter, OnDestroy,
 } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
+import { defaultAvatarSrc } from '@shared/constants/avatars';
+import { Player } from '@shared/models/player.model';
+import { QuitPhase } from '@shared/models/quit-phase.interface';
+import { Role } from '@shared/models/role.enum';
+import { PlayersState } from '@shared/store/game/players/players.state';
+import { ShootPlayer } from '@shared/store/game/round/current-night/current-night.actions';
+import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { Player } from '@shared/models/player.model';
-import { Role } from '@shared/models/role.enum';
-import { defaultAvatarSrc } from '@shared/constants/avatars';
-import { PlayersState } from '@shared/store/game/players/players.state';
-import { CurrentNightState } from '@shared/store/game/round/current-night/current-night.state';
-import { ShootPlayer } from '@shared/store/game/round/current-night/current-night.actions';
-import { QuitPhase } from '@shared/models/quit-phase.interface';
 
 @Component({
   selector: 'app-mafia-hunt',

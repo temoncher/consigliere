@@ -26,17 +26,24 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import { Store, ActionType } from '@ngxs/store';
+
 import 'cypress-shadow-dom';
 import './store.commands';
 import './general.commands';
 import './player-controls.commands';
-import { Store, ActionType } from '@ngxs/store';
 import { PlayerControlsOptions } from '../models/player-controls-options.interface';
 
 // Must be declared global to be detected by typescript (allows import/export)
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
+      /**
+       * Get one or more DOM elements by data-cy attribute.
+       *
+       * @param {string} id - data-cy attribute value.
+       */
+      getCy(id: string): Chainable<Subject>;
       /**
        * 1. Locate to application page.
        * 2. Locate to table tab.
@@ -63,3 +70,6 @@ declare global {
     store: Store;
   }
 }
+
+Cypress.Commands.add('getCy', (id: string) => cy.get(`[data-cy=${id}]`));
+

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+
 import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
 
 @Component({
