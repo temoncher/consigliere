@@ -20,6 +20,7 @@ export const webpackOptions: webpack.Configuration = {
     // add the alias object
     alias: {
       '@shared': path.resolve('src/app/shared'),
+      src: path.resolve('src'),
     },
   },
 };
