@@ -108,15 +108,18 @@ export class PreparationComponent implements OnInit, OnDestroy {
       inputs: [
         {
           name: 'nickname',
+          id: 'nickname-input',
           type: 'text',
           placeholder: this.hostPropmpt.namePlaceholder,
         },
       ],
       buttons: [
         {
+          cssClass: 'cancel-button',
           text: this.hostPropmpt.cancelButton,
           role: 'cancel',
         }, {
+          cssClass: 'submit-button',
           text: this.hostPropmpt.confirmButton,
           handler: (player) => this.setHost(player),
         },

@@ -37,7 +37,7 @@ const devModules = environment.production
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AppRoutingModule,
-    SharedModule,
+    SharedModule.forRoot(),
     NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),

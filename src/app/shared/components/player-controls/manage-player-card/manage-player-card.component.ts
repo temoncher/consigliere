@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
+import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
 import { TimersService } from '@shared/services/timers.service';
 import { AssignFall, ResetPlayer } from '@shared/store/game/players/players.actions';
 import { KickPlayer } from '@shared/store/game/round/round.actions';
@@ -44,15 +45,15 @@ export class ManagePlayerCardComponent implements OnInit {
     const { role } = await popover.onWillDismiss();
 
     switch (role) {
-      case 'refresh':
+      case PlayerControlsAction.REFRESH:
         this.refresh();
         break;
 
-      case 'fall':
+      case PlayerControlsAction.FALL:
         this.store.dispatch(new AssignFall(this.playerId));
         break;
 
-      case 'kick':
+      case PlayerControlsAction.KICK:
         this.store.dispatch(new KickPlayer(this.playerId));
         break;
 

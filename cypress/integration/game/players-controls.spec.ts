@@ -1,3 +1,5 @@
+import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
+
 describe('[Game] Players controls', () => {
   beforeEach(() => {
     cy.startGame();
@@ -44,26 +46,31 @@ describe('[Game] Players controls', () => {
   });
 
   it('should assign falls', () => {
+    cy.log('Checking if all falls are clear...');
     cy.getCy('player-controls')
       .find('falls-label', { includeShadowDom: true })
       .should('have.length', 0);
 
+    cy.log('Assigning first fall to a player...');
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'assignFall',
+      action: PlayerControlsAction.FALL,
     });
 
+    cy.log('Checking if first fall is assigned correctly...');
     cy.getCy('player-controls')
       .find('app-small-player-card')
       .first()
       .find('.falls-label', { includeShadowDom: true })
       .should('contain.text', 1);
 
+    cy.log('Assigning second fall to a player...');
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'assignFall',
+      action: PlayerControlsAction.FALL,
     });
 
+    cy.log('Checking if second fall is assigned correctly...');
     cy.getCy('player-controls')
       .find('app-small-player-card')
       .first()
@@ -78,7 +85,7 @@ describe('[Game] Players controls', () => {
 
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'kick',
+      action: PlayerControlsAction.KICK,
     });
 
     cy.getCy('player-controls')
@@ -89,7 +96,7 @@ describe('[Game] Players controls', () => {
 
     cy.playerControlsChoose({
       playerNumber: 3,
-      action: 'kick',
+      action: PlayerControlsAction.KICK,
     });
 
     cy.getCy('player-controls')
@@ -102,16 +109,16 @@ describe('[Game] Players controls', () => {
   it('should refresh players', () => {
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'assignFall',
+      action: PlayerControlsAction.FALL,
     });
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'assignFall',
+      action: PlayerControlsAction.FALL,
     });
 
     cy.playerControlsChoose({
       playerNumber: 1,
-      action: 'refresh',
+      action: PlayerControlsAction.REFRESH,
     });
 
     cy.getCy('player-controls')
@@ -120,12 +127,12 @@ describe('[Game] Players controls', () => {
 
     cy.playerControlsChoose({
       playerNumber: 3,
-      action: 'kick',
+      action: PlayerControlsAction.KICK,
     });
 
     cy.playerControlsChoose({
       playerNumber: 3,
-      action: 'refresh',
+      action: PlayerControlsAction.REFRESH,
     });
 
     cy.getCy('player-controls')

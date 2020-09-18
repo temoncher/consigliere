@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-explore-container',
   template: `
     <div class="grid-content-center">
-      <strong>Coming soon!</strong>
+      <strong>Уже скоро!</strong>
     </div>
   `,
   styles: [`

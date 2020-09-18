@@ -12,6 +12,7 @@ import { LanguageService } from '@shared/services/language.service';
 import { PlayersService } from '@shared/services/players.service';
 import { TimersService } from '@shared/services/timers.service';
 
+import { ScreenSizeComponent } from './components/guard-pages/screen-size.component';
 import { ManagePlayerCardComponent } from './components/player-controls/manage-player-card/manage-player-card.component';
 import { PlayerControlsComponent } from './components/player-controls/player-controls.component';
 import { PlayerMenuComponent } from './components/player-controls/player-menu/player-menu.component';
@@ -36,6 +37,7 @@ import { TableTemplateComponent } from './components/table-template/table-templa
     ManagePlayerCardComponent,
     PlayerMenuComponent,
     PortalComponent,
+    ScreenSizeComponent,
   ],
   exports: [
     ExploreContainerComponent,
@@ -44,6 +46,7 @@ import { TableTemplateComponent } from './components/table-template/table-templa
     PlayerControlsComponent,
     TranslateModule,
     PortalComponent,
+    ScreenSizeComponent,
   ],
 })
 export class SharedModule {

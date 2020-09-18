@@ -4,6 +4,7 @@ import {
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { Player } from '@shared/models/player.model';
+import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
 import { PlayersState } from '@shared/store/game/players/players.state';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,6 +17,8 @@ import { takeUntil } from 'rxjs/operators';
 export class PlayerMenuComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
+
+  PlayerControlsAction = PlayerControlsAction;
 
   player: Player;
   playerQuitPhase: string;
@@ -45,8 +48,8 @@ export class PlayerMenuComponent implements OnInit, OnDestroy {
     this.destroy.unsubscribe();
   }
 
-  chooseOption(role: string) {
-    this.popoverController.dismiss(null, role);
+  chooseOption(option: PlayerControlsAction) {
+    this.popoverController.dismiss(null, option);
   }
 
   dismissPopover() {
