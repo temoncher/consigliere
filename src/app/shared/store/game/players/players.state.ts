@@ -239,7 +239,7 @@ export class PlayersState {
       throw new Error(this.emptyNicknameText);
     }
 
-    if (host && host.user?.id === player.user?.id) {
+    if (host.nickname === player.nickname) {
       throw new Error(this.isPlayerAlreadyHostText);
     }
 
