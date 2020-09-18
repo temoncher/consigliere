@@ -19,13 +19,13 @@ declare global {
 
 Cypress.Commands.add('addGuest', (nickname: string) => {
   /* Click add guest */
-  cy.wait(500);
   cy.getCy('add-guest-item')
+    .wait(2000)
     .click();
 
   /* Add guest prompt */
-  cy.wait(1000);
   cy.get('#nickname-input')
+    .wait(2000)
     .click()
     .clear()
     .type(nickname, { delay: 100 })
