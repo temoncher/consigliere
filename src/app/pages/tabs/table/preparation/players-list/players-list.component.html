@@ -3,6 +3,7 @@
     <!-- Add new player button-->
     <ion-item
       *ngIf="(players$ | async)?.length < 10"
+      data-cy="add-player-item"
       class="add-new"
       lines="none"
       (click)="presentPlayerModal()"

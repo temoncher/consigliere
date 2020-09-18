@@ -22,11 +22,7 @@
     <div class="sticky top host-container">
       <div class="d-flex">
         <!-- Host card -->
-        <ion-item
-          *ngIf="host$ | async"
-          class="host-card"
-          lines="none"
-        >
+        <ion-item *ngIf="host$ | async" data-cy="host-card" lines="none">
           <ion-avatar slot="start">
             <img
               [src]="
@@ -42,7 +38,7 @@
           </ion-label>
           <ion-icon
             slot="end"
-            id="change-host-button"
+            data-cy="change-host-button"
             name="swap-vertical"
             color="medium"
             (click)="presentHostModal()"
@@ -52,6 +48,7 @@
 
         <!-- Add new host button-->
         <ion-item
+          data-cy="add-host-item"
           class="add-new"
           *ngIf="(host$ | async) === undefined"
           lines="none"
@@ -74,12 +71,12 @@
 
           <ion-button
             *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) === 11"
-            id="proceed-button"
+            data-cy="proceed-button"
             fill="outlined"
             size="large"
-            (click)="start()"
             routerLink="/tabs/game/game"
             routerDirection="forward"
+            (click)="start()"
           >
             <ion-icon slot="icon-only" name="play" color="primary"></ion-icon>
           </ion-button>

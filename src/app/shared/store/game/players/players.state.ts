@@ -57,9 +57,15 @@ export interface PlayersStateModel {
 })
 @Injectable()
 export class PlayersState {
+  // TODO: Translate this
   private readonly isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
   private readonly emptyNicknameText = 'У гостя должно быть имя.';
   private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
+
+  @Selector()
+  static getState(state: PlayersStateModel) {
+    return state;
+  }
 
   @Selector()
   static getHost({ host }: PlayersStateModel) {
@@ -233,7 +239,7 @@ export class PlayersState {
       throw new Error(this.emptyNicknameText);
     }
 
-    if (host?.user?.id === player.user?.id) {
+    if (host && host.user?.id === player.user?.id) {
       throw new Error(this.isPlayerAlreadyHostText);
     }
 

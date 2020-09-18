@@ -19,7 +19,7 @@
       </ion-button>
       <ion-button
         *ngIf="(isGameStarted$ | async) === false"
-        id="new-game-button"
+        data-cy="new-game-button"
         shape="round"
         routerLink="preparation"
         routerDirection="forward"

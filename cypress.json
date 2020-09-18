@@ -1,6 +1,4 @@
 {
   "viewportWidth": 375,
-  "viewportHeight": 667,
-  "video": false,
-  "experimentalShadowDomSupport": true
+  "viewportHeight": 667
 }

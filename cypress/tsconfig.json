@@ -5,6 +5,12 @@
     "paths": {
       "@shared/*": [
         "../src/app/shared/*"
+      ],
+      "src/*": [
+        "../src/*"
+      ],
+      "@e2e/*": [
+        "../cypress/*"
       ]
     },
     "types": [

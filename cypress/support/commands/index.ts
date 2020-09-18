@@ -14,6 +14,7 @@ import { Store } from '@ngxs/store';
 import 'cypress-shadow-dom';
 import './store.commands';
 import './general.commands';
+import './preparation.commands';
 import './player-controls.commands';
 
 // Must be declared global to be detected by typescript (allows import/export)

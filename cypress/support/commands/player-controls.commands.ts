@@ -1,10 +1,12 @@
-import { PlayerControlsOptions } from '../models/player-controls-options.interface';
+import { PlayerControlsOptions } from '@e2e/models/player-controls-options.interface';
+import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
   namespace Cypress {
     interface Chainable<Subject> {
       /**
+       * ! Should be used when player controls is present on the page
        * Pick one of player controls menu options.
        *
        * @param {PlayerControlsOptions} options - player number and action type.
@@ -30,18 +32,17 @@ Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: PlayerCo
     .find('app-small-player-card')
     .eq(playerNumber - 1)
     .find('ion-card', { includeShadowDom: true })
-    .first()
     .click();
 
   cy.wait(500);
   cy.get('app-player-menu')
     .then(($menu) => {
       switch (action) {
-        case 'assignFall':
+        case PlayerControlsAction.FALL:
           return $menu.find('.assign-fall-option');
-        case 'kick':
+        case PlayerControlsAction.KICK:
           return $menu.find('.kick-option');
-        case 'refresh':
+        case PlayerControlsAction.REFRESH:
           return $menu.find('.refresh-option');
         default:
           return $menu;

@@ -14,7 +14,12 @@
 <ion-content>
   <ion-list class="cards-list">
     <!-- Add unauthorized user button-->
-    <ion-item class="add-new" lines="none" (click)="choosePlayer()">
+    <ion-item
+      class="add-new"
+      data-cy="add-guest-item"
+      lines="none"
+      (click)="choosePlayer()"
+    >
       <ion-icon slot="start" name="add" color="primary"></ion-icon>
       <ion-label color="primary">
         {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.addGuest" | translate }}

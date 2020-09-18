@@ -70,7 +70,6 @@ export class PlayersListComponent implements OnInit {
   async presentRolesMenu(playerId: string) {
     const popover = await this.popoverController.create({
       component: RoleMenuComponent,
-      event,
       translucent: true,
     });
 
@@ -117,10 +116,12 @@ export class PlayersListComponent implements OnInit {
       ],
       buttons: [
         {
+          cssClass: 'cancel-button',
           text: this.playerPrompt.cancelButton,
           role: 'cancel',
         },
         {
+          cssClass: 'submit-button',
           text: this.playerPrompt.confirmButton,
           handler: (player) => this.addNewPlayer(player),
         },
