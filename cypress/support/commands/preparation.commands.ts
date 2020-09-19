@@ -1,9 +1,4 @@
-import { Chance } from 'chance';
-
-const chance = new Chance();
-
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
   namespace Cypress {
     interface Chainable<Subject> {
       /**
@@ -12,20 +7,20 @@ declare global {
        *
        * @param {string} [nickname] - guest's nickname(creates random nickname if not specified)
        */
-      addGuest(nickname: string): void;
+      addGuest(nickname: string, delay?: number): void;
     }
   }
 }
 
-Cypress.Commands.add('addGuest', (nickname: string) => {
+Cypress.Commands.add('addGuest', (nickname: string, delay: number = 2000) => {
   /* Click add guest */
   cy.getCy('add-guest-item')
-    .wait(2000)
+    .wait(delay)
     .click();
 
   /* Add guest prompt */
   cy.get('#nickname-input')
-    .wait(2000)
+    .wait(delay)
     .click()
     .clear()
     .type(nickname, { delay: 100 })
@@ -33,3 +28,5 @@ Cypress.Commands.add('addGuest', (nickname: string) => {
   cy.get('.submit-button')
     .click(); // Accept button
 });
+
+export {};

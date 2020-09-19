@@ -2,7 +2,6 @@ import { PlayerControlsOptions } from '@e2e/models/player-controls-options.inter
 import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
   namespace Cypress {
     interface Chainable<Subject> {
       /**
@@ -34,7 +33,7 @@ Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: PlayerCo
     .find('ion-card', { includeShadowDom: true })
     .click();
 
-  cy.wait(500);
+  cy.wait(1000);
   cy.get('app-player-menu')
     .then(($menu) => {
       switch (action) {

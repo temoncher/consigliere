@@ -129,6 +129,7 @@ export class PlayersListComponent implements OnInit {
     });
 
     await prompt.present();
+    document.getElementById('nickname-input').focus();
   }
 
   private addNewPlayer(player: Player) {

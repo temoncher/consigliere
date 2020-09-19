@@ -2,7 +2,7 @@ import { PlayerControlsAction } from '@shared/models/table/player-controls-actio
 
 describe('[Game] Players controls', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
   });
 
   it('should be visible and contain 10 cards with numbers from 1 to 10', () => {
@@ -24,7 +24,7 @@ describe('[Game] Players controls', () => {
       .find('ion-icon')
       .should('have.attr', 'name', 'chevron-up');
 
-    cy.wait(500);
+    cy.wait(1000);
     cy.get('.toggle-controls-button')
       .click();
 
@@ -36,7 +36,7 @@ describe('[Game] Players controls', () => {
       .find('#player-controls__slider')
       .should('not.be.visible');
 
-    cy.wait(500);
+    cy.wait(1000);
     cy.get('.toggle-controls-button')
       .click();
 

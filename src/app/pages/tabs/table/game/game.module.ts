@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { DiscardGameGuard } from '@shared/guards/discard-game.guard';
 import { SharedModule } from '@shared/shared.module';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
@@ -22,7 +23,11 @@ import { VoteModule } from './vote/vote.module';
     DayModule,
     NightModule,
     VoteModule,
-    RouterModule.forChild([{ path: '', component: GameComponent }]),
+    RouterModule.forChild([{
+      path: '',
+      component: GameComponent,
+      canDeactivate: [DiscardGameGuard],
+    }]),
   ],
   declarations: [
     GameComponent,

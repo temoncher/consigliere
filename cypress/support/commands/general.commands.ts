@@ -5,22 +5,30 @@ import { PlayersStateModel } from '@shared/store/game/players/players.state';
 import { EmptyAction } from '../empty.action';
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace, no-redeclare
   namespace Cypress {
     interface Chainable<Subject> {
       /**
-       * 1. Locate to application page.
-       * 2. Locate to table tab.
-       * 3. Click new game button.
+       * ! Programmatically
+       * 1. Visit to application page.
+       * 2. Navigate to table tab.
+       * 3. Fill players and host
        * 4. Click proceed button.
        *
        */
-      startGame(): void;
+      _startGame(delay?: number): void;
+      /**
+       * 1. Visit to application page.
+       * 2. Navigate to table tab.
+       * 3. Fill players and host
+       * 4. Click proceed button.
+       *
+       */
+      startGame(delay?: number): void;
     }
   }
 }
 
-Cypress.Commands.add('startGame', () => {
+Cypress.Commands.add('_startGame', (delay: number = 1000) => {
   cy.visit(localhost);
 
   cy.getCy('new-game-button')
@@ -45,7 +53,40 @@ Cypress.Commands.add('startGame', () => {
 
       store.dispatch(new EmptyAction());
 
+      cy.wait(delay);
       cy.getCy('proceed-button')
         .click();
     });
+});
+
+Cypress.Commands.add('startGame', (delay: number = 1000) => {
+  cy.visit(localhost);
+
+  cy.getCy('new-game-button')
+    .click();
+
+  cy.log('Adding host...');
+  cy.getCy('add-host-item')
+    .click();
+
+  cy.addGuest(dummyHost.nickname, delay);
+
+  cy.log('Adding players...');
+
+  dummyPlayers.forEach((player) => {
+    cy.getCy('add-player-item')
+      .click({ force: true });
+
+    cy.addGuest(player.nickname, delay);
+
+    cy.getCy('change-role')
+      .eq(player.number - 1)
+      .click()
+      .wait(delay)
+      .getCy(player.role)
+      .click();
+  });
+
+  cy.getCy('proceed-button')
+    .click();
 });

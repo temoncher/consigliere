@@ -1,5 +1,5 @@
 describe('[Game] Player card', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
   });
 });

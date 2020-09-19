@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IonRouterOutlet } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.component.scss'],
 })
 export class TabsComponent {
-  constructor() { }
+  constructor(
+    private routerOutlet: IonRouterOutlet,
+  ) {
+    this.disableIosSwipeBack();
+  }
+
+  disableIosSwipeBack() {
+    this.routerOutlet.swipeGesture = false;
+  }
 }
