@@ -127,6 +127,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
     });
 
     await prompt.present();
+    document.getElementById('nickname-input').focus();
   }
 
   private setHost(player: Player) {

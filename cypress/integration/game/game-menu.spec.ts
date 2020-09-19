@@ -1,6 +1,6 @@
-describe.skip('[Game] Menu', () => {
+describe('[Game] Menu', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
   });
 
   it('should show/hide roles', () => {
@@ -36,7 +36,7 @@ describe.skip('[Game] Menu', () => {
     cy.getCy('game-menu-button')
       .click();
 
-    cy.wait(500);
+    cy.wait(1000);
     cy.get('ion-menu[menuid=game-menu]')
       .should('be.visible')
       .find('.toggle-roles-option')

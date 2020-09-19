@@ -3,7 +3,7 @@ import { PlayersState } from '@shared/store/game/players/players.state';
 
 describe('[Game] Night', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
   });
 
   it('should show game stage and day number on the toolbar', () => {
@@ -16,7 +16,7 @@ describe('[Game] Night', () => {
 // TODO: update this test
 describe.skip('[Game] Night - Give roles', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
   });
 
   it('should contain ten cards with players\' numbers', () => {
@@ -119,7 +119,7 @@ describe.skip('[Game] Night - Give roles', () => {
 // TODO: update this test
 describe.skip('[Game] Night - Don', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
 
     cy.get('ion-toolbar')
       .should('be.visible')
@@ -160,7 +160,7 @@ describe.skip('[Game] Night - Don', () => {
 // TODO: update this test
 describe.skip('[Game] Night - Sheriff', () => {
   beforeEach(() => {
-    cy.startGame();
+    cy._startGame();
 
     cy.get('ion-toolbar')
       .should('be.visible')

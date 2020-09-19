@@ -23,6 +23,7 @@ export class AppComponent {
     }
 
     this.initializeApp();
+    this.preventDoubleTapZoom();
   }
 
   initializeApp() {
@@ -31,6 +32,25 @@ export class AppComponent {
       this.splashScreen.hide();
 
       this.languageService.setInitialAppLanguage();
+    });
+  }
+
+  preventDoubleTapZoom() {
+    /**
+     * workaround for ios double tap zoom
+     * https://medium.com/building-blocks/code-snippet-4accfa29b75d
+     *
+     * */
+    let doubleTouchStartTimestamp = 0;
+
+    document.addEventListener('touchstart', (event) => {
+      const now = +(new Date());
+
+      if (doubleTouchStartTimestamp + 500 > now) {
+        event.preventDefault();
+      }
+
+      doubleTouchStartTimestamp = now;
     });
   }
 }

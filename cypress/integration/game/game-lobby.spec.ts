@@ -1,5 +1,6 @@
 import { localhost } from '@e2e/constants/urls';
 import { Player } from '@shared/models/player.model';
+import { Role } from '@shared/models/role.enum';
 import { AddPlayer, SetHost } from '@shared/store/game/players/players.actions';
 import { Chance } from 'chance';
 
@@ -58,7 +59,6 @@ describe('[Game] Lobby', () => {
     cy.getCy('add-player-item')
       .click();
 
-    /* Lobby */
     cy.addGuest(playerName);
   });
 
@@ -81,6 +81,44 @@ describe('[Game] Lobby', () => {
 
         cy.get('.player-list__item')
           .should('have.length', 0);
+      });
+  });
+
+  it('should change player\'s role', () => {
+    cy.window()
+      .then(({ store }) => {
+        store.dispatch(new AddPlayer(new Player({
+          nickname: chance.first(),
+          user: {
+            id: 'user-id',
+          },
+        })));
+
+        cy.log('Changin role to Don...');
+        cy.get('.player-list__item')
+          .first()
+          .getCy('change-role')
+          .click()
+          .wait(1000)
+          .getCy(Role.DON)
+          .click();
+
+        cy.log('Checking if role is assigned correctly...');
+        cy.get('.player-list__item')
+          .should('contain.text', Role.DON);
+
+        cy.log('Changin role to Sheriff...');
+        cy.get('.player-list__item')
+          .first()
+          .getCy('change-role')
+          .click()
+          .wait(1000)
+          .getCy(Role.SHERIFF)
+          .click();
+
+        cy.log('Checking if role is reassigned correctly...');
+        cy.get('.player-list__item')
+          .should('contain.text', Role.SHERIFF);
       });
   });
 });

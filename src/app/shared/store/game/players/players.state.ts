@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, State, Selector, StateContext, createSelector } from '@ngxs/store';
-import { patch, updateItem } from '@ngxs/store/operators';
+import { compose, insertItem, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { Player } from '@shared/models/player.model';
 import { QuitPhase } from '@shared/models/quit-phase.interface';
 import { Role } from '@shared/models/role.enum';
@@ -61,11 +61,6 @@ export class PlayersState {
   private readonly isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
   private readonly emptyNicknameText = 'У гостя должно быть имя.';
   private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
-
-  @Selector()
-  static getState(state: PlayersStateModel) {
-    return state;
-  }
 
   @Selector()
   static getHost({ host }: PlayersStateModel) {
@@ -239,7 +234,7 @@ export class PlayersState {
       throw new Error(this.emptyNicknameText);
     }
 
-    if (host.nickname === player.nickname) {
+    if (host?.nickname === player?.nickname) {
       throw new Error(this.isPlayerAlreadyHostText);
     }
 
@@ -277,15 +272,18 @@ export class PlayersState {
 
   @Action(ReorderPlayer)
   reorderPlayer(
-    { patchState, getState }: StateContext<PlayersStateModel>,
+    { setState, getState }: StateContext<PlayersStateModel>,
     { previoustIndex, newIndex }: ReorderPlayer,
   ) {
     const { players } = cloneDeep(getState());
-    const playerToReorder = players.splice(previoustIndex, 1)[0];
+    const playerToReorder = players[previoustIndex];
 
-    players.splice(newIndex, 0, playerToReorder);
-
-    patchState({ players });
+    setState(patch<PlayersStateModel>({
+      players: compose(
+        removeItem(previoustIndex),
+        insertItem(playerToReorder, newIndex),
+      ),
+    }));
   }
 
   @Action(ResetPlayer)

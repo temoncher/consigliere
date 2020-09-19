@@ -155,7 +155,10 @@ module.exports = {
         "cypress/globals": true,
       },
       rules: {
+        "@typescript-eslint/no-namespace": 0, // for cypress commands
         "cypress/no-unnecessary-waiting": 0, // to wait for modals
+        "no-underscore-dangle": 0, // for programmatic methods
+        "no-redeclare": 0, // for cypress commands
       },
     },
   ],
