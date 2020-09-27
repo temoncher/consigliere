@@ -1,9 +1,13 @@
-import { GameStates, ExtendedGameStateModel } from './game';
+import { ExtendedTableStateModel, GameStates } from '@/table/store';
+
+import { UserState, UserStateModel } from './user/user.state';
 
 export interface ApplicationStateModel {
-  game: ExtendedGameStateModel;
+  table: ExtendedTableStateModel;
+  user: UserStateModel;
 }
 
 export const ApplicationStates = [
   ...GameStates,
+  UserState,
 ];

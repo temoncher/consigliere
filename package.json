@@ -95,7 +95,12 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "^3.7.5",
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.1",
+    "@angular-devkit/architect": "~0.900",
+    "firebase-tools": "^8.0.0",
+    "fuzzy": "^0.1.3",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1"
   },
   "description": "Mafia deduction game host assistant"
 }

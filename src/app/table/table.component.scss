@@ -1,0 +1,9 @@
+.table-menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .image-container {
+    padding: 20vmin;
+  }
+}

@@ -30,7 +30,9 @@
 @import "./theme/clip-buttons.scss";
 @import "./theme/cards.scss";
 @import "./theme/colors.scss";
+@import "./theme/forms.scss";
 @import "./theme/custom-variables.scss";
+@import "./theme/consigliere-label.scss";
 
 .app-divider {
   border-bottom: 2px solid var(--ion-color-light);
@@ -38,6 +40,10 @@
 
 .d-flex {
   display: flex;
+}
+
+.no-scroll {
+  --overflow: hidden;
 }
 
 .h100-fixed {

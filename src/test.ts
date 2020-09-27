@@ -10,9 +10,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { NgxsModule } from '@ngxs/store';
-import { LanguageModule } from '@shared/language.module';
-import { SharedModule } from '@shared/shared.module';
-import { ApplicationStates } from '@shared/store';
+
+import { LanguageModule } from '@/shared/language.module';
+import { SharedModule } from '@/shared/shared.module';
+import { ApplicationStates } from '@/shared/store';
 
 export const imports = [
   SharedModule,

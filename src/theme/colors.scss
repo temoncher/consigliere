@@ -23,6 +23,12 @@
   &-transparent-dark {
     background-color: var(--app-background-color-transparent-dark);
   }
+  &-light {
+    background-color: var(--ion-color-light);
+  }
+  &-white {
+    background-color: white;
+  }
 }
 
 .text-color {
@@ -43,5 +49,11 @@
   }
   &-dark-contrast {
     color: var(--ion-color-dark-contrast);
+  }
+  &-light {
+    color: var(--ion-color-light);
+  }
+  &-white {
+    color: white;
   }
 }

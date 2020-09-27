@@ -19,7 +19,7 @@ export const webpackOptions: webpack.Configuration = {
     extensions: ['.ts', '.js'],
     // add the alias object
     alias: {
-      '@shared': path.resolve('src/app/shared'),
+      '@': path.resolve('src/app'),
       '@e2e': path.resolve('cypress'),
       src: path.resolve('src'),
     },

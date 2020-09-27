@@ -1,0 +1,9 @@
+@import "./variables.scss";
+
+.consigliere-label {
+  background-color: white;
+  border-radius: var(--app-border-radius);
+  height: 64px;
+  width: 64px;
+  padding: 4px;
+}

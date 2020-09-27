@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-screen-size',
@@ -33,6 +35,14 @@ import { Component } from '@angular/core';
     }
   `],
 })
-export class ScreenSizeComponent {
-  constructor() {}
+export class ScreenSizeComponent implements OnInit {
+  constructor(private store: Store) {}
+
+  ngOnInit() {
+    const { height, width } = window.screen;
+
+    if (height < 1000 && width < 500) {
+      this.store.dispatch(new Navigate([]));
+    }
+  }
 }

@@ -3,7 +3,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { Store } from '@ngxs/store';
-import { LanguageService } from '@shared/services/language.service';
+
+import { LanguageService } from '@/shared/services/language.service';
 
 @Component({
   selector: 'app-root',

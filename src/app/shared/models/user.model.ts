@@ -1,9 +1,10 @@
 export class User {
-  id: string;
+  uid: string;
+  nickname: string;
   avatar?: string;
 
   constructor(partialUser: Partial<User>) {
-    this.id = partialUser.id;
+    this.uid = partialUser.uid;
     this.avatar = partialUser.avatar;
   }
 }

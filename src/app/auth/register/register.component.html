@@ -1,0 +1,101 @@
+<ion-content class="no-scroll">
+  <div class="register-page h100">
+    <div class="hero-block">
+      <div class="consigliere-label">
+        <ion-img src="assets/icon/favicon.png"></ion-img>
+      </div>
+      <h2 class="hero-block__title text-color-white">
+        <span>Новые лица в городе!</span>
+        <span>Как к вам обращаться?</span>
+      </h2>
+    </div>
+    <form
+      class="app-form"
+      [formGroup]="registerForm"
+      (ngSubmit)="register()"
+      (keydown)="submitOnEnterKey($event)"
+    >
+      <h2 class="app-form__title">Добро пожаловать!</h2>
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked" color="medium">Псевдоним*</ion-label>
+          <ion-input
+            formControlName="nickname"
+            inputmode="text"
+            type="text"
+            data-cy="nickname-input"
+          ></ion-input>
+        </ion-item>
+        <div class="app-form__error-container">
+          <small class="text-color-danger" *ngIf="nickname.touched">
+            <ng-container *ngIf="nickname.errors?.required">
+              Псевдоним - это обязательное поле
+            </ng-container>
+            <ng-container *ngIf="nickname.errors?.minlength">
+              Псевдоним должен быть минимум из
+              {{ nickname.errors?.minlength.requiredLength }} символов
+            </ng-container>
+            <ng-container *ngIf="nickname.errors?.maxLength">
+              Псевдоним должен быть максимум из
+              {{ nickname.errors?.minlength.requiredLength }} символов
+            </ng-container>
+          </small>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked" color="medium">Почта*</ion-label>
+          <ion-input
+            formControlName="email"
+            inputmode="email"
+            type="email"
+            data-cy="email-input"
+          ></ion-input>
+        </ion-item>
+        <div class="app-form__error-container">
+          <small class="text-color-danger" *ngIf="email.touched">
+            <ng-container *ngIf="email.errors?.required">
+              Почта - это обязательное поле
+            </ng-container>
+            <ng-container *ngIf="email.errors?.email">
+              С вашей почтой что-то не так...
+            </ng-container>
+          </small>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked" color="medium">Пароль*</ion-label>
+          <ion-input
+            formControlName="password"
+            inputmode="password"
+            type="password"
+            data-cy="password-input"
+          ></ion-input>
+        </ion-item>
+        <div class="app-form__error-container">
+          <small class="text-color-danger" *ngIf="password.touched">
+            <ng-container *ngIf="password.errors?.required">
+              Пароль - это обязательное поле
+            </ng-container>
+            <ng-container *ngIf="password.errors?.minlength">
+              Пароль должен быть минимум из
+              {{ password.errors?.minlength.requiredLength }} символов
+            </ng-container>
+            <ng-container *ngIf="password.errors?.maxLength">
+              Пароль должен быть максимум из
+              {{ password.errors?.minlength.requiredLength }} символов
+            </ng-container>
+          </small>
+        </div>
+      </ion-list>
+
+      <ion-button
+        type="submit"
+        expand="block"
+        shape="round"
+        [disabled]="registerForm.invalid"
+      >
+        Присоединиться
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

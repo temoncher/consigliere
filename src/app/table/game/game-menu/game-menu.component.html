@@ -1,0 +1,54 @@
+<ion-list-header>
+  <ion-toolbar>
+    <ion-title>{{ "TABS.TABLE.GAME.menuHeader" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-list-header>
+
+<ion-content class="no-scroll">
+  <ion-list>
+    <ion-menu-toggle auto-hide="false" menu="game-menu">
+      <ion-item
+        class="toggle-quitted-option"
+        lines="none"
+        detail="false"
+        (click)="switchSettingsBoolean('isQuittedHidden')"
+      >
+        <ion-label>
+          {{
+            "TABS.TABLE.GAME" +
+              ((isQuittedHidden$ | async) ? ".showQuitted" : ".hideQuitted")
+              | translate
+          }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item
+        class="toggle-roles-option"
+        lines="none"
+        detail="false"
+        (click)="switchSettingsBoolean('isRolesVisible')"
+      >
+        <ion-label>
+          {{
+            "TABS.TABLE.GAME" +
+              ((isRolesVisible$ | async) ? ".hideRoles" : ".showRoles")
+              | translate
+          }}
+        </ion-label>
+      </ion-item>
+
+      <div class="app-divider"></div>
+
+      <ion-item
+        class="drop-game-option"
+        lines="none"
+        detail="false"
+        (click)="dropGame()"
+      >
+        <ion-label color="danger">
+          {{ "TABS.TABLE.GAME.dropGame" | translate }}
+        </ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </ion-list>
+</ion-content>

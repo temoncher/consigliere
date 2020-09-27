@@ -4,8 +4,8 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@shared/*": [
-        "src/app/shared/*"
+      "@/*": [
+        "src/app/*"
       ]
     },
     "outDir": "./dist/out-tsc",
