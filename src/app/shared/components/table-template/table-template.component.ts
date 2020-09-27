@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { Player } from '@shared/models/player.model';
-import { PlayersState } from '@shared/store/game/players/players.state';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+
+import { Player } from '@/shared/models/player.model';
+import { PlayersState } from '@/table/store/players/players.state';
 
 @Component({
   selector: 'app-table-template',
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
 export class TableTemplateComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
-  constructor(private store: Store) { }
+  constructor() { }
 
   ngOnInit() { }
 }

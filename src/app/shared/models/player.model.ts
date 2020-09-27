@@ -13,7 +13,7 @@ export class Player {
     this.number = partialPlayer.number;
     this.role = partialPlayer.role;
 
-    if (partialPlayer.user?.id) {
+    if (partialPlayer.user?.uid) {
       this.isGuest = false;
       this.user = partialPlayer.user;
 
@@ -22,7 +22,8 @@ export class Player {
 
     this.isGuest = true;
     this.user = {
-      id: new Date().getTime().toString(),
+      uid: new Date().getTime().toString(),
+      nickname: partialPlayer.nickname,
     };
   }
 }

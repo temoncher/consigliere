@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
+import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { ScreenSizeGuard } from '@shared/guards/screen-size.guard';
 
-import { ScreenSizeComponent } from './shared/components/guard-pages/screen-size.component';
+import { ScreenSizeComponent } from '@/shared/components/guard-pages/screen-size.component';
+import { ScreenSizeGuard } from '@/shared/guards/screen-size.guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth', 'login']);
+const redirectAuthorizedToTable = () => redirectLoggedInTo(['tabs', 'table']);
 
 const routes: Routes = [
   {
@@ -10,19 +14,16 @@ const routes: Routes = [
     component: ScreenSizeComponent,
   },
   {
+    path: 'auth',
+    canActivate: [ScreenSizeGuard, AngularFireAuthGuard],
+    data: { authGuardPipe: redirectAuthorizedToTable },
+    loadChildren: () => import('@/auth/auth.module').then((m) => m.AppModule),
+  },
+  {
     path: '',
-    canActivate: [ScreenSizeGuard],
-    loadChildren: () => import('./pages/tabs/tabs.module').then((m) => m.TabsModule),
-  },
-  {
-    path: 'login',
-    canActivate: [ScreenSizeGuard],
-    loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule),
-  },
-  {
-    path: 'register',
-    canActivate: [ScreenSizeGuard],
-    loadChildren: () => import('./pages/login/login.module').then((m) => m.LoginModule),
+    canActivate: [ScreenSizeGuard, AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    loadChildren: () => import('@/tabs/tabs.module').then((m) => m.TabsModule),
   },
 ];
 

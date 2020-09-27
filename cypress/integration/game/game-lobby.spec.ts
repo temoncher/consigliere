@@ -1,8 +1,9 @@
 import { localhost } from '@e2e/constants/urls';
-import { Player } from '@shared/models/player.model';
-import { Role } from '@shared/models/role.enum';
-import { AddPlayer, SetHost } from '@shared/store/game/players/players.actions';
 import { Chance } from 'chance';
+
+import { Player } from '@/shared/models/player.model';
+import { Role } from '@/shared/models/role.enum';
+import { AddPlayer, SetHost } from '@/table/store/players/players.actions';
 
 const chance = new Chance();
 
@@ -38,7 +39,10 @@ describe('[Game] Lobby', () => {
       .then(({ store }) => {
         store.dispatch(new SetHost(new Player({
           nickname: hostName,
-          user: { id: 'host-id' },
+          user: {
+            uid: 'host-id',
+            nickname: 'host-nickname',
+          },
         })));
 
         /* Lobby */
@@ -68,7 +72,8 @@ describe('[Game] Lobby', () => {
         store.dispatch(new AddPlayer(new Player({
           nickname: chance.first(),
           user: {
-            id: 'user-id',
+            uid: 'user-id',
+            nickname: 'user-nickname',
           },
         })));
 
@@ -90,7 +95,8 @@ describe('[Game] Lobby', () => {
         store.dispatch(new AddPlayer(new Player({
           nickname: chance.first(),
           user: {
-            id: 'user-id',
+            uid: 'user-id',
+            nickname: 'user-nickname',
           },
         })));
 

@@ -2,5 +2,14 @@
   "projects": {
     "dev": "mafia-consigliere-develop",
     "prod": "mafia-consigliere"
+  },
+  "targets": {
+    "mafia-consigliere-develop": {
+      "hosting": {
+        "app": [
+          "mafia-consigliere-develop"
+        ]
+      }
+    }
   }
 }

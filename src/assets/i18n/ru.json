@@ -6,7 +6,7 @@
     "tableTitle": "Стол",
     "CLUBS": {},
     "PROFILE": {
-      "header": "Привет, Андрей!"
+      "header": "Привет, {{ name }}!"
     },
     "SEARCH": {},
     "TABLE": {

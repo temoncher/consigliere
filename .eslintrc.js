@@ -67,10 +67,18 @@ module.exports = {
           "error",
           {
             "newlines-between": "always",
+            "pathGroups": [
+              {
+                "pattern": "@/**",
+                "group": "parent",
+                "position": "before"
+              }
+            ],
             "alphabetize": {
               "order": "asc",
               "caseInsensitive": true
-            }
+            },
+            "pathGroupsExcludedImportTypes": ["builtin"]
           }
         ],
         semi: ["error", "always"],

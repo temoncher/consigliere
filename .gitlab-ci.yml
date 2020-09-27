@@ -46,18 +46,19 @@ unit:
   script:
     - npm run unit
 
-e2e:
-  stage: test
-  image: cypress/browsers:node11.13.0-chrome73
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-  script:
-    - npm run ci:cy-run
-  artifacts:
-    paths:
-      - cypress/videos
-      - cypress/screenshots
-    expire_in: 1 day
+# turn on when possible
+# e2e:
+#   stage: test
+#   image: cypress/browsers:node11.13.0-chrome73
+#   rules:
+#     - if: $CI_MERGE_REQUEST_ID
+#   script:
+#     - npm run ci:cy-run
+#   artifacts:
+#     paths:
+#       - cypress/videos
+#       - cypress/screenshots
+#     expire_in: 1 day
 
 deploy:
   stage: deploy

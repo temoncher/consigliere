@@ -11,19 +11,21 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { LanguageModule } from '@shared/language.module';
-import { SharedModule } from '@shared/shared.module';
-import { ApplicationStates } from '@shared/store';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
+
+import { LanguageModule } from '@/shared/language.module';
+import { SharedModule } from '@/shared/shared.module';
+import { ApplicationStates } from '@/shared/store';
 
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-const devModules = environment.production
-  ? []
-  : [NgxsReduxDevtoolsPluginModule.forRoot(), NgxsLoggerPluginModule.forRoot()];
+const devModules = [
+  NgxsReduxDevtoolsPluginModule.forRoot(),
+  NgxsLoggerPluginModule.forRoot(),
+];
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,17 +33,15 @@ const devModules = environment.production
     BrowserModule,
     BrowserAnimationsModule,
     LanguageModule,
-    IonicModule.forRoot({
-      mode: 'ios',
-    }),
+    IonicModule.forRoot({ mode: 'ios' }),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AppRoutingModule,
-    SharedModule.forRoot(),
+    SharedModule,
     NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
-    devModules,
+    environment.production ? devModules : [],
   ],
   providers: [
     StatusBar,

@@ -1,5 +1,5 @@
-import { Role } from '@shared/models/role.enum';
-import { PlayersState } from '@shared/store/game/players/players.state';
+import { Role } from '@/shared/models/role.enum';
+import { PlayersState } from '@/table/store/players/players.state';
 
 describe('[Game] Night', () => {
   beforeEach(() => {

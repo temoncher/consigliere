@@ -1,6 +1,8 @@
+import { cyCredentials } from '@e2e/constants/cy-credentials';
 import { localhost } from '@e2e/constants/urls';
-import { dummyHost, dummyPlayers } from '@shared/store/game/players/players-mocks';
-import { PlayersStateModel } from '@shared/store/game/players/players.state';
+
+import { dummyHost, dummyPlayers } from '@/table/store/players/players-mocks';
+import { PlayersStateModel } from '@/table/store/players/players.state';
 
 import { EmptyAction } from '../empty.action';
 
@@ -24,6 +26,14 @@ declare global {
        *
        */
       startGame(delay?: number): void;
+      /**
+       * 1. Visit to application page.
+       * 2. Navigate to table tab.
+       * 3. Fill players and host
+       * 4. Click proceed button.
+       *
+       */
+      register(): void;
     }
   }
 }
@@ -38,15 +48,15 @@ Cypress.Commands.add('_startGame', (delay: number = 1000) => {
     .then(({ store }) => {
       const storeSnapshot = store.snapshot();
       const newPlayersState: PlayersStateModel = {
-        ...storeSnapshot.game.players,
+        ...storeSnapshot.table.players,
         host: dummyHost,
         players: dummyPlayers,
       };
 
       store.reset({
         ...storeSnapshot,
-        game: {
-          ...storeSnapshot.game,
+        table: {
+          ...storeSnapshot.table,
           players: newPlayersState,
         },
       });
@@ -89,4 +99,21 @@ Cypress.Commands.add('startGame', (delay: number = 1000) => {
 
   cy.getCy('proceed-button')
     .click();
+});
+
+Cypress.Commands.add('login', () => {
+  cy.visit(`${localhost}auth/login`);
+});
+
+Cypress.Commands.add('register', () => {
+  cy.visit(`${localhost}auth/register`);
+
+  cy.getCy('nickname-input')
+    .type(cyCredentials.nickname, { delay: 200 });
+
+  cy.getCy('email-input')
+    .type(cyCredentials.email, { delay: 200 });
+
+  cy.getCy('password-input')
+    .type(cyCredentials.password, { delay: 200 });
 });

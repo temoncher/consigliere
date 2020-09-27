@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { CanActivate, Router, UrlTree } from '@angular/router';
 export class ScreenSizeGuard implements CanActivate {
   constructor(private router: Router) { }
 
-  canActivate(): boolean | UrlTree {
+  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // workaround for screen height, window.screen doesn't work with cypress
     const { offsetHeight: height, offsetWidth: width } = document.querySelector('body');
 

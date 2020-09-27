@@ -1,5 +1,6 @@
 import { PlayerControlsOptions } from '@e2e/models/player-controls-options.interface';
-import { PlayerControlsAction } from '@shared/models/table/player-controls-action.enum';
+
+import { PlayerControlsAction } from '@/table/models/player-controls-action.enum';
 
 declare global {
   namespace Cypress {

@@ -3,8 +3,8 @@
   "compilerOptions": {
     "baseUrl": "../node_modules", // needed if your tests import npm modules
     "paths": {
-      "@shared/*": [
-        "../src/app/shared/*"
+      "@/*": [
+        "../src/app/*"
       ],
       "src/*": [
         "../src/*"
