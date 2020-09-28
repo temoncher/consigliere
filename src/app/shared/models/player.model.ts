@@ -66,7 +66,7 @@ export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
 
         if (exclude?.includes(playerKey) || typeof value === 'undefined') return player;
 
-        if (playerKey !== 'user') {
+        if (playerKey !== 'user' && playerKey !== 'isGuest') {
           (player[playerKey] as any) = value;
         }
 
