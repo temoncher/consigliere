@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm.statusChanges.pipe(
       distinctUntilChanged(),
-    ).subscribe(this.changeDetectorRef.detectChanges); // to enable button on status change
+    ).subscribe(() => this.changeDetectorRef.detectChanges()); // to enable button on status change
   }
 
   async login() {

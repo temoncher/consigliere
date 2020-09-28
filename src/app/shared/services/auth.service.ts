@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
-import { User } from '@/shared/models/user.model';
+import { User } from '@/shared/models/user.interface';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 export enum GameResult {
-  MAFIA = 'mafia',
-  CIVILIANS = 'civilians',
-  TIE = 'tie',
+  MAFIA = 'MAFIA',
+  CIVILIANS = 'CIVILIANS',
+  TIE = 'TIE',
 }

@@ -1,7 +1,16 @@
 import { Role } from './role.enum';
-import { User } from './user.model';
+import { ISerializable } from './serializable.interface';
+import { User } from './user.interface';
 
-export class Player {
+export interface IPlayer {
+  nickname: string;
+  number?: number;
+  user?: User;
+  isGuest?: boolean;
+  role?: Role;
+}
+
+export class Player implements IPlayer, ISerializable<IPlayer> {
   nickname: string;
   number?: number;
   user?: User;
@@ -10,8 +19,11 @@ export class Player {
 
   constructor(partialPlayer: Partial<Player>) {
     this.nickname = partialPlayer.nickname;
-    this.number = partialPlayer.number;
     this.role = partialPlayer.role;
+
+    if (partialPlayer.number) {
+      this.number = partialPlayer.number;
+    }
 
     if (partialPlayer.user?.uid) {
       this.isGuest = false;
@@ -25,5 +37,22 @@ export class Player {
       uid: new Date().getTime().toString(),
       nickname: partialPlayer.nickname,
     };
+  }
+
+  serialize(exclude?: (keyof IPlayer)[]): IPlayer {
+    /* eslint-disable no-param-reassign */
+    const serializedPlayer = Object.entries(this)
+      .reduce((player, [key, value]) => {
+        const playerKey = key as keyof IPlayer;
+
+        if (exclude?.includes(playerKey) || typeof value === 'undefined') return player;
+
+        (player[playerKey] as any) = value;
+
+        return player;
+      }, {} as IPlayer);
+    /* eslint-enable */
+
+    return serializedPlayer;
   }
 }

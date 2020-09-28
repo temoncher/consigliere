@@ -50,7 +50,7 @@ export interface PlayersStateModel {
   name: 'players',
   defaults: {
     players: environment.production ? [] : dummyPlayers,
-    host: environment.production ? undefined : dummyHost,
+    host: environment.production ? null : dummyHost,
     falls: new Map<string, number>(),
     quitPhases: new Map<string, QuitPhase>(),
     speechSkips: new Map<string, number>(),
@@ -62,6 +62,11 @@ export class PlayersState {
   private readonly isPlayerAlreadyPresentText = 'Игрок с таким никнеймом уже за столом.';
   private readonly emptyNicknameText = 'У гостя должно быть имя.';
   private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
+
+  @Selector()
+  static getState(state: PlayersStateModel) {
+    return state;
+  }
 
   @Selector()
   static getHost({ host }: PlayersStateModel) {

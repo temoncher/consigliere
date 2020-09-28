@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.registerForm.statusChanges.pipe(
       distinctUntilChanged(),
-    ).subscribe(this.changeDetectorRef.detectChanges); // to enable button on status change
+    ).subscribe(() => this.changeDetectorRef.detectChanges()); // to enable button on status change
   }
 
   register() {

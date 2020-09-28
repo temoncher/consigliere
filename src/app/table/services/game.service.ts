@@ -3,7 +3,11 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
+import { MapToRecordConverter } from '@/shared/helpers/map-to-record-converter';
+import { Game } from '@/shared/models/game.interface';
 import { Role } from '@/shared/models/role.enum';
+import { ApiService } from '@/shared/services/api/api.service';
+import { UserState } from '@/shared/store/user/user.state';
 import { RoundPhase } from '@/table/models/day-phase.enum';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
@@ -20,7 +24,7 @@ import { SetIsVoteDisabled } from '../store/round/current-vote/current-vote.acti
 import { CurrentVoteState } from '../store/round/current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer } from '../store/round/round.actions';
 import { RoundState } from '../store/round/round.state';
-import { SetIsGameStarted, AddRound } from '../store/table.actions';
+import { SetIsGameStarted, AddRound, EndGame } from '../store/table.actions';
 import { TableState } from '../store/table.state';
 
 import { VoteService } from './vote.service';
@@ -35,8 +39,10 @@ export class GameService {
     private voteService: VoteService,
     private timersService: TimersService,
     private playersService: PlayersService,
+    private apiService: ApiService,
   ) {
     this.catchPlayerKick();
+    this.watchGameEnd();
   }
 
   startGame() {
@@ -102,6 +108,10 @@ export class GameService {
   }
 
   saveGame() {
+    const newGame = this.composeGame();
+
+    this.apiService.games.create(newGame);
+
     this.store.dispatch([
       new StateReset(TableState),
       new Navigate(['tabs', 'table']),
@@ -109,15 +119,8 @@ export class GameService {
   }
 
   private startNewRound() {
-    const currentNight = this.store.selectSnapshot(CurrentNightState);
-    const currentDay = this.store.selectSnapshot(CurrentDayState);
-    const currentVote = this.store.selectSnapshot(CurrentVoteState);
     const isVoteDisabled = this.store.selectSnapshot(TableState.getIsNextVotingDisabled);
-    const round = new Round({
-      ...currentNight,
-      ...currentDay,
-      ...currentVote,
-    });
+    const round = this.getCurrentRound();
 
     this.timersService.resetTimers();
 
@@ -127,6 +130,43 @@ export class GameService {
       new SwitchRoundPhase(RoundPhase.NIGHT),
       new SetIsVoteDisabled(isVoteDisabled),
     ]);
+  }
+
+  private getCurrentRound() {
+    const currentNight = this.store.selectSnapshot(CurrentNightState);
+    const currentDay = this.store.selectSnapshot(CurrentDayState);
+    const kickedPlayers = this.store.selectSnapshot(RoundState.getKickedPlayers);
+    const currentVote = this.store.selectSnapshot(CurrentVoteState);
+    const round = new Round({
+      kickedPlayers,
+      ...currentNight,
+      ...currentDay,
+      ...currentVote,
+    });
+
+    return round;
+  }
+
+  private composeGame() {
+    const rounds = this.store.selectSnapshot(TableState.getRounds);
+    const result = this.store.selectSnapshot(TableState.getGameResult);
+    const { players, falls, quitPhases, speechSkips } = this.store.selectSnapshot(PlayersState.getState);
+    const host = this.store.selectSnapshot(PlayersState.getHost);
+    const user = this.store.selectSnapshot(UserState.getState);
+    const mappedRounds = rounds.map((round) => MapToRecordConverter.deepConvert(round.serialize()));
+
+    const newGame: Game = {
+      creatorId: user.uid,
+      players: players.map((player) => player.serialize()),
+      falls: MapToRecordConverter.convert(falls),
+      quitPhases: MapToRecordConverter.convert(quitPhases),
+      speechSkips: MapToRecordConverter.convert(speechSkips),
+      host: host.serialize(['number']),
+      rounds: mappedRounds,
+      result,
+    };
+
+    return newGame;
   }
 
   private catchPlayerKick() {
@@ -141,6 +181,16 @@ export class GameService {
         new KillPlayer(playerId, quitPhase),
         new ResetProposedPlayers(),
       ]);
+    });
+  }
+
+  private watchGameEnd() {
+    this.actions$.pipe(
+      ofActionSuccessful(EndGame),
+    ).subscribe(() => {
+      const currentRound = this.getCurrentRound();
+
+      this.store.dispatch(new AddRound(currentRound));
     });
   }
 }

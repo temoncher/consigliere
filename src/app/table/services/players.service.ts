@@ -41,6 +41,15 @@ export class PlayersService {
     return quitPhase;
   }
 
+  stopSpeech(playerId: string) {
+    const playerTimer = this.timersService.getPlayerTimer(playerId);
+
+    playerTimer.endSpeech();
+    const timeLeft = playerTimer.time;
+
+    this.store.dispatch(new SetPlayerTimer(playerId, timeLeft));
+  }
+
   private catchPlayerReset() {
     this.actions$.pipe(
       ofActionSuccessful(ResetPlayer),
@@ -86,15 +95,6 @@ export class PlayersService {
         this.store.dispatch(new KickPlayer(playerId));
       }
     });
-  }
-
-  stopSpeech(playerId: string) {
-    const playerTimer = this.timersService.getPlayerTimer(playerId);
-
-    playerTimer.endSpeech();
-    const timeLeft = playerTimer.time;
-
-    this.store.dispatch(new SetPlayerTimer(playerId, timeLeft));
   }
 
   private checkGameEndingConditions() {

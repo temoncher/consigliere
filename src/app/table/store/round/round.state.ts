@@ -5,17 +5,18 @@ import {
   Action,
   StateContext,
 } from '@ngxs/store';
+import { append, patch, removeItem } from '@ngxs/store/operators';
 import { cloneDeep } from 'lodash';
 
 import { RoundPhase } from '@/table/models/day-phase.enum';
-import { Round } from '@/table/models/round.model';
+import { IRound } from '@/table/models/round.model';
 
 import { CurrentDayState } from './current-day/current-day.state';
 import { CurrentNightState } from './current-night/current-night.state';
 import { CurrentVoteState } from './current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer, ResetKickedPlayer } from './round.actions';
 
-export interface RoundStateModel extends Round {
+export interface RoundStateModel extends IRound {
   kickedPlayers: string[];
   currentPhase: RoundPhase;
 }
@@ -38,6 +39,10 @@ export class RoundState {
   static getRoundPhase({ currentPhase }: RoundStateModel) {
     return currentPhase;
   }
+  @Selector()
+  static getKickedPlayers({ kickedPlayers }: RoundStateModel) {
+    return kickedPlayers;
+  }
 
   @Action(SwitchRoundPhase)
   switchRoundPhase(
@@ -49,25 +54,21 @@ export class RoundState {
 
   @Action(KickPlayer)
   kickPlayer(
-    { patchState, getState }: StateContext<RoundStateModel>,
+    { setState }: StateContext<RoundStateModel>,
     { playerId }: KickPlayer,
   ) {
-    const { kickedPlayers } = cloneDeep(getState());
-
-    kickedPlayers.push(playerId);
-
-    patchState({ kickedPlayers });
+    setState(patch<RoundStateModel>({
+      kickedPlayers: append([playerId]),
+    }));
   }
 
   @Action(ResetKickedPlayer)
   resetKickedPlayer(
-    { patchState, getState }: StateContext<RoundStateModel>,
+    { setState }: StateContext<RoundStateModel>,
     { playerId }: ResetKickedPlayer,
   ) {
-    const { kickedPlayers } = cloneDeep(getState());
-
-    kickedPlayers.filter((kickedPlayerId) => kickedPlayerId !== playerId);
-
-    patchState({ kickedPlayers });
+    setState(patch<RoundStateModel>({
+      kickedPlayers: removeItem((kickedPlayerId) => kickedPlayerId === playerId),
+    }));
   }
 }

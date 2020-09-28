@@ -35,6 +35,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
       rules: {
+        "@typescript-eslint/interface-name-prefix": 0,
         "@typescript-eslint/no-empty-function": 0, // disabled for ngOnInit
         "@typescript-eslint/explicit-function-return-type": 0, // disabled for ngOnInit
         "@typescript-eslint/no-useless-constructor": 0, // disabled for default component template

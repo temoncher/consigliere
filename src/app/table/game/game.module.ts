@@ -2,12 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
 import { SharedModule } from '@/shared/shared.module';
 import { DiscardGameGuard } from '@/table/guards/discard-game.guard';
-
-import { TableModule } from '../table.module';
 
 import { DayModule } from './day/day.module';
 import { GameMenuComponent } from './game-menu/game-menu.component';

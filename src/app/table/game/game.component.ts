@@ -46,7 +46,13 @@ export class GameComponent implements OnInit, CanDeactivate<GameComponent> {
   ngOnInit() { }
 
   canDeactivate(): boolean | Observable<boolean> {
-    return from(this.presentHostPrompt());
+    const isGameStarted = this.store.selectSnapshot(TableState.getIsGameStarted);
+
+    if (isGameStarted) {
+      return from(this.presentHostPrompt());
+    }
+
+    return true;
   }
 
   openMenu() {

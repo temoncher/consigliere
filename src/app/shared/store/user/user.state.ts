@@ -11,7 +11,7 @@ import {
 import { filter, map, switchMap } from 'rxjs/operators';
 
 import { CollectionName } from '@/shared/models/collection-name.enum';
-import { User } from '@/shared/models/user.model';
+import { User } from '@/shared/models/user.interface';
 
 import { SetUser } from './user.actions';
 
