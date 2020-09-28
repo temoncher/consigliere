@@ -1,0 +1,16 @@
+@import "./variables.scss";
+@import "./custom-variables.scss";
+
+.square-avatar {
+  background-color: white;
+  box-shadow: var(--app-box-shadow);
+  border-radius: var(--app-border-radius);
+  overflow: hidden;
+  height: 64px;
+  width: 64px;
+  padding: 4px;
+
+  img {
+    border-radius: var(--app-border-radius);
+  }
+}

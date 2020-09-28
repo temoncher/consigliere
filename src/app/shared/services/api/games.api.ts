@@ -6,11 +6,11 @@ import { Game } from '@/shared/models/game.interface';
 import { Api } from './api.interface';
 
 export class GamesApi implements Api<Game> {
-  private gamesCollection = this.firestore.collection(CollectionName.GAMES);
+  private gamesCollection = this.firestore.collection<Game>(CollectionName.GAMES);
 
   constructor(private firestore: AngularFirestore) {}
 
-  create(game: Game) {
-    this.gamesCollection.add(game);
+  async create(game: Game): Promise<void> {
+    await this.gamesCollection.add(game);
   }
 }

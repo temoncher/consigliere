@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 import {
   State,
   StateContext,
@@ -8,12 +7,12 @@ import {
   Selector,
   NgxsOnInit,
 } from '@ngxs/store';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 
-import { CollectionName } from '@/shared/models/collection-name.enum';
 import { User } from '@/shared/models/user.interface';
+import { ApiService } from '@/shared/services/api/api.service';
 
-import { SetUser } from './user.actions';
+import { FetchUser, SetUser } from './user.actions';
 
 export type UserStateModel = User | null;
 
@@ -30,11 +29,20 @@ export class UserState implements NgxsOnInit {
 
   constructor(
     private auth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private apiService: ApiService,
   ) {}
 
   ngxsOnInit(context: StateContext<UserStateModel>) {
     this.watchAndUpdateUserData(context);
+  }
+
+  @Action(FetchUser)
+  async fetchUser({ setState }: StateContext<UserStateModel>) {
+    const currentUser = await this.auth.currentUser;
+
+    const user = await this.apiService.users.getOneSnapshot(currentUser.uid);
+
+    setState(user);
   }
 
   @Action(SetUser)
@@ -48,15 +56,7 @@ export class UserState implements NgxsOnInit {
   private watchAndUpdateUserData(context: StateContext<UserStateModel>) {
     this.auth.user.pipe(
       filter((user) => !!user),
-      switchMap(({ uid }) => {
-        const userDocs = this.firestore.collection<User>(
-          CollectionName.USERS,
-          (ref) => ref.where('uid', '==', uid),
-        );
-
-        return userDocs.valueChanges();
-      }),
-      map(([userData]) => userData),
+      switchMap(({ uid }) => this.apiService.users.getOne(uid)),
     ).subscribe((user) => context.setState(user));
   }
 }

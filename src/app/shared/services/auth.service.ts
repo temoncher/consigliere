@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
 import { User } from '@/shared/models/user.interface';
+
+import { ApiService } from './api/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ import { User } from '@/shared/models/user.interface';
 export class AuthService {
   constructor(
     private store: Store,
+    private apiService: ApiService,
     private auth: AngularFireAuth,
-    private firestore: AngularFirestore,
   ) { }
 
   async register(email: string, password: string, nickname: string) {
@@ -23,7 +24,7 @@ export class AuthService {
       nickname,
     };
 
-    await this.firestore.collection<User>('users').add(newUser);
+    await this.apiService.users.create(newUser);
 
     this.store.dispatch(new Navigate(['tabs', 'table']));
   }

@@ -32,7 +32,11 @@
 @import "./theme/colors.scss";
 @import "./theme/forms.scss";
 @import "./theme/custom-variables.scss";
-@import "./theme/consigliere-label.scss";
+@import "./theme/square-avatar.scss";
+
+ion-content {
+  --background: var(--ion-color-light);
+}
 
 .app-divider {
   border-bottom: 2px solid var(--ion-color-light);

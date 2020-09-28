@@ -1,5 +1,11 @@
+@import "~src/theme/variables";
+
 :host {
   display: block;
+}
+
+.player-controls {
+  background-color: var(--ion-color-dark-contrast);
 }
 
 .toggle-controls {

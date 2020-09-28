@@ -1,50 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
+import { defaultAvatarSrc } from '@/shared/constants/avatars';
+import { User } from '@/shared/models/user.interface';
 import { AuthService } from '@/shared/services/auth.service';
+import { FetchUser } from '@/shared/store/user/user.actions';
 import { UserState } from '@/shared/store/user/user.state';
 
 import { SettingsMenuComponent } from './settings-menu.component';
 
 @Component({
   selector: 'app-profile',
-  template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{ "TABS.PROFILE.header" | translate:userParam }}</ion-title>
-
-        <ion-buttons slot="end">
-          <ion-button (click)="logout()">
-            <ion-icon slot="icon-only" name="exit-outline"></ion-icon>
-          </ion-button>
-          <!-- TODO: add translation languages -->
-          <!-- <ion-button (click)="presentSettingsMenu()">
-            <ion-icon slot="icon-only" name="globe-outline"></ion-icon>
-          </ion-button> -->
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content class="no-scroll">
-      <ion-title>{{ "TABS.PROFILE.header" | translate:userParam }}</ion-title>
-    </ion-content>
-  `,
+  templateUrl: 'profile.component.html',
+  styleUrls: ['profile.component.scss'],
 })
-export class ProfileComponent {
-  get userParam() {
-    const user = this.store.selectSnapshot(UserState.getState);
+export class ProfileComponent implements OnInit {
+  @Select(UserState.getState) user$: Observable<User>;
 
-    return {
-      name: user.nickname,
-    };
-  }
+  defaultAvatar = defaultAvatarSrc;
 
   constructor(
     private store: Store,
     private popoverController: PopoverController,
     private authService: AuthService,
   ) { }
+
+  ngOnInit() {
+    this.store.dispatch(new FetchUser());
+  }
 
   async logout() {
     await this.authService.logout();

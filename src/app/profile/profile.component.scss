@@ -1,0 +1,25 @@
+@import "~src/theme/variables.scss";
+@import "~src/theme/custom-variables.scss";
+
+ion-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+
+  .hero-block {
+    display: flex;
+    padding: 16px 32px 32px;
+
+    &__title {
+      margin: 8px 0 0 16px;
+    }
+  }
+
+  .app-form {
+    flex: 1;
+  }
+}

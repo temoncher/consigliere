@@ -1,3 +1,3 @@
 export interface Api<T> {
-  create: (entity: T) => void;
+  create: (entity: T) => Promise<void>;
 }
