@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+import { fadeSlide } from '@/shared/animations';
 
 import { AuthService } from '../auth.service';
 
@@ -7,6 +10,7 @@ import { AuthService } from '../auth.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  animations: [fadeSlide],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = this.formBuilder.group({
@@ -34,9 +38,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loginForm.statusChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(this.changeDetectorRef.detectChanges); // to enable button on status change
+  }
 
   async login() {
     await this.authService.login(this.email.value, this.password.value);

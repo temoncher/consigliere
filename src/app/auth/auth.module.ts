@@ -4,10 +4,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: AuthComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -26,6 +31,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ],
   declarations: [
+    AuthComponent,
     LoginComponent,
     RegisterComponent,
   ],

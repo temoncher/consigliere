@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+import { fadeSlide } from '@/shared/animations';
 
 import { AuthService } from '../auth.service';
 
@@ -7,6 +10,7 @@ import { AuthService } from '../auth.service';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  animations: [fadeSlide],
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup = this.formBuilder.group({
@@ -50,9 +54,14 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.registerForm.statusChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(this.changeDetectorRef.detectChanges); // to enable button on status change
+  }
 
   register() {
     if (this.registerForm.invalid) return;
