@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 
 import { fadeSlide } from '@/shared/animations';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',

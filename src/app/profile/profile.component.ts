@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 
-import { AuthService } from '@/auth/auth.service';
+import { AuthService } from '@/shared/services/auth.service';
 import { UserState } from '@/shared/store/user/user.state';
 
 import { SettingsMenuComponent } from './settings-menu.component';
