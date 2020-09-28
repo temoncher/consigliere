@@ -32,7 +32,6 @@ export interface CurrentVoteStateModel extends Vote {
   defaults: {
     isVoteDisabled: false,
     votes: [],
-    voteResult: VoteResult.NO_CANDIDATES,
   },
 })
 @Injectable()

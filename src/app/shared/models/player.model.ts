@@ -10,7 +10,12 @@ export interface IPlayer {
   role?: Role;
 }
 
-export class Player implements IPlayer, ISerializable<IPlayer> {
+export interface ISerializedPlayer extends Omit<IPlayer, 'user' | 'nickname'> {
+  nickname?: string;
+  user?: string;
+}
+
+export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
   nickname: string;
   number?: number;
   user?: User;
@@ -39,18 +44,34 @@ export class Player implements IPlayer, ISerializable<IPlayer> {
     };
   }
 
-  serialize(exclude?: (keyof IPlayer)[]): IPlayer {
+  serialize(exclude?: (keyof ISerializedPlayer)[]): ISerializedPlayer {
+    if (!this.isGuest) {
+      const serializedPlayer: ISerializedPlayer = {};
+
+      if (!exclude?.includes('role')) {
+        serializedPlayer.role = this.role;
+      }
+
+      if (!exclude?.includes('user')) {
+        serializedPlayer.user = this.user.uid;
+      }
+
+      return serializedPlayer;
+    }
+
     /* eslint-disable no-param-reassign */
     const serializedPlayer = Object.entries(this)
       .reduce((player, [key, value]) => {
-        const playerKey = key as keyof IPlayer;
+        const playerKey = key as keyof ISerializedPlayer;
 
         if (exclude?.includes(playerKey) || typeof value === 'undefined') return player;
 
-        (player[playerKey] as any) = value;
+        if (playerKey !== 'user') {
+          (player[playerKey] as any) = value;
+        }
 
         return player;
-      }, {} as IPlayer);
+      }, {} as ISerializedPlayer);
     /* eslint-enable */
 
     return serializedPlayer;

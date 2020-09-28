@@ -21,7 +21,7 @@ export interface IRound extends Night, Day, Vote {
   isVoteDisabled: boolean;
   votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
   eliminateAllVote?: Map<string, boolean>;
-  voteResult: VoteResult;
+  voteResult?: VoteResult;
 }
 
 export class Round implements IRound, ISerializable<IRound> {
@@ -40,7 +40,7 @@ export class Round implements IRound, ISerializable<IRound> {
   isVoteDisabled = false;
   votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
   eliminateAllVote?: Map<string, boolean>;
-  voteResult: VoteResult;
+  voteResult?: VoteResult;
 
   constructor(partialDay?: Partial<Round>) {
     this.kickedPlayers = partialDay?.kickedPlayers || [];
@@ -56,7 +56,7 @@ export class Round implements IRound, ISerializable<IRound> {
     this.isVoteDisabled = partialDay?.isVoteDisabled || false;
     this.votes = partialDay?.votes || [];
     this.eliminateAllVote = partialDay?.eliminateAllVote;
-    this.voteResult = partialDay?.voteResult || VoteResult.NO_CANDIDATES;
+    this.voteResult = partialDay?.voteResult;
   }
 
   serialize(exclude?: (keyof IRound)[]): IRound {
