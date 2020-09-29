@@ -22,6 +22,11 @@ const dummySuggestions: IUser[] = [
 @Component({
   selector: 'app-preparation-modal',
   templateUrl: './preparation-modal.component.html',
+  styles: [`
+    .add-new {
+      flex: 1;
+    }
+  `],
 })
 export class PreparationModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;

@@ -67,6 +67,8 @@
 }
 
 .sticky {
+  background-color: var(--ion-color-primary-contrast);
+
   position: sticky;
   z-index: 2;
 
