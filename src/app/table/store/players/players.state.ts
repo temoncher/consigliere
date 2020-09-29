@@ -356,19 +356,15 @@ export class PlayersState {
 
   @Action(AssignRole)
   assignRole(
-    { setState }: StateContext<PlayersStateModel>,
+    { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, role }: AssignRole,
   ) {
-    setState(
-      patch<PlayersStateModel>({
-        players: updateItem(
-          (player) => player.uid === playerId,
-          (player) => ({
-            ...player,
-            role,
-          }),
-        ),
-      }),
-    );
+    const { roles } = getState();
+    const newRoles = {
+      ...roles,
+      [playerId]: role,
+    };
+
+    patchState({ roles: newRoles });
   }
 }

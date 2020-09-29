@@ -100,21 +100,7 @@ export class PlayersListComponent implements OnInit {
     this.awaitPlayerModalResult(modal);
   }
 
-  private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
-    const { data: player, role } = await modal.onWillDismiss();
-
-    if (role === 'authenticated') {
-      this.addNewPlayer(player);
-
-      return;
-    }
-
-    if (role === 'guest') {
-      this.presentPlayerPrompt();
-    }
-  }
-
-  async presentPlayerPrompt() {
+  private async presentPlayerPrompt() {
     const prompt = await this.alertController.create({
       header: this.playerPrompt.header,
       inputs: [
@@ -140,7 +126,22 @@ export class PlayersListComponent implements OnInit {
     });
 
     await prompt.present();
+
     document.getElementById('nickname-input').focus();
+  }
+
+  private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
+    const { data: player, role } = await modal.onWillDismiss();
+
+    if (role === 'authenticated') {
+      this.addNewPlayer(player);
+
+      return;
+    }
+
+    if (role === 'guest') {
+      this.presentPlayerPrompt();
+    }
   }
 
   private addNewPlayer(player: Player) {
