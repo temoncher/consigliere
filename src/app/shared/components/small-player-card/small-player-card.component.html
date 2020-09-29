@@ -3,7 +3,7 @@
   *ngIf="player"
   [ngClass]="
     (showRole || showTeam) &&
-    (player.role === Role.MAFIA || player.role === Role.DON)
+    (playerRole === Role.MAFIA || playerRole === Role.DON)
       ? 'background-color-dark'
       : ''
   "
@@ -11,19 +11,19 @@
 >
   <div
     *ngIf="
-      showRole && (player.role === Role.DON || player.role === Role.SHERIFF)
+      showRole && (playerRole === Role.DON || playerRole === Role.SHERIFF)
     "
-    [id]="player.role === Role.DON ? 'don-label' : 'sheriff-label'"
+    [id]="playerRole === Role.DON ? 'don-label' : 'sheriff-label'"
     class="clip-button top-left"
     [ngClass]="
-      player.role === Role.DON
+      playerRole === Role.DON
         ? 'background-color-danger'
         : 'background-color-warning'
     "
   >
     <ion-icon
       class="text-color-dark-contrast"
-      [name]="player.role === Role.DON ? 'rose' : 'star'"
+      [name]="playerRole === Role.DON ? 'rose' : 'star'"
     ></ion-icon>
   </div>
 

@@ -30,6 +30,7 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
   player: Player;
   proposedPlayer: Player;
   playerQuitPhase: string;
+  playerRole: Role;
 
   Role = Role;
 
@@ -53,6 +54,10 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
     this.store.select(PlayersState.getPlayerFalls(this.playerId))
       .pipe(takeUntil(this.destroy))
       .subscribe((falls) => this.fallsNumber = falls);
+
+    this.store.select(PlayersState.getPlayerRole(this.playerId))
+      .pipe(takeUntil(this.destroy))
+      .subscribe((role) => this.playerRole = role);
   }
 
   ngOnDestroy() {

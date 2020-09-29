@@ -18,6 +18,7 @@ export class ResultComponent implements OnInit {
   @Select(TableState.getGameResult) gameResult$: Observable<GameResult>;
   @Select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON])) mafiaPlayers$: Observable<Player[]>;
   @Select(PlayersState.getPlayersByRoles([Role.CITIZEN, Role.SHERIFF])) citizenPlayers$: Observable<Player[]>;
+  @Select(PlayersState.getRoles) roles$: Observable<Record<string, Role>>;
 
   GameResult = GameResult;
 

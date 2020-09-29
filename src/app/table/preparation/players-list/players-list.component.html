@@ -23,7 +23,7 @@
         <div
           class="clip-button top-left text-only text-color-dark-contrast"
           [ngClass]="
-            (validRoles$ | async)[player.role]
+            (validRoles$ | async)[getPlayersRole(player)]
               ? 'background-color-primary'
               : 'background-color-danger'
           "
@@ -31,16 +31,20 @@
           {{ i + 1 }}
         </div>
         <ion-avatar>
-          <img
-            [src]="player.user?.avatar ? player.user?.avatar : defaultAvatar"
-          />
+          <img [src]="player.user?.avatar || defaultAvatar" />
         </ion-avatar>
       </div>
 
       <ion-label>
         <h3>{{ player.nickname }}</h3>
         <!-- TODO: translate this -->
-        <div *ngIf="player.role; then hasRole; else hasNoRole">
+        <div
+          *ngIf="
+            getPlayersRole(player);
+            then hasRole;
+            else hasNoRole
+          "
+        >
           {{
             "TABS.TABLE.PREPARATION.PLAYERS_LIST" +
               (player.isGuest ? ".guest" : ".authorizedUser") | translate
@@ -48,8 +52,8 @@
         </div>
         <ng-template #hasRole>
           <p>
-            <ion-text [color]="(validRoles$ | async)[player.role] || 'danger'">
-              {{ player.role }}
+            <ion-text [color]="(validRoles$ | async)[getPlayersRole(player)] || 'danger'">
+              {{ getPlayersRole(player) }}
             </ion-text>
           </p>
         </ng-template>

@@ -31,6 +31,7 @@ interface IonicReorderEvent {
 export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(PlayersState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getRoles) roles$: Observable<Record<string, Role>>;
   @Select(PlayersState.getValidRoles) validRoles$: Observable<Partial<Record<keyof typeof Role, boolean>>>;
 
   defaultAvatar = defaultAvatarSrc;
@@ -42,6 +43,8 @@ export class PlayersListComponent implements OnInit {
     confirmButton: string;
   };
 
+  roles: Record<string, Role>;
+
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
@@ -52,6 +55,8 @@ export class PlayersListComponent implements OnInit {
   ) {
     this.translate.get('TABS.TABLE.PREPARATION.PLAYERS_LIST.playerPrompt')
       .subscribe((playerPrompt) => this.playerPrompt = playerPrompt);
+
+    this.roles$.subscribe((roles) => this.roles = roles);
   }
 
   ngOnInit() { }
@@ -67,6 +72,10 @@ export class PlayersListComponent implements OnInit {
 
   changeRole(playerId: string) {
     this.store.dispatch(new AssignRole(playerId, Role.DON));
+  }
+
+  getPlayersRole(player: Player) {
+    return this.roles[player.user.uid];
   }
 
   async presentRolesMenu(playerId: string) {

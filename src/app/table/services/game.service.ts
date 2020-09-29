@@ -3,7 +3,6 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
-import { MapToRecordConverter } from '@/shared/helpers/map-to-record-converter';
 import { Game } from '@/shared/models/game.interface';
 import { Role } from '@/shared/models/role.enum';
 import { ApiService } from '@/shared/services/api/api.service';
@@ -57,12 +56,15 @@ export class GameService {
   }
 
   endNight() {
-    const players = this.store.selectSnapshot(PlayersState.getPlayers);
-    const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
+    const { players, roles, quitPhases } = this.store.selectSnapshot(PlayersState.getState);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
-    const aliveMafia = players.filter(
-      (player) => !quitPhases[player.user.uid] && (player.role === Role.DON || player.role === Role.MAFIA),
-    );
+    const aliveMafia = players.filter((player) => {
+      const playerRole = roles[player.user.uid];
+      const playerQuitPhase = quitPhases[player.user.uid];
+
+      return !playerQuitPhase && (playerRole === Role.DON || playerRole === Role.MAFIA);
+    });
+
     let murderedPlayer: string;
 
     for (const [victimId, mafiaIds] of victimsMap) {
@@ -154,7 +156,6 @@ export class GameService {
     const { players, falls, quitPhases, speechSkips } = this.store.selectSnapshot(PlayersState.getState);
     const host = this.store.selectSnapshot(PlayersState.getHost);
     const user = this.store.selectSnapshot(UserState.getState);
-    const mappedRounds = rounds.map((round) => MapToRecordConverter.deepConvert(round.serialize()));
 
     const newGame: Game = {
       creatorId: user.uid,
@@ -163,7 +164,7 @@ export class GameService {
       quitPhases,
       speechSkips,
       host: host.serialize(['number']),
-      rounds: mappedRounds,
+      rounds,
       result,
     };
 

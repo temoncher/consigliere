@@ -9,7 +9,7 @@ import { QuitPhase } from '@/shared/models/quit-phase.interface';
 import { Role } from '@/shared/models/role.enum';
 import { RoundPhase } from '@/table/models/day-phase.enum';
 
-import { dummyPlayers, dummyHost } from './players-mocks';
+import { dummyPlayers, dummyHost, dummyPlayersRoles } from './players-mocks';
 import {
   GiveRoles,
   SetHost,
@@ -44,6 +44,7 @@ export interface PlayersStateModel {
   falls: Record<string, number>; // <playerId, numberOfFalls>
   quitPhases: Record<string, QuitPhase>; // <playerId, quitPhase>
   speechSkips: Record<string, number>; // <playerId, roundNumber>
+  roles: Record<string, Role>; // <playerId, role>
 }
 
 @State<PlayersStateModel>({
@@ -51,6 +52,7 @@ export interface PlayersStateModel {
   defaults: {
     players: environment.production ? [] : dummyPlayers,
     host: environment.production ? null : dummyHost,
+    roles: environment.production ? {} : dummyPlayersRoles,
     falls: {},
     quitPhases: {},
     speechSkips: {},
@@ -74,6 +76,11 @@ export class PlayersState {
   }
 
   @Selector()
+  static getRoles({ roles }: PlayersStateModel) {
+    return roles;
+  }
+
+  @Selector()
   static getSpeechSkips({ speechSkips }: PlayersStateModel) {
     return speechSkips;
   }
@@ -94,27 +101,23 @@ export class PlayersState {
   }
 
   @Selector()
-  static getSheriff({ players }: PlayersStateModel) {
-    return players.find((player) => player.role === Role.SHERIFF);
+  static getSheriff({ players, roles }: PlayersStateModel) {
+    return players.find((player) => roles[player.user.uid] === Role.SHERIFF);
   }
 
   @Selector()
-  static getDon({ players }: PlayersStateModel) {
-    return players.find((player) => player.role === Role.DON);
+  static getDon({ players, roles }: PlayersStateModel) {
+    return players.find((player) => roles[player.user.uid] === Role.DON);
   }
 
   @Selector()
-  static getRolesNumbers({ players }: PlayersStateModel) {
+  static getRolesNumbers({ roles }: PlayersStateModel) {
     const initial: Partial<Record<keyof typeof Role, number>> = {};
 
-    return players.reduce((accumulator, player) => {
-      if (!player.role) return accumulator;
-
-      return {
-        ...accumulator,
-        [player.role]: accumulator[player.role] + 1 || 1,
-      };
-    }, initial);
+    return Object.entries(roles).reduce((accumulator, [, role]) => ({
+      ...accumulator,
+      [role]: accumulator[role] + 1 || 1,
+    }), initial);
   }
 
   @Selector([PlayersState.getRolesNumbers])
@@ -174,25 +177,39 @@ export class PlayersState {
     );
   }
 
-  static getPlayersByRoles(roles: Role[]) {
+  @Selector()
+  static getPlayerRole(playerId: string) {
     return createSelector(
       [PlayersState],
-      ({ players }: PlayersStateModel) => players.filter((player) => roles.includes(player.role)),
+      ({ roles }: PlayersStateModel) => roles[playerId],
+    );
+  }
+
+  static getPlayersByRoles(chosenRoles: Role[]) {
+    return createSelector(
+      [PlayersState],
+      ({ players, roles }: PlayersStateModel) => {
+        const chosenRolePlayers = players.filter((player) => chosenRoles.includes(roles[player.user.uid]));
+
+        return chosenRolePlayers;
+      },
     );
   }
 
   @Action(GiveRoles)
   giveRoles({ patchState, getState }: StateContext<PlayersStateModel>) {
-    const { players, host } = cloneDeep(getState());
-    const roles = shuffle([...rolesArray]);
+    const { players } = getState();
+    /* eslint-disable no-param-reassign */
+    const newRoles: Record<string, Role> = shuffle([...rolesArray]).reduce((roles, currentRole, index) => {
+      const playerId = players[index].user.uid;
 
-    host.role = Role.HOST;
+      roles[playerId] = currentRole;
 
-    for (const [index, player] of players.entries()) {
-      player.role = roles[index];
-    }
+      return roles;
+    }, {});
+    /* eslint-enable */
 
-    patchState({ players, host });
+    patchState({ roles: newRoles });
   }
 
   @Action(SetHost)

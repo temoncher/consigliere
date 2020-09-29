@@ -44,12 +44,16 @@
 
   <div class="result-container__list" [ngSwitch]="gameResult$ | async">
     <ng-container *ngSwitchCase="GameResult.MAFIA">
-      <app-result-list [players]="mafiaPlayers$ | async"></app-result-list>
+      <app-result-list
+        [players]="mafiaPlayers$ | async"
+        [roles]="roles$ | async"
+      ></app-result-list>
     </ng-container>
     <ng-container *ngSwitchCase="GameResult.CIVILIANS">
       <app-result-list
         class="result-container__list"
         [players]="citizenPlayers$ | async"
+        [roles]="roles$ | async"
       ></app-result-list>
     </ng-container>
   </div>

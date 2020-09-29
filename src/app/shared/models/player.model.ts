@@ -1,4 +1,3 @@
-import { Role } from './role.enum';
 import { ISerializable } from './serializable.interface';
 import { User } from './user.interface';
 
@@ -7,7 +6,6 @@ export interface IPlayer {
   number?: number;
   user?: User;
   isGuest?: boolean;
-  role?: Role;
 }
 
 export interface ISerializedPlayer extends Omit<IPlayer, 'user' | 'nickname'> {
@@ -20,11 +18,9 @@ export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
   number?: number;
   user?: User;
   isGuest?: boolean;
-  role?: Role;
 
   constructor(partialPlayer: Partial<Player>) {
     this.nickname = partialPlayer.nickname;
-    this.role = partialPlayer.role;
 
     if (partialPlayer.number) {
       this.number = partialPlayer.number;
@@ -47,10 +43,6 @@ export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
   serialize(exclude?: (keyof ISerializedPlayer)[]): ISerializedPlayer {
     if (!this.isGuest) {
       const serializedPlayer: ISerializedPlayer = {};
-
-      if (!exclude?.includes('role')) {
-        serializedPlayer.role = this.role;
-      }
 
       if (!exclude?.includes('user')) {
         serializedPlayer.user = this.user.uid;
