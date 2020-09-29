@@ -1,5 +1,3 @@
-import { ISerializable } from '@/shared/models/serializable.interface';
-
 import { Day } from './day.interface';
 import { Night } from './night.interface';
 import { VoteResult } from './vote-result.enum';
@@ -9,7 +7,7 @@ export interface IRound extends Night, Day, Vote {
   kickedPlayers: string[];
 }
 
-export class Round implements IRound, ISerializable<IRound> {
+export class Round implements IRound {
   kickedPlayers: string[];
   // Night
   shots: Record<string, string>; // <mafiaId, playerId>
@@ -27,37 +25,20 @@ export class Round implements IRound, ISerializable<IRound> {
   eliminateAllVote?: Record<string, boolean>;
   voteResult?: VoteResult;
 
-  constructor(partialDay?: Partial<Round>) {
-    this.kickedPlayers = partialDay?.kickedPlayers || [];
+  constructor(partialRound?: Partial<Round>) {
+    this.kickedPlayers = partialRound?.kickedPlayers || [];
 
-    this.shots = partialDay?.shots || {};
-    this.murderedPlayer = partialDay?.murderedPlayer;
-    this.donCheck = partialDay?.donCheck;
-    this.sheriffCheck = partialDay?.sheriffCheck;
+    this.shots = partialRound?.shots || {};
+    this.murderedPlayer = partialRound?.murderedPlayer;
+    this.donCheck = partialRound?.donCheck;
+    this.sheriffCheck = partialRound?.sheriffCheck;
 
-    this.timers = partialDay?.timers || {};
-    this.proposedPlayers = partialDay?.proposedPlayers;
+    this.timers = partialRound?.timers || {};
+    this.proposedPlayers = partialRound?.proposedPlayers;
 
-    this.isVoteDisabled = partialDay?.isVoteDisabled || false;
-    this.votes = partialDay?.votes || [];
-    this.eliminateAllVote = partialDay?.eliminateAllVote;
-    this.voteResult = partialDay?.voteResult;
-  }
-
-  serialize(exclude?: (keyof IRound)[]): IRound {
-    /* eslint-disable no-param-reassign */
-    const serializedRound = Object.entries(this)
-      .reduce((round, [key, value]) => {
-        const roundKey = key as keyof IRound;
-
-        if (exclude?.includes(roundKey) || typeof value === 'undefined') return round;
-
-        (round[roundKey] as any) = value;
-
-        return round;
-      }, {} as IRound);
-    /* eslint-enable */
-
-    return serializedRound;
+    this.isVoteDisabled = partialRound?.isVoteDisabled || false;
+    this.votes = partialRound?.votes || [];
+    this.eliminateAllVote = partialRound?.eliminateAllVote;
+    this.voteResult = partialRound?.voteResult;
   }
 }
