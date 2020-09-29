@@ -8,7 +8,7 @@
       (cardClick)="switchVote(player.user.uid)"
     >
       <div
-        *ngIf="(eliminateAllVote$ | async)?.has(player.user.uid)"
+        *ngIf="!!(eliminateAllVote$ | async)[player.user.uid]"
         slot="overlay"
         class="full-parent-overlay grid-content-center background-color-danger"
       >
@@ -21,10 +21,10 @@
         slot="center"
         class="votes-number-card grid-content-center"
         [class.text-color-danger]="
-          (eliminateAllVote$ | async)?.size > (players$ | async)?.length / 2
+          votedPlayersNumber > (players$ | async)?.length / 2
         "
       >
-        <span>{{ (eliminateAllVote$ | async)?.size }}</span>
+        <span>{{ votedPlayersNumber }}</span>
       </ion-card>
     </div>
 

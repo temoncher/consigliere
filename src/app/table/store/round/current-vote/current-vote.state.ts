@@ -133,16 +133,17 @@ export class CurrentVoteState {
     { patchState, getState }: StateContext<CurrentVoteStateModel>,
     { playerId }: VoteForElimination,
   ) {
-    const { eliminateAllVote } = cloneDeep(getState());
-    const previousDecision = eliminateAllVote.get(playerId);
+    const { eliminateAllVote } = getState();
+    const newEliminateAllVote = { ...eliminateAllVote };
+    const previousDecision = newEliminateAllVote[playerId];
 
     if (previousDecision) {
-      eliminateAllVote.delete(playerId);
+      delete newEliminateAllVote[playerId];
     } else {
-      eliminateAllVote.set(playerId, true);
+      newEliminateAllVote[playerId] = true;
     }
 
-    patchState({ eliminateAllVote });
+    patchState({ eliminateAllVote: newEliminateAllVote });
   }
 
   @Action(VoteForCandidate)

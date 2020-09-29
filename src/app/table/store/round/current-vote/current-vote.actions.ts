@@ -46,7 +46,7 @@ export class SetVoteResult {
 
 export class SetEliminateAllVote {
   static readonly type = `[${voteActionsPrefix}] Set eliminate all vote phase`;
-  constructor(public eliminateAllVote: Map<string, boolean>) { }
+  constructor(public eliminateAllVote: Record<string, boolean>) { }
 }
 
 export class DisableCurrentVote {

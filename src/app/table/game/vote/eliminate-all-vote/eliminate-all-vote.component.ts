@@ -15,16 +15,22 @@ import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.
   styleUrls: ['./eliminate-all-vote.component.scss'],
 })
 export class EliminateAllVoteComponent implements OnInit {
-  @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Map<string, boolean>>;
+  @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Record<string, boolean>>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
+
+  get votedPlayersNumber() {
+    const eliminateVote = this.store.selectSnapshot(CurrentVoteState.getEliminateVote);
+
+    return Object.keys(eliminateVote).length;
+  }
 
   constructor(
     private store: Store,
     private voteService: VoteService,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   switchVote(playerId: string) {
     this.store.dispatch(new VoteForElimination(playerId));

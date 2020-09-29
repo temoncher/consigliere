@@ -87,7 +87,7 @@ export class VoteService {
     }
 
     if (previousLeadersIds?.length === leadersIds.length) {
-      this.store.dispatch(new SetEliminateAllVote(new Map<string, boolean>()));
+      this.store.dispatch(new SetEliminateAllVote({}));
       this.switchVotePhase(VotePhase.ELIMINATE_VOTE);
 
       return;
@@ -106,7 +106,7 @@ export class VoteService {
 
     if (eliminateAllVote) {
       const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
-      const isEliminateAll = eliminateAllVote.size > alivePlayers.length / 2;
+      const isEliminateAll = Object.keys(eliminateAllVote).length > alivePlayers.length / 2;
 
       if (isEliminateAll) {
         const quitPhase = this.playersService.getQuitPhase();
@@ -186,7 +186,7 @@ export class VoteService {
         return;
       }
 
-      if (eliminateAllVote?.size <= players.length / 2) {
+      if (Object.keys(eliminateAllVote).length <= players.length / 2) {
         this.store.dispatch([
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.PLAYERS_KEPT_ALIVE),
@@ -211,7 +211,7 @@ export class VoteService {
 
     this.store.dispatch([
       new SetCurrentVotePhase(newVotePhase),
-      new SetEliminateAllVote(new Map<string, false>()),
+      new SetEliminateAllVote({}),
     ]);
   }
 

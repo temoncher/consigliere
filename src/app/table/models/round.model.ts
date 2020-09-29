@@ -24,7 +24,7 @@ export class Round implements IRound, ISerializable<IRound> {
   // Vote
   isVoteDisabled = false;
   votes: Record<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
-  eliminateAllVote?: Map<string, boolean>;
+  eliminateAllVote?: Record<string, boolean>;
   voteResult?: VoteResult;
 
   constructor(partialDay?: Partial<Round>) {
