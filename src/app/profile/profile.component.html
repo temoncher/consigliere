@@ -3,6 +3,7 @@
     <ion-header>
       <ion-button fill="clear" (click)="logout()">
         <ion-icon
+          color="light"
           slot="icon-only"
           name="exit-outline"
           (click)="logout()"
@@ -19,6 +20,23 @@
       </h2>
     </div>
 
-    <div class="app-form"></div>
+    <div class="app-form">
+      <ion-list class="games-list cards-list">
+        <ion-list-header>Игры</ion-list-header>
+
+        <ion-item lines="none">
+          <div slot="start">
+            <ion-avatar>
+              <img src="assets/icon/favicon.png" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ "lol" }}</h3>
+            <p>{{ "lol" }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 </ion-content>

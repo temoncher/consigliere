@@ -22,4 +22,12 @@ ion-header {
   .app-form {
     flex: 1;
   }
+
+  .games-list {
+    background-color: var(--ion-color-dark-contrast);
+
+    ion-item {
+      padding-left: 8px;
+    }
+  }
 }

@@ -1,55 +1,57 @@
-<ng-container
-  *ngIf="gameResult$ | async; then resultBlock; else gameBlock"
-></ng-container>
+<div class="game">
+  <ng-container
+    *ngIf="gameResult$ | async; then resultBlock; else gameBlock"
+  ></ng-container>
 
-<ng-template #resultBlock>
-  <ion-content>
-    <app-result></app-result>
-  </ion-content>
-</ng-template>
-<ng-template #gameBlock>
-  <ion-split-pane contentId="game-content">
-    <ion-menu contentId="game-content" menuId="game-menu" type="overlay">
-      <app-game-menu class="h100"></app-game-menu>
-    </ion-menu>
-
-    <ion-content
-      id="game-content"
-      class="no-scroll"
-      [ngSwitch]="currentPhase$ | async"
-    >
-      <ion-header class="game__header">
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button data-cy="game-menu-button" (click)="openMenu()">
-              <ion-icon slot="icon-only" name="menu"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-
-          <ion-title>
-            <ng-container *ngSwitchCase="RoundPhase.DAY">
-              {{ "TABS.TABLE.GAME.DAY.toolbarTitle" | translate }}
-            </ng-container>
-            <ng-container *ngSwitchCase="RoundPhase.NIGHT">
-              {{ "TABS.TABLE.GAME.NIGHT.toolbarTitle" | translate }}
-            </ng-container>
-            <ng-container *ngSwitchCase="RoundPhase.VOTE">
-              {{ "TABS.TABLE.GAME.VOTE.toolbarTitle" | translate }}
-            </ng-container>
-            {{ roundNumber$ | async }}
-          </ion-title>
-
-          <ion-buttons id="game-buttons-outlet" slot="end"></ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
-      <div class="game">
-        <app-player-controls data-cy="player-controls"></app-player-controls>
-
-        <app-day *ngSwitchCase="RoundPhase.DAY"></app-day>
-        <app-night *ngSwitchCase="RoundPhase.NIGHT"></app-night>
-        <app-vote *ngSwitchCase="RoundPhase.VOTE"></app-vote>
-      </div>
+  <ng-template #resultBlock>
+    <ion-content>
+      <app-result></app-result>
     </ion-content>
-  </ion-split-pane>
-</ng-template>
+  </ng-template>
+  <ng-template #gameBlock>
+    <ion-split-pane contentId="game-content">
+      <ion-menu contentId="game-content" menuId="game-menu" type="overlay">
+        <app-game-menu class="h100"></app-game-menu>
+      </ion-menu>
+
+      <ion-content
+        id="game-content"
+        class="no-scroll"
+        [ngSwitch]="currentPhase$ | async"
+      >
+        <ion-header class="game__header">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button data-cy="game-menu-button" (click)="openMenu()">
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+
+            <ion-title>
+              <ng-container *ngSwitchCase="RoundPhase.DAY">
+                {{ "TABS.TABLE.GAME.DAY.toolbarTitle" | translate }}
+              </ng-container>
+              <ng-container *ngSwitchCase="RoundPhase.NIGHT">
+                {{ "TABS.TABLE.GAME.NIGHT.toolbarTitle" | translate }}
+              </ng-container>
+              <ng-container *ngSwitchCase="RoundPhase.VOTE">
+                {{ "TABS.TABLE.GAME.VOTE.toolbarTitle" | translate }}
+              </ng-container>
+              {{ roundNumber$ | async }}
+            </ion-title>
+
+            <ion-buttons id="game-buttons-outlet" slot="end"></ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <div class="game">
+          <app-player-controls data-cy="player-controls"></app-player-controls>
+
+          <app-day *ngSwitchCase="RoundPhase.DAY"></app-day>
+          <app-night *ngSwitchCase="RoundPhase.NIGHT"></app-night>
+          <app-vote *ngSwitchCase="RoundPhase.VOTE"></app-vote>
+        </div>
+      </ion-content>
+    </ion-split-pane>
+  </ng-template>
+</div>

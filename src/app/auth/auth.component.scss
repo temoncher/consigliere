@@ -1,10 +1,6 @@
 @import "~src/theme/variables.scss";
 @import "~src/theme/custom-variables.scss";
 
-ion-content {
-  --background: var(--ion-color-dark);
-}
-
 .auth-page {
   display: flex;
   flex-direction: column;

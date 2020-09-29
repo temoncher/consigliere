@@ -13,4 +13,10 @@ export class GamesApi implements Api<Game> {
   async create(game: Game): Promise<void> {
     await this.gamesCollection.add(game);
   }
+
+  async getLastGamesByPlayerID(id: string) {
+    // const createdGamesDocs = await this.gamesCollection.ref.where('creatorId', '==', id).get();
+    // const hostedGamesDocs = await this.gamesCollection.ref.where('host.user', '==', id).get();
+    // const hostedGamesDocs = await this.gamesCollection.ref.where('host.user', '==', id).get();
+  }
 }

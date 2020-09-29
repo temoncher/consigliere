@@ -8,8 +8,13 @@ import { User } from '@/shared/models/user.interface';
 import { AuthService } from '@/shared/services/auth.service';
 import { FetchUser } from '@/shared/store/user/user.actions';
 import { UserState } from '@/shared/store/user/user.state';
+import { GameResult } from '@/table/models/game-result.enum';
 
 import { SettingsMenuComponent } from './settings-menu.component';
+
+type WinnerMap = {
+  [key in GameResult]: string;
+};
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +25,11 @@ export class ProfileComponent implements OnInit {
   @Select(UserState.getState) user$: Observable<User>;
 
   defaultAvatar = defaultAvatarSrc;
+  winnerText: WinnerMap = {
+    [GameResult.CIVILIANS]: 'Мирные',
+    [GameResult.MAFIA]: 'Мафия',
+    [GameResult.TIE]: 'Ничья',
+  };
 
   constructor(
     private store: Store,

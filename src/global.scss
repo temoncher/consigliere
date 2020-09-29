@@ -35,7 +35,13 @@
 @import "./theme/square-avatar.scss";
 
 ion-content {
+  --background: var(--ion-color-primary-tint);
+  --color: var(--ion-color-primary-contrast)
+}
+
+.game ion-content {
   --background: var(--ion-color-light);
+  --color: var(--ion-color-light-contrast)
 }
 
 .app-divider {

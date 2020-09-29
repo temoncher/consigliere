@@ -1,10 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="tabs/table"
-        [text]="'TABS.TABLE.PREPARATION.backButton' | translate"
-      ></ion-back-button>
+      <ion-button fill="clear" routerLink="/tabs/table">
+        <ion-icon
+          slot="icon-only"
+          name="arrow-back-outline"
+        ></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>
       {{ "TABS.TABLE.PREPARATION.toolbarTitle" | translate }}
