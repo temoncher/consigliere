@@ -27,7 +27,7 @@ export type CurrentDayStateModel = Day;
   name: 'currentDay',
   defaults: {
     timers: {},
-    proposedPlayers: new Map<string, string>(), // <candidateId, playerId>
+    proposedPlayers: {}, // <candidateId, playerId>
   },
 })
 @Injectable()
@@ -43,23 +43,26 @@ export class CurrentDayState {
   }
 
   static getProposedPlayer(playerId: string) {
-    return createSelector([CurrentDayState, PlayersState], ({ proposedPlayers }: CurrentDayStateModel, { players }: PlayersStateModel) => {
-      let foundCandidateId = null;
+    return createSelector(
+      [CurrentDayState, PlayersState],
+      ({ proposedPlayers }: CurrentDayStateModel, { players }: PlayersStateModel) => {
+        let foundCandidateId = null;
 
-      for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
-        if (playerId === proposingPlayerId) {
-          foundCandidateId = candidateId;
+        for (const [candidateId, proposingPlayerId] of Object.entries(proposedPlayers)) {
+          if (playerId === proposingPlayerId) {
+            foundCandidateId = candidateId;
+          }
         }
-      }
 
-      if (foundCandidateId) {
-        const foundPlayer = players.find((player) => player.user.uid === foundCandidateId);
+        if (foundCandidateId) {
+          const foundPlayer = players.find((player) => player.user.uid === foundCandidateId);
 
-        return foundPlayer;
-      }
+          return foundPlayer;
+        }
 
-      return null;
-    });
+        return null;
+      },
+    );
   }
 
   @Action(ProposePlayer)
@@ -70,13 +73,14 @@ export class CurrentDayState {
       candidateId,
     }: ProposePlayer,
   ) {
-    const { proposedPlayers } = cloneDeep(getState());
+    const { proposedPlayers } = getState();
+    const newProposedPlayers = { ...proposedPlayers };
 
-    if (!proposedPlayers.has(candidateId)) {
-      proposedPlayers.set(candidateId, playerId);
+    if (!newProposedPlayers[candidateId]) {
+      newProposedPlayers[candidateId] = playerId;
     }
 
-    patchState({ proposedPlayers });
+    patchState({ proposedPlayers: newProposedPlayers });
   }
 
   @Action(ResetPlayerTimer)
@@ -95,7 +99,7 @@ export class CurrentDayState {
 
   @Action(ResetProposedPlayers)
   resetProposedPlayers({ patchState }: StateContext<CurrentDayStateModel>) {
-    patchState({ proposedPlayers: new Map<string, string>() });
+    patchState({ proposedPlayers: {} });
   }
 
   @Action(WithdrawPlayer)
@@ -103,17 +107,18 @@ export class CurrentDayState {
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId }: WithdrawPlayer,
   ) {
-    const { proposedPlayers } = cloneDeep(getState());
+    const { proposedPlayers } = getState();
+    const newProposedPlayers = { ...proposedPlayers };
     let foundCandidateId = null;
 
-    for (const [candidateId, proposingPlayerId] of proposedPlayers.entries()) {
+    for (const [candidateId, proposingPlayerId] of Object.entries(newProposedPlayers)) {
       if (playerId === proposingPlayerId) {
         foundCandidateId = candidateId;
       }
     }
 
     if (foundCandidateId) {
-      proposedPlayers.delete(foundCandidateId);
+      delete proposedPlayers[foundCandidateId];
     }
 
     patchState({ proposedPlayers });

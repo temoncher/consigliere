@@ -18,11 +18,11 @@ import { CurrentDayState } from '@/table/store/round/current-day/current-day.sta
 export class ProposeModalComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
+  @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Record<string, string>>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
 
   players: Player[];
-  proposedPlayers: Map<string, string> = new Map<string, string>();
+  proposedPlayers: Record<string, string> = {};
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -57,7 +57,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   }
 
   isAlreadyACandidate(playerId: string) {
-    return this.proposedPlayers.has(playerId);
+    return !!this.proposedPlayers[playerId];
   }
 
   proposePlayer() {

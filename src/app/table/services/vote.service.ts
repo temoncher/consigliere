@@ -166,7 +166,9 @@ export class VoteService {
         return;
       }
 
-      if (!proposedPlayers.size) {
+      const numberOfProposedPlayers = Object.keys(proposedPlayers).length;
+
+      if (!numberOfProposedPlayers) {
         this.store.dispatch([
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.NO_CANDIDATES),
@@ -175,7 +177,7 @@ export class VoteService {
         return;
       }
 
-      if (proposedPlayers.size === 1 && currentRoundNumber === 0) {
+      if (numberOfProposedPlayers === 1 && currentRoundNumber === 0) {
         this.store.dispatch([
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.SINGLE_CANDIDATE_AND_ZERO_DAY),

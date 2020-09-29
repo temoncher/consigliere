@@ -87,7 +87,7 @@ export class GameService {
 
   endDay() {
     const proposedPlayers = this.store.selectSnapshot(CurrentDayState.getProposedPlayers);
-    const proposedPlayersIds = [...proposedPlayers.keys()];
+    const proposedPlayersIds = [...Object.keys(proposedPlayers)];
 
     this.store.dispatch([
       new SwitchRoundPhase(RoundPhase.VOTE),
