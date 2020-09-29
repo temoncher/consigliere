@@ -177,7 +177,6 @@ export class PlayersState {
     );
   }
 
-  @Selector()
   static getPlayerRole(playerId: string) {
     return createSelector(
       [PlayersState],

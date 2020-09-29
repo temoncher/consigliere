@@ -58,11 +58,10 @@
       >
         <div
           slot="overlay"
-          *ngIf="(shots$ | async)[mafiaPlayer.user.uid]"
+          *ngIf="currentShot(mafiaPlayer)"
           class="full-parent-overlay grid-content-center"
           [ngClass]="
-            (shots$ | async)[mafiaPlayer.user.uid] ===
-            players[currentPlayerIndex].user.uid
+            currentShot(mafiaPlayer) === players[currentPlayerIndex].user.uid
               ? 'background-color-danger'
               : 'background-color-medium'
           "

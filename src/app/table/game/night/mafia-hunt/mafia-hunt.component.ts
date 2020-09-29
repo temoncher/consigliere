@@ -32,6 +32,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
+  shots: Record<string, string>;
   aliveMafia: Player[];
 
   currentPlayerIndex = 0;
@@ -54,6 +55,10 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
     this.players$
       .pipe(takeUntil(this.destroy))
       .subscribe((players) => this.players = players);
+
+    this.shots$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((shots) => this.shots = shots);
   }
 
   ngOnInit() { }
@@ -73,5 +78,9 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
 
   shootPlayer(mafiaPlayerId: string) {
     this.store.dispatch(new ShootPlayer(mafiaPlayerId, this.players[this.currentPlayerIndex].user.uid));
+  }
+
+  currentShot(mafia: Player) {
+    return this.shots[mafia.user.uid];
   }
 }
