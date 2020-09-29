@@ -45,13 +45,13 @@ export class VoteService {
       return;
     }
 
-    votes.push(new Map<string, string[]>());
+    votes.push({});
     const vote = votes[votes.length - 1];
 
     if (proposedPlayers.length === 1) {
       const quitPhase = this.playersService.getQuitPhase();
 
-      vote.set(proposedPlayers[0], players.map(({ user: { uid: id } }) => id));
+      vote[proposedPlayers[0]] = players.map(({ user: { uid: id } }) => id);
 
       this.store.dispatch([
         new KillPlayer(proposedPlayers[0], quitPhase),
@@ -63,7 +63,7 @@ export class VoteService {
     }
 
     for (const candidateId of proposedPlayers) {
-      vote.set(candidateId, []);
+      vote[candidateId] = [];
     }
 
     this.store.dispatch(new SetVotes(votes));
@@ -133,11 +133,11 @@ export class VoteService {
       throw new Error('Leader candidates not found');
     }
 
-    votes.push(new Map<string, string[]>());
+    votes.push({});
     const vote = votes[votes.length - 1];
 
     for (const candidateId of leadersIds) {
-      vote.set(candidateId, []);
+      vote[candidateId] = [];
     }
 
     this.store.dispatch([

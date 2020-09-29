@@ -20,14 +20,14 @@ import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.
 export class VoteStageComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
+  @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Record<string, string[]>>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
 
   defaultAvatar = defaultAvatarSrc;
 
   players: Player[];
   proposedPlayers: Player[] = [];
-  vote: Map<string, string[]>;
+  vote: Record<string, string[]>;
 
   voteInfoMap: Map<string, Player> = new Map<string, Player>();
   numberSliderConfig: SwiperOptions = {
@@ -49,7 +49,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
 
     // Implemented to keep players proposal order
     if (currentVote) {
-      for (const candidateId of currentVote.keys()) {
+      for (const candidateId of Object.keys(currentVote)) {
         const candidate = alivePlayers.find((player) => player.user.uid === candidateId);
 
         proposedPlayers.push(candidate);
@@ -74,14 +74,14 @@ export class VoteStageComponent implements OnInit, OnDestroy {
         let newNumberOfLeaderVotes = 0;
 
         if (voteMap) {
-          for (const candidateId of voteMap.keys()) {
+          for (const [candidateId, votedPlayersIds] of Object.entries(voteMap)) {
             const candidate = this.players.find((player) => player.user.uid === candidateId);
 
-            if (voteMap.get(candidateId).length > newNumberOfLeaderVotes) {
-              newNumberOfLeaderVotes = voteMap.get(candidateId).length;
+            if (votedPlayersIds.length > newNumberOfLeaderVotes) {
+              newNumberOfLeaderVotes = votedPlayersIds.length;
             }
 
-            for (const playerId of voteMap.get(candidateId)) {
+            for (const playerId of votedPlayersIds) {
               newVoteInfoMap.set(playerId, candidate);
             }
           }

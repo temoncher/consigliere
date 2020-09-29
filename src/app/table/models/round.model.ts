@@ -23,7 +23,7 @@ export class Round implements IRound, ISerializable<IRound> {
 
   // Vote
   isVoteDisabled = false;
-  votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
+  votes: Record<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
   eliminateAllVote?: Map<string, boolean>;
   voteResult?: VoteResult;
 

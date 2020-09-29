@@ -104,16 +104,16 @@
         (click)="navigateToPlayer(i)"
       >
         <div
-          *ngIf="vote.get(proposedPlayer.user.uid)?.length"
+          *ngIf="vote[proposedPlayer.user.uid]?.length"
           slot="clips"
           class="proposed-player-clip clip-button top-right text-only text-color-dark-contrast"
           [ngClass]="
-            numberOfLeaderVotes === vote.get(proposedPlayer.user.uid)?.length
+            numberOfLeaderVotes === vote[proposedPlayer.user.uid]?.length
               ? 'background-color-danger'
               : 'background-color-medium'
           "
         >
-          {{ vote.get(proposedPlayer.user.uid)?.length }}
+          {{ vote[proposedPlayer.user.uid]?.length }}
         </div>
       </app-small-player-card>
     </ion-slide>

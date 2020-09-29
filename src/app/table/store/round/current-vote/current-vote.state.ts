@@ -78,13 +78,13 @@ export class CurrentVoteState {
     const voteLeaders: string[] = [];
     let numberOfLeaderVotes = 0;
 
-    for (const votedPlayersIds of vote.values()) {
+    for (const votedPlayersIds of Object.values(vote)) {
       if (votedPlayersIds.length > numberOfLeaderVotes) {
         numberOfLeaderVotes = votedPlayersIds.length;
       }
     }
 
-    for (const [candidateId, votedPlayersIds] of vote.entries()) {
+    for (const [candidateId, votedPlayersIds] of Object.entries(vote)) {
       if (votedPlayersIds.length === numberOfLeaderVotes) {
         voteLeaders.push(candidateId);
       }
@@ -104,7 +104,7 @@ export class CurrentVoteState {
 
     if (currentPhase === VotePhase.VOTE) {
       const currentVote = votes[votes.length - 1];
-      const votedPlayersIdsArrays = [...currentVote.values()];
+      const votedPlayersIdsArrays = [...Object.values(currentVote)];
 
       return Boolean(votedPlayersIdsArrays.find((playersIds) => playersIds.length > alivePlayers.length / 2));
     }
@@ -155,23 +155,23 @@ export class CurrentVoteState {
   ) {
     const { votes } = cloneDeep(getState());
     const vote = votes[votes.length - 1];
-    const isAlreadyVotedForThisPlayer = vote.get(proposedPlayerId).includes(playerId);
+    const isAlreadyVotedForThisPlayer = vote[proposedPlayerId].includes(playerId);
 
     if (isAlreadyVotedForThisPlayer) {
-      vote.set(proposedPlayerId, vote.get(proposedPlayerId).filter((votedPlayerId) => playerId !== votedPlayerId));
+      vote[proposedPlayerId] = vote[proposedPlayerId].filter((votedPlayerId) => playerId !== votedPlayerId);
 
       patchState({ votes });
 
       return;
     }
 
-    for (const [candidateId, votedPlayers] of vote.entries()) {
+    for (const [candidateId, votedPlayers] of Object.entries(vote)) {
       const newVotedPlayers = votedPlayers.filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      vote.set(candidateId, newVotedPlayers);
+      vote[candidateId] = newVotedPlayers;
     }
 
-    vote.get(proposedPlayerId).push(playerId);
+    vote[proposedPlayerId].push(playerId);
 
     patchState({ votes });
   }

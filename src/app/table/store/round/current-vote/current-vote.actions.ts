@@ -8,7 +8,7 @@ const voteActionsPrefix = `${roundActionsPrefix}.CurrentVote`;
 
 export class SetVotes {
   static readonly type = `[${voteActionsPrefix}] Set votes`;
-  constructor(public votes: Map<string, string[]>[]) { }
+  constructor(public votes: Record<string, string[]>[]) { }
 }
 
 export class SetIsVoteDisabled {
