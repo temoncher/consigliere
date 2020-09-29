@@ -44,7 +44,7 @@ export class SheriffComponent implements OnInit, OnDestroy {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
     if (players) {
-      this.store.dispatch(new CheckBySheriff(players[this.currentPlayerIndex].user.uid));
+      this.store.dispatch(new CheckBySheriff(players[this.currentPlayerIndex].uid));
     }
   }
 

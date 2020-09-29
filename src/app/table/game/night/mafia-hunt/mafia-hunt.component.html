@@ -11,18 +11,18 @@
   <app-small-player-card
     *ngFor="let player of players$ | async"
     [slot]="player.number"
-    [disabled]="!!(qutiPhases$ | async)[player.user.uid]"
-    [playerId]="player.user.uid"
+    [disabled]="!!(qutiPhases$ | async)[player.uid]"
+    [playerId]="player.uid"
     (cardClick)="navigateToPlayer(player.number)"
   >
     <div
-      *ngIf="(victimsMap$ | async).get(player.user.uid)?.length"
+      *ngIf="(victimsMap$ | async).get(player.uid)?.length"
       slot="clips"
     >
       <div
         class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast"
       >
-        {{ (victimsMap$ | async).get(player.user.uid)?.length }}
+        {{ (victimsMap$ | async).get(player.uid)?.length }}
       </div>
     </div>
   </app-small-player-card>
@@ -43,7 +43,7 @@
       <ion-card-content class="player-card__content">
         <ion-avatar class="player-card__avatar">
           <img
-            [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar"
+            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
           />
         </ion-avatar>
       </ion-card-content>
@@ -53,15 +53,15 @@
       <app-small-player-card
         *ngFor="let mafiaPlayer of aliveMafia"
         showTeam="true"
-        [playerId]="mafiaPlayer.user.uid"
-        (cardClick)="shootPlayer(mafiaPlayer.user.uid)"
+        [playerId]="mafiaPlayer.uid"
+        (cardClick)="shootPlayer(mafiaPlayer.uid)"
       >
         <div
           slot="overlay"
           *ngIf="currentShot(mafiaPlayer)"
           class="full-parent-overlay grid-content-center"
           [ngClass]="
-            currentShot(mafiaPlayer) === players[currentPlayerIndex].user.uid
+            currentShot(mafiaPlayer) === players[currentPlayerIndex].uid
               ? 'background-color-danger'
               : 'background-color-medium'
           "

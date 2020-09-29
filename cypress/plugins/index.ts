@@ -24,7 +24,6 @@ const webpackPreprocessor = require('@cypress/webpack-preprocessor');
 const cyConfig: Cypress.PluginConfig = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  config.ignoreTestFiles = '**/examples/*.spec.js';
 
   on('file:preprocessor', webpackPreprocessor({ webpackOptions }));
 

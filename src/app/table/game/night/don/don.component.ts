@@ -40,7 +40,7 @@ export class DonComponent implements OnInit {
   check() {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
-    this.store.dispatch(new CheckByDon(players[this.currentPlayerIndex].user.uid));
+    this.store.dispatch(new CheckByDon(players[this.currentPlayerIndex].uid));
   }
 
   next() {

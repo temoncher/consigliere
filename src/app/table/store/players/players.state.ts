@@ -97,17 +97,17 @@ export class PlayersState {
 
   @Selector()
   static getAlivePlayers({ players, quitPhases }: PlayersStateModel) {
-    return players.filter(({ user: { uid: id } }) => !quitPhases[id]);
+    return players.filter(({ uid }) => !quitPhases[uid]);
   }
 
   @Selector()
   static getSheriff({ players, roles }: PlayersStateModel) {
-    return players.find((player) => roles[player.user.uid] === Role.SHERIFF);
+    return players.find((player) => roles[player.uid] === Role.SHERIFF);
   }
 
   @Selector()
   static getDon({ players, roles }: PlayersStateModel) {
-    return players.find((player) => roles[player.user.uid] === Role.DON);
+    return players.find((player) => roles[player.uid] === Role.DON);
   }
 
   @Selector()
@@ -151,7 +151,7 @@ export class PlayersState {
   static getPlayer(playerId: string) {
     return createSelector(
       [PlayersState],
-      ({ players }: PlayersStateModel) => players.find((player) => player.user.uid === playerId),
+      ({ players }: PlayersStateModel) => players.find((player) => player.uid === playerId),
     );
   }
 
@@ -188,7 +188,7 @@ export class PlayersState {
     return createSelector(
       [PlayersState],
       ({ players, roles }: PlayersStateModel) => {
-        const chosenRolePlayers = players.filter((player) => chosenRoles.includes(roles[player.user.uid]));
+        const chosenRolePlayers = players.filter((player) => chosenRoles.includes(roles[player.uid]));
 
         return chosenRolePlayers;
       },
@@ -200,7 +200,7 @@ export class PlayersState {
     const { players } = getState();
     /* eslint-disable no-param-reassign */
     const newRoles: Record<string, Role> = shuffle([...rolesArray]).reduce((roles, currentRole, index) => {
-      const playerId = players[index].user.uid;
+      const playerId = players[index].uid;
 
       roles[playerId] = currentRole;
 
@@ -275,7 +275,7 @@ export class PlayersState {
   @Action(RemovePlayer)
   removePlayer({ patchState, getState }: StateContext<PlayersStateModel>, { userId }: RemovePlayer) {
     const { players } = cloneDeep(getState());
-    const newPlayers = players.filter(({ user: { uid: id } }) => id !== userId);
+    const newPlayers = players.filter(({ uid }) => uid !== userId);
 
     patchState({ players: newPlayers });
   }
@@ -362,7 +362,7 @@ export class PlayersState {
     setState(
       patch<PlayersStateModel>({
         players: updateItem(
-          (player) => player.user.uid === playerId,
+          (player) => player.uid === playerId,
           (player) => ({
             ...player,
             role,

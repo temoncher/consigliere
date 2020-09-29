@@ -50,7 +50,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     // Implemented to keep players proposal order
     if (currentVote) {
       for (const candidateId of Object.keys(currentVote)) {
-        const candidate = alivePlayers.find((player) => player.user.uid === candidateId);
+        const candidate = alivePlayers.find((player) => player.uid === candidateId);
 
         proposedPlayers.push(candidate);
       }
@@ -75,7 +75,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
 
         if (voteMap) {
           for (const [candidateId, votedPlayersIds] of Object.entries(voteMap)) {
-            const candidate = this.players.find((player) => player.user.uid === candidateId);
+            const candidate = this.players.find((player) => player.uid === candidateId);
 
             if (votedPlayersIds.length > newNumberOfLeaderVotes) {
               newNumberOfLeaderVotes = votedPlayersIds.length;
@@ -101,7 +101,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   }
 
   switchVote(playerId: string) {
-    this.store.dispatch(new VoteForCandidate(playerId, this.proposedPlayers[this.currentPlayerIndex].user.uid));
+    this.store.dispatch(new VoteForCandidate(playerId, this.proposedPlayers[this.currentPlayerIndex].uid));
   }
 
   next() {

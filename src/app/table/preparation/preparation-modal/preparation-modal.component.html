@@ -28,15 +28,15 @@
     <!-- END Add unauthorized user button-->
 
     <ion-item
-      *ngFor="let player of players"
+      *ngFor="let user of users"
       lines="none"
-      (click)="choosePlayer(player)"
+      (click)="choosePlayer(user)"
     >
       <ion-avatar slot="start">
-        <img [src]="player.user?.avatar ? player.user.avatar : defaultAvatar" />
+        <img [src]="user.avatar ? user.avatar : defaultAvatar" />
       </ion-avatar>
       <ion-label>
-        <h3>{{ player.nickname }}</h3>
+        <h3>{{ user.nickname }}</h3>
       </ion-label>
     </ion-item>
   </ion-list>

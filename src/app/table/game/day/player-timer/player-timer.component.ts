@@ -115,7 +115,7 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
 
     switch (role) {
       case 'propose':
-        this.store.dispatch(new ProposePlayer(this.playerId, proposedPlayer.user.uid));
+        this.store.dispatch(new ProposePlayer(this.playerId, proposedPlayer.uid));
         break;
 
       default:

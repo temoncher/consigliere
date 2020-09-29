@@ -22,7 +22,7 @@
 
         <ion-card-content class="player-card__content">
           <ion-avatar class="player-card__avatar">
-            <img [src]="(don$ | async)?.user?.avatar || defaultAvatar" />
+            <img [src]="(don$ | async)?.avatar || defaultAvatar" />
           </ion-avatar>
         </ion-card-content>
       </ion-card>
@@ -47,7 +47,7 @@
               [ngStyle]="{
                 backgroundImage:
                   'url(' +
-                  ((sheriff$ | async)?.user?.avatar || defaultAvatar) +
+                  ((sheriff$ | async)?.avatar || defaultAvatar) +
                   ')'
               }"
               [current]="sheriffTimer.time"

@@ -59,8 +59,8 @@ export class GameService {
     const { players, roles, quitPhases } = this.store.selectSnapshot(PlayersState.getState);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
     const aliveMafia = players.filter((player) => {
-      const playerRole = roles[player.user.uid];
-      const playerQuitPhase = quitPhases[player.user.uid];
+      const playerRole = roles[player.uid];
+      const playerQuitPhase = quitPhases[player.uid];
 
       return !playerQuitPhase && (playerRole === Role.DON || playerRole === Role.MAFIA);
     });
@@ -153,7 +153,7 @@ export class GameService {
   private composeGame() {
     const rounds = this.store.selectSnapshot(TableState.getRounds);
     const result = this.store.selectSnapshot(TableState.getGameResult);
-    const { players, falls, quitPhases, speechSkips } = this.store.selectSnapshot(PlayersState.getState);
+    const { players, falls, quitPhases, speechSkips, roles } = this.store.selectSnapshot(PlayersState.getState);
     const host = this.store.selectSnapshot(PlayersState.getHost);
     const user = this.store.selectSnapshot(UserState.getState);
 
@@ -161,9 +161,10 @@ export class GameService {
       creatorId: user.uid,
       players: players.map((player) => player.serialize()),
       falls,
+      roles,
       quitPhases,
       speechSkips,
-      host: host.serialize(['number']),
+      host: host.serialize(),
       rounds,
       result,
     };

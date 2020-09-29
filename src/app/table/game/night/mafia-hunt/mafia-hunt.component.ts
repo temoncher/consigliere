@@ -47,9 +47,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
     combineLatest([this.mafiaPlayers$, this.qutiPhases$])
       .pipe(takeUntil(this.destroy))
       .subscribe(
-        ([mafiaPlayers, quitPhases]) => this.aliveMafia = mafiaPlayers.filter(
-          ({ user: { uid: id } }) => !quitPhases[id],
-        ),
+        ([mafiaPlayers, quitPhases]) => this.aliveMafia = mafiaPlayers.filter(({ uid }) => !quitPhases[uid]),
       );
 
     this.players$
@@ -77,10 +75,10 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   }
 
   shootPlayer(mafiaPlayerId: string) {
-    this.store.dispatch(new ShootPlayer(mafiaPlayerId, this.players[this.currentPlayerIndex].user.uid));
+    this.store.dispatch(new ShootPlayer(mafiaPlayerId, this.players[this.currentPlayerIndex].uid));
   }
 
   currentShot(mafia: Player) {
-    return this.shots[mafia.user.uid];
+    return this.shots[mafia.uid];
   }
 }

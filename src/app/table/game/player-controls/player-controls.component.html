@@ -9,11 +9,11 @@
       <ion-slide
         [hidden]="
           (isQuittedHidden$ | async) &&
-          !!(quitPhases$ | async)[player.user.uid]
+          !!(quitPhases$ | async)[player.uid]
         "
       >
         <app-manage-player-card
-          [playerId]="player.user.uid"
+          [playerId]="player.uid"
           [showFalls]="showFalls"
           [showRole]="isRolesVisible$ | async"
           [showProposedPlayer]="showProposedPlayers"

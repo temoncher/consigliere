@@ -11,13 +11,13 @@
         {{ player.number }}
       </div>
       <ion-avatar>
-        <img [src]="player.user?.avatar || defaultAvatar" />
+        <img [src]="player.avatar || defaultAvatar" />
       </ion-avatar>
     </div>
 
     <ion-label>
       <h3>{{ player.nickname }}</h3>
-      <p>{{ roles[player.user.uid] }}</p>
+      <p>{{ roles[player.uid] }}</p>
     </ion-label>
   </ion-item>
 </ion-list>

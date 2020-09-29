@@ -1,70 +1,57 @@
 import { ISerializable } from './serializable.interface';
-import { User } from './user.interface';
 
 export interface IPlayer {
+  uid: string;
   nickname: string;
   number?: number;
-  user?: User;
-  isGuest?: boolean;
+  avatar?: string;
+  isGuest: boolean;
 }
 
-export interface ISerializedPlayer extends Omit<IPlayer, 'user' | 'nickname'> {
-  nickname?: string;
-  user?: string;
-}
+export type ISerializedPlayer = Omit<IPlayer, 'avatar'>;
+
+export type PlayerInput = Omit<IPlayer, 'isGuest' | 'uid'> & { uid?: string };
 
 export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
+  uid: string;
   nickname: string;
   number?: number;
-  user?: User;
-  isGuest?: boolean;
+  avatar?: string;
+  isGuest = false;
 
-  constructor(partialPlayer: Partial<Player>) {
-    this.nickname = partialPlayer.nickname;
+  constructor(player: PlayerInput) {
+    this.nickname = player.nickname;
 
-    if (partialPlayer.number) {
-      this.number = partialPlayer.number;
+    if (this.avatar) {
+      this.avatar = player.avatar;
     }
 
-    if (partialPlayer.user?.uid) {
-      this.isGuest = false;
-      this.user = partialPlayer.user;
-
-      return;
+    if (typeof player.number !== 'undefined') {
+      this.number = player.number;
     }
 
-    this.isGuest = true;
-    this.user = {
-      uid: new Date().getTime().toString(),
-      nickname: partialPlayer.nickname,
-    };
+    if (player.uid) {
+      this.uid = player.uid;
+    } else {
+      this.uid = Date.now().toString();
+      this.isGuest = true;
+    }
   }
 
-  serialize(exclude?: (keyof ISerializedPlayer)[]): ISerializedPlayer {
-    if (!this.isGuest) {
-      const serializedPlayer: ISerializedPlayer = {};
+  serialize(): ISerializedPlayer {
+    const serializedPlayer: ISerializedPlayer = {
+      nickname: this.nickname,
+      uid: this.uid,
+      isGuest: this.isGuest,
+    };
 
-      if (!exclude?.includes('user')) {
-        serializedPlayer.user = this.user.uid;
-      }
-
-      return serializedPlayer;
+    if (this.isGuest) {
+      serializedPlayer.isGuest = this.isGuest;
     }
 
-    /* eslint-disable no-param-reassign */
-    const serializedPlayer = Object.entries(this)
-      .reduce((player, [key, value]) => {
-        const playerKey = key as keyof ISerializedPlayer;
-
-        if (exclude?.includes(playerKey) || typeof value === 'undefined') return player;
-
-        if (playerKey !== 'user' && playerKey !== 'isGuest') {
-          (player[playerKey] as any) = value;
-        }
-
-        return player;
-      }, {} as ISerializedPlayer);
-    /* eslint-enable */
+    if (typeof this.number !== 'undefined') {
+      serializedPlayer.number = this.number;
+    }
 
     return serializedPlayer;
   }

@@ -37,7 +37,7 @@ export class VoteService {
     const votes = [...votesSnapshot]; // to solve "object is not extensible" issue
     const isVoteDisabled = this.store.selectSnapshot(CurrentVoteState.getIsVoteDisabled);
     const roundNumber = this.store.selectSnapshot(TableState.getRoundNumber);
-    const players = this.store.selectSnapshot(PlayersState.getPlayers);
+    const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
 
     if ((proposedPlayers.length === 1 && roundNumber === 0) || !proposedPlayers.length || isVoteDisabled) {
       this.switchVotePhase(VotePhase.RESULT);
@@ -51,7 +51,7 @@ export class VoteService {
     if (proposedPlayers.length === 1) {
       const quitPhase = this.playersService.getQuitPhase();
 
-      vote[proposedPlayers[0]] = players.map(({ user: { uid: id } }) => id);
+      vote[proposedPlayers[0]] = alivePlayers.map(({ uid }) => uid);
 
       this.store.dispatch([
         new KillPlayer(proposedPlayers[0], quitPhase),

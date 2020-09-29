@@ -55,7 +55,7 @@ export class CurrentDayState {
         }
 
         if (foundCandidateId) {
-          const foundPlayer = players.find((player) => player.user.uid === foundCandidateId);
+          const foundPlayer = players.find((player) => player.uid === foundCandidateId);
 
           return foundPlayer;
         }

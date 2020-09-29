@@ -50,11 +50,11 @@ export class DayComponent implements OnInit, OnDestroy {
   endSpeech(playerId: string) {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
-    const finishedPlayerIndex = players.findIndex((player) => player.user.uid === playerId);
+    const finishedPlayerIndex = players.findIndex((player) => player.uid === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
-      const slideIndex = players.findIndex(({ user: { uid: id } }) => !quitPhases[id]
-        && !this.timersService.getPlayerTimer(id).isSpeechEnded);
+      const slideIndex = players.findIndex(({ uid }) => !quitPhases[uid]
+        && !this.timersService.getPlayerTimer(uid).isSpeechEnded);
 
       this.navigateToSlide(slideIndex);
     }

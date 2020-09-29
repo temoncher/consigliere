@@ -23,7 +23,7 @@
           (click)="switchTimer()"
           [ngStyle]="{
             backgroundImage:
-              'url(' + (player?.user.avatar || defaultAvatar) + ')'
+              'url(' + (player?.avatar || defaultAvatar) + ')'
           }"
           [current]="timer?.time"
           [max]="maxTime"

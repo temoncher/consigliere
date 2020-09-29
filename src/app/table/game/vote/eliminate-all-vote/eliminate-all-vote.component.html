@@ -3,12 +3,12 @@
     <app-small-player-card
       *ngFor="let player of players$ | async"
       [slot]="player.number"
-      [playerId]="player.user.uid"
-      [disabled]="(quitPhases$ | async)[player.user.uid]"
-      (cardClick)="switchVote(player.user.uid)"
+      [playerId]="player.uid"
+      [disabled]="(quitPhases$ | async)[player.uid]"
+      (cardClick)="switchVote(player.uid)"
     >
       <div
-        *ngIf="!!(eliminateAllVote$ | async)[player.user.uid]"
+        *ngIf="!!(eliminateAllVote$ | async)[player.uid]"
         slot="overlay"
         class="full-parent-overlay grid-content-center background-color-danger"
       >

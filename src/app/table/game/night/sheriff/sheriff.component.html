@@ -11,11 +11,11 @@
     <app-small-player-card
       *ngFor="let player of players$ | async"
       [slot]="player.number"
-      [playerId]="player.user.uid"
+      [playerId]="player.uid"
       (cardClick)="navigateToPlayer(player.number)"
     >
       <div
-        *ngIf="(sheriffCheck$ | async) === player.user.uid"
+        *ngIf="(sheriffCheck$ | async) === player.uid"
         slot="overlay"
         class="full-parent-overlay grid-content-center background-color-warning"
       >
@@ -41,7 +41,7 @@
           <ion-avatar class="player-card__avatar">
             <img
               [src]="
-                (players$ | async)[currentPlayerIndex].user?.avatar ||
+                (players$ | async)[currentPlayerIndex].avatar ||
                 defaultAvatar
               "
             />

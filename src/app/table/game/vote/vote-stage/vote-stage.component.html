@@ -4,25 +4,25 @@
       <app-small-player-card
         *ngFor="let player of players$ | async"
         [slot]="player.number"
-        [playerId]="player.user.uid"
-        [disabled]="!!(quitPhases$ | async)[player.user.uid]"
-        (cardClick)="switchVote(player.user.uid)"
+        [playerId]="player.uid"
+        [disabled]="!!(quitPhases$ | async)[player.uid]"
+        (cardClick)="switchVote(player.uid)"
       >
         <div
           slot="overlay"
-          *ngIf="voteInfoMap.get(player.user.uid)"
+          *ngIf="voteInfoMap.get(player.uid)"
           class="full-parent-overlay grid-content-center"
           [ngClass]="
-            voteInfoMap.get(player.user.uid).user.uid ===
-            proposedPlayers[currentPlayerIndex].user.uid
+            voteInfoMap.get(player.uid).uid ===
+            proposedPlayers[currentPlayerIndex].uid
               ? 'background-color-danger'
               : 'background-color-medium'
           "
         >
           <ng-container
             *ngIf="
-              voteInfoMap.get(player.user.uid).user.uid ===
-                proposedPlayers[currentPlayerIndex].user.uid;
+              voteInfoMap.get(player.uid).uid ===
+                proposedPlayers[currentPlayerIndex].uid;
               then iconBlock;
               else numberBlock
             "
@@ -31,7 +31,7 @@
             <ion-icon name="thumbs-up"></ion-icon>
           </ng-template>
           <ng-template #numberBlock>
-            <span>{{ voteInfoMap.get(player.user.uid)?.number }}</span>
+            <span>{{ voteInfoMap.get(player.uid)?.number }}</span>
           </ng-template>
         </div>
       </app-small-player-card>
@@ -52,8 +52,8 @@
             <ion-avatar class="player-card__avatar">
               <img
                 [src]="
-                  proposedPlayers[currentPlayerIndex]?.user?.avatar
-                    ? proposedPlayers[currentPlayerIndex]?.user.avatar
+                  proposedPlayers[currentPlayerIndex]?.avatar
+                    ? proposedPlayers[currentPlayerIndex]?.avatar
                     : defaultAvatar
                 "
               />
@@ -100,20 +100,20 @@
     <ion-slide *ngFor="let proposedPlayer of proposedPlayers; let i = index">
       <app-small-player-card
         [showFalls]="false"
-        [playerId]="proposedPlayer.user.uid"
+        [playerId]="proposedPlayer.uid"
         (click)="navigateToPlayer(i)"
       >
         <div
-          *ngIf="vote[proposedPlayer.user.uid]?.length"
+          *ngIf="vote[proposedPlayer.uid]?.length"
           slot="clips"
           class="proposed-player-clip clip-button top-right text-only text-color-dark-contrast"
           [ngClass]="
-            numberOfLeaderVotes === vote[proposedPlayer.user.uid]?.length
+            numberOfLeaderVotes === vote[proposedPlayer.uid]?.length
               ? 'background-color-danger'
               : 'background-color-medium'
           "
         >
-          {{ vote[proposedPlayer.user.uid]?.length }}
+          {{ vote[proposedPlayer.uid]?.length }}
         </div>
       </app-small-player-card>
     </ion-slide>

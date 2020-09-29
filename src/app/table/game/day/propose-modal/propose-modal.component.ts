@@ -43,7 +43,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
 
     this.currentPlayerIndex = this.players.findIndex(
-      ({ user: { uid: id } }) => !quitPhases[id] && !this.isAlreadyACandidate(id),
+      ({ uid }) => !quitPhases[uid] && !this.isAlreadyACandidate(uid),
     );
   }
 

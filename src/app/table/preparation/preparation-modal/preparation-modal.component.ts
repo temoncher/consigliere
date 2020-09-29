@@ -4,18 +4,19 @@ import { environment } from 'src/environments/environment';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
+import { User } from '@/shared/models/user.interface';
 
-const dummySuggestions = [
-  new Player({ nickname: 'Temoncher', user: { uid: 'temoncher', nickname: 'temoncher' } }),
-  new Player({ nickname: 'Cabby', user: { uid: 'cabby', nickname: 'cabby' } }),
-  new Player({ nickname: 'Булочка', user: { uid: 'bulochka', nickname: 'bulochka' } }),
-  new Player({ nickname: 'Краснова', user: { uid: 'krasnova', nickname: 'krasnova' } }),
-  new Player({ nickname: 'Олежа', user: { uid: 'olega', nickname: 'olega' } }),
-  new Player({ nickname: 'Маффин', user: { uid: 'maffin', nickname: 'maffin' } }),
-  new Player({ nickname: 'Девяткин', user: { uid: 'devyatkin', nickname: 'devyatkin' } }),
-  new Player({ nickname: 'Одинаковый', user: { uid: 'odynakoviy', nickname: 'odynakoviy' } }),
-  new Player({ nickname: 'Люба', user: { uid: 'lyba', nickname: 'lyba' } }),
-  new Player({ nickname: 'Углическая', user: { uid: 'uglicheskaya', nickname: 'uglicheskaya' } }),
+const dummySuggestions: User[] = [
+  { nickname: 'Temoncher', uid: 'temoncher' },
+  { nickname: 'Cabby', uid: 'cabby' },
+  { nickname: 'Булочка', uid: 'bulochka' },
+  { nickname: 'Краснова', uid: 'krasnova' },
+  { nickname: 'Олежа', uid: 'olega' },
+  { nickname: 'Маффин', uid: 'maffin' },
+  { nickname: 'Девяткин', uid: 'devyatkin' },
+  { nickname: 'Одинаковый', uid: 'odynakoviy' },
+  { nickname: 'Люба', uid: 'lyba' },
+  { nickname: 'Углическая', uid: 'uglicheskaya' },
 ];
 
 @Component({
@@ -24,13 +25,11 @@ const dummySuggestions = [
 })
 export class PreparationModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
-  players: Player[] = [];
+  users: User[] = environment.production ? [] : dummySuggestions;
 
   constructor(private modalController: ModalController) { }
 
-  ngOnInit() {
-    this.players = environment.production ? [] : dummySuggestions;
-  }
+  ngOnInit() { }
 
   choosePlayer(player?: Player) {
     const role = player ? 'authenticated' : 'guest';

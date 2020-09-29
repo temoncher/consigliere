@@ -27,8 +27,8 @@
         <ion-avatar slot="start">
           <img
             [src]="
-              (host$ | async)?.user?.avatar
-                ? (host$ | async).user.avatar
+              (host$ | async)?.avatar
+                ? (host$ | async).avatar
                 : defaultAvatar
             "
           />

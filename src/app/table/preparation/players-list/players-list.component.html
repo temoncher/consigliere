@@ -31,7 +31,7 @@
           {{ i + 1 }}
         </div>
         <ion-avatar>
-          <img [src]="player.user?.avatar || defaultAvatar" />
+          <img [src]="player.avatar || defaultAvatar" />
         </ion-avatar>
       </div>
 
@@ -74,14 +74,14 @@
         slot="end"
         name="repeat"
         color="medium"
-        (click)="presentRolesMenu(player.user.uid)"
+        (click)="presentRolesMenu(player.uid)"
       ></ion-icon>
       <ion-reorder slot="end"></ion-reorder>
       <ion-icon
         slot="end"
         name="close"
         color="medium"
-        (click)="removePlayer(player.user.uid)"
+        (click)="removePlayer(player.uid)"
       ></ion-icon>
     </ion-item>
   </ion-reorder-group>

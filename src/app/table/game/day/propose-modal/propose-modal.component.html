@@ -17,16 +17,16 @@
     <app-small-player-card
       *ngFor="let player of players"
       [slot]="player.number"
-      [playerId]="player.user.uid"
+      [playerId]="player.uid"
       [disabled]="
-        isAlreadyACandidate(player.user.uid) ||
-        !!(quitPhases$ | async)[player.user.uid]
+        isAlreadyACandidate(player.uid) ||
+        !!(quitPhases$ | async)[player.uid]
       "
       (cardClick)="navigateToPlayer(player)"
     >
       <div
         slot="overlay"
-        *ngIf="isAlreadyACandidate(player.user.uid)"
+        *ngIf="isAlreadyACandidate(player.uid)"
         class="full-parent-overlay background-color-transparent-dark grid-content-center"
       ></div>
     </app-small-player-card>
@@ -45,7 +45,7 @@
       <ion-card-content class="player-card__content ion-text-center">
         <ion-avatar class="player-card__avatar">
           <img
-            [src]="players[currentPlayerIndex].user?.avatar || defaultAvatar"
+            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
           />
         </ion-avatar>
       </ion-card-content>
@@ -54,7 +54,7 @@
     <div slot="under" class="grid-content-center">
       <ion-button
         size="large"
-        [disabled]="isAlreadyACandidate(players[currentPlayerIndex].user.uid)"
+        [disabled]="isAlreadyACandidate(players[currentPlayerIndex].uid)"
         (click)="proposePlayer()"
       >
         {{ "TABS.TABLE.GAME.DAY.PROPOSE_MODAL.proposeButton" | translate }}

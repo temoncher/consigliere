@@ -75,7 +75,7 @@ export class PlayersListComponent implements OnInit {
   }
 
   getPlayersRole(player: Player) {
-    return this.roles[player.user.uid];
+    return this.roles[player.uid];
   }
 
   async presentRolesMenu(playerId: string) {

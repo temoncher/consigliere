@@ -39,7 +39,7 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
     combineLatest([this.players$, this.leaders$])
       .pipe(takeUntil(this.destroy))
       .subscribe(([players, ledaerIds]) => {
-        this.leaders = players?.filter(({ user: { uid: id } }) => ledaerIds?.includes(id));
+        this.leaders = players?.filter(({ uid }) => ledaerIds?.includes(uid));
 
         if (ledaerIds) {
           for (const leaderId of ledaerIds) {
@@ -57,12 +57,12 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
   }
 
   endPlayerSpeech(playerId: string) {
-    const finishedPlayerIndex = this.leaders.findIndex((player) => player.user.uid === playerId);
+    const finishedPlayerIndex = this.leaders.findIndex((player) => player.uid === playerId);
 
     this.timers.get(playerId).endSpeech();
 
     if (finishedPlayerIndex < this.leaders?.length - 1) {
-      const slideIndex = this.leaders.findIndex(({ user: { uid: id } }) => !this.timers.get(id).isSpeechEnded);
+      const slideIndex = this.leaders.findIndex(({ uid }) => !this.timers.get(uid).isSpeechEnded);
 
       this.playerSlider.slideTo(slideIndex);
     }
