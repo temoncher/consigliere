@@ -6,7 +6,7 @@ import { SwiperOptions } from 'swiper';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { VoteService } from '@/table/services/vote.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { VoteForCandidate } from '@/table/store/round/current-vote/current-vote.actions';
@@ -21,7 +21,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Record<string, string[]>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
 
   defaultAvatar = defaultAvatarSrc;
 

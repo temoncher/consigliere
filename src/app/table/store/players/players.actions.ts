@@ -1,5 +1,5 @@
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { Role } from '@/shared/models/role.enum';
 
 import { gameActionsPrefix } from '../table.actions';
@@ -30,7 +30,7 @@ export class KillPlayer {
   static readonly type = `[${playersActionsPrefix}] Kill player`;
   constructor(
     public playerId: string,
-    public quitPhase: QuitPhase,
+    public quitPhase: IQuitPhase,
   ) { }
 }
 

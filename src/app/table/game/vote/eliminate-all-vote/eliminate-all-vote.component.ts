@@ -3,7 +3,7 @@ import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { VoteService } from '@/table/services/vote.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { VoteForElimination } from '@/table/store/round/current-vote/current-vote.actions';
@@ -16,7 +16,7 @@ import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.
 })
 export class EliminateAllVoteComponent implements OnInit {
   @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Record<string, boolean>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   get votedPlayersNumber() {

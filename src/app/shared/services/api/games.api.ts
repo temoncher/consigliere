@@ -1,16 +1,16 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 
 import { CollectionName } from '@/shared/models/collection-name.enum';
-import { Game } from '@/shared/models/game.interface';
+import { IGame } from '@/shared/models/game.interface';
 
-import { Api } from './api.interface';
+import { IApi } from './api.interface';
 
-export class GamesApi implements Api<Game> {
-  private gamesCollection = this.firestore.collection<Game>(CollectionName.GAMES);
+export class GamesApi implements IApi<IGame> {
+  private gamesCollection = this.firestore.collection<IGame>(CollectionName.GAMES);
 
   constructor(private firestore: AngularFirestore) {}
 
-  async create(game: Game): Promise<void> {
+  async create(game: IGame): Promise<void> {
     await this.gamesCollection.add(game);
   }
 

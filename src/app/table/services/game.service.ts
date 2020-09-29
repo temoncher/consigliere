@@ -3,7 +3,7 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
-import { Game } from '@/shared/models/game.interface';
+import { IGame } from '@/shared/models/game.interface';
 import { Role } from '@/shared/models/role.enum';
 import { ApiService } from '@/shared/services/api/api.service';
 import { UserState } from '@/shared/store/user/user.state';
@@ -157,7 +157,7 @@ export class GameService {
     const host = this.store.selectSnapshot(PlayersState.getHost);
     const user = this.store.selectSnapshot(UserState.getState);
 
-    const newGame: Game = {
+    const newGame: IGame = {
       creatorId: user.uid,
       players: players.map((player) => player.serialize()),
       falls,

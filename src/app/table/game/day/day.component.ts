@@ -7,7 +7,7 @@ import { Subject, Observable } from 'rxjs';
 
 import { playerSliderConfig } from '@/shared/constants/slider';
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { RoundPhase } from '@/table/models/day-phase.enum';
 import { GameService } from '@/table/services/game.service';
 import { TimersService } from '@/table/services/timers.service';
@@ -25,7 +25,7 @@ export class DayComponent implements OnInit, OnDestroy {
 
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
   @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   playerSliderConfig = playerSliderConfig;

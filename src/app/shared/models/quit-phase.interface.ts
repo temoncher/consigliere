@@ -1,6 +1,6 @@
 import { RoundPhase } from '@/table/models/day-phase.enum';
 
-export interface QuitPhase {
+export interface IQuitPhase {
   stage: RoundPhase;
   number: number;
 }

@@ -9,7 +9,7 @@ import {
 } from '@ngxs/store';
 import { cloneDeep } from 'lodash';
 
-import { Day } from '@/table/models/day.interface';
+import { IDay } from '@/table/models/day.interface';
 
 import { PlayersState, PlayersStateModel } from '../../players/players.state';
 
@@ -21,7 +21,7 @@ import {
   ResetProposedPlayers,
 } from './current-day.actions';
 
-export type CurrentDayStateModel = Day;
+export type CurrentDayStateModel = IDay;
 
 @State<CurrentDayStateModel>({
   name: 'currentDay',

@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { User } from '@/shared/models/user.interface';
+import { IUser } from '@/shared/models/user.interface';
 
-const dummySuggestions: User[] = [
+const dummySuggestions: IUser[] = [
   { nickname: 'Temoncher', uid: 'temoncher' },
   { nickname: 'Cabby', uid: 'cabby' },
   { nickname: 'Булочка', uid: 'bulochka' },
@@ -25,7 +25,7 @@ const dummySuggestions: User[] = [
 })
 export class PreparationModalComponent implements OnInit {
   defaultAvatar = defaultAvatarSrc;
-  users: User[] = environment.production ? [] : dummySuggestions;
+  users: IUser[] = environment.production ? [] : dummySuggestions;
 
   constructor(private modalController: ModalController) { }
 

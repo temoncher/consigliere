@@ -5,7 +5,7 @@ import { shuffle, cloneDeep } from 'lodash';
 import { environment } from 'src/environments/environment';
 
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { Role } from '@/shared/models/role.enum';
 import { RoundPhase } from '@/table/models/day-phase.enum';
 
@@ -42,7 +42,7 @@ export interface PlayersStateModel {
   host?: Player;
   players: Player[];
   falls: Record<string, number>; // <playerId, numberOfFalls>
-  quitPhases: Record<string, QuitPhase>; // <playerId, quitPhase>
+  quitPhases: Record<string, IQuitPhase>; // <playerId, quitPhase>
   speechSkips: Record<string, number>; // <playerId, roundNumber>
   roles: Record<string, Role>; // <playerId, role>
 }

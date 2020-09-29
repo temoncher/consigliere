@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { Role } from '@/shared/models/role.enum';
 import { PlayersState } from '@/table/store/players/players.state';
 import { ShootPlayer } from '@/table/store/round/current-night/current-night.actions';
@@ -23,7 +23,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON])) mafiaPlayers$: Observable<Player[]>;
   @Select(CurrentNightState.getShots) shots$: Observable<Record<string, string>>;
   @Select(CurrentNightState.getVictims) victimsMap$: Observable<Map<string, string[]>>;

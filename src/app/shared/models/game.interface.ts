@@ -2,10 +2,10 @@ import { GameResult } from '@/table/models/game-result.enum';
 import { IRound } from '@/table/models/round.model';
 
 import { ISerializedPlayer } from './player.model';
-import { QuitPhase } from './quit-phase.interface';
+import { IQuitPhase } from './quit-phase.interface';
 import { Role } from './role.enum';
 
-export interface Game {
+export interface IGame {
   creatorId: string;
   rounds: IRound[];
   result: GameResult;
@@ -13,6 +13,6 @@ export interface Game {
   roles: Record<string, Role>;
   host: ISerializedPlayer;
   falls: Record<string, number>;
-  quitPhases: Record<string, QuitPhase>;
+  quitPhases: Record<string, IQuitPhase>;
   speechSkips: Record<string, number>;
 }

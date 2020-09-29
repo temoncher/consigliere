@@ -1,4 +1,4 @@
-export interface Language {
+export interface ILanguage {
   text: string;
   code: LanguageCode;
   img: string;

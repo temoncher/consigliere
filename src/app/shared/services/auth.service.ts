@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
-import { User } from '@/shared/models/user.interface';
+import { IUser } from '@/shared/models/user.interface';
 
 import { ApiService } from './api/api.service';
 
@@ -19,7 +19,7 @@ export class AuthService {
 
   async register(email: string, password: string, nickname: string) {
     const { user: { uid } } = await this.auth.createUserWithEmailAndPassword(email, password);
-    const newUser: User = {
+    const newUser: IUser = {
       uid,
       nickname,
     };

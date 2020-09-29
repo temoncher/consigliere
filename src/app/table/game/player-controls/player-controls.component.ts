@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { SwiperOptions } from 'swiper';
 
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { ToggleGameMenuBoolean } from '@/table/store/menu/game-menu.actions';
 import { GameMenuState } from '@/table/store/menu/game-menu.state';
 import { PlayersState } from '@/table/store/players/players.state';
@@ -22,7 +22,7 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   @Select(GameMenuState.getBasicProp('isPlayerControlsVisible')) isPlayerControlsOpened$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
 
   @Input() showFalls = true;
   @Input() currentPlayerNumber = 0; // TODO: currently unused, implement sliding with speech end

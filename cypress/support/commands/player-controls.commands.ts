@@ -1,4 +1,4 @@
-import { PlayerControlsOptions } from '@e2e/models/player-controls-options.interface';
+import { IPlayerControlsOptions } from '@e2e/models/player-controls-options.interface';
 
 import { PlayerControlsAction } from '@/table/models/player-controls-action.enum';
 
@@ -9,14 +9,14 @@ declare global {
        * ! Should be used when player controls is present on the page
        * Pick one of player controls menu options.
        *
-       * @param {PlayerControlsOptions} options - player number and action type.
+       * @param {IPlayerControlsOptions} options - player number and action type.
        */
-      playerControlsChoose(options: PlayerControlsOptions): void;
+      playerControlsChoose(options: IPlayerControlsOptions): void;
     }
   }
 }
 
-Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: PlayerControlsOptions) => {
+Cypress.Commands.add('playerControlsChoose', ({ playerNumber, action }: IPlayerControlsOptions) => {
   let isControlsStateChanged = false;
 
   cy.get('.toggle-controls-button')

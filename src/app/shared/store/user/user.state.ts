@@ -9,12 +9,12 @@ import {
 } from '@ngxs/store';
 import { filter, switchMap } from 'rxjs/operators';
 
-import { User } from '@/shared/models/user.interface';
+import { IUser } from '@/shared/models/user.interface';
 import { ApiService } from '@/shared/services/api/api.service';
 
 import { FetchUser, SetUser } from './user.actions';
 
-export type UserStateModel = User | null;
+export type UserStateModel = IUser | null;
 
 @State<UserStateModel>({
   name: 'user',

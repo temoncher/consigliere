@@ -2,14 +2,14 @@
 import { Injectable } from '@angular/core';
 import { State, StateContext, Action, Selector } from '@ngxs/store';
 
-import { Night } from '@/table/models/night.interface';
+import { INight } from '@/table/models/night.interface';
 
 import {
   ShootPlayer, CheckByDon, CheckBySheriff, SetMurderedPlayer,
 } from './current-night.actions';
 
 // tslint:disable-next-line: no-empty-interface
-export type CurrentNightStateModel = Night;
+export type CurrentNightStateModel = INight;
 
 @State<CurrentNightStateModel>({
   name: 'currentNight',

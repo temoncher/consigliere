@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
-import { User } from '@/shared/models/user.interface';
+import { IUser } from '@/shared/models/user.interface';
 import { AuthService } from '@/shared/services/auth.service';
 import { FetchUser } from '@/shared/store/user/user.actions';
 import { UserState } from '@/shared/store/user/user.state';
@@ -22,7 +22,7 @@ type WinnerMap = {
   styleUrls: ['profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  @Select(UserState.getState) user$: Observable<User>;
+  @Select(UserState.getState) user$: Observable<IUser>;
 
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {

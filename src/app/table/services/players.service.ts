@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { Role } from '@/shared/models/role.enum';
 
 import { RoundPhase } from '../models/day-phase.enum';
@@ -33,7 +33,7 @@ export class PlayersService {
     const rounds = this.store.selectSnapshot(TableState.getRounds);
     const currentStage = this.store.selectSnapshot(TableState.getCurrentGameStage);
 
-    const quitPhase: QuitPhase = {
+    const quitPhase: IQuitPhase = {
       stage: currentStage.roundPhase,
       number: rounds.length,
     };

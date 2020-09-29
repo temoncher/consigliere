@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { QuitPhase } from '@/shared/models/quit-phase.interface';
+import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentDayState } from '@/table/store/round/current-day/current-day.state';
 
@@ -19,7 +19,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Record<string, string>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
 
   players: Player[];
   proposedPlayers: Record<string, string> = {};

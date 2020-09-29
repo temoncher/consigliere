@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 
-import { LanguageCode, Language } from '@/shared/models/language.interface';
+import { LanguageCode, ILanguage } from '@/shared/models/language.interface';
 
 const LNG_KEY = 'SELECTED_LANGUAGE';
 
@@ -12,7 +12,7 @@ const LNG_KEY = 'SELECTED_LANGUAGE';
 export class LanguageService {
   DEFAULT_LANGUAGE = LanguageCode.RUSSIAN;
   selectedLanguageCode = '';
-  supportedLanguages: Language[] = [
+  supportedLanguages: ILanguage[] = [
     { text: 'Русский', code: LanguageCode.RUSSIAN, img: 'assets/imgs/ru.png' },
   ];
 

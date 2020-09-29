@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 import { Player } from '@/shared/models/player.model';
 import { VotePhase } from '@/table/models/vote-phase.enum';
 import { VoteResult } from '@/table/models/vote-result.enum';
-import { Vote } from '@/table/models/vote.interface';
+import { IVote } from '@/table/models/vote.interface';
 
 import { PlayersState } from '../../players/players.state';
 
@@ -22,7 +22,7 @@ import {
   SetVoteResult,
 } from './current-vote.actions';
 
-export interface CurrentVoteStateModel extends Vote {
+export interface CurrentVoteStateModel extends IVote {
   currentPhase?: VotePhase;
   previousLeadersIds?: string[];
 }

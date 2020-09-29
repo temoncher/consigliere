@@ -1,10 +1,10 @@
-import { User } from '@/shared/models/user.interface';
+import { IUser } from '@/shared/models/user.interface';
 
 export const userActionsPrefix = 'User';
 
 export class SetUser {
   static readonly type = `[${userActionsPrefix}] Set user`;
-  constructor(public user: User) { }
+  constructor(public user: IUser) { }
 }
 
 export class FetchUser {
