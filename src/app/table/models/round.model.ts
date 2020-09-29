@@ -12,7 +12,7 @@ export interface IRound extends Night, Day, Vote {
 export class Round implements IRound, ISerializable<IRound> {
   kickedPlayers: string[];
   // Night
-  shots: Map<string, string>; // <mafiaId, playerId>
+  shots: Record<string, string>; // <mafiaId, playerId>
   murderedPlayer?: string; // murdered player id
   donCheck?: string; // id of player checked by Don
   sheriffCheck?: string; // id of player checked by Sheriff
@@ -30,7 +30,7 @@ export class Round implements IRound, ISerializable<IRound> {
   constructor(partialDay?: Partial<Round>) {
     this.kickedPlayers = partialDay?.kickedPlayers || [];
 
-    this.shots = partialDay?.shots || new Map<string, string>();
+    this.shots = partialDay?.shots || {};
     this.murderedPlayer = partialDay?.murderedPlayer;
     this.donCheck = partialDay?.donCheck;
     this.sheriffCheck = partialDay?.sheriffCheck;

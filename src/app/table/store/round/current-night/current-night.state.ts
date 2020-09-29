@@ -1,7 +1,6 @@
 
 import { Injectable } from '@angular/core';
 import { State, StateContext, Action, Selector } from '@ngxs/store';
-import { cloneDeep } from 'lodash';
 
 import { Night } from '@/table/models/night.interface';
 
@@ -15,7 +14,7 @@ export type CurrentNightStateModel = Night;
 @State<CurrentNightStateModel>({
   name: 'currentNight',
   defaults: {
-    shots: new Map<string, string>(),
+    shots: {},
   },
 })
 @Injectable()
@@ -31,7 +30,7 @@ export class CurrentNightState {
   static getVictims({ shots }: CurrentNightStateModel) {
     const victimsMap = new Map<string, string[]>();
 
-    for (const [shooterId, victimId] of shots) {
+    for (const [shooterId, victimId] of Object.entries(shots)) {
       victimsMap.set(victimId, [...victimsMap.get(victimId) || [], shooterId]);
     }
 
@@ -53,19 +52,22 @@ export class CurrentNightState {
     { patchState, getState }: StateContext<CurrentNightStateModel>,
     { mafiaId, victimId }: ShootPlayer,
   ) {
-    const { shots } = cloneDeep(getState());
-    const thisMafiaVictim = shots.get(mafiaId);
+    const { shots } = getState();
+    const newShots = { ...shots };
+    const thisMafiaVictim = newShots[mafiaId];
     const isShotThisVicitm = thisMafiaVictim === victimId;
 
     if (isShotThisVicitm) {
-      shots.delete(mafiaId);
-      patchState({ shots });
+      delete newShots[mafiaId];
+
+      patchState({ shots: newShots });
 
       return;
     }
 
-    shots.set(mafiaId, victimId);
-    patchState({ shots });
+    newShots[mafiaId] = victimId;
+
+    patchState({ shots: newShots });
   }
 
   @Action(CheckByDon)

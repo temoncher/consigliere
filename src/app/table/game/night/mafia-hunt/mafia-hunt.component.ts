@@ -25,7 +25,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Record<string, QuitPhase>>;
   @Select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON])) mafiaPlayers$: Observable<Player[]>;
-  @Select(CurrentNightState.getShots) shots$: Observable<Map<string, string>>;
+  @Select(CurrentNightState.getShots) shots$: Observable<Record<string, string>>;
   @Select(CurrentNightState.getVictims) victimsMap$: Observable<Map<string, string[]>>;
 
   Role = Role;
@@ -35,6 +35,12 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   aliveMafia: Player[];
 
   currentPlayerIndex = 0;
+
+  get numberOfShots() {
+    const shots = this.store.selectSnapshot(CurrentNightState.getShots);
+
+    return Object.keys(shots).length;
+  }
 
   constructor(private store: Store) {
     combineLatest([this.mafiaPlayers$, this.qutiPhases$])

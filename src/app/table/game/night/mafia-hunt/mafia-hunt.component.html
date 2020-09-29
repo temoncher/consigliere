@@ -1,6 +1,8 @@
 <app-portal selector="#game-buttons-outlet">
   <ion-button id="next-stage-button" (click)="next()">
-    <ion-label color="primary">{{ 'TABS.TABLE.GAME.NIGHT.proceedToDon' | translate }}</ion-label>
+    <ion-label color="primary">{{
+      "TABS.TABLE.GAME.NIGHT.proceedToDon" | translate
+    }}</ion-label>
     <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
   </ion-button>
 </app-portal>
@@ -13,7 +15,10 @@
     [playerId]="player.user.uid"
     (cardClick)="navigateToPlayer(player.number)"
   >
-    <div *ngIf="(victimsMap$ | async).get(player.user.uid)?.length" slot="clips">
+    <div
+      *ngIf="(victimsMap$ | async).get(player.user.uid)?.length"
+      slot="clips"
+    >
       <div
         class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast"
       >
@@ -53,10 +58,10 @@
       >
         <div
           slot="overlay"
-          *ngIf="(shots$ | async).get(mafiaPlayer.user.uid)"
+          *ngIf="(shots$ | async)[mafiaPlayer.user.uid]"
           class="full-parent-overlay grid-content-center"
           [ngClass]="
-            (shots$ | async).get(mafiaPlayer.user.uid) ===
+            (shots$ | async)[mafiaPlayer.user.uid] ===
             players[currentPlayerIndex].user.uid
               ? 'background-color-danger'
               : 'background-color-medium'
@@ -71,7 +76,7 @@
   <div slot="under" class="grid-content-center">
     <ion-button
       size="large"
-      [disabled]="(shots$ | async).size !== aliveMafia.length"
+      [disabled]="numberOfShots !== aliveMafia.length"
       (click)="next()"
     >
       {{ "TABS.TABLE.GAME.NIGHT.MAFIA_HUNTS.nextStageButton" | translate }}
