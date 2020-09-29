@@ -26,7 +26,7 @@ export type CurrentDayStateModel = Day;
 @State<CurrentDayStateModel>({
   name: 'currentDay',
   defaults: {
-    timers: new Map<string, number>(),
+    timers: {},
     proposedPlayers: new Map<string, string>(), // <candidateId, playerId>
   },
 })
@@ -84,11 +84,13 @@ export class CurrentDayState {
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId }: ResetPlayerTimer,
   ) {
-    const { timers } = cloneDeep(getState());
+    const { timers } = getState();
 
-    timers.delete(playerId);
+    const newTimers = { ...timers };
 
-    patchState({ timers });
+    delete newTimers[playerId];
+
+    patchState({ timers: newTimers });
   }
 
   @Action(ResetProposedPlayers)
@@ -122,10 +124,13 @@ export class CurrentDayState {
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId, timeLeft }: SetPlayerTimer,
   ) {
-    const { timers } = cloneDeep(getState());
+    const { timers } = getState();
 
-    timers.set(playerId, timeLeft);
+    const newTimers = {
+      ...timers,
+      [playerId]: timeLeft,
+    };
 
-    patchState({ timers });
+    patchState({ timers: newTimers });
   }
 }

@@ -7,21 +7,6 @@ import { Vote } from './vote.interface';
 
 export interface IRound extends Night, Day, Vote {
   kickedPlayers: string[];
-  // Night
-  shots: Map<string, string>; // <mafiaId, playerId>
-  murderedPlayer?: string; // murdered player id
-  donCheck?: string; // id of player checked by Don
-  sheriffCheck?: string; // id of player checked by Sheriff
-
-  // Day
-  timers: Map<string, number>; // <playerId, timeLeft>
-  proposedPlayers?: Map<string, string>; // <candidateId, playerId>
-
-  // Vote
-  isVoteDisabled: boolean;
-  votes: Map<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
-  eliminateAllVote?: Map<string, boolean>;
-  voteResult?: VoteResult;
 }
 
 export class Round implements IRound, ISerializable<IRound> {
@@ -33,7 +18,7 @@ export class Round implements IRound, ISerializable<IRound> {
   sheriffCheck?: string; // id of player checked by Sheriff
 
   // Day
-  timers: Map<string, number>; // <playerId, timeLeft>
+  timers: Record<string, number>; // <playerId, timeLeft>
   proposedPlayers?: Map<string, string>; // <candidateId, playerId>
 
   // Vote
@@ -50,7 +35,7 @@ export class Round implements IRound, ISerializable<IRound> {
     this.donCheck = partialDay?.donCheck;
     this.sheriffCheck = partialDay?.sheriffCheck;
 
-    this.timers = partialDay?.timers || new Map<string, number>();
+    this.timers = partialDay?.timers || {};
     this.proposedPlayers = partialDay?.proposedPlayers;
 
     this.isVoteDisabled = partialDay?.isVoteDisabled || false;
