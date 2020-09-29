@@ -43,7 +43,7 @@ export interface PlayersStateModel {
   players: Player[];
   falls: Record<string, number>; // <playerId, numberOfFalls>
   quitPhases: Record<string, QuitPhase>; // <playerId, quitPhase>
-  speechSkips: Map<string, number>; // <playerId, roundNumber>
+  speechSkips: Record<string, number>; // <playerId, roundNumber>
 }
 
 @State<PlayersStateModel>({
@@ -53,7 +53,7 @@ export interface PlayersStateModel {
     host: environment.production ? null : dummyHost,
     falls: {},
     quitPhases: {},
-    speechSkips: new Map<string, number>(),
+    speechSkips: {},
   },
 })
 @Injectable()
@@ -313,11 +313,14 @@ export class PlayersState {
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, roundNumber }: SkipSpeech,
   ) {
-    const { speechSkips } = cloneDeep(getState());
+    const { speechSkips } = getState();
 
-    speechSkips.set(playerId, roundNumber);
+    const newSpeechSkips = {
+      ...speechSkips,
+      [playerId]: roundNumber,
+    };
 
-    patchState({ speechSkips });
+    patchState({ speechSkips: newSpeechSkips });
   }
 
   @Action(AssignFall)

@@ -161,7 +161,7 @@ export class GameService {
       players: players.map((player) => player.serialize()),
       falls,
       quitPhases,
-      speechSkips: MapToRecordConverter.convert(speechSkips),
+      speechSkips,
       host: host.serialize(['number']),
       rounds: mappedRounds,
       result,

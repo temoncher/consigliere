@@ -44,7 +44,7 @@ export class TimersService {
     this.pauseAll();
 
     for (const player of players) {
-      const time = speechSkips.get(player.user.uid) === currentRoundNumber ? 0 : 60;
+      const time = speechSkips[player.user.uid] === currentRoundNumber ? 0 : 60;
 
       this.timers.set(player.user.uid, new Timer({ time }));
     }
@@ -54,7 +54,7 @@ export class TimersService {
     const speechSkips = this.store.selectSnapshot(PlayersState.getSpeechSkips);
     const currentRoundNumber = this.store.selectSnapshot(TableState.getRoundNumber);
 
-    const time = speechSkips.get(playerId) === currentRoundNumber ? 0 : 60;
+    const time = speechSkips[playerId] === currentRoundNumber ? 0 : 60;
 
     this.timers.get(playerId).resetTimer(time);
   }
