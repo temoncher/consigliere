@@ -9,7 +9,7 @@
   <app-small-player-card
     *ngFor="let player of players$ | async"
     [slot]="player.number"
-    [disabled]="(qutiPhases$ | async).has(player.user.uid)"
+    [disabled]="!!(qutiPhases$ | async)[player.user.uid]"
     [playerId]="player.user.uid"
     (cardClick)="navigateToPlayer(player.number)"
   >

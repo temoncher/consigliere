@@ -1,18 +1,17 @@
 <app-portal selector="#game-buttons-outlet">
-      <ion-button (click)="endDay()">
-        <ion-label color="primary">
-          {{ "TABS.TABLE.GAME.DAY.proceedToVote" | translate }}
-        </ion-label>
-        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
-      </ion-button>
+  <ion-button (click)="endDay()">
+    <ion-label color="primary">
+      {{ "TABS.TABLE.GAME.DAY.proceedToVote" | translate }}
+    </ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
 </app-portal>
 
 <ion-slides #playerSlider [options]="playerSliderConfig">
   <ng-container *ngFor="let player of players$ | async">
     <ion-slide
       [hidden]="
-        (isQuittedHidden$ | async) &&
-        (quitPhases$ | async).has(player.user.uid)
+        (isQuittedHidden$ | async) && !!(quitPhases$ | async)[player.user.uid]
       "
     >
       <app-player-timer

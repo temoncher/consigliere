@@ -22,7 +22,7 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   @Select(GameMenuState.getBasicProp('isPlayerControlsVisible')) isPlayerControlsOpened$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
 
   @Input() showFalls = true;
   @Input() currentPlayerNumber = 0; // TODO: currently unused, implement sliding with speech end

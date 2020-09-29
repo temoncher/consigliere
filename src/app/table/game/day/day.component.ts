@@ -25,7 +25,7 @@ export class DayComponent implements OnInit, OnDestroy {
 
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
   @Select(RoundState.getRoundPhase) currentPhase$: Observable<RoundPhase>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   playerSliderConfig = playerSliderConfig;
@@ -53,7 +53,7 @@ export class DayComponent implements OnInit, OnDestroy {
     const finishedPlayerIndex = players.findIndex((player) => player.user.uid === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
-      const slideIndex = players.findIndex(({ user: { uid: id } }) => !quitPhases.has(id)
+      const slideIndex = players.findIndex(({ user: { uid: id } }) => !quitPhases[id]
         && !this.timersService.getPlayerTimer(id).isSpeechEnded);
 
       this.navigateToSlide(slideIndex);

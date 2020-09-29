@@ -41,8 +41,8 @@ const rolesArray = [
 export interface PlayersStateModel {
   host?: Player;
   players: Player[];
-  falls: Map<string, number>; // <playerId, numberOfFalls>
-  quitPhases: Map<string, QuitPhase>; // <playerId, quitPhase>
+  falls: Record<string, number>; // <playerId, numberOfFalls>
+  quitPhases: Record<string, QuitPhase>; // <playerId, quitPhase>
   speechSkips: Map<string, number>; // <playerId, roundNumber>
 }
 
@@ -51,8 +51,8 @@ export interface PlayersStateModel {
   defaults: {
     players: environment.production ? [] : dummyPlayers,
     host: environment.production ? null : dummyHost,
-    falls: new Map<string, number>(),
-    quitPhases: new Map<string, QuitPhase>(),
+    falls: {},
+    quitPhases: {},
     speechSkips: new Map<string, number>(),
   },
 })
@@ -90,7 +90,7 @@ export class PlayersState {
 
   @Selector()
   static getAlivePlayers({ players, quitPhases }: PlayersStateModel) {
-    return players.filter(({ user: { uid: id } }) => !quitPhases.has(id));
+    return players.filter(({ user: { uid: id } }) => !quitPhases[id]);
   }
 
   @Selector()
@@ -155,7 +155,7 @@ export class PlayersState {
   static getPlayerFalls(playerId: string) {
     return createSelector(
       [PlayersState],
-      ({ falls }: PlayersStateModel) => falls.get(playerId),
+      ({ falls }: PlayersStateModel) => falls[playerId],
     );
   }
 
@@ -163,7 +163,7 @@ export class PlayersState {
     return createSelector(
       [PlayersState],
       ({ quitPhases }: PlayersStateModel) => {
-        const quitPhase = quitPhases.get(playerId);
+        const quitPhase = quitPhases[playerId];
 
         if (quitPhase) {
           return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
@@ -271,9 +271,12 @@ export class PlayersState {
   ) {
     const { quitPhases } = cloneDeep(getState());
 
-    quitPhases.set(playerId, quitPhase);
+    const newQuitPhases = {
+      ...quitPhases,
+      [playerId]: quitPhase,
+    };
 
-    patchState({ quitPhases });
+    patchState({ quitPhases: newQuitPhases });
   }
 
   @Action(ReorderPlayer)
@@ -297,12 +300,12 @@ export class PlayersState {
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: ResetPlayer,
   ) {
-    const { quitPhases, falls } = cloneDeep(getState());
+    const { quitPhases, falls } = getState();
 
-    falls.set(playerId, 0);
-    quitPhases.set(playerId, null);
-
-    patchState({ quitPhases, falls });
+    patchState({
+      quitPhases: { ...quitPhases, [playerId]: null },
+      falls: { ...falls, [playerId]: 0 },
+    });
   }
 
   @Action(SkipSpeech)
@@ -322,12 +325,14 @@ export class PlayersState {
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: AssignFall,
   ) {
-    const { falls } = cloneDeep(getState());
-    const playerFallsNumber = falls.get(playerId);
+    const { falls } = getState();
+    const playerFallsNumber = falls[playerId];
 
-    falls.set(playerId, playerFallsNumber ? playerFallsNumber + 1 : 1);
+    const newFalls = {
+      [playerId]: playerFallsNumber ? playerFallsNumber + 1 : 1,
+    };
 
-    patchState({ falls });
+    patchState({ falls: newFalls });
   }
 
   @Action(AssignRole)

@@ -23,7 +23,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) qutiPhases$: Observable<Record<string, QuitPhase>>;
   @Select(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON])) mafiaPlayers$: Observable<Player[]>;
   @Select(CurrentNightState.getShots) shots$: Observable<Map<string, string>>;
   @Select(CurrentNightState.getVictims) victimsMap$: Observable<Map<string, string[]>>;
@@ -39,7 +39,11 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
   constructor(private store: Store) {
     combineLatest([this.mafiaPlayers$, this.qutiPhases$])
       .pipe(takeUntil(this.destroy))
-      .subscribe(([mafiaPlayers, quitPhases]) => this.aliveMafia = mafiaPlayers.filter(({ user: { uid: id } }) => !quitPhases.has(id)));
+      .subscribe(
+        ([mafiaPlayers, quitPhases]) => this.aliveMafia = mafiaPlayers.filter(
+          ({ user: { uid: id } }) => !quitPhases[id],
+        ),
+      );
 
     this.players$
       .pipe(takeUntil(this.destroy))

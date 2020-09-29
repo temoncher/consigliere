@@ -21,7 +21,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Map<string, string[]>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
 
   defaultAvatar = defaultAvatarSrc;
 

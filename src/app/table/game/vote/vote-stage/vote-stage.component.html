@@ -5,7 +5,7 @@
         *ngFor="let player of players$ | async"
         [slot]="player.number"
         [playerId]="player.user.uid"
-        [disabled]="(quitPhases$ | async).has(player.user.uid)"
+        [disabled]="!!(quitPhases$ | async)[player.user.uid]"
         (cardClick)="switchVote(player.user.uid)"
       >
         <div

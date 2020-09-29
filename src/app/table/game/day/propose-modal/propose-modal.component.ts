@@ -19,7 +19,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Map<string, string>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
 
   players: Player[];
   proposedPlayers: Map<string, string> = new Map<string, string>();
@@ -42,7 +42,9 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
       .subscribe((players) => this.players = players);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
 
-    this.currentPlayerIndex = this.players.findIndex(({ user: { uid: id } }) => !quitPhases.has(id) && !this.isAlreadyACandidate(id));
+    this.currentPlayerIndex = this.players.findIndex(
+      ({ user: { uid: id } }) => !quitPhases[id] && !this.isAlreadyACandidate(id),
+    );
   }
 
   ngOnDestroy() {

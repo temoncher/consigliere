@@ -9,7 +9,7 @@
       <ion-slide
         [hidden]="
           (isQuittedHidden$ | async) &&
-          (quitPhases$ | async).has(player.user.uid)
+          !!(quitPhases$ | async)[player.user.uid]
         "
       >
         <app-manage-player-card

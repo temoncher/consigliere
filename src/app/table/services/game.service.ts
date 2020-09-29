@@ -60,8 +60,9 @@ export class GameService {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
-    const aliveMafia = players.filter((player) => !quitPhases.has(player.user.uid)
-      && (player.role === Role.DON || player.role === Role.MAFIA));
+    const aliveMafia = players.filter(
+      (player) => !quitPhases[player.user.uid] && (player.role === Role.DON || player.role === Role.MAFIA),
+    );
     let murderedPlayer: string;
 
     for (const [victimId, mafiaIds] of victimsMap) {
@@ -158,8 +159,8 @@ export class GameService {
     const newGame: Game = {
       creatorId: user.uid,
       players: players.map((player) => player.serialize()),
-      falls: MapToRecordConverter.convert(falls),
-      quitPhases: MapToRecordConverter.convert(quitPhases),
+      falls,
+      quitPhases,
       speechSkips: MapToRecordConverter.convert(speechSkips),
       host: host.serialize(['number']),
       rounds: mappedRounds,

@@ -20,7 +20,7 @@
       [playerId]="player.user.uid"
       [disabled]="
         isAlreadyACandidate(player.user.uid) ||
-        (quitPhases$ | async).has(player.user.uid)
+        !!(quitPhases$ | async)[player.user.uid]
       "
       (cardClick)="navigateToPlayer(player)"
     >

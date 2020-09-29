@@ -16,7 +16,7 @@ import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.
 })
 export class EliminateAllVoteComponent implements OnInit {
   @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Map<string, boolean>>;
-  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Map<string, QuitPhase>>;
+  @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, QuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   constructor(

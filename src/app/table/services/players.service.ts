@@ -101,7 +101,7 @@ export class PlayersService {
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const mafiaPlayers = this.store.selectSnapshot(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]));
     const qutiPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
-    const aliveMafia = mafiaPlayers.filter(({ user: { uid: id } }) => !qutiPhases.has(id));
+    const aliveMafia = mafiaPlayers.filter(({ user: { uid: id } }) => !qutiPhases[id]);
     let gameResult: GameResult;
 
     if (aliveMafia.length >= alivePlayers.length / 2) {
