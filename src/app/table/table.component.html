@@ -13,7 +13,7 @@
     <div class="table-menu__buttons-container">
       <ion-button
         *ngIf="isGameStarted$ | async"
-        color="dark"
+        color="primary"
         shape="round"
         routerLink="game"
         id="continue-button"
@@ -22,9 +22,8 @@
         {{ "TABS.TABLE.continue" | translate }}
       </ion-button>
       <ion-button
-        *ngIf="(isGameStarted$ | async) === false"
         data-cy="new-game-button"
-        color="light"
+        color="primary"
         shape="round"
         routerLink="preparation"
         routerDirection="forward"

@@ -26,22 +26,22 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 /* Custom styles */
-@import "./theme/variables.scss";
+@import "./theme/background.scss";
+@import "./theme/round-slide.scss";
 @import "./theme/clip-buttons.scss";
 @import "./theme/cards.scss";
 @import "./theme/colors.scss";
 @import "./theme/forms.scss";
-@import "./theme/custom-variables.scss";
 @import "./theme/square-avatar.scss";
+@import "./theme/variables.scss";
+@import "./theme/custom-variables.scss";
 
-ion-content {
-  --background: var(--ion-color-primary-tint);
-  --color: var(--ion-color-primary-contrast)
+:root {
+  --ion-font-family: "Fira Sans", sans-serif;
 }
 
-.game ion-content {
-  --background: var(--ion-color-light);
-  --color: var(--ion-color-light-contrast)
+.lobster {
+  font-family: "Lobster", cursive;
 }
 
 .app-divider {

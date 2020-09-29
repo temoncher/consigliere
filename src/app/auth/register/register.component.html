@@ -1,4 +1,4 @@
-<ion-content class="no-scroll">
+<ion-content class="saturated no-scroll">
   <div class="register-page h100">
     <ion-header>
       <ion-button fill="clear" routerLink="../">
@@ -21,7 +21,7 @@
     </div>
     <form
       @fadeSlide
-      class="app-form"
+      class="app-form round-slide"
       [formGroup]="registerForm"
       (ngSubmit)="register()"
       (keydown)="submitOnEnterKey($event)"

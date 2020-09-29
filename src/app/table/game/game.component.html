@@ -4,7 +4,7 @@
   ></ng-container>
 
   <ng-template #resultBlock>
-    <ion-content>
+    <ion-content class="light no-scroll">
       <app-result></app-result>
     </ion-content>
   </ng-template>
@@ -16,7 +16,7 @@
 
       <ion-content
         id="game-content"
-        class="no-scroll"
+        class="light no-scroll"
         [ngSwitch]="currentPhase$ | async"
       >
         <ion-header class="game__header">

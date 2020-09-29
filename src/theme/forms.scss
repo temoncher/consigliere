@@ -1,10 +1,6 @@
 @import './variables.scss';
 
 .app-form {
-  padding: 32px;
-  border-radius: 32px 32px 0 0;
-  background-color: white;
-
   &__error-container {
     height: 16px;
   }
