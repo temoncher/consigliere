@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as firebase from 'firebase';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { fadeSlide } from '@/shared/animations';
+import { ErrorCode } from '@/shared/models/error-code.enum';
+import { AuthService } from '@/shared/services/auth.service';
 
-import { AuthService } from '../../shared/services/auth.service';
+import { authErrorMessages } from '../auth-error-messages';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +30,12 @@ export class LoginComponent implements OnInit {
     ],
   });
 
+  startingTitle = 'Напомните...';
+  loadingText = 'Секундочку...';
+  somethingWentWrong = 'Попробуй еще...';
+  errorMessage = '';
+  title = this.startingTitle;
+
   get email() {
     return this.loginForm.get('email');
   }
@@ -48,7 +57,25 @@ export class LoginComponent implements OnInit {
   }
 
   async login() {
-    await this.authService.login(this.email.value, this.password.value);
+    this.title = this.loadingText;
+    this.errorMessage = '';
+
+    try {
+      await this.authService.login(this.email.value, this.password.value);
+    } catch (error) {
+      if (error.code) {
+        const firebaseError = error as firebase.auth.Error;
+
+        this.errorMessage = authErrorMessages[firebaseError.code] || this.somethingWentWrong;
+
+        return;
+      }
+
+      throw error;
+    } finally {
+      this.title = this.startingTitle;
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   submitOnEnterKey({ key }: KeyboardEvent) {

@@ -26,7 +26,7 @@
       (ngSubmit)="register()"
       (keydown)="submitOnEnterKey($event)"
     >
-      <h2 class="app-form__title">Добро пожаловать!</h2>
+      <h2 class="app-form__title" [ngClass]="{ 'text-color-danger': !!errorMessage }">{{ errorMessage || title }}</h2>
       <ion-list>
         <ion-item>
           <ion-label position="stacked" color="medium">Псевдоним*</ion-label>

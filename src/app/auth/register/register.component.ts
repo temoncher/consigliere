@@ -5,6 +5,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { fadeSlide } from '@/shared/animations';
 
 import { AuthService } from '../../shared/services/auth.service';
+import { authErrorMessages } from '../auth-error-messages';
 
 @Component({
   selector: 'app-register',
@@ -39,6 +40,12 @@ export class RegisterComponent implements OnInit {
     ],
   });
 
+  startingTitle = 'Добро пожаловать!';
+  loadingText = 'Секундочку...';
+  somethingWentWrong = 'Попробуй еще...';
+  errorMessage = '';
+  title = this.startingTitle;
+
   get nickname() {
     return this.registerForm.get('nickname');
   }
@@ -63,10 +70,25 @@ export class RegisterComponent implements OnInit {
     ).subscribe(() => this.changeDetectorRef.detectChanges()); // to enable button on status change
   }
 
-  register() {
+  async register() {
     if (this.registerForm.invalid) return;
 
-    this.authService.register(this.email.value, this.password.value, this.nickname.value);
+    try {
+      await this.authService.register(this.email.value, this.password.value, this.nickname.value);
+    } catch (error) {
+      if (error.code) {
+        const firebaseError = error as firebase.auth.Error;
+
+        this.errorMessage = authErrorMessages[firebaseError.code] || this.somethingWentWrong;
+
+        return;
+      }
+
+      throw error;
+    } finally {
+      this.title = this.startingTitle;
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   submitOnEnterKey({ key }: KeyboardEvent) {
