@@ -273,11 +273,17 @@ export class PlayersState {
   }
 
   @Action(RemovePlayer)
-  removePlayer({ patchState, getState }: StateContext<PlayersStateModel>, { userId }: RemovePlayer) {
-    const { players } = getState();
+  removePlayer(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { userId }: RemovePlayer,
+  ) {
+    const { players, roles } = getState();
+    const newRoles = { ...roles };
     const newPlayers = players.filter(({ uid }) => uid !== userId);
 
-    patchState({ players: newPlayers });
+    delete newRoles[userId];
+
+    patchState({ players: newPlayers, roles: newRoles });
   }
 
   @Action(KillPlayer)

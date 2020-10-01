@@ -2,10 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button fill="clear" routerLink="/tabs/table">
-        <ion-icon
-          slot="icon-only"
-          name="arrow-back-outline"
-        ></ion-icon>
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>
@@ -27,9 +24,7 @@
         <ion-avatar slot="start">
           <img
             [src]="
-              (host$ | async)?.avatar
-                ? (host$ | async).avatar
-                : defaultAvatar
+              (host$ | async)?.avatar ? (host$ | async).avatar : defaultAvatar
             "
           />
         </ion-avatar>
@@ -88,4 +83,6 @@
   </div>
 </ion-list>
 
-<app-players-list></app-players-list>
+<ion-content class="light">
+  <app-players-list></app-players-list>
+</ion-content>
