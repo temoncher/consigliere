@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { cloneDeep } from 'lodash';
 
 import { RoundPhase } from '@/table/models/day-phase.enum';
 import { GameResult } from '@/table/models/game-result.enum';
@@ -94,7 +93,7 @@ export class TableState {
     { patchState, getState }: StateContext<TableStateModel>,
     { round }: AddRound,
   ) {
-    const { rounds } = cloneDeep(getState());
+    const { rounds } = getState();
 
     rounds.push(round);
 

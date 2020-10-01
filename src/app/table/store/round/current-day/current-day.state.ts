@@ -7,7 +7,6 @@ import {
   Selector,
   createSelector,
 } from '@ngxs/store';
-import { cloneDeep } from 'lodash';
 
 import { IDay } from '@/table/models/day.interface';
 

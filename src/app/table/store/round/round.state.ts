@@ -6,7 +6,6 @@ import {
   StateContext,
 } from '@ngxs/store';
 import { append, patch, removeItem } from '@ngxs/store/operators';
-import { cloneDeep } from 'lodash';
 
 import { RoundPhase } from '@/table/models/day-phase.enum';
 import { IRound } from '@/table/models/round.model';

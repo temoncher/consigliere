@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, State, Selector, StateContext, createSelector } from '@ngxs/store';
-import { compose, insertItem, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { shuffle, cloneDeep } from 'lodash';
+import { compose, insertItem, patch, removeItem } from '@ngxs/store/operators';
+import { shuffle } from 'lodash';
 import { environment } from 'src/environments/environment';
 
 import { Player } from '@/shared/models/player.model';
@@ -213,7 +213,7 @@ export class PlayersState {
 
   @Action(SetHost)
   setHost({ patchState, getState }: StateContext<PlayersStateModel>, { player }: SetHost) {
-    const { host, players } = cloneDeep(getState());
+    const { host, players } = getState();
 
     if (!player.nickname) {
       throw new Error(this.emptyNicknameText);
@@ -234,7 +234,7 @@ export class PlayersState {
 
   @Action(ShufflePlayers)
   shufflePlayers({ patchState, getState }: StateContext<PlayersStateModel>) {
-    const { players } = cloneDeep(getState());
+    const { players } = getState();
     const newPlayers = shuffle(players);
 
     patchState({ players: newPlayers });
@@ -242,7 +242,7 @@ export class PlayersState {
 
   @Action(SetPlayersNumbers)
   setPlayersNumbers({ patchState, getState }: StateContext<PlayersStateModel>) {
-    const { players } = cloneDeep(getState());
+    const { players } = getState();
     const newPlayers = players.map((player, index) => new Player({ ...player, number: index + 1 }));
 
     patchState({ players: newPlayers });
@@ -250,7 +250,7 @@ export class PlayersState {
 
   @Action(AddPlayer)
   addPlayer({ patchState, getState }: StateContext<PlayersStateModel>, { player }: AddPlayer) {
-    const { host, players } = cloneDeep(getState());
+    const { host, players } = getState();
 
     if (!player.nickname) {
       throw new Error(this.emptyNicknameText);
@@ -274,7 +274,7 @@ export class PlayersState {
 
   @Action(RemovePlayer)
   removePlayer({ patchState, getState }: StateContext<PlayersStateModel>, { userId }: RemovePlayer) {
-    const { players } = cloneDeep(getState());
+    const { players } = getState();
     const newPlayers = players.filter(({ uid }) => uid !== userId);
 
     patchState({ players: newPlayers });
@@ -285,7 +285,7 @@ export class PlayersState {
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, quitPhase }: KillPlayer,
   ) {
-    const { quitPhases } = cloneDeep(getState());
+    const { quitPhases } = getState();
 
     const newQuitPhases = {
       ...quitPhases,

@@ -5,7 +5,6 @@ import {
   StateContext,
   createSelector,
 } from '@ngxs/store';
-import { cloneDeep } from 'lodash';
 
 import { ToggleGameMenuBoolean } from './game-menu.actions';
 import { GameMenuStateModel } from './game-menu.model';
@@ -35,7 +34,7 @@ export class GameMenuState {
     { patchState, getState }: StateContext<GameMenuStateModel>,
     { propName }: ToggleGameMenuBoolean,
   ) {
-    const { [propName]: oldPropValue } = cloneDeep(getState());
+    const { [propName]: oldPropValue } = getState();
 
     return patchState({
       [propName]: !oldPropValue,

@@ -1,11 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { State, Selector, StateContext, Action } from '@ngxs/store';
-import { cloneDeep } from 'lodash';
 
 import { Player } from '@/shared/models/player.model';
 import { VotePhase } from '@/table/models/vote-phase.enum';
-import { VoteResult } from '@/table/models/vote-result.enum';
 import { IVote } from '@/table/models/vote.interface';
 
 import { PlayersState } from '../../players/players.state';
@@ -154,7 +152,7 @@ export class CurrentVoteState {
       proposedPlayerId,
     }: VoteForCandidate,
   ) {
-    const { votes } = cloneDeep(getState());
+    const { votes } = getState();
     const vote = votes[votes.length - 1];
     const isAlreadyVotedForThisPlayer = vote[proposedPlayerId].includes(playerId);
 
