@@ -212,7 +212,10 @@ export class PlayersState {
   }
 
   @Action(SetHost)
-  setHost({ patchState, getState }: StateContext<PlayersStateModel>, { player }: SetHost) {
+  setHost(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { player }: SetHost,
+  ) {
     const { host, players } = getState();
 
     if (!player.nickname) {
@@ -274,16 +277,18 @@ export class PlayersState {
 
   @Action(RemovePlayer)
   removePlayer(
-    { patchState, getState }: StateContext<PlayersStateModel>,
+    { setState, getState }: StateContext<PlayersStateModel>,
     { userId }: RemovePlayer,
   ) {
-    const { players, roles } = getState();
+    const { roles } = getState();
     const newRoles = { ...roles };
-    const newPlayers = players.filter(({ uid }) => uid !== userId);
 
     delete newRoles[userId];
 
-    patchState({ players: newPlayers, roles: newRoles });
+    setState(patch<PlayersStateModel>({
+      players: removeItem(({ uid }) => uid === userId),
+      roles: newRoles,
+    }));
   }
 
   @Action(KillPlayer)

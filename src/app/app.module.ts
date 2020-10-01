@@ -41,7 +41,7 @@ const devModules = [
     NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
-    environment.production ? devModules : [],
+    environment.production ? [] : devModules,
   ],
   providers: [
     StatusBar,

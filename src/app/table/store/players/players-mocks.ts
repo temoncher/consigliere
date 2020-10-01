@@ -2,16 +2,16 @@ import { Player } from '@/shared/models/player.model';
 import { Role } from '@/shared/models/role.enum';
 
 export const dummyPlayers = [
-  new Player({ nickname: 'Воланд', number: 1, uid: 'voland' }),
-  new Player({ nickname: 'Cabby', number: 2, uid: 'cabby' }),
-  new Player({ nickname: 'Булочка', number: 3, uid: 'bulochka' }),
-  new Player({ nickname: 'Краснова', number: 4, uid: 'krasnova' }),
-  new Player({ nickname: 'Олежа', number: 5, uid: 'olega' }),
-  new Player({ nickname: 'Маффин', number: 6, uid: 'maffin' }),
-  new Player({ nickname: 'Девяткин', number: 7, uid: 'devyatkin' }),
-  new Player({ nickname: 'Одинаковый', number: 8, uid: 'odynakoviy' }),
-  new Player({ nickname: 'Люба', number: 9, uid: 'lyba' }),
-  new Player({ nickname: 'Углическая', number: 10, uid: 'uglicheskaya' }),
+  new Player({ nickname: 'Воланд', uid: 'voland' }),
+  new Player({ nickname: 'Cabby', uid: 'cabby' }),
+  new Player({ nickname: 'Булочка', uid: 'bulochka' }),
+  new Player({ nickname: 'Краснова', uid: 'krasnova' }),
+  new Player({ nickname: 'Олежа', uid: 'olega' }),
+  new Player({ nickname: 'Маффин', uid: 'maffin' }),
+  new Player({ nickname: 'Девяткин', uid: 'devyatkin' }),
+  new Player({ nickname: 'Одинаковый', uid: 'odynakoviy' }),
+  new Player({ nickname: 'Люба', uid: 'lyba' }),
+  new Player({ nickname: 'Углическая', uid: 'uglicheskaya' }),
 ];
 
 export const dummyPlayersRoles: Record<string, Role> = {

@@ -153,13 +153,14 @@ export class CurrentVoteState {
     }: VoteForCandidate,
   ) {
     const { votes } = getState();
-    const vote = votes[votes.length - 1];
+    const newVotes = [...votes];
+    const vote = newVotes[votes.length - 1];
     const isAlreadyVotedForThisPlayer = vote[proposedPlayerId].includes(playerId);
 
     if (isAlreadyVotedForThisPlayer) {
       vote[proposedPlayerId] = vote[proposedPlayerId].filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      patchState({ votes });
+      patchState({ votes: newVotes });
 
       return;
     }
@@ -172,7 +173,7 @@ export class CurrentVoteState {
 
     vote[proposedPlayerId].push(playerId);
 
-    patchState({ votes });
+    patchState({ votes: newVotes });
   }
 
   @Action(SetVotes)
