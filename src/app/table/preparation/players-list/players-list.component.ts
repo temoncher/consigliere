@@ -44,7 +44,6 @@ export class PlayersListComponent implements OnInit {
   };
 
   roles: Record<string, Role>;
-  players: Player[];
 
   constructor(
     private modalController: ModalController,
@@ -58,7 +57,6 @@ export class PlayersListComponent implements OnInit {
       .subscribe((playerPrompt) => this.playerPrompt = playerPrompt);
 
     this.roles$.subscribe((roles) => this.roles = roles);
-    this.players$.subscribe((players) => this.players = players);
   }
 
   ngOnInit() { }

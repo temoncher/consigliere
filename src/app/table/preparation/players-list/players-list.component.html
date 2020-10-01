@@ -2,7 +2,7 @@
   <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
     <!-- Add new player button-->
     <ion-item
-      *ngIf="players?.length < 10"
+      *ngIf="(players$ | async)?.length < 10"
       data-cy="add-player-item"
       class="add-new"
       lines="none"
@@ -15,7 +15,7 @@
     </ion-item>
     <!-- END Add new player button-->
     <ion-item
-      *ngFor="let player of players; let i = index"
+      *ngFor="let player of (players$ | async); let i = index"
       class="player-list__item"
       lines="none"
     >
