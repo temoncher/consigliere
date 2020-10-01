@@ -94,10 +94,11 @@ export class TableState {
     { round }: AddRound,
   ) {
     const { rounds } = getState();
+    const newRounds = [...rounds];
 
-    rounds.push(round);
+    newRounds.push(round);
 
-    patchState({ rounds });
+    patchState({ rounds: newRounds });
   }
 
   @Action(ResetIsNextVotingDisabled)
