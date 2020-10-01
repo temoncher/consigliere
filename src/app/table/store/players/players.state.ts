@@ -300,7 +300,7 @@ export class PlayersState {
     { setState, getState }: StateContext<PlayersStateModel>,
     { previoustIndex, newIndex }: ReorderPlayer,
   ) {
-    const { players } = cloneDeep(getState());
+    const { players } = getState();
     const playerToReorder = players[previoustIndex];
 
     setState(patch<PlayersStateModel>({
