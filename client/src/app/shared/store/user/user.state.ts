@@ -49,12 +49,18 @@ export class UserState implements NgxsOnInit {
     this.auth.user.pipe(
       filter((user) => !!user),
       tap((user) => {
-        console.log('Detected user change:', user);
-        console.log('New token is:', user.getIdToken());
+        this.logUser(user);
       }),
       switchMap(({ uid }) => this.apiService.users.getOne(uid)),
     ).subscribe((user) => {
       context.setState(user);
     });
+  }
+
+  private async logUser(user: firebase.User) {
+    console.log('Detected user change:', user);
+    const token = await user.getIdToken();
+
+    console.log('New token is:', { token });
   }
 }

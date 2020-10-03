@@ -1,0 +1,7 @@
+query getUser {
+  user(id: "temoncher") {
+    uid
+    nickname
+    avatar
+  }
+}

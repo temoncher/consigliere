@@ -1,12 +1,14 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
-import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { HttpStatus, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { ApolloError, ValidationError } from 'apollo-server-express';
 
 import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { User } from '@/models/user.model';
 
 import { GetUserArgs, GetUsersArgs } from './users.types';
+import { ErrorCode } from '@/enums/apollo-code.enum';
 
 type UsersCollection = FirebaseFirestore.CollectionReference<User>;
 
@@ -20,35 +22,38 @@ export class UsersResolver {
   @Query(() => User, { name: 'user' })
   async getUser(@Args() args: GetUserArgs): Promise<User> {
     if (Object.keys(args).length > 1) {
-      throw new HttpException('Must provide only one property to query on', HttpStatus.BAD_REQUEST);
+      throw new ValidationError('Must provide only one property to query on');
     }
+
+    let userData: User;
 
     if (args.id) {
       const userDoc = await this.usersCollection.doc(args.id).get();
-      const userData = userDoc.data();
 
-      return userData;
+      userData = userDoc.data();
     }
 
     if (args.nickname) {
       const userDocs = await this.usersCollection.where('nickname', '==', args.nickname).get();
 
       if (userDocs.size === 0) {
-        throw new HttpException(`User with nickname "${args.nickname}" is not found`, HttpStatus.NOT_FOUND);
+        throw new ApolloError(`User with nickname "${args.nickname}" is not found`, ErrorCode.NOT_FOUND);
       }
 
-      const userData = userDocs.docs[0].data();
-
-      return userData;
+      userData = userDocs.docs[0].data();
     }
 
-    throw new HttpException('Incorrect arguments passed', HttpStatus.BAD_REQUEST);
+    if (!userData) {
+      throw new ApolloError('User not found', ErrorCode.NOT_FOUND);
+    }
+
+    throw new ValidationError('Incorrect arguments passed');
   }
 
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() args: GetUsersArgs): Promise<User[]> {
     if (Object.keys(args).length > 1) {
-      throw new HttpException('Must provide only one property to query on', HttpStatus.BAD_REQUEST);
+      throw new ValidationError('Must provide only one property to query on');
     }
 
     if (args.ids) {
@@ -65,6 +70,6 @@ export class UsersResolver {
       return usersData;
     }
 
-    throw new HttpException('Incorrect arguments passed', HttpStatus.BAD_REQUEST);
+    throw new ValidationError('Incorrect arguments passed');
   }
 }

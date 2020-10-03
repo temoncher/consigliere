@@ -32,7 +32,7 @@ export class AuthService {
   async login(email: string, password: string) {
     await this.auth.signInWithEmailAndPassword(email, password);
     const currentUser = await this.auth.currentUser;
-    const token = currentUser.getIdToken();
+    const token = await currentUser.getIdToken();
 
     console.log('Logged in with user:', currentUser);
     console.log('User\'s token:', token);

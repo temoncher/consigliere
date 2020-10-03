@@ -9,4 +9,7 @@ export class User extends DateDocument {
 
   @Field()
   nickname: string;
+
+  @Field()
+  avatar?: string;
 }

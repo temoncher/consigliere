@@ -1,7 +1,8 @@
 import { FirebaseAuthenticationService } from '@aginix/nestjs-firebase-admin';
-import { CanActivate, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CanActivate, Injectable } from '@nestjs/common';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { AuthenticationError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
 import { IGQLContext } from '@/interfaces/gql-context.interface';
@@ -14,7 +15,7 @@ export class AuthGuard implements CanActivate {
     const gqlContext = GqlExecutionContext.create(executionContextHost).getContext<IGQLContext>();
 
     if (!gqlContext.headers.authorization) {
-      throw new HttpException('Authorization header is missing', HttpStatus.UNAUTHORIZED);
+      throw new AuthenticationError('Authorization header is missing');
     }
 
     const decodedToken = await this.decodeToken(gqlContext.headers.authorization);
@@ -28,7 +29,7 @@ export class AuthGuard implements CanActivate {
     const [bearerTag, token] = authHeader.split(' ');
 
     if (bearerTag !== 'Bearer') {
-      throw new HttpException('Token bearer is missing', HttpStatus.UNAUTHORIZED);
+      throw new AuthenticationError('Token bearer is missing');
     }
 
     try {
@@ -36,7 +37,7 @@ export class AuthGuard implements CanActivate {
 
       return decodedToken;
     } catch {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      throw new AuthenticationError('Invalid token');
     }
   }
 }

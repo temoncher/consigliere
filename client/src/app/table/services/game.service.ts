@@ -160,9 +160,6 @@ export class GameService {
       .filter(({ isGuest }) => !isGuest)
       .map(({ uid }) => uid);
 
-    console.log(rounds);
-    console.log(host.uid);
-
     const newGame: IGame = {
       participants: [host.uid, ...playersIds],
       createdBy: user.uid,

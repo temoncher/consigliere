@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SETTINGS } from '@angular/fire/firestore';
+import { GraphQLModule } from './graphql.module';
 
 const devModules = [
   NgxsReduxDevtoolsPluginModule.forRoot(),
@@ -42,6 +43,7 @@ const devModules = [
     NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
+    GraphQLModule,
     environment.production ? [] : devModules,
   ],
   providers: [

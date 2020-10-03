@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { GetUserGQL, GetUserQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
-import { IUser } from '@/shared/models/user.interface';
 import { AuthService } from '@/shared/services/auth.service';
-import { UserState } from '@/shared/store/user/user.state';
 import { GameResult } from '@/table/models/game-result.enum';
 
 import { SettingsMenuComponent } from './settings-menu.component';
@@ -21,7 +20,7 @@ type WinnerMap = {
   styleUrls: ['profile.component.scss'],
 })
 export class ProfileComponent {
-  @Select(UserState.getState) user$: Observable<IUser>;
+  user$: Observable<GetUserQuery['user']>;
 
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
@@ -33,7 +32,12 @@ export class ProfileComponent {
   constructor(
     private popoverController: PopoverController,
     private authService: AuthService,
-  ) { }
+    private userGQL: GetUserGQL,
+  ) {
+    this.user$ = this.userGQL.watch().valueChanges.pipe(
+      map((result) => result.data.user),
+    );
+  }
 
   async logout() {
     await this.authService.logout();
