@@ -21,6 +21,7 @@ import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SETTINGS } from '@angular/fire/firestore';
 
 const devModules = [
   NgxsReduxDevtoolsPluginModule.forRoot(),
@@ -50,6 +51,13 @@ const devModules = [
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy,
     },
+    {
+      provide: SETTINGS,
+      useValue: !environment.emulation ? undefined : {
+        host: 'localhost:8081',
+        ssl: false
+      }
+    }
   ],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  emulation: false,
   firebaseConfig: {
     apiKey: 'AIzaSyBBpLs7C_yicQg2xbfZ1nZBdfiKP72bkgk',
     authDomain: 'mafia-consigliere.firebaseapp.com',

@@ -8,6 +8,7 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "build": "ng build --prod",
+    "build:emulator": "ng build -c emulator --output-path www --watch",
     "unit:watch": "ng test",
     "unit": "ng test --sourceMap=false --browsers=ChromeHeadless --watch=false --progress=false",
     "ci:start-server": "angular-http-server --path ./www -p 4200",
