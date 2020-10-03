@@ -54,7 +54,7 @@ const devModules = [
     {
       provide: SETTINGS,
       useValue: !environment.emulation ? undefined : {
-        host: 'localhost:8081',
+        host: 'localhost:4343',
         ssl: false
       }
     }
