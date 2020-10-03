@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "public": "www",
+      "public": "client/www",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -16,7 +16,7 @@
     },
     {
       "target": "app",
-      "public": "www",
+      "public": "client/www",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -42,7 +42,7 @@
       "port": 5001
     },
     "firestore": {
-      "port": 8080
+      "port": 4343
     },
     "hosting": {
       "port": 5000

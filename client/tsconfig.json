@@ -32,6 +32,7 @@
     "strictInjectionParameters": true
   },
   "exclude": [
-    "cypress"
+    "cypress",
+    "functions"
   ]
 }
