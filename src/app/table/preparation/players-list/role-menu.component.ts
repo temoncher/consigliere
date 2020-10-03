@@ -9,7 +9,7 @@ import { Role } from '@/shared/models/role.enum';
     <ion-list>
       <ng-container *ngFor="let role of Role | keyvalue">
         <ion-item
-          *ngIf="role.value !== Role.HOST"
+          *ngIf="role.value !== Role.HOST && role.value !== Role.CREATOR"
           [attr.data-cy]="role.value"
           button
           lines="none"

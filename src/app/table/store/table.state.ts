@@ -3,8 +3,9 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 import { RoundPhase } from '@/table/models/day-phase.enum';
 import { GameResult } from '@/table/models/game-result.enum';
-import { Round } from '@/table/models/round.model';
 import { VotePhase } from '@/table/models/vote-phase.enum';
+
+import { IRound } from '../models/round.interface';
 
 import { GameMenuState } from './menu/game-menu.state';
 import { PlayersState } from './players/players.state';
@@ -19,7 +20,7 @@ import {
 } from './table.actions';
 
 export interface TableStateModel {
-  rounds: Round[];
+  rounds: IRound[];
   isNextVotingDisabled: boolean;
   isGameStarted: boolean;
   gameResult?: GameResult;

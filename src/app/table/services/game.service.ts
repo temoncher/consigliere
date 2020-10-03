@@ -11,7 +11,7 @@ import { RoundPhase } from '@/table/models/day-phase.enum';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
 
-import { Round } from '../models/round.model';
+import { IRound } from '../models/round.interface';
 import { VotePhase } from '../models/vote-phase.enum';
 import { SetPlayersNumbers, KillPlayer } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
@@ -140,25 +140,32 @@ export class GameService {
     const currentDay = this.store.selectSnapshot(CurrentDayState);
     const kickedPlayers = this.store.selectSnapshot(RoundState.getKickedPlayers);
     const currentVote = this.store.selectSnapshot(CurrentVoteState);
-    const round = new Round({
+    const round: IRound = {
       kickedPlayers,
       ...currentNight,
       ...currentDay,
       ...currentVote,
-    });
+    };
 
     return round;
   }
 
   private composeGame() {
-    const rounds = this.store.selectSnapshot(TableState.getRounds);
-    const result = this.store.selectSnapshot(TableState.getGameResult);
     const { players, falls, quitPhases, speechSkips, roles } = this.store.selectSnapshot(PlayersState.getState);
+    const result = this.store.selectSnapshot(TableState.getGameResult);
+    const rounds = this.store.selectSnapshot(TableState.getRounds);
     const host = this.store.selectSnapshot(PlayersState.getHost);
     const user = this.store.selectSnapshot(UserState.getState);
+    const playersIds = players
+      .filter(({ isGuest }) => !isGuest)
+      .map(({ uid }) => uid);
+
+    console.log(rounds);
+    console.log(host.uid);
 
     const newGame: IGame = {
-      creatorId: user.uid,
+      participants: [host.uid, ...playersIds],
+      createdBy: user.uid,
       players: players.map((player) => player.serialize()),
       falls,
       roles,

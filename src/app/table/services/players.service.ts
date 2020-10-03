@@ -45,9 +45,9 @@ export class PlayersService {
     const playerTimer = this.timersService.getPlayerTimer(playerId);
 
     playerTimer.endSpeech();
-    const timeLeft = playerTimer.time;
+    const timeElapsed = 60 - playerTimer.time;
 
-    this.store.dispatch(new SetPlayerTimer(playerId, timeLeft));
+    this.store.dispatch(new SetPlayerTimer(playerId, timeElapsed));
   }
 
   private catchPlayerReset() {

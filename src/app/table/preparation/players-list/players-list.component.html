@@ -53,7 +53,7 @@
         <ng-template #hasRole>
           <p>
             <ion-text [color]="(validRoles$ | async)[getPlayersRole(player)] || 'danger'">
-              {{ getPlayersRole(player) }}
+              {{ "ROLES." + getPlayersRole(player) | translate }}
             </ion-text>
           </p>
         </ng-template>

@@ -126,13 +126,13 @@ export class CurrentDayState {
   @Action(SetPlayerTimer)
   setPlayerTimer(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
-    { playerId, timeLeft }: SetPlayerTimer,
+    { playerId, timeElapsed }: SetPlayerTimer,
   ) {
     const { timers } = getState();
 
     const newTimers = {
       ...timers,
-      [playerId]: timeLeft,
+      [playerId]: timeElapsed,
     };
 
     patchState({ timers: newTimers });

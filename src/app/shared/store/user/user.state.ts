@@ -7,12 +7,12 @@ import {
   Selector,
   NgxsOnInit,
 } from '@ngxs/store';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@/shared/models/user.interface';
 import { ApiService } from '@/shared/services/api/api.service';
 
-import { FetchUser, SetUser } from './user.actions';
+import { SetUser } from './user.actions';
 
 export type UserStateModel = IUser | null;
 
@@ -36,27 +36,25 @@ export class UserState implements NgxsOnInit {
     this.watchAndUpdateUserData(context);
   }
 
-  @Action(FetchUser)
-  async fetchUser({ setState }: StateContext<UserStateModel>) {
-    const currentUser = await this.auth.currentUser;
-
-    const user = await this.apiService.users.getOneSnapshot(currentUser.uid);
-
-    setState(user);
-  }
-
   @Action(SetUser)
   setUser(
     { setState }: StateContext<UserStateModel>,
     { user }: SetUser,
   ) {
+    console.log('New user data is:', user);
     setState(user);
   }
 
   private watchAndUpdateUserData(context: StateContext<UserStateModel>) {
     this.auth.user.pipe(
       filter((user) => !!user),
+      tap((user) => {
+        console.log('Detected user change:', user);
+        console.log('New token is:', user.getIdToken());
+      }),
       switchMap(({ uid }) => this.apiService.users.getOne(uid)),
-    ).subscribe((user) => context.setState(user));
+    ).subscribe((user) => {
+      context.setState(user);
+    });
   }
 }

@@ -7,6 +7,6 @@ export const environment = {
     projectId: 'mafia-consigliere',
     storageBucket: 'mafia-consigliere.appspot.com',
     messagingSenderId: '190618312639',
-    appId: '1:190618312639:web:3960ed8b1ed7f110e1cb0a'
-  }
+    appId: '1:190618312639:web:3960ed8b1ed7f110e1cb0a',
+  },
 };

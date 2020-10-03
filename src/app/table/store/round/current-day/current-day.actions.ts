@@ -6,7 +6,7 @@ export class SetPlayerTimer {
   static readonly type = `[${dayActionsPrefix}] Set player timer`;
   constructor(
     public playerId: string,
-    public timeLeft: number,
+    public timeElapsed: number,
   ) { }
 }
 

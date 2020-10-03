@@ -1,7 +1,8 @@
 export enum Role {
-  MAFIA = 'Мафия',
-  CITIZEN = 'Мирный',
-  DON = 'Дон',
-  SHERIFF = 'Шериф',
-  HOST = 'Ведущий',
+  MAFIA = 'MAFIA',
+  CITIZEN = 'CITIZEN',
+  DON = 'DON',
+  SHERIFF = 'SHERIFF',
+  HOST = 'HOST',
+  CREATOR = 'CREATOR',
 }

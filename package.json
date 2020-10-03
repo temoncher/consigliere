@@ -39,7 +39,9 @@
     "@ngxs/logger-plugin": "^3.6.2",
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
+    "@apollo/client": "^3.0.0",
     "angular-svg-round-progressbar": "^3.0.1",
+    "apollo-angular": "^2.0.4",
     "core-js": "^2.5.4",
     "firebase": "^7.14.0",
     "lodash": "^4.17.15",
@@ -48,7 +50,8 @@
     "rxjs": "~6.5.1",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "graphql": "^15.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.1",
@@ -94,7 +97,7 @@
     "ts-loader": "^8.0.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "^3.7.5",
+    "typescript": "3.7.5",
     "webpack": "^4.44.1",
     "@angular-devkit/architect": "~0.900",
     "firebase-tools": "^8.0.0",

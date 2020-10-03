@@ -8,7 +8,7 @@ import {
 import { append, patch, removeItem } from '@ngxs/store/operators';
 
 import { RoundPhase } from '@/table/models/day-phase.enum';
-import { IRound } from '@/table/models/round.model';
+import { IRound } from '@/table/models/round.interface';
 
 import { CurrentDayState } from './current-day/current-day.state';
 import { CurrentNightState } from './current-night/current-night.state';
@@ -16,14 +16,12 @@ import { CurrentVoteState } from './current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer, ResetKickedPlayer } from './round.actions';
 
 export interface RoundStateModel extends IRound {
-  kickedPlayers: string[];
   currentPhase: RoundPhase;
 }
 
 @State({
   name: 'round',
   defaults: {
-    kickedPlayers: [],
     currentPhase: RoundPhase.NIGHT,
   },
   children: [
@@ -40,7 +38,7 @@ export class RoundState {
   }
   @Selector()
   static getKickedPlayers({ kickedPlayers }: RoundStateModel) {
-    return kickedPlayers;
+    return kickedPlayers || [];
   }
 
   @Action(SwitchRoundPhase)

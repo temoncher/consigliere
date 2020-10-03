@@ -1,4 +1,12 @@
 {
+  "ROLES": {
+    "MAFIA": "Мафия",
+    "CITIZEN": "Мирный",
+    "DON": "Дон",
+    "SHERIFF": "Шериф",
+    "HOST": "Ведущий",
+    "CREATOR": "Создатель"
+  },
   "TABS": {
     "clubsTitle": "Клубы",
     "profileTitle": "Профиль",

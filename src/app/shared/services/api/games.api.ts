@@ -10,13 +10,7 @@ export class GamesApi implements IApi<IGame> {
 
   constructor(private firestore: AngularFirestore) {}
 
-  async create(game: IGame): Promise<void> {
+  async create(game: Omit<IGame, 'createdAt' | 'updatedAt'>): Promise<void> {
     await this.gamesCollection.add(game);
-  }
-
-  async getLastGamesByPlayerID(id: string) {
-    // const createdGamesDocs = await this.gamesCollection.ref.where('creatorId', '==', id).get();
-    // const hostedGamesDocs = await this.gamesCollection.ref.where('host.user', '==', id).get();
-    // const hostedGamesDocs = await this.gamesCollection.ref.where('host.user', '==', id).get();
   }
 }

@@ -1,5 +1,5 @@
 import { GameResult } from '@/table/models/game-result.enum';
-import { Round } from '@/table/models/round.model';
+import { IRound } from '@/table/models/round.interface';
 
 export const gameActionsPrefix = 'Game';
 
@@ -15,7 +15,7 @@ export class ResetIsNextVotingDisabled {
 
 export class AddRound {
   static readonly type = `[${gameActionsPrefix}] Add round`;
-  constructor(public round: Round) { }
+  constructor(public round: IRound) { }
 }
 
 export class SetIsNextVotingDisabled {
