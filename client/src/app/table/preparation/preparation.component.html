@@ -46,7 +46,7 @@
       <ion-item
         data-cy="add-host-item"
         class="add-new"
-        *ngIf="(host$ | async) === undefined"
+        *ngIf="(host$ | async) === null"
         lines="none"
         (click)="presentHostModal()"
       >

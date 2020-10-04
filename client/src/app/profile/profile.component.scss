@@ -16,6 +16,10 @@ ion-header {
 
     &__title {
       margin: 8px 0 0 16px;
+
+      ion-skeleton-text {
+        height: 18px;
+      }
     }
   }
 

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { GetUserGQL, GetUserQuery } from '@/graphql/gql.generated';
+import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { AuthService } from '@/shared/services/auth.service';
 import { GameResult } from '@/table/models/game-result.enum';
@@ -20,8 +20,11 @@ type WinnerMap = {
   templateUrl: 'profile.component.html',
   styleUrls: ['profile.component.scss'],
 })
-export class ProfileComponent {
-  user$: Observable<GetUserQuery['user']>;
+export class ProfileComponent implements OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
+
+  user: ProfilePageQuery['user'];
+  games: ProfilePageQuery['lastGames'];
 
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
@@ -34,12 +37,22 @@ export class ProfileComponent {
     private popoverController: PopoverController,
     private authService: AuthService,
     private fireauth: AngularFireAuth,
-    private userGQL: GetUserGQL,
+    private profilePageGQL: ProfilePageGQL,
   ) {
-    this.user$ = this.fireauth.user.pipe(
-      switchMap((fireUser) => this.userGQL.watch({ id: fireUser.uid }).valueChanges),
-      map((userQuery) => userQuery.data.user),
-    );
+    this.fireauth.user.pipe(
+      takeUntil(this.destroy),
+      switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
+      map((profilePageQuery) => profilePageQuery.data),
+    ).subscribe((queryData) => {
+      console.log(queryData);
+      this.user = queryData.user;
+      this.games = queryData.lastGames;
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   async logout() {

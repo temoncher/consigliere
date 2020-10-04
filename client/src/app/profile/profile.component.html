@@ -12,30 +12,50 @@
     </ion-header>
 
     <div class="hero-block">
-      <div class="square-avatar">
-        <img [src]="(user$ | async)?.avatar || defaultAvatar" />
-      </div>
-      <h2 class="hero-block__title">
-        {{ (user$ | async)?.nickname }}
-      </h2>
+      <ng-container
+        *ngIf="user; then userBlock; else skeletonBlock"
+      ></ng-container>
+      <ng-template #userBlock>
+        <ion-thumbnail class="square-avatar">
+          <img [src]="user.avatar || defaultAvatar" />
+        </ion-thumbnail>
+        <h2 *ngIf="user" class="hero-block__title">
+          {{ user.nickname }}
+        </h2>
+      </ng-template>
+      <ng-template #skeletonBlock>
+        <ion-thumbnail class="square-avatar">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <h2 class="hero-block__title">
+          <ion-skeleton-text style="width: 200px" animated></ion-skeleton-text>
+        </h2>
+      </ng-template>
     </div>
 
     <div class="profile-page__content app-form round-slide">
       <ion-list class="games-list cards-list">
+        <!-- TODO: Translate this -->
         <ion-list-header>Игры</ion-list-header>
 
-        <ion-item lines="none">
-          <div slot="start">
-            <ion-avatar>
-              <img src="assets/icon/favicon.png" />
-            </ion-avatar>
-          </div>
-
-          <ion-label>
-            <h3>{{ "lol" }}</h3>
-            <p>{{ "lol" }}</p>
-          </ion-label>
+        <ion-item *ngIf="!games.length" class="cards-list__empty" lines="none">
+          <ion-text color="medium">Здесь пока еще пусто...</ion-text>
         </ion-item>
+
+        <ng-container *ngIf="games.length">
+          <ion-item *ngFor="let game of games" lines="none">
+            <div slot="start">
+              <ion-avatar>
+                <img src="assets/icon/favicon.png" />
+              </ion-avatar>
+            </div>
+
+            <ion-label>
+              <h3>{{ "lol" }}</h3>
+              <p>{{ "ROLE." + game.roles[user.uid] | translate }}</p>
+            </ion-label>
+          </ion-item>
+        </ng-container>
       </ion-list>
     </div>
   </div>

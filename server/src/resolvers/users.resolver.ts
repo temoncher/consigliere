@@ -1,5 +1,5 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
-import { HttpStatus, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 

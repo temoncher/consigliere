@@ -80,7 +80,7 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   uid: Scalars['ID'];
   nickname: Scalars['String'];
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -114,25 +114,34 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
-export type GetUserQueryVariables = Exact<{
-  id?: Maybe<Scalars['String']>;
+export type ProfilePageQueryVariables = Exact<{
+  id: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = (
+export type ProfilePageQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'uid' | 'nickname' | 'avatar'>
-  ) }
+  ), lastGames: Array<(
+    { __typename?: 'Game' }
+    & Pick<Game, 'createdAt' | 'id' | 'result' | 'roles'>
+  )> }
 );
 
-export const GetUserDocument = gql`
-    query getUser($id: String) {
+export const ProfilePageDocument = gql`
+    query profilePage($id: String!) {
   user(id: $id) {
     uid
     nickname
     avatar
+  }
+  lastGames(playerId: $id) {
+    createdAt
+    id
+    result
+    roles
   }
 }
     `;
@@ -140,8 +149,8 @@ export const GetUserDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
-    document = GetUserDocument;
+  export class ProfilePageGQL extends Apollo.Query<ProfilePageQuery, ProfilePageQueryVariables> {
+    document = ProfilePageDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

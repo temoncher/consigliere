@@ -4,7 +4,6 @@ import * as firebase from 'firebase';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { fadeSlide } from '@/shared/animations';
-import { ErrorCode } from '@/shared/models/error-code.enum';
 import { AuthService } from '@/shared/services/auth.service';
 
 import { authErrorMessages } from '../auth-error-messages';
@@ -73,7 +72,6 @@ export class LoginComponent implements OnInit {
 
       throw error;
     } finally {
-      this.title = this.startingTitle;
       this.changeDetectorRef.detectChanges();
     }
   }

@@ -1,0 +1,13 @@
+query profilePage($id: String!) {
+  user(id: $id) {
+    uid
+    nickname
+    avatar
+  }
+  lastGames(playerId: $id, limit: 10) {
+    createdAt
+    id
+    result
+    roles
+  }
+}
