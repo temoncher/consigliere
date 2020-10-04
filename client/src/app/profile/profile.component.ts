@@ -44,7 +44,6 @@ export class ProfileComponent implements OnDestroy {
       switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
       map((profilePageQuery) => profilePageQuery.data),
     ).subscribe((queryData) => {
-      console.log(queryData);
       this.user = queryData.user;
       this.games = queryData.lastGames;
     });

@@ -7,6 +7,7 @@ import { filter, tap } from 'rxjs/operators';
 import { IUser } from '@/shared/models/user.interface';
 
 import { ApiService } from './api/api.service';
+import { LoggerService } from '@/table/services/logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class AuthService {
     private store: Store,
     private apiService: ApiService,
     private fireauth: AngularFireAuth,
+    private logger: LoggerService,
   ) {
     this.watchAndUpdateUser();
   }
@@ -39,8 +41,8 @@ export class AuthService {
     const currentUser = await this.fireauth.currentUser;
     const token = await currentUser.getIdToken();
 
-    console.log('Logged in with user:', currentUser);
-    console.log('User\'s token:', token);
+    this.logger.log('Logged in with user:', currentUser);
+    this.logger.log('User\'s token:', token);
 
     this.store.dispatch(new Navigate(['tabs', 'table']));
   }
@@ -54,7 +56,7 @@ export class AuthService {
   private watchAndUpdateUser() {
     this.fireauth.user.pipe(
       filter((user) => !!user),
-      tap((user) => console.log('Detected user change:', user)),
+      tap((user) => this.logger.log('Detected user change:', user)),
     ).subscribe((user) => this.currentUser = user);
   }
 }

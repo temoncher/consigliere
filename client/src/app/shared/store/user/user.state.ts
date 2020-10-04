@@ -13,6 +13,7 @@ import { IUser } from '@/shared/models/user.interface';
 import { ApiService } from '@/shared/services/api/api.service';
 
 import { SetUser } from './user.actions';
+import { LoggerService } from '@/table/services/logger.service';
 
 export type UserStateModel = IUser | null;
 
@@ -30,6 +31,7 @@ export class UserState implements NgxsOnInit {
   constructor(
     private fireauth: AngularFireAuth,
     private apiService: ApiService,
+    private logger: LoggerService,
   ) {}
 
   ngxsOnInit(context: StateContext<UserStateModel>) {
@@ -41,7 +43,7 @@ export class UserState implements NgxsOnInit {
     { setState }: StateContext<UserStateModel>,
     { user }: SetUser,
   ) {
-    console.log('New user data is:', user);
+    this.logger.log('New user data is:', user);
     setState(user);
   }
 
@@ -60,6 +62,6 @@ export class UserState implements NgxsOnInit {
   private async logUser(user: firebase.User) {
     const token = await user.getIdToken();
 
-    console.log('New token is:', { token });
+    this.logger.log('New token is:', { token });
   }
 }

@@ -38,11 +38,11 @@
         <!-- TODO: Translate this -->
         <ion-list-header>Игры</ion-list-header>
 
-        <ion-item *ngIf="!games.length" class="cards-list__empty" lines="none">
+        <ion-item *ngIf="!games?.length" class="cards-list__empty" lines="none">
           <ion-text color="medium">Здесь пока еще пусто...</ion-text>
         </ion-item>
 
-        <ng-container *ngIf="games.length">
+        <ng-container *ngIf="games?.length">
           <ion-item *ngFor="let game of games" lines="none">
             <div slot="start">
               <ion-avatar>
