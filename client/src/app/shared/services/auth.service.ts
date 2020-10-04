@@ -5,9 +5,9 @@ import { Store } from '@ngxs/store';
 import { filter, tap } from 'rxjs/operators';
 
 import { IUser } from '@/shared/models/user.interface';
+import { LoggerService } from '@/table/services/logger.service';
 
 import { ApiService } from './api/api.service';
-import { LoggerService } from '@/table/services/logger.service';
 
 @Injectable({
   providedIn: 'root',

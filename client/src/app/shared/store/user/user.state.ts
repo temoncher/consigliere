@@ -11,9 +11,9 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@/shared/models/user.interface';
 import { ApiService } from '@/shared/services/api/api.service';
+import { LoggerService } from '@/table/services/logger.service';
 
 import { SetUser } from './user.actions';
-import { LoggerService } from '@/table/services/logger.service';
 
 export type UserStateModel = IUser | null;
 

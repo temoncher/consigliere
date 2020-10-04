@@ -1,29 +1,30 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
+import { GameResult } from '@/enums/game-result.enum';
+import { Role } from '@/enums/role.enum';
 import { VoteResult } from '@/enums/vote-result.enum';
+import { IGame } from '@/interfaces/game.interface';
+import { IPlayer } from '@/interfaces/player.interface';
+import { IQuitPhase } from '@/interfaces/quit-phase.interface';
+import { IRound } from '@/interfaces/round.interface';
+import { DateDocument } from '@/models/date-document.model';
 
-export interface IRound {
-  kickedPlayers?: string[];
-  // Night
-  shots?: Record<string, string>; // <mafiaId, playerId>
-  murderedPlayer?: string; // murdered player id
-  donCheck?: string; // id of player checked by Don
-  sheriffCheck?: string; // id of player checked by Sheriff
-
-  // Day
-  timers?: Record<string, number>; // <playerId, timeLeft>
-  proposedPlayers?: Record<string, string>; // <candidateId, playerId>
-
-  // Vote
-  isVoteDisabled?: boolean;
-  votes?: Record<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
-  eliminateAllVote?: Record<string, boolean>;
-  voteResult: VoteResult;
+@ObjectType()
+export class PlayerOutput implements IPlayer {
+  @Field(() => ID)
+  uid: string;
+  @Field()
+  nickname: string;
+  @Field(() => Int, { nullable: true })
+  number?: number;
+  @Field()
+  isGuest: boolean;
 }
 
 @ObjectType()
-export class Round implements IRound {
+export class RoundOutput implements IRound {
   @Field(() => [ID], {
     nullable: true,
     description: 'Kicked player id',
@@ -70,4 +71,30 @@ export class Round implements IRound {
   eliminateAllVote?: Record<string, boolean>;
   @Field(() => VoteResult)
   voteResult: VoteResult;
+}
+
+@ObjectType()
+export class GameOutput extends DateDocument implements IGame {
+  @Field(() => ID)
+  id: string;
+  @Field(() => [ID])
+  participants: string[];
+  @Field(() => ID)
+  creatorId: string;
+  @Field(() => [RoundOutput])
+  rounds: IRound[];
+  @Field()
+  result: GameResult;
+  @Field(() => [PlayerOutput])
+  players: IPlayer[];
+  @Field(() => GraphQLJSONObject)
+  roles: Record<string, Role>;
+  @Field(() => PlayerOutput)
+  host: IPlayer;
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  falls?: Record<string, number>;
+  @Field(() => GraphQLJSONObject)
+  quitPhases: Record<string, IQuitPhase>;
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  speechSkips?: Record<string, number>;
 }

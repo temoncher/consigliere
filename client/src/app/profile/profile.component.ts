@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';

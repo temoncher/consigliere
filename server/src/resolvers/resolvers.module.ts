@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { GamesResolver } from './games.resolver';
+import { GamesResolver } from './games/games.resolver';
 import { UsersResolver } from './users.resolver';
 
 @Module({

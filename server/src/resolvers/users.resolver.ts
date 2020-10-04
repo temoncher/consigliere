@@ -48,8 +48,6 @@ export class UsersResolver {
     }
 
     return userData;
-
-    throw new ValidationError('Incorrect arguments passed');
   }
 
   @Query(() => [User], { name: 'users' })
