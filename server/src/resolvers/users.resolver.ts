@@ -3,12 +3,12 @@ import { HttpStatus, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 
+import { ErrorCode } from '@/enums/apollo-code.enum';
 import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { User } from '@/models/user.model';
 
 import { GetUserArgs, GetUsersArgs } from './users.types';
-import { ErrorCode } from '@/enums/apollo-code.enum';
 
 type UsersCollection = FirebaseFirestore.CollectionReference<User>;
 
@@ -46,6 +46,8 @@ export class UsersResolver {
     if (!userData) {
       throw new ApolloError('User not found', ErrorCode.NOT_FOUND);
     }
+
+    return userData;
 
     throw new ValidationError('Incorrect arguments passed');
   }

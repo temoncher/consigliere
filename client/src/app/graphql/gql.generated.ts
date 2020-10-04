@@ -114,7 +114,9 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
-export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserQueryVariables = Exact<{
+  id?: Maybe<Scalars['String']>;
+}>;
 
 
 export type GetUserQuery = (
@@ -126,8 +128,8 @@ export type GetUserQuery = (
 );
 
 export const GetUserDocument = gql`
-    query getUser {
-  user(id: "temoncher") {
+    query getUser($id: String) {
+  user(id: $id) {
     uid
     nickname
     avatar

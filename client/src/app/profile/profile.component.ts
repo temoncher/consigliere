@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { GetUserGQL, GetUserQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
@@ -32,10 +33,12 @@ export class ProfileComponent {
   constructor(
     private popoverController: PopoverController,
     private authService: AuthService,
+    private fireauth: AngularFireAuth,
     private userGQL: GetUserGQL,
   ) {
-    this.user$ = this.userGQL.watch().valueChanges.pipe(
-      map((result) => result.data.user),
+    this.user$ = this.fireauth.user.pipe(
+      switchMap((fireUser) => this.userGQL.watch({ id: fireUser.uid }).valueChanges),
+      map((userQuery) => userQuery.data.user),
     );
   }
 

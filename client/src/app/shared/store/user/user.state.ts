@@ -28,7 +28,7 @@ export class UserState implements NgxsOnInit {
   }
 
   constructor(
-    private auth: AngularFireAuth,
+    private fireauth: AngularFireAuth,
     private apiService: ApiService,
   ) {}
 
@@ -46,7 +46,7 @@ export class UserState implements NgxsOnInit {
   }
 
   private watchAndUpdateUserData(context: StateContext<UserStateModel>) {
-    this.auth.user.pipe(
+    this.fireauth.user.pipe(
       filter((user) => !!user),
       tap((user) => {
         this.logUser(user);
@@ -58,7 +58,6 @@ export class UserState implements NgxsOnInit {
   }
 
   private async logUser(user: firebase.User) {
-    console.log('Detected user change:', user);
     const token = await user.getIdToken();
 
     console.log('New token is:', { token });

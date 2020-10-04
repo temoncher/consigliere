@@ -10,6 +10,6 @@ export class User extends DateDocument {
   @Field()
   nickname: string;
 
-  @Field()
+  @Field({ nullable: true })
   avatar?: string;
 }

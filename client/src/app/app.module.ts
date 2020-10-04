@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { SETTINGS } from '@angular/fire/firestore';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -21,7 +22,6 @@ import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SETTINGS } from '@angular/fire/firestore';
 import { GraphQLModule } from './graphql.module';
 
 const devModules = [
@@ -57,9 +57,9 @@ const devModules = [
       provide: SETTINGS,
       useValue: !environment.emulation ? undefined : {
         host: 'localhost:4343',
-        ssl: false
-      }
-    }
+        ssl: false,
+      },
+    },
   ],
   bootstrap: [AppComponent],
 })
