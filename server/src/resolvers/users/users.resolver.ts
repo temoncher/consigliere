@@ -8,7 +8,7 @@ import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { User } from '@/models/user.model';
 
-import { GetUserArgs, GetUsersArgs } from './users.types';
+import { GetUserArgs, GetUsersArgs } from './users.output';
 
 type UsersCollection = FirebaseFirestore.CollectionReference<User>;
 
