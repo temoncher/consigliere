@@ -9,7 +9,7 @@ import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IQuitPhase } from '@/interfaces/quit-phase.interface';
 import { IRound } from '@/interfaces/round.interface';
-import { DateDocument } from '@/models/date-document.model';
+import { DocumentMeta } from '@/models/document-with-meta.model';
 
 @ObjectType()
 export class PlayerOutput implements IPlayer {
@@ -74,7 +74,7 @@ export class RoundOutput implements IRound {
 }
 
 @ObjectType()
-export class GameOutput extends DateDocument implements IGame {
+export class GameOutput extends DocumentMeta implements IGame {
   @Field(() => ID)
   id: string;
   @Field(() => [ID])

@@ -2,12 +2,14 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class LoggerService {
   constructor(private errorHandler: ErrorHandler) {}
 
   log(message: string, ...rest: any[]) {
-    if (!environment.production) {
+    if (!environment.production || environment.emulation) {
       console.log(message, ...rest);
     }
   }
@@ -17,7 +19,7 @@ export class LoggerService {
   }
 
   warn(message: string, ...rest: any[]) {
-    if (!environment.production) {
+    if (!environment.production || environment.emulation) {
       console.warn(message, ...rest);
     }
   }

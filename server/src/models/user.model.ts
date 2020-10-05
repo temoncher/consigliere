@@ -1,9 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { DateDocument } from './date-document.model';
+import { DocumentMeta } from './document-with-meta.model';
 
 @ObjectType()
-export class User extends DateDocument {
+export class User extends DocumentMeta {
   @Field(() => ID)
   uid: string;
 

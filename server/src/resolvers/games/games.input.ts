@@ -8,7 +8,7 @@ import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IQuitPhase } from '@/interfaces/quit-phase.interface';
 import { IRound } from '@/interfaces/round.interface';
-import { DateDocument } from '@/models/date-document.model';
+import { DocumentMeta } from '@/models/document-with-meta.model';
 
 @ArgsType()
 export class GetGameArgs {
@@ -97,7 +97,7 @@ export class PlayerInput implements IPlayer {
 }
 
 @InputType()
-export class GameInput extends DateDocument implements Partial<IGame> {
+export class GameInput extends DocumentMeta implements Partial<IGame> {
   @Field(() => [RoundInput])
   rounds: IRound[];
   @Field()
