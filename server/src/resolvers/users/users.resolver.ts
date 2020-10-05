@@ -6,26 +6,28 @@ import { ApolloError, ValidationError } from 'apollo-server-express';
 import { ErrorCode } from '@/enums/apollo-code.enum';
 import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
-import { User } from '@/models/user.model';
+import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IUser } from '@/interfaces/user.interface';
 
-import { GetUserArgs, GetUsersArgs } from './users.output';
+import { GetUserArgs, GetUsersArgs } from './users.input';
+import { UserOutput } from './users.output';
 
-type UsersCollection = FirebaseFirestore.CollectionReference<User>;
+type UsersCollection = FirebaseFirestore.CollectionReference<IUser & IDocumentMeta>;
 
-@Resolver(() => User)
+@Resolver()
 @UseGuards(AuthGuard)
 export class UsersResolver {
   private usersCollection = this.firestore.collection(CollectionName.USERS) as UsersCollection;
 
   constructor(private firestore: FirebaseFirestoreService) {}
 
-  @Query(() => User, { name: 'user' })
-  async getUser(@Args() args: GetUserArgs): Promise<User> {
+  @Query(() => UserOutput, { name: 'user' })
+  async getUser(@Args() args: GetUserArgs): Promise<UserOutput> {
     if (Object.keys(args).length > 1) {
       throw new ValidationError('Must provide only one property to query on');
     }
 
-    let userData: User;
+    let userData: UserOutput;
 
     if (args.id) {
       const userDoc = await this.usersCollection.doc(args.id).get();
@@ -50,8 +52,8 @@ export class UsersResolver {
     return userData;
   }
 
-  @Query(() => [User], { name: 'users' })
-  async getUsers(@Args() args: GetUsersArgs): Promise<User[]> {
+  @Query(() => [UserOutput], { name: 'users' })
+  async getUsers(@Args() args: GetUsersArgs): Promise<UserOutput[]> {
     if (Object.keys(args).length > 1) {
       throw new ValidationError('Must provide only one property to query on');
     }

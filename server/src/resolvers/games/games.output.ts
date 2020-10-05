@@ -5,6 +5,7 @@ import { GraphQLJSONObject } from 'graphql-type-json';
 import { GameResult } from '@/enums/game-result.enum';
 import { Role } from '@/enums/role.enum';
 import { VoteResult } from '@/enums/vote-result.enum';
+import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IQuitPhase } from '@/interfaces/quit-phase.interface';
@@ -74,7 +75,7 @@ export class RoundOutput implements IRound {
 }
 
 @ObjectType()
-export class GameOutput extends DocumentMeta implements IGame {
+export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
   @Field(() => ID)
   id: string;
   @Field(() => [ID])

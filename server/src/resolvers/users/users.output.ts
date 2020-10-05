@@ -1,19 +1,17 @@
-import { Field, ArgsType } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
-@ArgsType()
-export class GetUserArgs {
-  @Field(() => String, { nullable: true })
-  id?: string;
+import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IUser } from '@/interfaces/user.interface';
+import { DocumentMeta } from '@/models/document-with-meta.model';
 
-  @Field(() => String, { nullable: true })
-  nickname?: string;
-}
+@ObjectType()
+export class UserOutput extends DocumentMeta implements IUser, IDocumentMeta {
+  @Field(() => ID)
+  uid: string;
 
-@ArgsType()
-export class GetUsersArgs {
-  @Field(() => [String], { nullable: true })
-  ids?: string[];
+  @Field()
+  nickname: string;
 
-  @Field(() => [String], { nullable: true })
-  nicknames?: string[];
+  @Field({ nullable: true })
+  avatar?: string;
 }
