@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ExploreContainerComponent } from '@/shared/components/explore-container.component';
+import { PlaceholderComponent } from '@/shared/components/placeholder.component';
 
 import { ScreenSizeComponent } from './components/guard-pages/screen-size.component';
 import { PortalComponent } from './components/portal.component';
@@ -24,14 +24,14 @@ import { TableTemplateComponent } from './components/table-template/table-templa
     AngularFireAuthGuardModule,
   ],
   declarations: [
-    ExploreContainerComponent,
+    PlaceholderComponent,
     PortalComponent,
     ScreenSizeComponent,
     SmallPlayerCardComponent,
     TableTemplateComponent,
   ],
   exports: [
-    ExploreContainerComponent,
+    PlaceholderComponent,
     TranslateModule,
     PortalComponent,
     ScreenSizeComponent,

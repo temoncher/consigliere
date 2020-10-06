@@ -88,13 +88,15 @@ ion-card.large-card {
 
 // Cards list
 .cards-list {
-  background-color: var(--app-color-light);
-
   .clip-button {
     font-size: 0.8rem;
   }
 
-  ion-item:not(.cards-list__empty) {
+  ion-note {
+    padding: 8px;
+  }
+
+  ion-item {
     margin: 8px;
     border-radius: var(--app-border-radius);
     box-shadow: var(--app-box-shadow);

@@ -23,6 +23,7 @@ type WinnerMap = {
 export class ProfileComponent {
   user: ProfilePageQuery['user'];
   games: ProfilePageQuery['playersLastGames'];
+  loading = true;
 
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
@@ -39,10 +40,10 @@ export class ProfileComponent {
   ) {
     this.fireauth.user.pipe(
       switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
-      map((profilePageQuery) => profilePageQuery.data),
-    ).subscribe((queryData) => {
-      this.user = queryData.user;
-      this.games = queryData.playersLastGames;
+    ).subscribe(({ data, loading }) => {
+      this.loading = loading;
+      this.user = data.user;
+      this.games = data.playersLastGames;
     });
   }
 

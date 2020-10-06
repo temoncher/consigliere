@@ -13,6 +13,7 @@ export class ClubsComponent {
   administratedClubs: ClubsPageQuery['currentPlayerClubs'];
   confidantClubs: ClubsPageQuery['currentPlayerClubs'];
   memberClubs: ClubsPageQuery['currentPlayerClubs'];
+  loading = true;
 
   get isAnyClubsPresent() {
     return this.administratedClubs?.length
@@ -26,11 +27,21 @@ export class ClubsComponent {
   ) {
     this.fireauth.user.pipe(
       switchMap(() => this.clubsPageGQL.watch().valueChanges),
-      map((clubsPageQuery) => clubsPageQuery.data),
-    ).subscribe(({ currentPlayerClubs: clubs }) => {
+    ).subscribe(({ data, loading }) => {
+      const clubs = data.currentPlayerClubs;
+
+      this.loading = false;
       this.administratedClubs = clubs.filter(({ role }) => role === ClubRole.Admin);
       this.confidantClubs = clubs.filter(({ role }) => role === ClubRole.Confidant);
       this.memberClubs = clubs.filter(({ role }) => role === ClubRole.Member);
     });
+  }
+
+  join() {
+    console.log('JOIN');
+  }
+
+  create() {
+    console.log('CREATE');
   }
 }

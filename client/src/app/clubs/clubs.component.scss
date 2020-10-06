@@ -1,0 +1,26 @@
+@import "~src/theme/variables.scss";
+@import "~src/theme/custom-variables.scss";
+
+ion-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.clubs-page {
+  display: flex;
+  flex-direction: column;
+
+  .hero-block {
+    display: flex;
+    padding: 16px 32px;
+
+    .join-button {
+      flex: 1;
+      margin-left: 16px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+}
