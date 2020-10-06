@@ -1,14 +1,15 @@
 import { Field, ArgsType, Int, ID, InputType } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
-import { GameResult } from '@/enums/game-result.enum';
-import { Role } from '@/enums/role.enum';
-import { VoteResult } from '@/enums/vote-result.enum';
 import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IQuitPhase } from '@/interfaces/quit-phase.interface';
 import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
+
+import { GameResult } from '~enums/game-result.enum';
+import { Role } from '~enums/role.enum';
+import { VoteResult } from '~enums/vote-result.enum';
 
 @ArgsType()
 export class GetGameArgs {

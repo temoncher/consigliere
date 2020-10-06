@@ -1,9 +1,9 @@
-import { GameResult } from '@/enums/game-result.enum';
-import { Role } from '@/enums/role.enum';
-
 import { IPlayer } from './player.interface';
 import { IQuitPhase } from './quit-phase.interface';
 import { IRound } from './round.interface';
+
+import { GameResult } from '~enums/game-result.enum';
+import { Role } from '~enums/role.enum';
 
 export interface IGame {
   id?: string;

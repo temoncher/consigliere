@@ -1,8 +1,7 @@
 module.exports = {
-  root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
@@ -48,6 +47,11 @@ module.exports = {
         'pathGroups': [
           {
             'pattern': '@/**',
+            'group': 'sibling',
+            'position': 'before'
+          },
+          {
+            'pattern': '~/**',
             'group': 'parent',
             'position': 'before'
           }

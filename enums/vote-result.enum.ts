@@ -1,5 +1,3 @@
-import { registerEnumType } from '@nestjs/graphql';
-
 export enum VoteResult {
   NO_CANDIDATES = 'NO_CANDIDATES',
   SINGLE_CANDIDATE_AND_ZERO_DAY = 'SINGLE_CANDIDATE_AND_ZERO_DAY',
@@ -7,7 +5,3 @@ export enum VoteResult {
   PLAYERS_ELIMINATED = 'PLAYERS_ELIMINATED',
   PLAYERS_KEPT_ALIVE = 'PLAYERS_KEPT_ALIVE'
 }
-
-registerEnumType(VoteResult, {
-  name: 'VoteResult',
-});

@@ -2,7 +2,6 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "module": "commonjs",
-    "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -15,9 +14,16 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "~enums/*": [
+        "../enums/*"
       ]
     }
   },
+  "include": [
+    "src",
+    "../enums"
+  ],
   "exclude": [
     "node_modules",
     "dist"

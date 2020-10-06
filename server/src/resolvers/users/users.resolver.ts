@@ -3,14 +3,15 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 
-import { ErrorCode } from '@/enums/apollo-code.enum';
-import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { IUser } from '@/interfaces/user.interface';
 
 import { GetUserArgs, GetUsersArgs } from './users.input';
 import { UserOutput } from './users.output';
+
+import { CollectionName } from '~enums/colletion-name.enum';
+import { ErrorCode } from '~enums/error-code.enum';
 
 type UsersCollection = FirebaseFirestore.CollectionReference<IUser & IDocumentMeta>;
 

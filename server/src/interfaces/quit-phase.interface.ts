@@ -1,4 +1,4 @@
-import { RoundPhase } from '@/enums/round-phase.enum';
+import { RoundPhase } from '~enums/round-phase.enum';
 
 export interface IQuitPhase {
   stage: RoundPhase;

@@ -4,14 +4,15 @@ import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
-import { ErrorCode } from '@/enums/apollo-code.enum';
-import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { IClub } from '@/interfaces/club.interface';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 
 import { ClubsInputs, GetClubArgs, GetClubsByPlayerIdArgs, NewClubInput } from './clubs.input';
 import { ClubOutput } from './clubs.output';
+
+import { CollectionName } from '~enums/colletion-name.enum';
+import { ErrorCode } from '~enums/error-code.enum';
 
 type ClubsCollection = FirebaseFirestore.CollectionReference<IClub & IDocumentMeta>;
 

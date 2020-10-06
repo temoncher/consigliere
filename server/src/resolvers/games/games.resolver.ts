@@ -4,14 +4,15 @@ import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
-import { ErrorCode } from '@/enums/apollo-code.enum';
-import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { IGame } from '@/interfaces/game.interface';
 
 import { GameInput, GetGameArgs, GetLastGamesArgs } from './games.input';
 import { GameOutput } from './games.output';
+
+import { CollectionName } from '~enums/colletion-name.enum';
+import { ErrorCode } from '~enums/error-code.enum';
 
 type GamesCollection = FirebaseFirestore.CollectionReference<IGame & IDocumentMeta>;
 
