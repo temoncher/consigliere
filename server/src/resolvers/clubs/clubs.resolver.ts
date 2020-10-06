@@ -10,9 +10,9 @@ import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 
 import { ClubsInputs, GetClubArgs, GetClubsByPlayerIdArgs, NewClubInput } from './clubs.input';
 import { ClubOutput } from './clubs.output';
+
 import { CollectionName } from '~types/enums/colletion-name.enum';
 import { ErrorCode } from '~types/enums/error-code.enum';
-
 
 type ClubsCollection = FirebaseFirestore.CollectionReference<IClub & IDocumentMeta>;
 
@@ -73,7 +73,7 @@ export class ClubsResolver {
   @Query(() => [ClubOutput], { name: 'playerClubs' })
   async getClubsByPlayerId(@Args() args: GetClubsByPlayerIdArgs): Promise<(IClub & IDocumentMeta)[]> {
     const playersClubs = await this.clubsCollection.where('members', 'array-contains', args.playerId).get();
-    const playersClubsData = playersClubs.docs.map((club) => club.data());
+    const playersClubsData = playersClubs.docs.map((clubDoc) => ({ ...clubDoc.data(), id: clubDoc.id }));
 
     return playersClubsData;
   }
