@@ -6,7 +6,10 @@ import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '@/shared/shared.module';
 
+import { ClubsListComponent } from './clubs-list/clubs-list.component';
 import { ClubsComponent } from './clubs.component';
+import { CreateClubComponent } from './create-club/create-club.component';
+import { JoinClubComponent } from './join-club/join-club.component';
 
 @NgModule({
   imports: [
@@ -16,6 +19,11 @@ import { ClubsComponent } from './clubs.component';
     SharedModule,
     RouterModule.forChild([{ path: '', component: ClubsComponent }]),
   ],
-  declarations: [ClubsComponent],
+  declarations: [
+    ClubsComponent,
+    ClubsListComponent,
+    CreateClubComponent,
+    JoinClubComponent,
+  ],
 })
 export class ClubsModule {}

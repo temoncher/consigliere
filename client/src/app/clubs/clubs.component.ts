@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
-import { ClubRole, ClubsPageGQL, ClubsPageQuery } from '@/graphql/gql.generated';
+import { ClubsPageGQL, ClubsPageQuery } from '@/graphql/gql.generated';
+
+enum ClubsPageState {
+  CREATE = 'CREATE',
+  JOIN = 'JOIN',
+  LIST = 'LIST',
+}
 
 @Component({
   selector: 'app-clubs',
@@ -10,16 +16,11 @@ import { ClubRole, ClubsPageGQL, ClubsPageQuery } from '@/graphql/gql.generated'
   styleUrls: ['clubs.component.scss'],
 })
 export class ClubsComponent {
-  administratedClubs: ClubsPageQuery['currentPlayerClubs'];
-  confidantClubs: ClubsPageQuery['currentPlayerClubs'];
-  memberClubs: ClubsPageQuery['currentPlayerClubs'];
+  clubs: ClubsPageQuery['currentPlayerClubs'];
   loading = true;
 
-  get isAnyClubsPresent() {
-    return this.administratedClubs?.length
-      || this.confidantClubs?.length
-      || this.memberClubs?.length;
-  }
+  ClubsPageState = ClubsPageState;
+  pageState = ClubsPageState.LIST;
 
   constructor(
     private fireauth: AngularFireAuth,
@@ -28,20 +29,28 @@ export class ClubsComponent {
     this.fireauth.user.pipe(
       switchMap(() => this.clubsPageGQL.watch().valueChanges),
     ).subscribe(({ data, loading }) => {
-      const clubs = data.currentPlayerClubs;
-
       this.loading = loading;
-      this.administratedClubs = clubs.filter(({ role }) => role === ClubRole.Admin);
-      this.confidantClubs = clubs.filter(({ role }) => role === ClubRole.Confidant);
-      this.memberClubs = clubs.filter(({ role }) => role === ClubRole.Member);
+      this.clubs = data.currentPlayerClubs;
     });
   }
 
   join() {
-    console.log('JOIN');
+    if (this.pageState !== ClubsPageState.JOIN) {
+      this.pageState = ClubsPageState.JOIN;
+
+      return;
+    }
+
+    this.pageState = ClubsPageState.LIST;
   }
 
   create() {
-    console.log('CREATE');
+    if (this.pageState !== ClubsPageState.CREATE) {
+      this.pageState = ClubsPageState.CREATE;
+
+      return;
+    }
+
+    this.pageState = ClubsPageState.LIST;
   }
 }

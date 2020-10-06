@@ -6,6 +6,10 @@ ion-header {
   justify-content: flex-end;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 .clubs-page {
   display: flex;
   flex-direction: column;
@@ -14,9 +18,8 @@ ion-header {
     display: flex;
     padding: 16px 32px;
 
-    .join-button {
-      flex: 1;
-      margin-left: 16px;
+    >:first-child {
+      margin-right: 18px; // 18px = 16px + 2px(native margin of ion-button)
     }
   }
 

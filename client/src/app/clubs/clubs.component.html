@@ -1,103 +1,50 @@
 <ion-content class="saturated">
   <div class="clubs-page h100">
     <div class="hero-block">
-      <ion-button size="large" color="light" (click)="create()">
-        <ion-icon slot="icon-only" icon="add-outline"></ion-icon>
+      <ion-button
+        [ngClass]="{ 'flex-1': pageState === ClubsPageState.JOIN }"
+        size="large"
+        color="light"
+        (click)="create()"
+      >
+        <ion-icon
+          *ngIf="pageState !== ClubsPageState.JOIN"
+          slot="icon-only"
+          [icon]="
+            pageState === ClubsPageState.CREATE
+              ? 'close-outline'
+              : 'add-outline'
+          "
+        ></ion-icon>
+        <ng-container *ngIf="pageState === ClubsPageState.JOIN"
+          >Создать</ng-container
+        >
       </ion-button>
       <ion-button
-        class="join-button"
+        [ngClass]="{ 'flex-1': pageState !== ClubsPageState.JOIN }"
         size="large"
         color="light"
         (click)="join()"
       >
-        Присоединиться
+        <ion-icon
+          *ngIf="pageState === ClubsPageState.JOIN"
+          slot="icon-only"
+          icon="close-outline"
+        ></ion-icon>
+        <ng-container *ngIf="pageState !== ClubsPageState.JOIN"
+          >Присоединиться</ng-container
+        >
       </ion-button>
     </div>
 
-    <div class="clubs-page__content round-slide">
-      <app-placeholder
-        *ngIf="!loading && !isAnyClubsPresent"
-        style="height: 80%;"
-        image="assets/sad.png"
-      >
-        Здесь пока еще пусто...
-      </app-placeholder>
-
-      <ion-list class="cards-list">
-        <ng-container *ngIf="loading">
-          <ion-list-header>
-            <ion-skeleton-text style="width: 50%; height: 16px;" animated></ion-skeleton-text>
-          </ion-list-header>
-
-          <ion-item *ngFor="let number of [0, 1, 2]" lines="none">
-            <ion-avatar slot="start">
-              <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-avatar>
-
-            <ion-label>
-              <h3><ion-skeleton-text animated></ion-skeleton-text></h3>
-              <p><ion-skeleton-text style="width: 50%;" animated></ion-skeleton-text></p>
-            </ion-label>
-          </ion-item>
-        </ng-container>
-
-        <ion-item-group *ngIf="administratedClubs?.length">
-          <ion-list-header>
-            {{ "CLUB_ROLE.ADMIN" | translate }}
-          </ion-list-header>
-
-          <ion-item *ngFor="let club of administratedClubs" lines="none">
-            <div slot="start">
-              <ion-avatar>
-                <img [src]="club.avatar || 'assets/icon/favicon.png'" />
-              </ion-avatar>
-            </div>
-
-            <ion-label>
-              <h3>{{ club.title }}</h3>
-              <p>{{ club.location }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-item-group>
-
-        <ion-item-group *ngIf="confidantClubs?.length">
-          <ion-list-header>
-            {{ "CLUB_ROLE.CONFIDANT" | translate }}
-          </ion-list-header>
-
-          <ion-item *ngFor="let club of confidantClubs" lines="none">
-            <div slot="start">
-              <ion-avatar>
-                <img [src]="club.avatar || 'assets/icon/favicon.png'" />
-              </ion-avatar>
-            </div>
-
-            <ion-label>
-              <h3>{{ club.title }}</h3>
-              <p>{{ "CLUB_ROLE." + club.role | translate }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-item-group>
-
-        <ion-item-group *ngIf="memberClubs?.length">
-          <ion-list-header>{{
-            "CLUB_ROLE.MEMBER" | translate
-          }}</ion-list-header>
-
-          <ion-item *ngFor="let club of memberClubs" lines="none">
-            <div slot="start">
-              <ion-avatar>
-                <img [src]="club.avatar || 'assets/icon/favicon.png'" />
-              </ion-avatar>
-            </div>
-
-            <ion-label>
-              <h3>{{ club.title }}</h3>
-              <p>{{ "CLUB_ROLE." + club.role | translate }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-item-group>
-      </ion-list>
+    <div class="clubs-page__content round-slide" [ngSwitch]="pageState">
+      <app-clubs-list
+        *ngSwitchCase="ClubsPageState.LIST"
+        [loading]="loading"
+        [clubs]="clubs"
+      ></app-clubs-list>
+      <app-create-club *ngSwitchCase="ClubsPageState.CREATE"></app-create-club>
+      <app-join-club *ngSwitchCase="ClubsPageState.JOIN"></app-join-club>
     </div>
   </div>
 </ion-content>
