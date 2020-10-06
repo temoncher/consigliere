@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 
-import { CollectionName } from '~enums/colletion-name.enum';
+import { CollectionName } from '~/types/colletion-name.enum';
 
 export const usersCreatedAt = functions.firestore
   .document(`/${CollectionName.USERS}/{userId}`)

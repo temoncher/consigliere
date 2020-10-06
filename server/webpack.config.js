@@ -1,4 +1,5 @@
 const path = require("path");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = function(options) {
     return {
@@ -8,5 +9,9 @@ module.exports = function(options) {
           filename: 'index.js',
           path: path.resolve(__dirname, 'dist'),
         },
+        resolve: {
+          ...options.resolve,
+          plugins: [new TsconfigPathsPlugin({/* options: see below */})],
+        }
     };
 };

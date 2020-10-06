@@ -9,9 +9,9 @@ import { IQuitPhase } from '@/interfaces/quit-phase.interface';
 import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 
-import { GameResult } from '~enums/game-result.enum';
-import { Role } from '~enums/role.enum';
-import { VoteResult } from '~enums/vote-result.enum';
+import { GameResult } from '~/types/game-result.enum';
+import { Role } from '~/types/role.enum';
+import { VoteResult } from '~/types/vote-result.enum';
 
 @ObjectType()
 export class PlayerOutput implements IPlayer {

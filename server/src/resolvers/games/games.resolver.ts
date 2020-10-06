@@ -11,8 +11,8 @@ import { IGame } from '@/interfaces/game.interface';
 import { GameInput, GetGameArgs, GetLastGamesArgs } from './games.input';
 import { GameOutput } from './games.output';
 
-import { CollectionName } from '~enums/colletion-name.enum';
-import { ErrorCode } from '~enums/error-code.enum';
+import { CollectionName } from '~/types/colletion-name.enum';
+import { ErrorCode } from '~/types/error-code.enum';
 
 type GamesCollection = FirebaseFirestore.CollectionReference<IGame & IDocumentMeta>;
 

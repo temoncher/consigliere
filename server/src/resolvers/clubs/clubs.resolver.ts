@@ -11,8 +11,8 @@ import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { ClubsInputs, GetClubArgs, GetClubsByPlayerIdArgs, NewClubInput } from './clubs.input';
 import { ClubOutput } from './clubs.output';
 
-import { CollectionName } from '~enums/colletion-name.enum';
-import { ErrorCode } from '~enums/error-code.enum';
+import { CollectionName } from '~/types/colletion-name.enum';
+import { ErrorCode } from '~/types/error-code.enum';
 
 type ClubsCollection = FirebaseFirestore.CollectionReference<IClub & IDocumentMeta>;
 
