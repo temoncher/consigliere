@@ -7,6 +7,7 @@ import { fadeSlide } from '@/shared/animations';
 import { AuthService } from '@/shared/services/auth.service';
 
 import { authErrorMessages } from '../auth-error-messages';
+import { consigliereLogo } from '@/shared/constants/avatars';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,8 @@ export class LoginComponent implements OnInit {
       [Validators.required],
     ],
   });
+
+  consigliereLogo = consigliereLogo;
 
   startingTitle = 'Напомните...';
   loadingText = 'Секундочку...';

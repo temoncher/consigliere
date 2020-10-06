@@ -4,7 +4,7 @@ import { PopoverController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
 
 import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
-import { defaultAvatarSrc } from '@/shared/constants/avatars';
+import { consigliereLogo, defaultAvatarSrc } from '@/shared/constants/avatars';
 import { AuthService } from '@/shared/services/auth.service';
 
 import { SettingsMenuComponent } from './settings-menu.component';
@@ -25,6 +25,7 @@ export class ProfileComponent {
   games: ProfilePageQuery['playersLastGames'];
   loading = true;
 
+  defaultGameAvatar = consigliereLogo;
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
     [GameResult.CIVILIANS]: 'Мирные',

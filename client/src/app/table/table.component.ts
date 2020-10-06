@@ -3,6 +3,8 @@ import { Store, Select } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 import { Observable } from 'rxjs';
 
+import { consigliereLogo } from '@/shared/constants/avatars';
+
 import { TableState } from './store/table.state';
 
 @Component({
@@ -12,6 +14,8 @@ import { TableState } from './store/table.state';
 })
 export class TableComponent {
   @Select(TableState.getIsGameStarted) isGameStarted$: Observable<boolean>;
+
+  consigliereLogo = consigliereLogo;
 
   constructor(private store: Store) { }
 

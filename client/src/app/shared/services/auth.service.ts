@@ -33,6 +33,7 @@ export class AuthService {
 
     await this.apiService.users.create(newUser);
 
+    // TODO: make this navigation relative
     this.store.dispatch(new Navigate(['tabs', 'table']));
   }
 

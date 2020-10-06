@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
 
 import { ClubRole, ClubsPageQuery } from '@/graphql/gql.generated';
+import { consigliereLogo } from '@/shared/constants/avatars';
 
 @Component({
   selector: 'app-clubs-list',
@@ -23,7 +27,16 @@ export class ClubsListComponent implements OnInit {
     return this.clubs.filter(({ role }) => role === ClubRole.Member);
   }
 
-  constructor() { }
+  defaultClubAvatar = consigliereLogo;
+
+  constructor(
+    private store: Store,
+    private activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit() {}
+
+  navigateToClub(clubId: string) {
+    this.store.dispatch(new Navigate([clubId], null, { relativeTo: this.activatedRoute }));
+  }
 }

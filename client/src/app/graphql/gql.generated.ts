@@ -31,24 +31,9 @@ export type ClubOutput = {
   location?: Maybe<Scalars['String']>;
   confidants: Array<Scalars['ID']>;
   members: Array<Scalars['ID']>;
-};
-
-
-export type CurrentPlayerClubsOutput = {
-  __typename?: 'CurrentPlayerClubsOutput';
-  createdBy: Scalars['ID'];
-  updatedBy: Scalars['ID'];
-  createdAt: Scalars['FirebaseTimestamp'];
-  updatedAt: Scalars['FirebaseTimestamp'];
-  id: Scalars['ID'];
-  admin: Scalars['ID'];
-  avatar?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  location?: Maybe<Scalars['String']>;
-  confidants: Array<Scalars['ID']>;
-  members: Array<Scalars['ID']>;
   role: ClubRole;
 };
+
 
 export enum ClubRole {
   Admin = 'ADMIN',
@@ -154,7 +139,7 @@ export type UserOutput = {
 export type Query = {
   __typename?: 'Query';
   club: ClubOutput;
-  currentPlayerClubs: Array<CurrentPlayerClubsOutput>;
+  currentPlayerClubs: Array<ClubOutput>;
   game: GameOutput;
   playersLastGames: Array<LastGamesByPlayerIdOutput>;
   user: UserOutput;
@@ -191,13 +176,19 @@ export type QueryUsersArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createClub: CurrentPlayerClubsOutput;
+  createClub: ClubOutput;
+  deleteClub: ClubOutput;
   addGame: GameOutput;
 };
 
 
 export type MutationCreateClubArgs = {
   club: Club;
+};
+
+
+export type MutationDeleteClubArgs = {
+  clubId: Scalars['String'];
 };
 
 
@@ -260,8 +251,34 @@ export type CreateClubMutationVariables = Exact<{
 export type CreateClubMutation = (
   { __typename?: 'Mutation' }
   & { createClub: (
-    { __typename?: 'CurrentPlayerClubsOutput' }
-    & Pick<CurrentPlayerClubsOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
+    { __typename?: 'ClubOutput' }
+    & Pick<ClubOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
+  ) }
+);
+
+export type DeleteClubMutationVariables = Exact<{
+  clubId: Scalars['String'];
+}>;
+
+
+export type DeleteClubMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteClub: (
+    { __typename?: 'ClubOutput' }
+    & Pick<ClubOutput, 'id'>
+  ) }
+);
+
+export type ClubDetailsPageQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ClubDetailsPageQuery = (
+  { __typename?: 'Query' }
+  & { club: (
+    { __typename?: 'ClubOutput' }
+    & Pick<ClubOutput, 'id' | 'title' | 'avatar' | 'admin' | 'role'>
   ) }
 );
 
@@ -271,8 +288,8 @@ export type ClubsPageQueryVariables = Exact<{ [key: string]: never; }>;
 export type ClubsPageQuery = (
   { __typename?: 'Query' }
   & { currentPlayerClubs: Array<(
-    { __typename?: 'CurrentPlayerClubsOutput' }
-    & Pick<CurrentPlayerClubsOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
+    { __typename?: 'ClubOutput' }
+    & Pick<ClubOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
   )> }
 );
 
@@ -309,6 +326,46 @@ export const CreateClubDocument = gql`
   })
   export class CreateClubGQL extends Apollo.Mutation<CreateClubMutation, CreateClubMutationVariables> {
     document = CreateClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteClubDocument = gql`
+    mutation deleteClub($clubId: String!) {
+  deleteClub(clubId: $clubId) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteClubGQL extends Apollo.Mutation<DeleteClubMutation, DeleteClubMutationVariables> {
+    document = DeleteClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ClubDetailsPageDocument = gql`
+    query clubDetailsPage($id: String!) {
+  club(id: $id) {
+    id
+    title
+    avatar
+    admin
+    role
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ClubDetailsPageGQL extends Apollo.Query<ClubDetailsPageQuery, ClubDetailsPageQueryVariables> {
+    document = ClubDetailsPageDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

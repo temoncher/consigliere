@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { fadeSlide } from '@/shared/animations';
+import { consigliereLogo } from '@/shared/constants/avatars';
 
 import { AuthService } from '../../shared/services/auth.service';
 import { authErrorMessages } from '../auth-error-messages';
@@ -40,6 +41,8 @@ export class RegisterComponent implements OnInit {
       ],
     ],
   });
+
+  consigliereLogo = consigliereLogo;
 
   startingTitle = 'Добро пожаловать!';
   loadingText = 'Секундочку...';

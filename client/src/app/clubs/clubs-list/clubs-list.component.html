@@ -36,10 +36,14 @@
           {{ "CLUB_ROLE.ADMIN" | translate }}
         </ion-list-header>
 
-        <ion-item *ngFor="let club of administratedClubs" lines="none">
+        <ion-item
+          *ngFor="let club of administratedClubs"
+          lines="none"
+          (click)="navigateToClub(club.id)"
+        >
           <div slot="start">
             <ion-avatar>
-              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+              <img [src]="club.avatar || defaultClubAvatar" />
             </ion-avatar>
           </div>
 
@@ -55,10 +59,14 @@
           {{ "CLUB_ROLE.CONFIDANT" | translate }}
         </ion-list-header>
 
-        <ion-item *ngFor="let club of confidantClubs" lines="none">
+        <ion-item
+          *ngFor="let club of confidantClubs"
+          lines="none"
+          (click)="navigateToClub(club.id)"
+        >
           <div slot="start">
             <ion-avatar>
-              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+              <img [src]="club.avatar || defaultClubAvatar" />
             </ion-avatar>
           </div>
 
@@ -72,10 +80,14 @@
       <ion-item-group *ngIf="memberClubs?.length">
         <ion-list-header>{{ "CLUB_ROLE.MEMBER" | translate }}</ion-list-header>
 
-        <ion-item *ngFor="let club of memberClubs" lines="none">
+        <ion-item
+          *ngFor="let club of memberClubs"
+          lines="none"
+          (click)="navigateToClub(club.id)"
+        >
           <div slot="start">
             <ion-avatar>
-              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+              <img [src]="club.avatar || defaultClubAvatar" />
             </ion-avatar>
           </div>
 

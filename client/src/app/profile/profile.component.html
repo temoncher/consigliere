@@ -6,7 +6,6 @@
           color="light"
           slot="icon-only"
           name="exit-outline"
-          (click)="logout()"
         ></ion-icon>
       </ion-button>
     </ion-header>
@@ -55,7 +54,7 @@
         <ng-container *ngIf="games?.length">
           <ion-item *ngFor="let game of games" lines="none">
             <ion-avatar slot="start">
-              <img src="assets/icon/favicon.png" />
+              <img [src]="defaultGameAvatar" />
             </ion-avatar>
 
             <ion-label>

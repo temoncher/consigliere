@@ -22,10 +22,6 @@ export class ClubOutput extends DocumentMeta implements IClub, IDocumentMeta {
   confidants: string[];
   @Field(() => [ID])
   members: string[];
-}
-
-@ObjectType()
-export class CurrentPlayerClubsOutput extends ClubOutput {
   @Field(() => ClubRole)
   role: ClubRole;
 }

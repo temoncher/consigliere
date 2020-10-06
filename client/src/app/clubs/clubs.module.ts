@@ -1,15 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '@/shared/shared.module';
 
+import { ClubDetailsComponent } from './club-details/club-details.component';
 import { ClubsListComponent } from './clubs-list/clubs-list.component';
 import { ClubsComponent } from './clubs.component';
 import { CreateClubComponent } from './create-club/create-club.component';
 import { JoinClubComponent } from './join-club/join-club.component';
+
+const routes: Routes = [
+  {
+    path: ':clubId',
+    component: ClubDetailsComponent,
+  },
+  {
+    path: '',
+    component: ClubsComponent,
+  },
+];
 
 @NgModule({
   imports: [
@@ -18,13 +30,14 @@ import { JoinClubComponent } from './join-club/join-club.component';
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: ClubsComponent }]),
+    RouterModule.forChild(routes),
   ],
   declarations: [
     ClubsComponent,
     ClubsListComponent,
     CreateClubComponent,
     JoinClubComponent,
+    ClubDetailsComponent,
   ],
 })
 export class ClubsModule {}
