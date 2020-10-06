@@ -103,6 +103,9 @@ export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
 
 @ObjectType()
 export class LastGamesByPlayerIdOutput extends GameOutput {
-  @Field({ nullable: true })
+  @Field({
+    nullable: true,
+    description: 'Will remain undefined if plaer hosted this game, or if game resulted in tie',
+  })
   won?: boolean;
 }

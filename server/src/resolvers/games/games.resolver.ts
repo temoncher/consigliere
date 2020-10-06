@@ -76,7 +76,7 @@ export class GamesResolver {
     return { ...gameData, id: gameDoc.id };
   }
 
-  @Query(() => [GameOutput], { name: 'playersLastGames' })
+  @Query(() => [LastGamesByPlayerIdOutput], { name: 'playersLastGames' })
   async getLastGamesByPlayerId(
     @Args() args: GetLastGamesByPlayerIdArgs,
   ): Promise<LastGamesByPlayerIdOutput[]> {
