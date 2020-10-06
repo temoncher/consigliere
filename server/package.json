@@ -9,8 +9,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build --webpack --webpackPath=webpack.config.js",
+    "build:emulator": "nest start --watch --webpack --webpackPath=webpack.config.js",
     "start": "nest start --webpack --webpackPath=webpack.config.js",
-    "start:dev": "nest start --watch --webpack --webpackPath=webpack.config.js",
     "start:debug": "nest start --debug --watch --webpack --webpackPath=webpack.config.js",
     "start:prod": "node dist/index.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
