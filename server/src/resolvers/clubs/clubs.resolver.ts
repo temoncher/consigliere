@@ -24,16 +24,21 @@ export class ClubsResolver {
 
   constructor(private firestore: FirebaseFirestoreService) {}
 
-  @Mutation(() => ID)
+  @Mutation(() => CurrentPlayerClubsOutput)
   async createClub(
     @Args(ClubsInputs.NEW_CLUB) newClubInput: NewClubInput,
       @Context('user') currentUser: admin.auth.UserRecord,
-  ): Promise<string> {
+  ): Promise<CurrentPlayerClubsOutput> {
+    console.log('started', newClubInput);
     const { docs: clubsWithSameTitle } = await this.clubsCollection.where('title', '==', newClubInput.title).get();
+
+    console.log(newClubInput);
 
     if (clubsWithSameTitle.length) {
       throw new ValidationError('Club with this title already exists');
     }
+
+    console.log('validation passed');
 
     const meta: IDocumentMeta = {
       createdAt: admin.firestore.Timestamp.now(),
@@ -54,7 +59,11 @@ export class ClubsResolver {
 
     const { id } = await this.clubsCollection.add(newClub as IClub & IDocumentMeta);
 
-    return id;
+    return {
+      ...newClub,
+      id,
+      role: ClubRole.ADMIN,
+    };
   }
 
   @Query(() => ClubOutput, { name: 'club' })

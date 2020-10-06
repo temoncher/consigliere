@@ -1,6 +1,6 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ForbiddenError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
@@ -25,11 +25,11 @@ export class GamesResolver {
 
   constructor(private firestore: FirebaseFirestoreService) {}
 
-  @Mutation(() => ID)
+  @Mutation(() => GameOutput)
   async addGame(
     @Args('addGameData') gameInput: GameInput,
       @Context('user') currentUser: admin.auth.UserRecord,
-  ): Promise<string> {
+  ): Promise<GameOutput> {
     const playersIds = gameInput.players.map((player) => player.uid);
 
     if (gameInput.club) {
@@ -59,9 +59,12 @@ export class GamesResolver {
       ...meta,
     };
 
-    const newGameDoc = await this.gamesCollection.add(newGame as IGame & IDocumentMeta);
+    const { id } = await this.gamesCollection.add(newGame as IGame & IDocumentMeta);
 
-    return newGameDoc.id;
+    return {
+      ...newGame,
+      id,
+    };
   }
 
   @Query(() => GameOutput, { name: 'game' })

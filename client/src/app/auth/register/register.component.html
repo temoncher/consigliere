@@ -50,6 +50,9 @@
               Псевдоним должен быть максимум из
               {{ nickname.errors?.minlength.requiredLength }} символов
             </ng-container>
+            <ng-container *ngIf="nickname.errors?.pattern">
+              Псевдоним не должен включать специальных символов
+            </ng-container>
           </small>
         </div>
 

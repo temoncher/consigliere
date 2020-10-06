@@ -14,6 +14,7 @@
 				"directory": "server",
 				"changeProcessCWD": true
 			}
-		]
+		],
+		"vsicons.presets.angular": true
 	}
 }

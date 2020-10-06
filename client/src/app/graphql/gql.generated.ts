@@ -28,7 +28,7 @@ export type ClubOutput = {
   admin: Scalars['ID'];
   avatar?: Maybe<Scalars['String']>;
   title: Scalars['String'];
-  location: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
   confidants: Array<Scalars['ID']>;
   members: Array<Scalars['ID']>;
 };
@@ -44,7 +44,7 @@ export type CurrentPlayerClubsOutput = {
   admin: Scalars['ID'];
   avatar?: Maybe<Scalars['String']>;
   title: Scalars['String'];
-  location: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
   confidants: Array<Scalars['ID']>;
   members: Array<Scalars['ID']>;
   role: ClubRole;
@@ -191,8 +191,8 @@ export type QueryUsersArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createClub: Scalars['ID'];
-  addGame: Scalars['ID'];
+  createClub: CurrentPlayerClubsOutput;
+  addGame: GameOutput;
 };
 
 
@@ -252,6 +252,19 @@ export type PlayerInput = {
   isGuest: Scalars['Boolean'];
 };
 
+export type CreateClubMutationVariables = Exact<{
+  club: Club;
+}>;
+
+
+export type CreateClubMutation = (
+  { __typename?: 'Mutation' }
+  & { createClub: (
+    { __typename?: 'CurrentPlayerClubsOutput' }
+    & Pick<CurrentPlayerClubsOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
+  ) }
+);
+
 export type ClubsPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -279,6 +292,28 @@ export type ProfilePageQuery = (
   )> }
 );
 
+export const CreateClubDocument = gql`
+    mutation createClub($club: club!) {
+  createClub(club: $club) {
+    id
+    avatar
+    title
+    role
+    location
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateClubGQL extends Apollo.Mutation<CreateClubMutation, CreateClubMutationVariables> {
+    document = CreateClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ClubsPageDocument = gql`
     query clubsPage {
   currentPlayerClubs {

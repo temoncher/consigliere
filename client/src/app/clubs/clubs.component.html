@@ -10,15 +10,16 @@
         <ion-icon
           *ngIf="pageState !== ClubsPageState.JOIN"
           slot="icon-only"
+          [color]="pageState === ClubsPageState.CREATE ? 'danger' : undefined"
           [icon]="
             pageState === ClubsPageState.CREATE
               ? 'close-outline'
               : 'add-outline'
           "
         ></ion-icon>
-        <ng-container *ngIf="pageState === ClubsPageState.JOIN"
-          >Создать</ng-container
-        >
+        <ng-container *ngIf="pageState === ClubsPageState.JOIN">
+          Создать
+        </ng-container>
       </ion-button>
       <ion-button
         [ngClass]="{ 'flex-1': pageState !== ClubsPageState.JOIN }"
@@ -30,10 +31,11 @@
           *ngIf="pageState === ClubsPageState.JOIN"
           slot="icon-only"
           icon="close-outline"
+          [color]="pageState === ClubsPageState.JOIN ? 'danger' : undefined"
         ></ion-icon>
-        <ng-container *ngIf="pageState !== ClubsPageState.JOIN"
-          >Присоединиться</ng-container
-        >
+        <ng-container *ngIf="pageState !== ClubsPageState.JOIN">
+          Присоединиться
+        </ng-container>
       </ion-button>
     </div>
 
