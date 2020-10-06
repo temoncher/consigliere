@@ -7,10 +7,11 @@ import { Observable } from 'rxjs';
 import { SwiperOptions } from 'swiper';
 
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { ToggleGameMenuBoolean } from '@/table/store/menu/game-menu.actions';
 import { GameMenuState } from '@/table/store/menu/game-menu.state';
 import { PlayersState } from '@/table/store/players/players.state';
+
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-player-controls',

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
-import { RoundPhase } from '@/table/models/day-phase.enum';
-
 import { VotePhase } from '../models/vote-phase.enum';
-import { VoteResult } from '../models/vote-result.enum';
 import { KillPlayer } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 import { CurrentDayState } from '../store/round/current-day/current-day.state';
@@ -22,6 +19,9 @@ import { SetIsNextVotingDisabled } from '../store/table.actions';
 import { TableState } from '../store/table.state';
 
 import { PlayersService } from './players.service';
+
+import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { VoteResult } from '~/types/enums/vote-result.enum';
 
 @Injectable({
   providedIn: 'root',

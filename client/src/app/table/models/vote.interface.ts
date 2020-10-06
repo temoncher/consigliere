@@ -1,4 +1,4 @@
-import { VoteResult } from './vote-result.enum';
+import { VoteResult } from '~/types/enums/vote-result.enum';
 
 export interface IVote {
   isVoteDisabled?: boolean;

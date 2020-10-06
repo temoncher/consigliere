@@ -1,9 +1,10 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { CollectionName } from '@/shared/models/collection-name.enum';
 import { IUser } from '@/shared/models/user.interface';
 
 import { IApi } from './api.interface';
+
+import { CollectionName } from '~/types/enums/colletion-name.enum';
 
 export class UsersApi implements IApi<IUser> {
   private usersCollection = this.firestore.collection<IUser>(CollectionName.USERS);

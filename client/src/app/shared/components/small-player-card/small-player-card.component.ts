@@ -6,9 +6,10 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentDayState } from '@/table/store/round/current-day/current-day.state';
+
+import { Role } from '~/types/enums/role.enum';
 
 @Component({
   selector: 'app-small-player-card',

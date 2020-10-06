@@ -5,9 +5,6 @@ import { shuffle } from 'lodash';
 import { environment } from 'src/environments/environment';
 
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
-import { Role } from '@/shared/models/role.enum';
-import { RoundPhase } from '@/table/models/day-phase.enum';
 
 import { dummyPlayers, dummyHost, dummyPlayersRoles } from './players-mocks';
 import {
@@ -24,6 +21,10 @@ import {
   SkipSpeech,
   AssignRole,
 } from './players.actions';
+
+import { Role } from '~/types/enums/role.enum';
+import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 const rolesArray = [
   Role.DON,

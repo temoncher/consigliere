@@ -7,13 +7,14 @@ import {
 } from '@ngxs/store';
 import { append, patch, removeItem } from '@ngxs/store/operators';
 
-import { RoundPhase } from '@/table/models/day-phase.enum';
 import { IRound } from '@/table/models/round.interface';
 
 import { CurrentDayState } from './current-day/current-day.state';
 import { CurrentNightState } from './current-night/current-night.state';
 import { CurrentVoteState } from './current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer, ResetKickedPlayer } from './round.actions';
+
+import { RoundPhase } from '~/types/enums/round-phase.enum';
 
 export interface RoundStateModel extends IRound {
   currentPhase: RoundPhase;

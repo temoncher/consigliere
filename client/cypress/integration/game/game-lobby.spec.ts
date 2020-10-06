@@ -2,7 +2,6 @@ import { localhost } from '@e2e/constants/urls';
 import { Chance } from 'chance';
 
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
 import { AddPlayer, SetHost } from '@/table/store/players/players.actions';
 
 const chance = new Chance();

@@ -7,11 +7,12 @@ import { takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
-import { Role } from '@/shared/models/role.enum';
 import { PlayersState } from '@/table/store/players/players.state';
 import { ShootPlayer } from '@/table/store/round/current-night/current-night.actions';
 import { CurrentNightState } from '@/table/store/round/current-night/current-night.state';
+
+import { Role } from '~/types/enums/role.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-mafia-hunt',

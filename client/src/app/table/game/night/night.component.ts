@@ -3,11 +3,12 @@ import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
 import { NightStages } from '@/table/models/night-stages.enum';
 import { GameService } from '@/table/services/game.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { TableState } from '@/table/store/table.state';
+
+import { Role } from '~/types/enums/role.enum';
 
 @Component({
   selector: 'app-night',

@@ -4,10 +4,8 @@ import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
 import { IGame } from '@/shared/models/game.interface';
-import { Role } from '@/shared/models/role.enum';
 import { ApiService } from '@/shared/services/api/api.service';
 import { UserState } from '@/shared/store/user/user.state';
-import { RoundPhase } from '@/table/models/day-phase.enum';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
 
@@ -27,6 +25,9 @@ import { SetIsGameStarted, AddRound, EndGame } from '../store/table.actions';
 import { TableState } from '../store/table.state';
 
 import { VoteService } from './vote.service';
+
+import { Role } from '~/types/enums/role.enum';
+import { RoundPhase } from '~/types/enums/round-phase.enum';
 
 @Injectable({
   providedIn: 'root',

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 
-import { RoundPhase } from '@/table/models/day-phase.enum';
-import { GameResult } from '@/table/models/game-result.enum';
 import { VotePhase } from '@/table/models/vote-phase.enum';
 
 import { IRound } from '../models/round.interface';
@@ -18,6 +16,9 @@ import {
   EndGame,
   AddRound,
 } from './table.actions';
+
+import { GameResult } from '~/types/enums/game-result.enum';
+import { RoundPhase } from '~/types/enums/round-phase.enum';
 
 export interface TableStateModel {
   rounds: IRound[];

@@ -6,10 +6,11 @@ import { takeUntil } from 'rxjs/operators';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { playerSliderConfig } from '@/shared/constants/slider';
 import { Player } from '@/shared/models/player.model';
-import { VoteResult } from '@/table/models/vote-result.enum';
 import { GameService } from '@/table/services/game.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.state';
+
+import { VoteResult } from '~/types/enums/vote-result.enum';
 
 @Component({
   selector: 'app-vote-results',

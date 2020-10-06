@@ -47,7 +47,7 @@ module.exports = {
         'pathGroups': [
           {
             'pattern': '@/**',
-            'group': 'sibling',
+            'group': 'parent',
             'position': 'before'
           },
           {

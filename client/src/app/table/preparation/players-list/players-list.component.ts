@@ -7,13 +7,14 @@ import { catchError, first } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
 import { ReorderPlayer, RemovePlayer, AssignRole, AddPlayer } from '@/table/store/players/players.actions';
 import { PlayersState } from '@/table/store/players/players.state';
 
 import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
 
 import { RoleMenuComponent } from './role-menu.component';
+
+import { Role } from '~/types/enums/role.enum';
 
 interface IonicReorderEvent {
   detail: {

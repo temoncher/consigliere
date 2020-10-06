@@ -1,9 +1,11 @@
-import { GameResult } from '@/table/models/game-result.enum';
+
 import { IRound } from '@/table/models/round.interface';
 
 import { ISerializedPlayer } from './player.model';
-import { IQuitPhase } from './quit-phase.interface';
-import { Role } from './role.enum';
+
+import { GameResult } from '~/types/enums/game-result.enum';
+import { Role } from '~/types/enums/role.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 export interface IGame {
   participants: string[]; // playersIds + hostId

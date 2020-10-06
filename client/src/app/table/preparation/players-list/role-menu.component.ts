@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
-import { Role } from '@/shared/models/role.enum';
+import { Role } from '~/types/enums/role.enum';
 
 @Component({
   selector: 'app-role-menu',

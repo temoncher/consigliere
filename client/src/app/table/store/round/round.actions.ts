@@ -1,6 +1,7 @@
-import { RoundPhase } from '@/table/models/day-phase.enum';
 
 import { gameActionsPrefix } from '../table.actions';
+
+import { RoundPhase } from '~/types/enums/round-phase.enum';
 
 export const roundActionsPrefix = `${gameActionsPrefix}.Round`;
 

@@ -6,6 +6,9 @@
     "paths": {
       "@/*": [
         "src/app/*"
+      ],
+      "~/*": [
+        "../*"
       ]
     },
     "outDir": "./dist/out-tsc",
@@ -31,6 +34,10 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   },
+  "include": [
+    "src",
+    "../types"
+  ],
   "exclude": [
     "cypress",
     "functions"

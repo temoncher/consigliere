@@ -6,9 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentDayState } from '@/table/store/round/current-day/current-day.state';
+
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-propose-modal',

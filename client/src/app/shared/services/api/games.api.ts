@@ -1,9 +1,10 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { CollectionName } from '@/shared/models/collection-name.enum';
 import { IGame } from '@/shared/models/game.interface';
 
 import { IApi } from './api.interface';
+
+import { CollectionName } from '~/types/enums/colletion-name.enum';
 
 export class GamesApi implements IApi<IGame> {
   private gamesCollection = this.firestore.collection<IGame>(CollectionName.GAMES);

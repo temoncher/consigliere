@@ -3,11 +3,12 @@ import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
 import { VoteService } from '@/table/services/vote.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { VoteForElimination } from '@/table/store/round/current-vote/current-vote.actions';
 import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.state';
+
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-eliminate-all-vote',

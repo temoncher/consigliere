@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
+
+import { Role } from '~/types/enums/role.enum';
 
 @Component({
   selector: 'app-result-list',

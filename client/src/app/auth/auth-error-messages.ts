@@ -1,4 +1,4 @@
-import { ErrorCode } from '@/shared/models/error-code.enum';
+import { ErrorCode } from '~/types/enums/error-code.enum';
 
 export const authErrorMessages: { [key in ErrorCode]?: string } = {
   [ErrorCode.TOO_MANY_REQUESTS]: 'Попробуй попозже',

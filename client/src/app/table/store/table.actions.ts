@@ -1,5 +1,7 @@
-import { GameResult } from '@/table/models/game-result.enum';
+
 import { IRound } from '@/table/models/round.interface';
+
+import { GameResult } from '~/types/enums/game-result.enum';
 
 export const gameActionsPrefix = 'Game';
 

@@ -5,10 +5,11 @@ import { Select, Store } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 import { from, Observable } from 'rxjs';
 
-import { RoundPhase } from '../models/day-phase.enum';
-import { GameResult } from '../models/game-result.enum';
 import { RoundState } from '../store/round/round.state';
 import { TableState } from '../store/table.state';
+
+import { GameResult } from '~/types/enums/game-result.enum';
+import { RoundPhase } from '~/types/enums/round-phase.enum';
 
 interface DiscardGamePrompt {
   header: string;

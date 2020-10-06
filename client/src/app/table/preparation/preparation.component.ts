@@ -7,13 +7,14 @@ import { catchError, first, takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
-import { Role } from '@/shared/models/role.enum';
-import { GameService } from '@/table/services/game.service';
 
+import { GameService } from '../services/game.service';
 import { ShufflePlayers, SetHost } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+
+import { Role } from '~/types/enums/role.enum';
 
 interface HostPropmt {
   header: string;

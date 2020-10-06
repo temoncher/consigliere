@@ -1,8 +1,10 @@
+
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
-import { Role } from '@/shared/models/role.enum';
 
 import { gameActionsPrefix } from '../table.actions';
+
+import { Role } from '~/types/enums/role.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 const playersActionsPrefix = `${gameActionsPrefix}.Players`;
 

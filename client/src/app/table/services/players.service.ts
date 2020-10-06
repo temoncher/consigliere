@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
-import { Role } from '@/shared/models/role.enum';
-
-import { RoundPhase } from '../models/day-phase.enum';
-import { GameResult } from '../models/game-result.enum';
 import { ResetPlayer, KillPlayer, AssignFall, SkipSpeech } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 import { ResetPlayerTimer, SetPlayerTimer } from '../store/round/current-day/current-day.actions';
@@ -14,6 +9,11 @@ import { EndGame } from '../store/table.actions';
 import { TableState } from '../store/table.state';
 
 import { TimersService } from './timers.service';
+
+import { GameResult } from '~/types/enums/game-result.enum';
+import { Role } from '~/types/enums/role.enum';
+import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Injectable({
   providedIn: 'root',

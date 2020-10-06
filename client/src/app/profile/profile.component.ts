@@ -7,9 +7,10 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { AuthService } from '@/shared/services/auth.service';
-import { GameResult } from '@/table/models/game-result.enum';
 
 import { SettingsMenuComponent } from './settings-menu.component';
+
+import { GameResult } from '~/types/enums/game-result.enum';
 
 type WinnerMap = {
   [key in GameResult]: string;

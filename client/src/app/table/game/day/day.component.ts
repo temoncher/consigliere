@@ -7,13 +7,14 @@ import { Subject, Observable } from 'rxjs';
 
 import { playerSliderConfig } from '@/shared/constants/slider';
 import { Player } from '@/shared/models/player.model';
-import { IQuitPhase } from '@/shared/models/quit-phase.interface';
-import { RoundPhase } from '@/table/models/day-phase.enum';
 import { GameService } from '@/table/services/game.service';
 import { TimersService } from '@/table/services/timers.service';
 import { GameMenuState } from '@/table/store/menu/game-menu.state';
 import { PlayersState } from '@/table/store/players/players.state';
 import { RoundState } from '@/table/store/round/round.state';
+
+import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-day',
