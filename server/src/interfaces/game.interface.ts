@@ -1,12 +1,13 @@
 import { IPlayer } from './player.interface';
-import { IQuitPhase } from './quit-phase.interface';
 import { IRound } from './round.interface';
 
-import { GameResult } from '~types/game-result.enum';
-import { Role } from '~types/role.enum';
+import { GameResult } from '~types/enums/game-result.enum';
+import { Role } from '~types/enums/role.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 export interface IGame {
-  id?: string;
+  id: string;
+  club?: string;
   participants: string[];
   creatorId: string;
   rounds: IRound[];

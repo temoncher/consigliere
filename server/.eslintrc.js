@@ -71,7 +71,7 @@ module.exports = {
     'no-useless-constructor': 0,
     'no-var': 2,
     'no-new': 0,
-    'no-console': 0,
+    'no-console': 1,
     'no-return-assign': 0,
     'no-duplicate-imports': 2,
     'max-classes-per-file': 0,

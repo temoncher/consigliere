@@ -4,15 +4,13 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 
 import { AuthGuard } from '@/guards/auth.guard';
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
-import { IUser } from '@/interfaces/user.interface';
+import { UsersCollection } from '@/models/collections.types';
 
-import { ErrorCode } from '~types/enums/error-code.enum';
 import { GetUserArgs, GetUsersArgs } from './users.input';
 import { UserOutput } from './users.output';
-import { CollectionName } from '~types/enums/colletion-name.enum';
 
-type UsersCollection = FirebaseFirestore.CollectionReference<IUser & IDocumentMeta>;
+import { CollectionName } from '~types/enums/colletion-name.enum';
+import { ErrorCode } from '~types/enums/error-code.enum';
 
 @Resolver()
 @UseGuards(AuthGuard)

@@ -8,9 +8,10 @@ import { AuthGuard } from '@/guards/auth.guard';
 import { IClub } from '@/interfaces/club.interface';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 
-import { ClubsInputs, GetClubArgs, GetClubsByPlayerIdArgs, NewClubInput } from './clubs.input';
-import { ClubOutput } from './clubs.output';
+import { ClubsInputs, GetClubArgs, NewClubInput } from './clubs.input';
+import { ClubOutput, CurrentPlayerClubsOutput } from './clubs.output';
 
+import { ClubRole } from '~types/enums/club-role.enum';
 import { CollectionName } from '~types/enums/colletion-name.enum';
 import { ErrorCode } from '~types/enums/error-code.enum';
 
@@ -57,7 +58,7 @@ export class ClubsResolver {
   }
 
   @Query(() => ClubOutput, { name: 'club' })
-  async getClub(@Args() args: GetClubArgs): Promise<IClub & IDocumentMeta> {
+  async getClub(@Args() args: GetClubArgs): Promise<ClubOutput> {
     const clubDoc = await this.clubsCollection.doc(args.id).get();
     const clubData = clubDoc.data();
 
@@ -65,15 +66,32 @@ export class ClubsResolver {
       throw new ApolloError('Club not found', ErrorCode.NOT_FOUND);
     }
 
-    console.log('created', clubData.createdAt);
-
     return { ...clubData, id: clubDoc.id };
   }
 
-  @Query(() => [ClubOutput], { name: 'playerClubs' })
-  async getClubsByPlayerId(@Args() args: GetClubsByPlayerIdArgs): Promise<(IClub & IDocumentMeta)[]> {
-    const playersClubs = await this.clubsCollection.where('members', 'array-contains', args.playerId).get();
-    const playersClubsData = playersClubs.docs.map((clubDoc) => ({ ...clubDoc.data(), id: clubDoc.id }));
+  @Query(() => [CurrentPlayerClubsOutput], { name: 'currentPlayersClubs' })
+  async getCurrentPlayersClubs(
+    @Context('user') currentUser: admin.auth.UserRecord,
+  ): Promise<CurrentPlayerClubsOutput[]> {
+    const playersClubs = await this.clubsCollection.where('members', 'array-contains', currentUser.uid).get();
+    const playersClubsData = playersClubs.docs.map((clubDoc) => {
+      const docData = clubDoc.data();
+      let role = ClubRole.MEMBER;
+
+      if (docData.confidants.includes(currentUser.uid)) {
+        role = ClubRole.CONFIDANT;
+      }
+
+      if (docData.admin === currentUser.uid) {
+        role = ClubRole.ADMIN;
+      }
+
+      return ({
+        ...docData,
+        id: clubDoc.id,
+        role,
+      });
+    });
 
     return playersClubsData;
   }

@@ -5,6 +5,7 @@ import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
+
 import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 import { VoteResult } from '~types/enums/vote-result.enum';
@@ -17,7 +18,7 @@ export class GetGameArgs {
 }
 
 @ArgsType()
-export class GetLastGamesArgs {
+export class GetLastGamesByPlayerIdArgs {
   @Field(() => String)
   playerId: string;
 
@@ -100,6 +101,8 @@ export class PlayerInput implements IPlayer {
 export class GameInput extends DocumentMeta implements Partial<IGame> {
   @Field(() => [RoundInput])
   rounds: IRound[];
+  @Field(() => ID, { nullable: true })
+  club?: string;
   @Field(() => GameResult)
   result: GameResult;
   @Field(() => [PlayerInput])

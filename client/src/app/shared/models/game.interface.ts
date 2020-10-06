@@ -8,6 +8,7 @@ import { Role } from '~types/enums/role.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 export interface IGame {
+  club?: string;
   participants: string[]; // playersIds + hostId
   rounds: IRound[];
   result: GameResult;

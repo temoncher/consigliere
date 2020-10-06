@@ -7,11 +7,11 @@ import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
 import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
+
 import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 import { VoteResult } from '~types/enums/vote-result.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
-
 
 @ObjectType()
 export class PlayerOutput implements IPlayer {
@@ -99,4 +99,10 @@ export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
   quitPhases: Record<string, IQuitPhase>;
   @Field(() => GraphQLJSONObject, { nullable: true })
   speechSkips?: Record<string, number>;
+}
+
+@ObjectType()
+export class LastGamesByPlayerIdOutput extends GameOutput {
+  @Field({ nullable: true })
+  won?: boolean;
 }

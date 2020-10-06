@@ -12,12 +12,6 @@ export class GetClubArgs {
   id: string;
 }
 
-@ArgsType()
-export class GetClubsByPlayerIdArgs {
-  @Field()
-  playerId: string;
-}
-
 @InputType(ClubsInputs.NEW_CLUB)
 export class NewClubInput implements Partial<IClub> {
   @Field()

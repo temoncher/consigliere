@@ -1,5 +1,6 @@
 import { registerEnumType } from '@nestjs/graphql';
 
+import { ClubRole } from '~types/enums/club-role.enum';
 import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 import { RoundPhase } from '~types/enums/round-phase.enum';
@@ -10,4 +11,5 @@ export const registerEnums = (): void => {
   registerEnumType(Role, { name: 'Role' });
   registerEnumType(RoundPhase, { name: 'RoundPhase' });
   registerEnumType(VoteResult, { name: 'VoteResult' });
+  registerEnumType(ClubRole, { name: 'ClubRole' });
 };
