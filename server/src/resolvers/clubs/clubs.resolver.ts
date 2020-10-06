@@ -69,7 +69,7 @@ export class ClubsResolver {
     return { ...clubData, id: clubDoc.id };
   }
 
-  @Query(() => [CurrentPlayerClubsOutput], { name: 'currentPlayersClubs' })
+  @Query(() => [CurrentPlayerClubsOutput], { name: 'currentPlayerClubs' })
   async getCurrentPlayersClubs(
     @Context('user') currentUser: admin.auth.UserRecord,
   ): Promise<CurrentPlayerClubsOutput[]> {

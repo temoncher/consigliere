@@ -16,6 +16,8 @@ export class ClubOutput extends DocumentMeta implements IClub, IDocumentMeta {
   avatar?: string;
   @Field()
   title: string;
+  @Field({ nullable: true })
+  location?: string;
   @Field(() => [ID])
   confidants: string[];
   @Field(() => [ID])

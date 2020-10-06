@@ -1,8 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { Subject } from 'rxjs';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
@@ -21,11 +20,9 @@ type WinnerMap = {
   templateUrl: 'profile.component.html',
   styleUrls: ['profile.component.scss'],
 })
-export class ProfileComponent implements OnDestroy {
-  private destroy: Subject<boolean> = new Subject<boolean>();
-
+export class ProfileComponent {
   user: ProfilePageQuery['user'];
-  games: ProfilePageQuery['lastGames'];
+  games: ProfilePageQuery['playersLastGames'];
 
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
@@ -41,18 +38,12 @@ export class ProfileComponent implements OnDestroy {
     private profilePageGQL: ProfilePageGQL,
   ) {
     this.fireauth.user.pipe(
-      takeUntil(this.destroy),
       switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
       map((profilePageQuery) => profilePageQuery.data),
     ).subscribe((queryData) => {
       this.user = queryData.user;
-      this.games = queryData.lastGames;
+      this.games = queryData.playersLastGames;
     });
-  }
-
-  ngOnDestroy() {
-    this.destroy.next();
-    this.destroy.unsubscribe();
   }
 
   async logout() {

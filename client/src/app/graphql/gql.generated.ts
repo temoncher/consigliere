@@ -10,24 +10,62 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Firebase timestamp */
+  FirebaseTimestamp: any;
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSONObject: any;
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: any;
 };
 
 
 
-export type Player = {
-  __typename?: 'Player';
+export type ClubOutput = {
+  __typename?: 'ClubOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  admin: Scalars['ID'];
+  avatar?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  location: Scalars['String'];
+  confidants: Array<Scalars['ID']>;
+  members: Array<Scalars['ID']>;
+};
+
+
+export type CurrentPlayerClubsOutput = {
+  __typename?: 'CurrentPlayerClubsOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  admin: Scalars['ID'];
+  avatar?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  location: Scalars['String'];
+  confidants: Array<Scalars['ID']>;
+  members: Array<Scalars['ID']>;
+  role: ClubRole;
+};
+
+export enum ClubRole {
+  Admin = 'ADMIN',
+  Confidant = 'CONFIDANT',
+  Member = 'MEMBER'
+}
+
+export type PlayerOutput = {
+  __typename?: 'PlayerOutput';
   uid: Scalars['ID'];
   nickname: Scalars['String'];
   number?: Maybe<Scalars['Int']>;
   isGuest: Scalars['Boolean'];
 };
 
-export type Round = {
-  __typename?: 'Round';
+export type RoundOutput = {
+  __typename?: 'RoundOutput';
   /** Kicked player id */
   kickedPlayers?: Maybe<Array<Scalars['ID']>>;
   /** Mafia shots, Record<string, string>; // { [mafiaId]: playerId } */
@@ -56,28 +94,58 @@ export enum VoteResult {
   PlayersKeptAlive = 'PLAYERS_KEPT_ALIVE'
 }
 
-export type Game = {
-  __typename?: 'Game';
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+export type GameOutput = {
+  __typename?: 'GameOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
   id: Scalars['ID'];
   participants: Array<Scalars['ID']>;
   creatorId: Scalars['ID'];
-  rounds: Array<Round>;
-  result: Scalars['String'];
-  players: Array<Player>;
+  rounds: Array<RoundOutput>;
+  result: GameResult;
+  players: Array<PlayerOutput>;
   roles: Scalars['JSONObject'];
-  host: Player;
+  host: PlayerOutput;
   falls?: Maybe<Scalars['JSONObject']>;
   quitPhases: Scalars['JSONObject'];
   speechSkips?: Maybe<Scalars['JSONObject']>;
 };
 
+export enum GameResult {
+  Mafia = 'MAFIA',
+  Civilians = 'CIVILIANS',
+  Tie = 'TIE'
+}
 
-export type User = {
-  __typename?: 'User';
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+export type LastGamesByPlayerIdOutput = {
+  __typename?: 'LastGamesByPlayerIdOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  participants: Array<Scalars['ID']>;
+  creatorId: Scalars['ID'];
+  rounds: Array<RoundOutput>;
+  result: GameResult;
+  players: Array<PlayerOutput>;
+  roles: Scalars['JSONObject'];
+  host: PlayerOutput;
+  falls?: Maybe<Scalars['JSONObject']>;
+  quitPhases: Scalars['JSONObject'];
+  speechSkips?: Maybe<Scalars['JSONObject']>;
+  /** Will remain undefined if plaer hosted this game, or if game resulted in tie */
+  won?: Maybe<Scalars['Boolean']>;
+};
+
+export type UserOutput = {
+  __typename?: 'UserOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
   uid: Scalars['ID'];
   nickname: Scalars['String'];
   avatar?: Maybe<Scalars['String']>;
@@ -85,10 +153,17 @@ export type User = {
 
 export type Query = {
   __typename?: 'Query';
-  game: Game;
-  lastGames: Array<Game>;
-  user: User;
-  users: Array<User>;
+  club: ClubOutput;
+  currentPlayerClubs: Array<CurrentPlayerClubsOutput>;
+  game: GameOutput;
+  playersLastGames: Array<LastGamesByPlayerIdOutput>;
+  user: UserOutput;
+  users: Array<UserOutput>;
+};
+
+
+export type QueryClubArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -97,7 +172,7 @@ export type QueryGameArgs = {
 };
 
 
-export type QueryLastGamesArgs = {
+export type QueryPlayersLastGamesArgs = {
   playerId: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
 };
@@ -114,6 +189,80 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  createClub: Scalars['ID'];
+  addGame: Scalars['ID'];
+};
+
+
+export type MutationCreateClubArgs = {
+  club: Club;
+};
+
+
+export type MutationAddGameArgs = {
+  addGameData: GameInput;
+};
+
+export type Club = {
+  title: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+};
+
+export type GameInput = {
+  rounds: Array<RoundInput>;
+  club?: Maybe<Scalars['ID']>;
+  result: GameResult;
+  players: Array<PlayerInput>;
+  roles: Scalars['JSONObject'];
+  host: PlayerInput;
+  falls?: Maybe<Scalars['JSONObject']>;
+  quitPhases: Scalars['JSONObject'];
+  speechSkips?: Maybe<Scalars['JSONObject']>;
+};
+
+export type RoundInput = {
+  /** Kicked player id */
+  kickedPlayers?: Maybe<Array<Scalars['ID']>>;
+  /** Mafia shots, Record<string, string>; // { [mafiaId]: playerId } */
+  shots?: Maybe<Scalars['JSONObject']>;
+  /** murdered player id */
+  murderedPlayer?: Maybe<Scalars['ID']>;
+  /** id of player checked by Don */
+  donCheck?: Maybe<Scalars['ID']>;
+  /** id of player checked by Sheriff */
+  sheriffCheck?: Maybe<Scalars['ID']>;
+  /** Players' timers, Record<string, number>; // { [playerId]: timeElapsed } */
+  timers?: Maybe<Scalars['JSONObject']>;
+  /** Proposed players, Record<string, string>; // { [candidateId]: playerId } */
+  proposedPlayers?: Maybe<Scalars['JSONObject']>;
+  isVoteDisabled?: Maybe<Scalars['Boolean']>;
+  /** Votes, Record<string, string[]>; // { [candidatePlayerId]: votePlayerId[] } */
+  votes?: Maybe<Scalars['JSONObject']>;
+  /** Votes, Record<string, boolean>; // { [playerId]: isAgreed } */
+  eliminateAllVote?: Maybe<Scalars['JSONObject']>;
+  voteResult: VoteResult;
+};
+
+export type PlayerInput = {
+  uid: Scalars['ID'];
+  nickname: Scalars['String'];
+  number?: Maybe<Scalars['Int']>;
+  isGuest: Scalars['Boolean'];
+};
+
+export type ClubsPageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClubsPageQuery = (
+  { __typename?: 'Query' }
+  & { currentPlayerClubs: Array<(
+    { __typename?: 'CurrentPlayerClubsOutput' }
+    & Pick<CurrentPlayerClubsOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
+  )> }
+);
+
 export type ProfilePageQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -122,14 +271,36 @@ export type ProfilePageQueryVariables = Exact<{
 export type ProfilePageQuery = (
   { __typename?: 'Query' }
   & { user: (
-    { __typename?: 'User' }
-    & Pick<User, 'uid' | 'nickname' | 'avatar'>
-  ), lastGames: Array<(
-    { __typename?: 'Game' }
-    & Pick<Game, 'createdAt' | 'id' | 'result' | 'roles'>
+    { __typename?: 'UserOutput' }
+    & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
+  ), playersLastGames: Array<(
+    { __typename?: 'LastGamesByPlayerIdOutput' }
+    & Pick<LastGamesByPlayerIdOutput, 'createdAt' | 'id' | 'result' | 'roles' | 'won'>
   )> }
 );
 
+export const ClubsPageDocument = gql`
+    query clubsPage {
+  currentPlayerClubs {
+    id
+    avatar
+    title
+    role
+    location
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ClubsPageGQL extends Apollo.Query<ClubsPageQuery, ClubsPageQueryVariables> {
+    document = ClubsPageDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ProfilePageDocument = gql`
     query profilePage($id: String!) {
   user(id: $id) {
@@ -137,11 +308,12 @@ export const ProfilePageDocument = gql`
     nickname
     avatar
   }
-  lastGames(playerId: $id) {
+  playersLastGames(playerId: $id, limit: 10) {
     createdAt
     id
     result
     roles
+    won
   }
 }
     `;

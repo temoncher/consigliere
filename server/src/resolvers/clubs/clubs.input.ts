@@ -16,4 +16,6 @@ export class GetClubArgs {
 export class NewClubInput implements Partial<IClub> {
   @Field()
   title: string;
+  @Field({ nullable: true })
+  location?: string;
 }

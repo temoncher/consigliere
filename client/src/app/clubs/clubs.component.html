@@ -1,3 +1,61 @@
-<ion-content class="no-scroll">
-  <app-explore-container></app-explore-container>
+<ion-content class="light">
+  <ion-list class="games-list cards-list">
+    <!-- TODO: Translate this -->
+    <ion-item *ngIf="!isAnyClubsPresent" class="cards-list__empty" lines="none">
+      <ion-text color="medium">Здесь пока еще пусто...</ion-text>
+    </ion-item>
+
+    <ng-container *ngIf="isAnyClubsPresent">
+      <ng-container *ngIf="administratedClubs.length">
+        <ion-list-header>{{ "CLUB_ROLE.ADMIN" | translate }}</ion-list-header>
+
+        <ion-item *ngFor="let club of administratedClubs" lines="none">
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ club.location }}</p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="confidantClubs.length">
+        <ion-list-header>{{ "CLUB_ROLE.CONFIDANT" | translate }}</ion-list-header>
+
+        <ion-item *ngFor="let club of confidantClubs" lines="none">
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ "CLUB_ROLE." + club.role | translate }}</p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="memberClubs.length">
+        <ion-list-header>{{ "CLUB_ROLE.MEMBER" | translate }}</ion-list-header>
+
+        <ion-item *ngFor="let club of memberClubs" lines="none">
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || 'assets/icon/favicon.png'" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ "CLUB_ROLE." + club.role | translate }}</p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ng-container>
+  </ion-list>
 </ion-content>

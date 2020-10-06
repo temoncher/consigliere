@@ -4,10 +4,11 @@ query profilePage($id: String!) {
     nickname
     avatar
   }
-  lastGames(playerId: $id, limit: 10) {
+  playersLastGames(playerId: $id, limit: 10) {
     createdAt
     id
     result
     roles
+    won
   }
 }

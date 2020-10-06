@@ -1,5 +1,5 @@
 export enum ClubRole {
-  ADMIN = 'admin',
-  CONFIDANT = 'confidant',
-  MEMBER = 'member'
+  ADMIN = 'ADMIN',
+  CONFIDANT = 'CONFIDANT',
+  MEMBER = 'MEMBER'
 }
