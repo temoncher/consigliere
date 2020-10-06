@@ -44,7 +44,7 @@ const devModules = [
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
     GraphQLModule,
-    environment.production ? [] : devModules,
+    environment.emulation || !environment.production ? devModules : [],
   ],
   providers: [
     StatusBar,

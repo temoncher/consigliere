@@ -30,7 +30,7 @@ export class ClubsComponent {
     ).subscribe(({ data, loading }) => {
       const clubs = data.currentPlayerClubs;
 
-      this.loading = false;
+      this.loading = loading;
       this.administratedClubs = clubs.filter(({ role }) => role === ClubRole.Admin);
       this.confidantClubs = clubs.filter(({ role }) => role === ClubRole.Confidant);
       this.memberClubs = clubs.filter(({ role }) => role === ClubRole.Member);
