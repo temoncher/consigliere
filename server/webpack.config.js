@@ -8,6 +8,7 @@ module.exports = function(options) {
         output: {
           filename: 'index.js',
           path: path.resolve(__dirname, 'dist'),
+          libraryTarget: 'this' // <-- Important
         },
         resolve: {
           ...options.resolve,
