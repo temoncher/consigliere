@@ -13,8 +13,8 @@ import { GameMenuState } from '@/table/store/menu/game-menu.state';
 import { PlayersState } from '@/table/store/players/players.state';
 import { RoundState } from '@/table/store/round/round.state';
 
-import { RoundPhase } from '~/types/enums/round-phase.enum';
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { RoundPhase } from '~types/enums/round-phase.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-day',

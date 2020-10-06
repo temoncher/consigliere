@@ -1,6 +1,6 @@
 import { Player } from '@/shared/models/player.model';
 
-import { Role } from '~/types/enums/role.enum';
+import { Role } from '~types/enums/role.enum';
 
 export const dummyPlayers = [
   new Player({ nickname: 'Воланд', uid: 'voland' }),

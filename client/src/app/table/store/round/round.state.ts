@@ -14,7 +14,7 @@ import { CurrentNightState } from './current-night/current-night.state';
 import { CurrentVoteState } from './current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer, ResetKickedPlayer } from './round.actions';
 
-import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
 
 export interface RoundStateModel extends IRound {
   currentPhase: RoundPhase;

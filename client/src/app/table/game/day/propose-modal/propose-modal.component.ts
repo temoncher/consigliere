@@ -9,7 +9,7 @@ import { Player } from '@/shared/models/player.model';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentDayState } from '@/table/store/round/current-day/current-day.state';
 
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-propose-modal',

@@ -9,7 +9,7 @@ import { Player } from '@/shared/models/player.model';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentDayState } from '@/table/store/round/current-day/current-day.state';
 
-import { Role } from '~/types/enums/role.enum';
+import { Role } from '~types/enums/role.enum';
 
 @Component({
   selector: 'app-small-player-card',

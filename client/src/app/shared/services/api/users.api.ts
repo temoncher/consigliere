@@ -4,7 +4,7 @@ import { IUser } from '@/shared/models/user.interface';
 
 import { IApi } from './api.interface';
 
-import { CollectionName } from '~/types/enums/colletion-name.enum';
+import { CollectionName } from '~types/enums/colletion-name.enum';
 
 export class UsersApi implements IApi<IUser> {
   private usersCollection = this.firestore.collection<IUser>(CollectionName.USERS);

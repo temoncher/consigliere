@@ -11,8 +11,8 @@ import { PlayersState } from '@/table/store/players/players.state';
 import { ShootPlayer } from '@/table/store/round/current-night/current-night.actions';
 import { CurrentNightState } from '@/table/store/round/current-night/current-night.state';
 
-import { Role } from '~/types/enums/role.enum';
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { Role } from '~types/enums/role.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-mafia-hunt',

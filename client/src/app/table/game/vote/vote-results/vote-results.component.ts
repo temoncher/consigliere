@@ -10,7 +10,7 @@ import { GameService } from '@/table/services/game.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.state';
 
-import { VoteResult } from '~/types/enums/vote-result.enum';
+import { VoteResult } from '~types/enums/vote-result.enum';
 
 @Component({
   selector: 'app-vote-results',

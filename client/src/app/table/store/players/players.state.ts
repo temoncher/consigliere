@@ -22,9 +22,9 @@ import {
   AssignRole,
 } from './players.actions';
 
-import { Role } from '~/types/enums/role.enum';
-import { RoundPhase } from '~/types/enums/round-phase.enum';
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { Role } from '~types/enums/role.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 const rolesArray = [
   Role.DON,

@@ -3,8 +3,8 @@ import { Player } from '@/shared/models/player.model';
 
 import { gameActionsPrefix } from '../table.actions';
 
-import { Role } from '~/types/enums/role.enum';
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { Role } from '~types/enums/role.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 const playersActionsPrefix = `${gameActionsPrefix}.Players`;
 

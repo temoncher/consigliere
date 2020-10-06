@@ -14,7 +14,7 @@ import { PlayersState } from '../store/players/players.state';
 
 import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 
-import { Role } from '~/types/enums/role.enum';
+import { Role } from '~types/enums/role.enum';
 
 interface HostPropmt {
   header: string;

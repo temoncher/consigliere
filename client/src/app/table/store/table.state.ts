@@ -17,8 +17,8 @@ import {
   AddRound,
 } from './table.actions';
 
-import { GameResult } from '~/types/enums/game-result.enum';
-import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { GameResult } from '~types/enums/game-result.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
 
 export interface TableStateModel {
   rounds: IRound[];

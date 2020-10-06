@@ -7,8 +7,8 @@
       "@/*": [
         "src/app/*"
       ],
-      "~/*": [
-        "../*"
+      "~types/*": [
+        "../types/*"
       ]
     },
     "outDir": "./dist/out-tsc",

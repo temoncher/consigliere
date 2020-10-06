@@ -26,8 +26,8 @@ import { TableState } from '../store/table.state';
 
 import { VoteService } from './vote.service';
 
-import { Role } from '~/types/enums/role.enum';
-import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { Role } from '~types/enums/role.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
 
 @Injectable({
   providedIn: 'root',

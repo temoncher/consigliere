@@ -10,7 +10,7 @@ import { AuthService } from '@/shared/services/auth.service';
 
 import { SettingsMenuComponent } from './settings-menu.component';
 
-import { GameResult } from '~/types/enums/game-result.enum';
+import { GameResult } from '~types/enums/game-result.enum';
 
 type WinnerMap = {
   [key in GameResult]: string;

@@ -8,8 +8,8 @@ import { from, Observable } from 'rxjs';
 import { RoundState } from '../store/round/round.state';
 import { TableState } from '../store/table.state';
 
-import { GameResult } from '~/types/enums/game-result.enum';
-import { RoundPhase } from '~/types/enums/round-phase.enum';
+import { GameResult } from '~types/enums/game-result.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
 
 interface DiscardGamePrompt {
   header: string;

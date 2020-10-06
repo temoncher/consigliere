@@ -14,7 +14,7 @@ import { PreparationModalComponent } from '../preparation-modal/preparation-moda
 
 import { RoleMenuComponent } from './role-menu.component';
 
-import { Role } from '~/types/enums/role.enum';
+import { Role } from '~types/enums/role.enum';
 
 interface IonicReorderEvent {
   detail: {

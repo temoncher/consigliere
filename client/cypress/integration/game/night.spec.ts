@@ -1,6 +1,6 @@
 import { PlayersState } from '@/table/store/players/players.state';
 
-import { Role } from '~/types/role.enum';
+import { Role } from '~types/role.enum';
 
 describe('[Game] Night', () => {
   beforeEach(() => {

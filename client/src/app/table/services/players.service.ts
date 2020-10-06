@@ -10,10 +10,10 @@ import { TableState } from '../store/table.state';
 
 import { TimersService } from './timers.service';
 
-import { GameResult } from '~/types/enums/game-result.enum';
-import { Role } from '~/types/enums/role.enum';
-import { RoundPhase } from '~/types/enums/round-phase.enum';
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { GameResult } from '~types/enums/game-result.enum';
+import { Role } from '~types/enums/role.enum';
+import { RoundPhase } from '~types/enums/round-phase.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @Injectable({
   providedIn: 'root',

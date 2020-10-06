@@ -3,7 +3,7 @@ import { VotePhase } from '@/table/models/vote-phase.enum';
 
 import { roundActionsPrefix } from '../round.actions';
 
-import { VoteResult } from '~/types/enums/vote-result.enum';
+import { VoteResult } from '~types/enums/vote-result.enum';
 
 const voteActionsPrefix = `${roundActionsPrefix}.CurrentVote`;
 

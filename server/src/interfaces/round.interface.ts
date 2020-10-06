@@ -1,4 +1,4 @@
-import { VoteResult } from '~/types/vote-result.enum';
+import { VoteResult } from '~types/vote-result.enum';
 
 export interface IRound {
   kickedPlayers?: string[];

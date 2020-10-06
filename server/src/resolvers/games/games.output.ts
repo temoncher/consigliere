@@ -5,13 +5,13 @@ import { GraphQLJSONObject } from 'graphql-type-json';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { IGame } from '@/interfaces/game.interface';
 import { IPlayer } from '@/interfaces/player.interface';
-import { IQuitPhase } from '@/interfaces/quit-phase.interface';
 import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
+import { GameResult } from '~types/enums/game-result.enum';
+import { Role } from '~types/enums/role.enum';
+import { VoteResult } from '~types/enums/vote-result.enum';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
-import { GameResult } from '~/types/game-result.enum';
-import { Role } from '~/types/role.enum';
-import { VoteResult } from '~/types/vote-result.enum';
 
 @ObjectType()
 export class PlayerOutput implements IPlayer {

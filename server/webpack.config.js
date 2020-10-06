@@ -11,7 +11,7 @@ module.exports = function(options) {
         },
         resolve: {
           ...options.resolve,
-          plugins: [new TsconfigPathsPlugin({/* options: see below */})],
+          plugins: [new TsconfigPathsPlugin()],
         }
     };
 };

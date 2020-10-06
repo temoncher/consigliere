@@ -11,7 +11,7 @@ import { PlayersState } from '@/table/store/players/players.state';
 import { VoteForCandidate } from '@/table/store/round/current-vote/current-vote.actions';
 import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.state';
 
-import { IQuitPhase } from '~/types/interfaces/quit-phase.interface';
+import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @Component({
   selector: 'app-vote-stage',
