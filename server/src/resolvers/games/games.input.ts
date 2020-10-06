@@ -101,7 +101,7 @@ export class PlayerInput implements IPlayer {
 export class GameInput extends DocumentMeta implements Partial<IGame> {
   @Field(() => [RoundInput])
   rounds: IRound[];
-  @Field()
+  @Field(() => GameResult)
   result: GameResult;
   @Field(() => [PlayerInput])
   players: PlayerInput[];

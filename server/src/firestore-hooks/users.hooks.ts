@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+
 import { CollectionName } from '~enums/colletion-name.enum';
 
 export const usersCreatedAt = functions.firestore

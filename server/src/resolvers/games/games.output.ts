@@ -85,7 +85,7 @@ export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
   creatorId: string;
   @Field(() => [RoundOutput])
   rounds: IRound[];
-  @Field()
+  @Field(() => GameResult)
   result: GameResult;
   @Field(() => [PlayerOutput])
   players: IPlayer[];
