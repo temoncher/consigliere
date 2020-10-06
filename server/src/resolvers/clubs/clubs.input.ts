@@ -1,4 +1,4 @@
-import { ArgsType, Field, InputType } from '@nestjs/graphql';
+import { ArgsType, Field, InputType, Int } from '@nestjs/graphql';
 
 import { IClub } from '@/interfaces/club.interface';
 
@@ -10,6 +10,12 @@ export enum ClubsInputs {
 export class GetClubArgs {
   @Field()
   id: string;
+}
+
+@ArgsType()
+export class GetClubsByPlayerIdArgs {
+  @Field()
+  playerId: string;
 }
 
 @InputType(ClubsInputs.NEW_CLUB)

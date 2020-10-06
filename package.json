@@ -1,0 +1,17 @@
+{
+  "name": "consigliere",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "firebase emulators:start --import=./emulator-data --export-on-exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/temoncher/consigliere.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/temoncher/consigliere/issues"
+  },
+  "homepage": "https://github.com/temoncher/consigliere#readme"
+}

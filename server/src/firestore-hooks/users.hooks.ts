@@ -11,8 +11,8 @@ export const usersCreatedAt = functions.firestore
     const meta: IDocumentMeta = {
       createdBy: context.auth.uid,
       updatedBy: context.auth.uid,
-      createdAt: context.timestamp,
-      updatedAt: context.timestamp,
+      createdAt: admin.firestore.Timestamp.now(),
+      updatedAt: admin.firestore.Timestamp.now(),
     };
 
     return userSnapshot.ref.set(
@@ -28,7 +28,7 @@ export const usersOnUpdate = functions.firestore
     const userDoc = admin.firestore().collection(CollectionName.USERS).doc(userId);
     const meta: Partial<IDocumentMeta> = {
       updatedBy: context.auth.uid,
-      updatedAt: context.timestamp,
+      updatedAt: admin.firestore.Timestamp.now(),
     };
 
     return userDoc.set(

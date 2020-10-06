@@ -18,7 +18,7 @@ import * as credentials from './service-account.json';
       path: '/graphql',
       autoSchemaFile: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      context: ({ req }: any): IGQLContext => ({ headers: req.headers }),
+      context: ({ req }) => ({ headers: req.headers }),
       buildSchemaOptions: {
         dateScalarMode: 'timestamp',
       },

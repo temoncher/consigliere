@@ -4,5 +4,5 @@ export interface IGQLContext {
   headers?: {
     authorization?: string;
   };
-  user?: admin.auth.UserRecord;
+  user: admin.auth.UserRecord;
 }

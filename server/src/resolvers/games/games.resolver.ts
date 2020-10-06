@@ -1,8 +1,10 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ApolloError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
+import { ErrorCode } from '@/enums/apollo-code.enum';
 import { CollectionName } from '@/enums/colletion-name.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
@@ -26,10 +28,21 @@ export class GamesResolver {
       @Context('user') currentUser: admin.auth.UserRecord,
   ): Promise<string> {
     const playersIds = gameInput.players.map((player) => player.uid);
-    const newGame: IGame = {
+
+    const meta: IDocumentMeta = {
+      createdAt: admin.firestore.Timestamp.now(),
+      createdBy: currentUser.uid,
+      updatedAt: admin.firestore.Timestamp.now(),
+      updatedBy: currentUser.uid,
+    };
+    const newGameData: Omit<IGame, 'id'> = {
       ...gameInput,
       participants: [...playersIds, gameInput.host.uid],
       creatorId: currentUser.uid,
+    };
+    const newGame = {
+      ...newGameData,
+      ...meta,
     };
 
     const newGameDoc = await this.gamesCollection.add(newGame as IGame & IDocumentMeta);
@@ -40,9 +53,13 @@ export class GamesResolver {
   @Query(() => GameOutput, { name: 'game' })
   async getGame(@Args() args: GetGameArgs): Promise<(IGame & IDocumentMeta)> {
     const gameDoc = await this.gamesCollection.doc(args.id).get();
-    const gameData = { ...gameDoc.data(), id: gameDoc.id };
+    const gameData = gameDoc.data();
 
-    return gameData;
+    if (!gameData) {
+      throw new ApolloError('Game not found', ErrorCode.NOT_FOUND);
+    }
+
+    return { ...gameData, id: gameDoc.id };
   }
 
   @Query(() => [GameOutput], { name: 'lastGames' })

@@ -1,4 +1,7 @@
-import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import * as admin from 'firebase-admin';
+
+import { FirebaseTimestampScalar } from '@/scalars/firebase-timestamp.scalar';
 
 @ObjectType()
 export class DocumentMeta {
@@ -6,8 +9,8 @@ export class DocumentMeta {
   createdBy: string;
   @Field(() => ID)
   updatedBy: string;
-  @Field(() => GraphQLISODateTime)
-  createdAt: string;
-  @Field(() => GraphQLISODateTime)
-  updatedAt: string;
+  @Field(() => FirebaseTimestampScalar)
+  createdAt: admin.firestore.Timestamp;
+  @Field(() => FirebaseTimestampScalar)
+  updatedAt: admin.firestore.Timestamp;
 }
