@@ -68,7 +68,7 @@ export class GamesResolver {
   }
 
   @Query(() => GameOutput, { name: 'game' })
-  async getGame(@Args() args: GetGameArgs): Promise<(IGame & IDocumentMeta)> {
+  async getGame(@Args() args: GetGameArgs): Promise<GameOutput> {
     const gameDoc = await this.gamesCollection.doc(args.id).get();
     const gameData = gameDoc.data();
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
 import { consigliereLogo, defaultAvatarSrc } from '@/shared/constants/avatars';
@@ -40,6 +40,7 @@ export class ProfileComponent {
     private profilePageGQL: ProfilePageGQL,
   ) {
     this.fireauth.user.pipe(
+      filter((fireUser) => !!fireUser),
       switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
     ).subscribe(({ data, loading }) => {
       this.loading = loading;

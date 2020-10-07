@@ -6,7 +6,6 @@ import { Role } from '~types/enums/role.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 export interface IGame {
-  id: string;
   club?: string;
   participants: string[];
   creatorId: string;

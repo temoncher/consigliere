@@ -7,15 +7,14 @@ import * as admin from 'firebase-admin';
 import { AuthGuard } from '@/guards/auth.guard';
 import { IClub } from '@/interfaces/club.interface';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+import { ClubsCollection } from '@/models/collections.types';
 
-import { ClubsInputs, GetClubArgs, NewClubInput } from './clubs.input';
+import { ClubsInputName, GetClubArgs, NewClubInput } from './clubs.input';
 import { ClubOutput } from './clubs.output';
 
 import { ClubRole } from '~types/enums/club-role.enum';
 import { CollectionName } from '~types/enums/colletion-name.enum';
 import { ErrorCode } from '~types/enums/error-code.enum';
-
-type ClubsCollection = FirebaseFirestore.CollectionReference<IClub & IDocumentMeta>;
 
 @Resolver()
 @UseGuards(AuthGuard)
@@ -26,7 +25,7 @@ export class ClubsResolver {
 
   @Mutation(() => ClubOutput)
   async createClub(
-    @Args(ClubsInputs.NEW_CLUB) newClubInput: NewClubInput,
+    @Args(ClubsInputName.NEW_CLUB) newClubInput: NewClubInput,
       @Context('user') currentUser: admin.auth.UserRecord,
   ): Promise<ClubOutput> {
     const { docs: clubsWithSameTitle } = await this.clubsCollection.where('title', '==', newClubInput.title).get();
