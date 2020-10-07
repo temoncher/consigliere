@@ -8,6 +8,9 @@ import 'reflect-metadata';
 
 import { AppModule } from './app.module';
 
+console.log('Using emulators environment: ', process.env.FUNCTIONS_EMULATOR);
+console.log('on host: ', process.env.FIRESTORE_EMULATOR_HOST);
+
 const server: express.Express = express();
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

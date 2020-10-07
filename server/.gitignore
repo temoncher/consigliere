@@ -35,6 +35,7 @@ lerna-debug.log*
 
 # firebase secret
 service-account*
+.runtimeconfig.json
 
 # build
 dist

@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import * as admin from 'firebase-admin';
 
-import { IGQLContext } from './interfaces/gql-context.interface';
 import { ResolversModule } from './resolvers/resolvers.module';
 import * as credentials from './service-account.json';
 

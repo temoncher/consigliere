@@ -103,7 +103,7 @@ export class JoinRequestsResolver {
     };
   }
 
-  @Query(() => [JoinRequestOutput])
+  @Query(() => [JoinRequestOutput], { name: 'clubJoinRequests' })
   async getClubJoinRequests(
     @Args(JoinRequestInputNames.NEW_JOIN_REQUEST) joinRequestInput: JoinRequestInput,
       @Context('user') currentUser: admin.auth.UserRecord,
