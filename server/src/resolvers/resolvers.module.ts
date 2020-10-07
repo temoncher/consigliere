@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { FirebaseTimestampScalar } from '@/scalars/firebase-timestamp.scalar';
+import { AlgoliaService } from '@/services/algolia.service';
 
 import { ClubsResolver } from './clubs/clubs.resolver';
 import { GamesResolver } from './games/games.resolver';
@@ -17,6 +18,7 @@ registerEnums();
     UsersResolver,
     JoinRequestsResolver,
     FirebaseTimestampScalar,
+    AlgoliaService,
   ],
 })
 export class ResolversModule {}

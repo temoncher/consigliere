@@ -8,9 +8,10 @@ import { AuthGuard } from '@/guards/auth.guard';
 import { IClub } from '@/interfaces/club.interface';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { ClubsCollection } from '@/models/collections.types';
+import { AlgoliaService } from '@/services/algolia.service';
 
 import { ClubsInputName, GetClubArgs, NewClubInput } from './clubs.input';
-import { ClubOutput } from './clubs.output';
+import { ClubOutput, ClubSearchOutput } from './clubs.output';
 
 import { ClubRole } from '~types/enums/club-role.enum';
 import { CollectionName } from '~types/enums/colletion-name.enum';
@@ -21,7 +22,10 @@ import { ErrorCode } from '~types/enums/error-code.enum';
 export class ClubsResolver {
   private clubsCollection = this.firestore.collection(CollectionName.CLUBS) as ClubsCollection;
 
-  constructor(private firestore: FirebaseFirestoreService) {}
+  constructor(
+    private firestore: FirebaseFirestoreService,
+    private algoliaService: AlgoliaService,
+  ) {}
 
   @Mutation(() => ClubOutput)
   async createClub(
@@ -138,5 +142,15 @@ export class ClubsResolver {
     });
 
     return playersClubsData;
+  }
+
+  @Query(() => [ClubSearchOutput])
+  async searchClubs(
+    @Args('query') query: string,
+  ): Promise<ClubSearchOutput[]> {
+    const { hits } = await this.algoliaService.clubsIndex.search<IClub & IDocumentMeta & { objectID: string }>(query);
+    const clubs = hits.map(({ objectID, ...hit }) => ({ ...hit, id: objectID }));
+
+    return clubs;
   }
 }

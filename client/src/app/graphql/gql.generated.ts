@@ -18,6 +18,22 @@ export type Scalars = {
 
 
 
+export type ClubSearchOutput = {
+  __typename?: 'ClubSearchOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  admin: Scalars['ID'];
+  avatar?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+  confidants: Array<Scalars['ID']>;
+  members: Array<Scalars['ID']>;
+};
+
+
 export type ClubOutput = {
   __typename?: 'ClubOutput';
   createdBy: Scalars['ID'];
@@ -33,7 +49,6 @@ export type ClubOutput = {
   members: Array<Scalars['ID']>;
   role: ClubRole;
 };
-
 
 export enum ClubRole {
   Admin = 'ADMIN',
@@ -125,6 +140,24 @@ export type LastGamesByPlayerIdOutput = {
   won?: Maybe<Scalars['Boolean']>;
 };
 
+export type JoinRequestOutput = {
+  __typename?: 'JoinRequestOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  clubId: Scalars['ID'];
+  playerId: Scalars['ID'];
+  status: InvitationStatus;
+};
+
+export enum InvitationStatus {
+  Pending = 'PENDING',
+  Accepted = 'ACCEPTED',
+  Declined = 'DECLINED'
+}
+
 export type UserOutput = {
   __typename?: 'UserOutput';
   createdBy: Scalars['ID'];
@@ -140,8 +173,10 @@ export type Query = {
   __typename?: 'Query';
   club: ClubOutput;
   currentPlayerClubs: Array<ClubOutput>;
+  searchClubs: Array<ClubSearchOutput>;
   game: GameOutput;
   playersLastGames: Array<LastGamesByPlayerIdOutput>;
+  clubJoinRequests: Array<JoinRequestOutput>;
   user: UserOutput;
   users: Array<UserOutput>;
 };
@@ -149,6 +184,11 @@ export type Query = {
 
 export type QueryClubArgs = {
   id: Scalars['String'];
+};
+
+
+export type QuerySearchClubsArgs = {
+  query: Scalars['String'];
 };
 
 
@@ -163,6 +203,11 @@ export type QueryPlayersLastGamesArgs = {
 };
 
 
+export type QueryClubJoinRequestsArgs = {
+  joinRequest: JoinRequest;
+};
+
+
 export type QueryUserArgs = {
   id?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
@@ -174,11 +219,18 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
+export type JoinRequest = {
+  clubId: Scalars['ID'];
+  statuses?: Maybe<Array<InvitationStatus>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createClub: ClubOutput;
   deleteClub: ClubOutput;
   addGame: GameOutput;
+  createJoinRequest: JoinRequestOutput;
+  revokeJoinRequest: JoinRequestOutput;
 };
 
 
@@ -194,6 +246,16 @@ export type MutationDeleteClubArgs = {
 
 export type MutationAddGameArgs = {
   addGameData: GameInput;
+};
+
+
+export type MutationCreateJoinRequestArgs = {
+  clubId: Scalars['String'];
+};
+
+
+export type MutationRevokeJoinRequestArgs = {
+  id: Scalars['String'];
 };
 
 export type Club = {
@@ -309,6 +371,19 @@ export type ProfilePageQuery = (
   )> }
 );
 
+export type SearchClubsQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type SearchClubsQuery = (
+  { __typename?: 'Query' }
+  & { searchClubs: Array<(
+    { __typename?: 'ClubSearchOutput' }
+    & Pick<ClubSearchOutput, 'id' | 'title' | 'avatar' | 'location'>
+  )> }
+);
+
 export const CreateClubDocument = gql`
     mutation createClub($club: club!) {
   createClub(club: $club) {
@@ -415,6 +490,27 @@ export const ProfilePageDocument = gql`
   })
   export class ProfilePageGQL extends Apollo.Query<ProfilePageQuery, ProfilePageQueryVariables> {
     document = ProfilePageDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SearchClubsDocument = gql`
+    query searchClubs($query: String!) {
+  searchClubs(query: $query) {
+    id
+    title
+    avatar
+    location
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SearchClubsGQL extends Apollo.Query<SearchClubsQuery, SearchClubsQueryVariables> {
+    document = SearchClubsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
