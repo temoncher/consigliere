@@ -1,7 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
 
-import { ClubRole, ClubsPageDocument, CreateClubGQL, CreateClubMutationVariables } from '@/graphql/gql.generated';
+import {
+  ClubsPageDocument,
+  CreateClubGQL,
+  CreateClubMutation,
+  CreateClubMutationVariables,
+} from '@/graphql/gql.generated';
 
 @Component({
   selector: 'app-create-club',
@@ -9,6 +17,8 @@ import { ClubRole, ClubsPageDocument, CreateClubGQL, CreateClubMutationVariables
   styleUrls: ['./create-club.component.scss'],
 })
 export class CreateClubComponent implements OnInit {
+  @Output() create = new EventEmitter<CreateClubMutation['createClub']>();
+
   clubForm: FormGroup = this.formBuilder.group({
     title: [
       '',
@@ -44,13 +54,15 @@ export class CreateClubComponent implements OnInit {
   }
 
   constructor(
+    private store: Store,
     private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private createClubGQL: CreateClubGQL,
   ) { }
 
   ngOnInit() { }
 
-  create() {
+  createClub() {
     const location = this.location.value.trim();
     const title = this.title.value.trim();
     const club: CreateClubMutationVariables['club'] = {
@@ -66,12 +78,20 @@ export class CreateClubComponent implements OnInit {
       {
         refetchQueries: [{ query: ClubsPageDocument }],
       },
-    ).subscribe();
+    ).subscribe(({ data }) => {
+      this.create.emit(data.createClub);
+
+      this.store.dispatch(new Navigate(
+        [data.createClub.id],
+        null,
+        { relativeTo: this.activatedRoute },
+      ));
+    });
   }
 
   submitOnEnterKey({ key }: KeyboardEvent) {
     if (key !== 'Enter') return;
 
-    this.create();
+    this.createClub();
   }
 }

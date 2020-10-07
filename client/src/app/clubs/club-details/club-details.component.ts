@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { switchMap } from 'rxjs/operators';
@@ -30,6 +31,7 @@ export class ClubDetailsComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private clubDetailsPageGQL: ClubDetailsPageGQL,
     private deleteClubGQL: DeleteClubGQL,
+    public alertController: AlertController,
   ) {
     // TODO: ubsubscribe
     this.activateRoute.params.pipe(
@@ -48,6 +50,32 @@ export class ClubDetailsComponent implements OnInit {
       {
         refetchQueries: [{ query: ClubsPageDocument }],
       },
-    ).subscribe(() => this.store.dispatch(new Navigate(['../'], null, { relativeTo: this.activateRoute })));
+    ).subscribe(() => {
+      this.store.dispatch(new Navigate(
+        ['../'],
+        null,
+        { relativeTo: this.activateRoute },
+      ));
+    });
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Закрыть клуб',
+      message: 'Вы точно хотите закрыть этот клуб? Это действие необратимо.',
+      buttons: [
+        {
+          text: 'Удалить',
+          role: 'confirm',
+          handler: () => this.deleteClub(),
+        },
+        {
+          text: 'Отменить',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    await alert.present();
   }
 }

@@ -53,4 +53,8 @@ export class ClubsComponent {
 
     this.pageState = ClubsPageState.LIST;
   }
+
+  resetPage() {
+    this.pageState = ClubsPageState.LIST;
+  }
 }

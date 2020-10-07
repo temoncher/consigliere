@@ -16,7 +16,7 @@
       <ion-button
         *ngIf="club?.role === ClubRole.Admin"
         fill="clear"
-        (click)="deleteClub()"
+        (click)="presentAlert()"
       >
         <ion-icon
           color="light"
