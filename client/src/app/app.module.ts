@@ -53,13 +53,6 @@ const devModules = [
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy,
     },
-    {
-      provide: SETTINGS,
-      useValue: !environment.emulation ? undefined : {
-        host: 'localhost:4343',
-        ssl: false,
-      },
-    },
   ],
   bootstrap: [AppComponent],
 })

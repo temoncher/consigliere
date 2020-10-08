@@ -19,7 +19,7 @@
 </app-placeholder>
 
 <app-placeholder
-  [hidden]="!loading && (search.pristine || clubs?.length)"
+  [hidden]="!loading && clubs?.length && search.dirty"
   style="height: 80%"
   image="assets/sad.png"
 >

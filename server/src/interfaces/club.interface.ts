@@ -5,4 +5,5 @@ export interface IClub {
   admin: string;
   confidants: string[];
   members: string[];
+  public: boolean;
 }

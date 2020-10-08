@@ -29,6 +29,7 @@ export type ClubSearchOutput = {
   avatar?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   location?: Maybe<Scalars['String']>;
+  public: Scalars['Boolean'];
   confidants: Array<Scalars['ID']>;
   members: Array<Scalars['ID']>;
 };
@@ -45,9 +46,10 @@ export type ClubOutput = {
   avatar?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   location?: Maybe<Scalars['String']>;
+  public: Scalars['Boolean'];
   confidants: Array<Scalars['ID']>;
   members: Array<Scalars['ID']>;
-  role: ClubRole;
+  role?: Maybe<ClubRole>;
 };
 
 export enum ClubRole {
@@ -189,6 +191,7 @@ export type QueryClubArgs = {
 
 export type QuerySearchClubsArgs = {
   query: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
 };
 
 
@@ -331,6 +334,19 @@ export type DeleteClubMutation = (
   ) }
 );
 
+export type ClubAdminPageQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ClubAdminPageQuery = (
+  { __typename?: 'Query' }
+  & { club: (
+    { __typename?: 'ClubOutput' }
+    & Pick<ClubOutput, 'id' | 'title' | 'location' | 'avatar' | 'admin' | 'role' | 'members'>
+  ) }
+);
+
 export type ClubDetailsPageQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -340,7 +356,7 @@ export type ClubDetailsPageQuery = (
   { __typename?: 'Query' }
   & { club: (
     { __typename?: 'ClubOutput' }
-    & Pick<ClubOutput, 'id' | 'title' | 'avatar' | 'admin' | 'role'>
+    & Pick<ClubOutput, 'id' | 'title' | 'location' | 'avatar' | 'admin' | 'role' | 'members'>
   ) }
 );
 
@@ -424,14 +440,40 @@ export const DeleteClubDocument = gql`
       super(apollo);
     }
   }
+export const ClubAdminPageDocument = gql`
+    query clubAdminPage($id: String!) {
+  club(id: $id) {
+    id
+    title
+    location
+    avatar
+    admin
+    role
+    members
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ClubAdminPageGQL extends Apollo.Query<ClubAdminPageQuery, ClubAdminPageQueryVariables> {
+    document = ClubAdminPageDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ClubDetailsPageDocument = gql`
     query clubDetailsPage($id: String!) {
   club(id: $id) {
     id
     title
+    location
     avatar
     admin
     role
+    members
   }
 }
     `;

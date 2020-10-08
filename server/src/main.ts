@@ -21,8 +21,6 @@ export const createNestServer = async (expressInstance: express.Express): Promis
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-createNestServer(server)
-  .then(() => console.log('Nest is ready'))
-  .catch((error) => console.error('Nest is broken', error));
+createNestServer(server);
 
 export const api = functions.https.onRequest(server);

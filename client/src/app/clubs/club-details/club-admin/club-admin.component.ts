@@ -6,40 +6,36 @@ import { Store } from '@ngxs/store';
 import { switchMap } from 'rxjs/operators';
 
 import {
-  ClubDetailsPageGQL,
-  ClubDetailsPageQuery,
-  ClubRole,
-  ClubsPageDocument,
   DeleteClubGQL,
+  ClubAdminPageGQL,
+  ClubAdminPageQuery,
+  ClubsPageDocument,
+  ClubRole,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
 @Component({
-  selector: 'app-club-details',
-  templateUrl: './club-details.component.html',
-  styleUrls: ['./club-details.component.scss'],
+  selector: 'app-club-admin',
+  templateUrl: './club-admin.component.html',
+  styleUrls: ['./club-admin.component.scss'],
 })
-export class ClubDetailsComponent implements OnInit {
-  club: ClubDetailsPageQuery['club'];
+export class ClubAdminComponent implements OnInit {
+  club: ClubAdminPageQuery['club'];
   loading = true;
 
   defaultAvatar = consigliereLogo;
   ClubRole = ClubRole;
 
-  get isMember() {
-    return this.club?.admin;
-  }
-
   constructor(
     private store: Store,
     private activateRoute: ActivatedRoute,
-    private clubDetailsPageGQL: ClubDetailsPageGQL,
+    private clubAdminPageGQL: ClubAdminPageGQL,
     private deleteClubGQL: DeleteClubGQL,
     public alertController: AlertController,
   ) {
     // TODO: ubsubscribe
     this.activateRoute.params.pipe(
-      switchMap(({ clubId }) => this.clubDetailsPageGQL.watch({ id: clubId }).valueChanges),
+      switchMap(({ clubId }) => this.clubAdminPageGQL.watch({ id: clubId }).valueChanges),
     ).subscribe(({ data, loading }) => {
       this.club = data.club;
       this.loading = loading;
@@ -48,22 +44,33 @@ export class ClubDetailsComponent implements OnInit {
 
   ngOnInit() {}
 
-  leaveClub() {
-
+  deleteClub() {
+    this.deleteClubGQL.mutate(
+      { clubId: this.club.id },
+      {
+        refetchQueries: [{ query: ClubsPageDocument }],
+      },
+    ).subscribe(() => {
+      this.store.dispatch(new Navigate(
+        ['../'],
+        null,
+        { relativeTo: this.activateRoute },
+      ));
+    });
   }
 
-  async presentLeaveAlert() {
+  async presentAlert() {
     const alert = await this.alertController.create({
-      header: 'Вы уходите?',
-      message: 'Вы точно хотите уйти из клуба?',
+      header: 'Закрыть клуб',
+      message: 'Вы точно хотите закрыть этот клуб? Это действие необратимо.',
       buttons: [
         {
-          text: 'Уйти',
+          text: 'Удалить',
           role: 'confirm',
-          handler: () => this.leaveClub(),
+          handler: () => this.deleteClub(),
         },
         {
-          text: 'Остаться',
+          text: 'Отменить',
           role: 'cancel',
         },
       ],

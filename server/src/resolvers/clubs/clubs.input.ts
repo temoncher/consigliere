@@ -12,6 +12,14 @@ export class GetClubArgs {
   id: string;
 }
 
+@ArgsType()
+export class SearchClubArgs {
+  @Field()
+  query: string;
+  @Field({ nullable: true })
+  limit?: number;
+}
+
 @InputType(ClubsInputName.NEW_CLUB)
 export class NewClubInput implements Partial<IClub> {
   @Field()

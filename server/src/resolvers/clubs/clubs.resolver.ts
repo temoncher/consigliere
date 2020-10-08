@@ -1,6 +1,6 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ForbiddenError, ValidationError } from 'apollo-server-express';
 import * as admin from 'firebase-admin';
 
@@ -10,7 +10,7 @@ import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { ClubsCollection } from '@/models/collections.types';
 import { AlgoliaService } from '@/services/algolia.service';
 
-import { ClubsInputName, GetClubArgs, NewClubInput } from './clubs.input';
+import { ClubsInputName, GetClubArgs, NewClubInput, SearchClubArgs } from './clubs.input';
 import { ClubOutput, ClubSearchOutput } from './clubs.output';
 
 import { ClubRole } from '~types/enums/club-role.enum';
@@ -45,7 +45,8 @@ export class ClubsResolver {
       updatedBy: currentUser.uid,
     };
     const newClubData: Omit<IClub, 'id'> = {
-      title: newClubInput.title,
+      ...newClubInput,
+      public: true, // TODO: implement private clubs
       admin: currentUser.uid,
       confidants: [],
       members: [currentUser.uid],
@@ -62,6 +63,26 @@ export class ClubsResolver {
       id,
       role: ClubRole.ADMIN,
     };
+  }
+
+  @Mutation(() => ID)
+  async leaveClub(
+    @Args('clubId') clubId: string,
+      @Context('user') currentUser: admin.auth.UserRecord,
+  ): Promise<string> {
+    const clubDoc = await this.clubsCollection.doc(clubId).get();
+    const clubData = clubDoc.data();
+
+    if (!clubData) {
+      throw new ApolloError('Club not found', ErrorCode.NOT_FOUND);
+    }
+
+    // TODO: check if user is admin
+    await this.clubsCollection.doc(clubId).set({
+      members: clubData.members.filter((memberId) => memberId !== currentUser.uid),
+    }, { merge: true });
+
+    return clubDoc.id;
   }
 
   @Mutation(() => ClubOutput)
@@ -96,7 +117,11 @@ export class ClubsResolver {
   ): Promise<ClubOutput> {
     const clubDoc = await this.clubsCollection.doc(args.id).get();
     const clubData = clubDoc.data();
-    let role = ClubRole.MEMBER;
+    let role: ClubRole;
+
+    if (clubData.members.includes(currentUser.uid)) {
+      role = ClubRole.MEMBER;
+    }
 
     if (clubData.confidants.includes(currentUser.uid)) {
       role = ClubRole.CONFIDANT;
@@ -146,9 +171,10 @@ export class ClubsResolver {
 
   @Query(() => [ClubSearchOutput])
   async searchClubs(
-    @Args('query') query: string,
+    @Args() { query, limit }: SearchClubArgs,
   ): Promise<ClubSearchOutput[]> {
-    const { hits } = await this.algoliaService.clubsIndex.search<IClub & IDocumentMeta & { objectID: string }>(query);
+    const { hits } = await this.algoliaService.clubsIndex
+      .search<IClub & IDocumentMeta & { objectID: string }>(query, { hitsPerPage: limit || 10 });
     const clubs = hits.map(({ objectID, ...hit }) => ({ ...hit, id: objectID }));
 
     return clubs;

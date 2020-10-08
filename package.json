@@ -2,7 +2,7 @@
   "name": "consigliere",
   "version": "1.0.0",
   "scripts": {
-    "start:emulators": "firebase emulators:start --import=./emulator-data --export-on-exit",
+    "start:emulators": "firebase emulators:start",
     "start:server": "cd server && yarn build:emulator",
     "start:client": "cd client && yarn build:emulator"
   },

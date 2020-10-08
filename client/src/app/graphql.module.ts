@@ -1,4 +1,3 @@
-import { HttpHeaders } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
@@ -7,11 +6,11 @@ import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
-// eslint-disable-next-line no-nested-ternary
-const baseUri = environment.emulation
-  ? 'http://localhost:5001/'
-  : environment.production ? 'http://mafia-consigliere.web.app/' : 'http://mafia-consigliere-develop.web.app/';
-const uri = `${baseUri}mafia-consigliere-develop/us-central1/api/graphql`;
+const region = 'us-central1';
+const emulatorUrl = `http://localhost:5001/mafia-consigliere-develop/${region}/api/graphql`;
+const projectName = environment.production ? 'mafia-consigliere' : 'mafia-consigliere-develop';
+const remoteUrl = `https://${region}-${projectName}.cloudfunctions.net/api/graphql`;
+const uri = environment.emulation ? emulatorUrl : remoteUrl;
 
 export function createApollo(httpLink: HttpLink, fireauth: AngularFireAuth): ApolloClientOptions<any> {
   const basic = setContext(() => ({

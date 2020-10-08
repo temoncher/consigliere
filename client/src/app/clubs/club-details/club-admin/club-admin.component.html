@@ -1,5 +1,5 @@
 <ion-content class="saturated">
-  <div class="club-details h100">
+  <div class="club-admin h100">
     <ion-header>
       <ion-button fill="clear" routerLink="../" routerDirection="back">
         <ion-icon
@@ -10,14 +10,14 @@
       </ion-button>
 
       <ion-button
-        *ngIf="club?.role === ClubRole.Admin && club?.role === ClubRole.Confidant"
+        *ngIf="club?.role === ClubRole.Admin"
         fill="clear"
-        routerLink="admin"
+        (click)="presentAlert()"
       >
         <ion-icon
           color="light"
           slot="icon-only"
-          name="settings"
+          name="trash-outline"
         ></ion-icon>
       </ion-button>
     </ion-header>
@@ -39,32 +39,9 @@
       </ng-container>
     </div>
 
-    <div class="club-details__content round-slide with-actions">
-      <div class="round-slide__actions club-actions">
-        <div *ngIf="club?.role" (click)="leaveClub()">
-          <ion-icon
-            color="medium"
-            size="large"
-            name="checkbox-outline"
-          ></ion-icon>
-          <ion-text color="medium">
-            В клубе
-          </ion-text>
-        </div>
-        <div *ngIf="!club?.role">
-          <ion-icon
-            color="primary"
-            size="large"
-            name="enter-outline"
-          ></ion-icon>
-          <ion-text color="primary">
-            Вступить
-          </ion-text>
-        </div>
-      </div>
-
-      <app-placeholder *ngIf="!loading" image="assets/sad.png">
-        Здесь пока еще пусто...
+    <div class="club-admin__content round-slide">
+      <app-placeholder *ngIf="!loading" image="assets/wink.png">
+        Уже скоро!
       </app-placeholder>
     </div>
   </div>

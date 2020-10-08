@@ -18,6 +18,8 @@ export class ClubSearchOutput extends DocumentMeta implements IClub, IDocumentMe
   title: string;
   @Field({ nullable: true })
   location?: string;
+  @Field()
+  public: boolean;
   @Field(() => [ID])
   confidants: string[];
   @Field(() => [ID])
@@ -26,7 +28,7 @@ export class ClubSearchOutput extends DocumentMeta implements IClub, IDocumentMe
 
 @ObjectType()
 export class ClubOutput extends ClubSearchOutput {
-  @Field(() => ClubRole)
-  role: ClubRole;
+  @Field(() => ClubRole, { nullable: true })
+  role?: ClubRole;
 }
 

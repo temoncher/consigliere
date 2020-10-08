@@ -1,4 +1,4 @@
-query clubDetailsPage($id: String!) {
+query clubAdminPage($id: String!) {
   club(id: $id) {
     id
     title

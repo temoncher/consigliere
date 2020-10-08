@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '@/shared/shared.module';
 
+import { ClubAdminComponent } from './club-details/club-admin/club-admin.component';
 import { ClubDetailsComponent } from './club-details/club-details.component';
 import { ClubsListComponent } from './clubs-list/clubs-list.component';
 import { ClubsComponent } from './clubs.component';
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: ':clubId',
     component: ClubDetailsComponent,
+  },
+  {
+    path: ':clubId/admin',
+    component: ClubAdminComponent,
   },
   {
     path: '',
@@ -38,6 +43,7 @@ const routes: Routes = [
     CreateClubComponent,
     JoinClubComponent,
     ClubDetailsComponent,
+    ClubAdminComponent,
   ],
 })
 export class ClubsModule {}

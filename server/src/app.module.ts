@@ -5,7 +5,6 @@ import * as admin from 'firebase-admin';
 
 import { ResolversModule } from './resolvers/resolvers.module';
 import * as credentials from './service-account.json';
-import { AlgoliaService } from './services/algolia.service';
 
 @Module({
   imports: [
