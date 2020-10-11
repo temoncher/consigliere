@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: www
-          path: www
+          path: client/www
   deploy-hosting:
     name: Deploy hosting
     needs: build-client
@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: dist
-          path: dist
+          path: server/dist
   deploy-functions:
     name: Deploy functions
     needs: build-server
