@@ -90,7 +90,15 @@ export class ClubsResolver {
 
     const members = clubData.members.filter((memberId) => memberId !== currentUser.uid);
 
-    await this.clubsCollection.doc(clubId).set({ members }, { merge: true });
+    const meta: Partial<IDocumentMeta> = {
+      updatedAt: fbAdmin.firestore.Timestamp.now(),
+      updatedBy: currentUser.uid,
+    };
+
+    await this.clubsCollection.doc(clubId).set({
+      ...meta,
+      members,
+    }, { merge: true });
 
     return clubDoc.id;
   }
@@ -128,8 +136,13 @@ export class ClubsResolver {
       return currentUser.uid;
     });
     const admin = resignArgs.successorId;
+    const meta: Partial<IDocumentMeta> = {
+      updatedAt: fbAdmin.firestore.Timestamp.now(),
+      updatedBy: currentUser.uid,
+    };
 
     await this.clubsCollection.doc(resignArgs.clubId).set({
+      ...meta,
       admin,
       confidants,
     }, { merge: true });
