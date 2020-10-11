@@ -99,22 +99,6 @@ export class PlayerInput implements IPlayer {
 
 @InputType()
 export class GameInput extends DocumentMeta implements Partial<IGame> {
-  @Field(() => [RoundInput])
-  rounds: IRound[];
-  @Field(() => ID, { nullable: true })
-  club?: string;
   @Field(() => GameResult)
   result: GameResult;
-  @Field(() => [PlayerInput])
-  players: PlayerInput[];
-  @Field(() => GraphQLJSONObject)
-  roles: Record<string, Role>;
-  @Field(() => PlayerInput)
-  host: PlayerInput;
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  falls?: Record<string, number>;
-  @Field(() => GraphQLJSONObject)
-  quitPhases: Record<string, IQuitPhase>;
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  speechSkips?: Record<string, number>;
 }

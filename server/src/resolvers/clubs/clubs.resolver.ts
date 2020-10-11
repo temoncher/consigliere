@@ -1,7 +1,7 @@
 import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ApolloError, ForbiddenError } from 'apollo-server-express';
+import { ApolloError } from 'apollo-server-express';
 import * as fbAdmin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
@@ -132,13 +132,6 @@ export class ClubsResolver {
 
     return clubDoc.id;
   }
-
-  @Mutation(() => ClubOutput)
-  @UseGuards(ClubAdminGuard)
-  async promoteToConfidant(
-    @Args('memberId') memberId: string,
-      @Context('user') currentUser: fbAdmin.auth.UserRecord,
-  ): Promise<ClubOutput> {}
 
   @Mutation(() => ClubOutput)
   @UseGuards(ClubAdminGuard)

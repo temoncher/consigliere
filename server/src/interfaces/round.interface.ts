@@ -1,20 +1,27 @@
-import { VoteResult } from '~types/vote-result.enum';
+import { VoteResult } from '~types/enums/vote-result.enum';
 
 export interface IRound {
   kickedPlayers?: string[];
   // Night
-  shots?: Record<string, string>; // <mafiaId, playerId>
-  murderedPlayer?: string; // murdered player id
-  donCheck?: string; // id of player checked by Don
-  sheriffCheck?: string; // id of player checked by Sheriff
+  /** <mafiaId, playerId> */
+  shots?: Record<string, string>;
+  /** murdered player id */
+  murderedPlayer?: string;
+  /** id of player checked by Don */
+  donCheck?: string;
+  /** id of player checked by Sheriff */
+  sheriffCheck?: string;
 
   // Day
-  timers?: Record<string, number>; // <playerId, timeLeft>
-  proposedPlayers?: Record<string, string>; // <candidateId, playerId>
+  /** <playerId, timeLeft> */
+  timers?: Record<string, number>;
+  /** <candidateId, playerId> */
+  proposedPlayers?: Record<string, string>;
 
   // Vote
   isVoteDisabled?: boolean;
-  votes?: Record<string, string[]>[]; // <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties
+  /** <candidatePlayerId, votePlayerId[]>, multiple votes can occur on ties */
+  votes?: Record<string, string[]>[];
   eliminateAllVote?: Record<string, boolean>;
   voteResult: VoteResult;
 }
