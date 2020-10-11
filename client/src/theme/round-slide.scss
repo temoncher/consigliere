@@ -1,0 +1,23 @@
+@import "./custom-variables.scss";
+@import "./variables.scss";
+
+.round-slide {
+  padding: var(--app-border-radius-large);
+  border-radius: var(--app-border-radius-large) var(--app-border-radius-large) 0 0;
+  background-color: var(--app-color-saturated-contrast);
+  box-shadow: var(--app-box-shadow);
+  color: var(--ion-color-dark);
+
+  &.with-actions {
+    padding: 0;
+  }
+
+  &__actions {
+    border-radius: var(--app-border-radius-large);
+    box-shadow: var(--app-box-shadow-x2);
+    padding: var(--app-border-radius-large);
+
+    display: flex;
+    justify-content: space-between;
+  }
+}

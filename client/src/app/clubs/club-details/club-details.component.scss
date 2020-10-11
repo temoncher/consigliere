@@ -1,0 +1,69 @@
+ion-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.club-details {
+  display: flex;
+  flex-direction: column;
+
+  .hero-block {
+    display: flex;
+    padding: 16px 32px 32px;
+
+    &__title {
+      margin: 8px 0 0 16px;
+
+      .primary-text {
+        margin: 0;
+
+        ion-skeleton-text {
+          height: 18px;
+        }
+      }
+
+      .secondary-text {
+        margin: 0;
+
+        ion-skeleton-text {
+          height: 14px;
+        }
+      }
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+}
+
+.club-actions {
+  display: flex;
+  justify-content: space-between;
+
+  .action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8vh;
+    width: 20vw;
+
+    > div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      ion-icon {
+        margin-bottom: 4px;
+      }
+
+      ion-spinner {
+        margin: 4px;
+      }
+    }
+  }
+
+  ion-button {
+    flex: 1;
+  }
+}

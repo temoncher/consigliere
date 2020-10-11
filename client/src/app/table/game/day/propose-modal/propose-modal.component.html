@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "TABS.TABLE.GAME.DAY.PROPOSE_MODAL.toolbarTitle" | translate }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="outlined" (click)="close()">
+        <ion-icon slot="icon-only" color="primary" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="no-scroll">
+  <app-table-template>
+    <app-small-player-card
+      *ngFor="let player of players"
+      [slot]="player.number"
+      [playerId]="player.uid"
+      [disabled]="
+        isAlreadyACandidate(player.uid) ||
+        !!(quitPhases$ | async)[player.uid]
+      "
+      (cardClick)="navigateToPlayer(player)"
+    >
+      <div
+        slot="overlay"
+        *ngIf="isAlreadyACandidate(player.uid)"
+        class="full-parent-overlay background-color-transparent-dark grid-content-center"
+      ></div>
+    </app-small-player-card>
+
+    <ion-card slot="center" class="player-card">
+      <ion-card-header class="player-card__header">
+        <div
+          class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
+        >
+          {{ players[currentPlayerIndex].number }}
+        </div>
+        <ion-card-title class="player-card__header__title text-color-dark"
+          >{{ players[currentPlayerIndex].nickname }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="player-card__content ion-text-center">
+        <ion-avatar class="player-card__avatar">
+          <img
+            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
+          />
+        </ion-avatar>
+      </ion-card-content>
+    </ion-card>
+
+    <div slot="under" class="grid-content-center">
+      <ion-button
+        size="large"
+        [disabled]="isAlreadyACandidate(players[currentPlayerIndex].uid)"
+        (click)="proposePlayer()"
+      >
+        {{ "TABS.TABLE.GAME.DAY.PROPOSE_MODAL.proposeButton" | translate }}
+      </ion-button>
+    </div>
+  </app-table-template>
+</ion-content>

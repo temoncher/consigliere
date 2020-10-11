@@ -1,0 +1,11 @@
+query clubDetailsPage($id: String!) {
+  club(id: $id) {
+    id
+    title
+    location
+    avatar
+    admin
+    role
+    members
+  }
+}

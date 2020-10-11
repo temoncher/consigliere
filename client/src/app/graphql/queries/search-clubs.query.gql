@@ -1,0 +1,8 @@
+query searchClubs($query: String!) {
+  searchClubs(query: $query) {
+    id
+    title
+    avatar
+    location
+  }
+}

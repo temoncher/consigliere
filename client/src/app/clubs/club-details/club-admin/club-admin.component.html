@@ -1,0 +1,48 @@
+<ion-content class="saturated">
+  <div class="club-admin h100">
+    <ion-header>
+      <ion-button fill="clear" routerLink="../" routerDirection="back">
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="arrow-back-outline"
+        ></ion-icon>
+      </ion-button>
+
+      <ion-button
+        *ngIf="club?.role === ClubRole.Admin"
+        fill="clear"
+        (click)="presentAlert()"
+      >
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="trash-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-header>
+
+    <div class="hero-block">
+      <ion-thumbnail *ngIf="!loading" class="square-avatar">
+        <img [src]="club.avatar || defaultAvatar" />
+      </ion-thumbnail>
+      <h2 *ngIf="club" class="hero-block__title">
+        {{ club.title }}
+      </h2>
+      <ng-container *ngIf="loading">
+        <ion-thumbnail class="square-avatar">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <h2 class="hero-block__title">
+          <ion-skeleton-text style="width: 200px" animated></ion-skeleton-text>
+        </h2>
+      </ng-container>
+    </div>
+
+    <div class="club-admin__content round-slide">
+      <app-placeholder *ngIf="!loading" image="assets/wink.png">
+        Уже скоро!
+      </app-placeholder>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,29 @@
+@import "~src/theme/variables.scss";
+@import "~src/theme/custom-variables.scss";
+
+ion-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.clubs-page {
+  display: flex;
+  flex-direction: column;
+
+  .hero-block {
+    display: flex;
+    padding: 16px 32px;
+
+    >:first-child {
+      margin-right: 18px; // 18px = 16px + 2px(native margin of ion-button)
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+}

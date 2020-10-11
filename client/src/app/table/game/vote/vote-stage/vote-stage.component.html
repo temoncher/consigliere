@@ -1,0 +1,121 @@
+<div class="vote-stage">
+  <div>
+    <app-table-template>
+      <app-small-player-card
+        *ngFor="let player of players$ | async"
+        [slot]="player.number"
+        [playerId]="player.uid"
+        [disabled]="!!(quitPhases$ | async)[player.uid]"
+        (cardClick)="switchVote(player.uid)"
+      >
+        <div
+          slot="overlay"
+          *ngIf="voteInfoMap.get(player.uid)"
+          class="full-parent-overlay grid-content-center"
+          [ngClass]="
+            voteInfoMap.get(player.uid).uid ===
+            proposedPlayers[currentPlayerIndex].uid
+              ? 'background-color-danger'
+              : 'background-color-medium'
+          "
+        >
+          <ng-container
+            *ngIf="
+              voteInfoMap.get(player.uid).uid ===
+                proposedPlayers[currentPlayerIndex].uid;
+              then iconBlock;
+              else numberBlock
+            "
+          ></ng-container>
+          <ng-template #iconBlock>
+            <ion-icon name="thumbs-up"></ion-icon>
+          </ng-template>
+          <ng-template #numberBlock>
+            <span>{{ voteInfoMap.get(player.uid)?.number }}</span>
+          </ng-template>
+        </div>
+      </app-small-player-card>
+
+      <div slot="center">
+        <ion-card class="player-card">
+          <ion-card-header class="player-card__header">
+            <div
+              class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
+            >
+              {{ proposedPlayers[currentPlayerIndex]?.number }}
+            </div>
+            <ion-card-title class="player-card__header__title text-color-dark">
+              {{ proposedPlayers[currentPlayerIndex]?.nickname }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="player-card__content ion-text-center">
+            <ion-avatar class="player-card__avatar">
+              <img
+                [src]="
+                  proposedPlayers[currentPlayerIndex]?.avatar
+                    ? proposedPlayers[currentPlayerIndex]?.avatar
+                    : defaultAvatar
+                "
+              />
+            </ion-avatar>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div slot="under" class="controls-block flex-centralize">
+        <ng-container
+          *ngIf="isAllPlayersVoted; then endVoteBlock; else controlsBlock"
+        ></ng-container>
+
+        <ng-template #endVoteBlock>
+          <ion-button size="large" (click)="endVote()">
+            {{ "TABS.TABLE.GAME.VOTE.VOTE_STAGE.endVote" | translate }}
+          </ion-button>
+        </ng-template>
+
+        <ng-template #controlsBlock>
+          <div class="controls-block__buttons">
+            <ion-button
+              [disabled]="currentPlayerIndex === 0"
+              (click)="previous()"
+            >
+              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+            <ion-button
+              [disabled]="
+                this.currentPlayerIndex + 1 === this.proposedPlayers.length
+              "
+              (click)="next()"
+            >
+              <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+            </ion-button>
+          </div>
+        </ng-template>
+      </div>
+    </app-table-template>
+  </div>
+  <div class="app-divider"></div>
+
+  <ion-slides #numberSlider [options]="numberSliderConfig">
+    <ion-slide *ngFor="let proposedPlayer of proposedPlayers; let i = index">
+      <app-small-player-card
+        [showFalls]="false"
+        [playerId]="proposedPlayer.uid"
+        (click)="navigateToPlayer(i)"
+      >
+        <div
+          *ngIf="vote[proposedPlayer.uid]?.length"
+          slot="clips"
+          class="proposed-player-clip clip-button top-right text-only text-color-dark-contrast"
+          [ngClass]="
+            numberOfLeaderVotes === vote[proposedPlayer.uid]?.length
+              ? 'background-color-danger'
+              : 'background-color-medium'
+          "
+        >
+          {{ vote[proposedPlayer.uid]?.length }}
+        </div>
+      </app-small-player-card>
+    </ion-slide>
+  </ion-slides>
+</div>

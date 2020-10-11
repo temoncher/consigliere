@@ -1,0 +1,56 @@
+<ion-card
+  class="small-card"
+  *ngIf="player"
+  [ngClass]="
+    (showRole || showTeam) &&
+    (playerRole === Role.MAFIA || playerRole === Role.DON)
+      ? 'background-color-dark'
+      : ''
+  "
+  (click)="onClick($event)"
+>
+  <div
+    *ngIf="
+      showRole && (playerRole === Role.DON || playerRole === Role.SHERIFF)
+    "
+    [id]="playerRole === Role.DON ? 'don-label' : 'sheriff-label'"
+    class="clip-button top-left"
+    [ngClass]="
+      playerRole === Role.DON
+        ? 'background-color-danger'
+        : 'background-color-warning'
+    "
+  >
+    <ion-icon
+      class="text-color-dark-contrast"
+      [name]="playerRole === Role.DON ? 'rose' : 'star'"
+    ></ion-icon>
+  </div>
+
+  <slot name="clips"></slot>
+
+  <div
+    *ngIf="showFalls && fallsNumber"
+    class="falls-label clip-button top-right text-only background-color-danger text-color-dark-contrast"
+  >
+    {{ fallsNumber }}
+  </div>
+
+  <ion-card-content>{{ player.number }}</ion-card-content>
+
+  <div
+    *ngIf="showProposedPlayer && proposedPlayer?.number"
+    class="clip-button bottom-left text-only background-color-medium text-color-dark-contrast"
+  >
+    {{ proposedPlayer?.number }}
+  </div>
+
+  <div
+    *ngIf="playerQuitPhase"
+    class="quit-overlay full-parent-overlay background-color-transparent-dark grid-content-center"
+  >
+    <span class="text-color-medium">{{ playerQuitPhase }}</span>
+  </div>
+
+  <slot name="overlay"></slot>
+</ion-card>

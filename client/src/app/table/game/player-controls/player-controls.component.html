@@ -1,0 +1,51 @@
+<div class="player-controls">
+  <ion-slides
+    #numberSlider
+    id="player-controls__slider"
+    [hidden]="(isPlayerControlsOpened$ | async) === false || null || undefined"
+    [options]="numberSliderConfig"
+  >
+    <ng-container *ngFor="let player of players">
+      <ion-slide
+        [hidden]="
+          (isQuittedHidden$ | async) &&
+          !!(quitPhases$ | async)[player.uid]
+        "
+      >
+        <app-manage-player-card
+          [playerId]="player.uid"
+          [showFalls]="showFalls"
+          [showRole]="isRolesVisible$ | async"
+          [showProposedPlayer]="showProposedPlayers"
+        ></app-manage-player-card>
+      </ion-slide>
+    </ng-container>
+  </ion-slides>
+
+  <div *ngIf="isPlayerControlsOpened$ | async" class="toggle-controls">
+    <ion-button
+      size="small"
+      shape="round"
+      class="toggle-controls-button close"
+      (click)="toggleControlsVisibility()"
+    >
+      <ion-icon slot="icon-only" size="small" name="chevron-up"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div *ngIf="isPlayerControlsOpened$ | async" class="app-divider"></div>
+</div>
+
+<div
+  *ngIf="(isPlayerControlsOpened$ | async) === false"
+  class="toggle-controls"
+>
+  <ion-button
+    size="small"
+    shape="round"
+    class="toggle-controls-button open"
+    (click)="toggleControlsVisibility()"
+  >
+    <ion-icon slot="icon-only" size="small" name="chevron-down"></ion-icon>
+  </ion-button>
+</div>

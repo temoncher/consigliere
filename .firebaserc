@@ -1,7 +1,8 @@
 {
   "projects": {
     "dev": "mafia-consigliere-develop",
-    "prod": "mafia-consigliere"
+    "prod": "mafia-consigliere",
+    "default": "mafia-consigliere-develop"
   },
   "targets": {
     "mafia-consigliere-develop": {

@@ -1,0 +1,102 @@
+<app-placeholder
+  *ngIf="!loading && !clubs.length"
+  style="height: 80%"
+  image="assets/sad.png"
+>
+  Здесь пока еще пусто...
+</app-placeholder>
+
+<ng-container *ngIf="loading || clubs.length">
+  <ion-list class="cards-list">
+    <ng-container *ngIf="loading">
+      <ion-list-header>
+        <ion-skeleton-text
+          style="width: 50%; height: 16px"
+          animated
+        ></ion-skeleton-text>
+      </ion-list-header>
+
+      <ion-item *ngFor="let number of [0, 1, 2]" lines="none">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+
+        <ion-label>
+          <h3><ion-skeleton-text animated></ion-skeleton-text></h3>
+          <p>
+            <ion-skeleton-text style="width: 50%" animated></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="!loading">
+      <ion-item-group *ngIf="administratedClubs?.length">
+        <ion-list-header>
+          {{ "CLUB_ROLE.ADMIN" | translate }}
+        </ion-list-header>
+
+        <ion-item
+          *ngFor="let club of administratedClubs"
+          lines="none"
+          [routerLink]="club.id"
+        >
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || defaultClubAvatar" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ club.location }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group *ngIf="confidantClubs?.length">
+        <ion-list-header>
+          {{ "CLUB_ROLE.CONFIDANT" | translate }}
+        </ion-list-header>
+
+        <ion-item
+          *ngFor="let club of confidantClubs"
+          lines="none"
+          [routerLink]="club.id"
+        >
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || defaultClubAvatar" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ club.location }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group *ngIf="memberClubs?.length">
+        <ion-list-header>{{ "CLUB_ROLE.MEMBER" | translate }}</ion-list-header>
+
+        <ion-item
+          *ngFor="let club of memberClubs"
+          lines="none"
+          [routerLink]="club.id"
+        >
+          <div slot="start">
+            <ion-avatar>
+              <img [src]="club.avatar || defaultClubAvatar" />
+            </ion-avatar>
+          </div>
+
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ club.location }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ng-container>
+  </ion-list>
+</ng-container>

@@ -1,0 +1,9 @@
+overwrite: true
+schema: "http://localhost:5001/mafia-consigliere-develop/us-central1/api/graphql"
+documents: "src/app/graphql/**/*.gql"
+generates:
+  src/app/graphql/gql.generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-apollo-angular"

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "module": "commonjs",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "~types/*": [
+        "../types/*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "test",
+    "../types"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

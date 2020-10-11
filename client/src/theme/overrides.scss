@@ -1,0 +1,5 @@
+@import './custom-variables.scss';
+
+ion-skeleton-text {
+  border-radius: var(--app-border-radius);
+}

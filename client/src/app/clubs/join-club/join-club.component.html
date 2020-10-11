@@ -1,0 +1,51 @@
+<ion-searchbar
+  class="clubs-searchbar"
+  placeholder="Название клуба"
+  animated
+  [formControl]="search"
+></ion-searchbar>
+
+<ion-list-header>
+  Клубы
+  <ion-spinner name="crescent" [hidden]="!loading"></ion-spinner>
+</ion-list-header>
+
+<app-placeholder
+  [hidden]="search.dirty"
+  style="height: 80%"
+  image="assets/wink.png"
+>
+  Начинайте искать!
+</app-placeholder>
+
+<app-placeholder
+  [hidden]="!loading && clubs?.length && search.dirty"
+  style="height: 80%"
+  image="assets/sad.png"
+>
+  <span class="d-block">По вашему запросу</span>
+  <span class="d-block">не найдено клубов</span>
+</app-placeholder>
+
+<ng-container *ngIf="clubs?.length">
+  <ion-list class="cards-list">
+    <ion-item-group *ngIf="clubs?.length">
+      <ion-item
+        *ngFor="let club of clubs"
+        lines="none"
+        (click)="navigateToClub(club.id)"
+      >
+        <div slot="start">
+          <ion-avatar>
+            <img [src]="club.avatar || defaultClubAvatar" />
+          </ion-avatar>
+        </div>
+
+        <ion-label>
+          <h3>{{ club.title }}</h3>
+          <p>{{ club.location }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</ng-container>

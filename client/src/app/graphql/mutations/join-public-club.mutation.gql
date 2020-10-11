@@ -1,0 +1,3 @@
+mutation joinPublicClub($clubId: String!) {
+  joinPublicClub(clubId: $clubId)
+}

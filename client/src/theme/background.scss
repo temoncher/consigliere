@@ -1,0 +1,11 @@
+@import './custom-variables.scss';
+
+.saturated {
+  --background: var(--app-color-saturated);
+  --color: var(--app-color-saturated-contrast)
+}
+
+.light {
+  --background: var(--app-color-light);
+  --color: var(--app-color-light-contrast)
+}

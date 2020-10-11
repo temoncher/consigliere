@@ -1,0 +1,9 @@
+query clubsPage {
+  currentPlayerClubs {
+    id
+    avatar
+    title
+    role
+    location
+  }
+}

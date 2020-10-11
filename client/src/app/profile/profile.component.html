@@ -1,0 +1,69 @@
+<ion-content class="saturated">
+  <div class="profile-page h100">
+    <ion-header>
+      <ion-button fill="clear" (click)="logout()">
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="exit-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-header>
+
+    <div class="hero-block">
+      <ion-thumbnail *ngIf="!loading" class="square-avatar">
+        <img [src]="user.avatar || defaultAvatar" />
+      </ion-thumbnail>
+      <h2 *ngIf="user" class="hero-block__title">
+        {{ user.nickname }}
+      </h2>
+      <ng-container *ngIf="loading">
+        <ion-thumbnail class="square-avatar">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <h2 class="hero-block__title">
+          <ion-skeleton-text style="width: 200px" animated></ion-skeleton-text>
+        </h2>
+      </ng-container>
+    </div>
+
+    <div class="profile-page__content round-slide">
+      <ion-list-header>Игры</ion-list-header>
+      <app-placeholder
+        *ngIf="!loading && !games?.length"
+        style="height: 80%;"
+        image="assets/sad.png"
+      >
+        Здесь пока еще пусто...
+      </app-placeholder>
+
+      <ion-list class="games-list cards-list">
+        <ng-container *ngIf="loading">
+          <ion-item *ngFor="let number of [0, 1, 2, 3, 4]" lines="none">
+            <ion-avatar slot="start">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-avatar>
+
+            <ion-label>
+              <h3><ion-skeleton-text animated></ion-skeleton-text></h3>
+              <p><ion-skeleton-text style="width: 50%;" animated></ion-skeleton-text></p>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+
+        <ng-container *ngIf="games?.length">
+          <ion-item *ngFor="let game of games" lines="none">
+            <ion-avatar slot="start">
+              <img [src]="defaultGameAvatar" />
+            </ion-avatar>
+
+            <ion-label>
+              <h3>{{ "lol" }}</h3>
+              <p>{{ "ROLE." + game.roles[user.uid] | translate }}</p>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

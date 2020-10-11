@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "TABS.TABLE.GAME.RESULT.toolbarTitle" | translate }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="proceedToMenu()">
+        <ion-label color="primary">
+          {{ "TABS.TABLE.GAME.RESULT.menuButton" | translate }}
+        </ion-label>
+        <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="result-container light h100">
+  <div class="result-container__sticky sticky top">
+    <div
+      class="result-container__sticky__text"
+      [ngSwitch]="gameResult$ | async"
+    >
+      <ng-container *ngSwitchCase="GameResult.MAFIA">
+        <span>
+          <ion-text color="danger">
+            {{ "TABS.TABLE.GAME.RESULT.mafia" | translate }}
+          </ion-text>
+        </span>
+        <span>{{ "TABS.TABLE.GAME.RESULT.mafiaWon" | translate }}</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="GameResult.CIVILIANS">
+        <span>
+          <ion-text color="primary">
+            {{ "TABS.TABLE.GAME.RESULT.civilians" | translate }}
+          </ion-text>
+        </span>
+        <span>{{ "TABS.TABLE.GAME.RESULT.civiliansWon" | translate }}</span>
+      </ng-container>
+    </div>
+
+    <div class="app-divider"></div>
+  </div>
+
+  <div class="result-container__list" [ngSwitch]="gameResult$ | async">
+    <ng-container *ngSwitchCase="GameResult.MAFIA">
+      <app-result-list
+        [players]="mafiaPlayers$ | async"
+        [roles]="roles$ | async"
+      ></app-result-list>
+    </ng-container>
+    <ng-container *ngSwitchCase="GameResult.CIVILIANS">
+      <app-result-list
+        class="result-container__list"
+        [players]="citizenPlayers$ | async"
+        [roles]="roles$ | async"
+      ></app-result-list>
+    </ng-container>
+  </div>
+</ion-content>

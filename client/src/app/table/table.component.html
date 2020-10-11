@@ -1,0 +1,36 @@
+<ion-content class="no-scroll">
+  <div class="table-menu h100">
+    <div class="hero-block">
+      <ion-thumbnail class="square-avatar">
+        <ion-img [src]="consigliereLogo"></ion-img>
+      </ion-thumbnail>
+      <h2 class="hero-block__title">
+        Consigliere
+        <ion-badge color="danger">alpha</ion-badge>
+      </h2>
+    </div>
+
+    <div class="table-menu__buttons-container">
+      <ion-button
+        *ngIf="isGameStarted$ | async"
+        color="primary"
+        shape="round"
+        routerLink="game"
+        id="continue-button"
+        routerDirection="forward"
+      >
+        {{ "TABS.TABLE.continue" | translate }}
+      </ion-button>
+      <ion-button
+        data-cy="new-game-button"
+        color="primary"
+        shape="round"
+        routerLink="preparation"
+        routerDirection="forward"
+        (click)="resetGameState()"
+      >
+        {{ "TABS.TABLE.newGame" | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

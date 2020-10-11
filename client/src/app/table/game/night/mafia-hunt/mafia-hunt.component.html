@@ -1,0 +1,84 @@
+<app-portal selector="#game-buttons-outlet">
+  <ion-button id="next-stage-button" (click)="next()">
+    <ion-label color="primary">{{
+      "TABS.TABLE.GAME.NIGHT.proceedToDon" | translate
+    }}</ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</app-portal>
+
+<app-table-template class="mafia-hunt">
+  <app-small-player-card
+    *ngFor="let player of players$ | async"
+    [slot]="player.number"
+    [disabled]="!!(qutiPhases$ | async)[player.uid]"
+    [playerId]="player.uid"
+    (cardClick)="navigateToPlayer(player.number)"
+  >
+    <div
+      *ngIf="(victimsMap$ | async).get(player.uid)?.length"
+      slot="clips"
+    >
+      <div
+        class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast"
+      >
+        {{ (victimsMap$ | async).get(player.uid)?.length }}
+      </div>
+    </div>
+  </app-small-player-card>
+
+  <div slot="center" class="card-container">
+    <ion-card class="center-card">
+      <ion-card-header class="player-card__header">
+        <div
+          class="clip-button top-left text-only background-color-primary text-color-dark-contrast"
+        >
+          {{ players[currentPlayerIndex].number }}
+        </div>
+        <ion-card-title class="player-card__header__title text-color-dark">
+          {{ players[currentPlayerIndex].nickname }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="player-card__content">
+        <ion-avatar class="player-card__avatar">
+          <img
+            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
+          />
+        </ion-avatar>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="mafia-cards-container">
+      <app-small-player-card
+        *ngFor="let mafiaPlayer of aliveMafia"
+        showTeam="true"
+        [playerId]="mafiaPlayer.uid"
+        (cardClick)="shootPlayer(mafiaPlayer.uid)"
+      >
+        <div
+          slot="overlay"
+          *ngIf="currentShot(mafiaPlayer)"
+          class="full-parent-overlay grid-content-center"
+          [ngClass]="
+            currentShot(mafiaPlayer) === players[currentPlayerIndex].uid
+              ? 'background-color-danger'
+              : 'background-color-medium'
+          "
+        >
+          <ion-icon name="checkmark"></ion-icon>
+        </div>
+      </app-small-player-card>
+    </div>
+  </div>
+
+  <div slot="under" class="grid-content-center">
+    <ion-button
+      size="large"
+      [disabled]="numberOfShots !== aliveMafia.length"
+      (click)="next()"
+    >
+      {{ "TABS.TABLE.GAME.NIGHT.MAFIA_HUNTS.nextStageButton" | translate }}
+    </ion-button>
+  </div>
+</app-table-template>

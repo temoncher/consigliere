@@ -1,0 +1,94 @@
+<ion-content class="saturated">
+  <div class="club-details h100">
+    <ion-header>
+      <ion-button fill="clear" routerLink="../" routerDirection="back">
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="arrow-back-outline"
+        ></ion-icon>
+      </ion-button>
+
+      <ion-button
+        *ngIf="
+          club?.role === ClubRole.Admin || club?.role === ClubRole.Confidant
+        "
+        fill="clear"
+        routerLink="admin"
+      >
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="settings-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-header>
+
+    <div class="hero-block">
+      <ng-container *ngIf="club">
+        <ion-thumbnail *ngIf="!loading" class="square-avatar">
+          <img [src]="club.avatar || defaultAvatar" />
+        </ion-thumbnail>
+        <div class="hero-block__title">
+          <h2 class="primary-text" *ngIf="club">
+            {{ club.title }}
+          </h2>
+          <p class="secondary-text">{{ club.location }}</p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loading">
+        <ion-thumbnail class="square-avatar">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <div class="hero-block__title">
+          <h2 class="primary-text">
+            <ion-skeleton-text
+              style="width: 200px"
+              animated
+            ></ion-skeleton-text>
+          </h2>
+          <p class="secondary-text">
+            <ion-skeleton-text
+              style="width: 100px"
+              animated
+            ></ion-skeleton-text>
+          </p>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="club-details__content round-slide with-actions">
+      <div *ngIf="club" class="round-slide__actions club-actions">
+        <div class="action">
+          <div [hidden]="!statusLoading">
+            <ion-spinner name="crescent" color="dark"></ion-spinner>
+            <ion-text color="medium">...</ion-text>
+          </div>
+          <ng-container *ngIf="!statusLoading">
+            <div (click)="presentLeaveAlert()">
+              <ion-icon
+                *ngIf="club.role"
+                color="medium"
+                size="large"
+                name="checkbox-outline"
+              ></ion-icon>
+              <ion-text *ngIf="club.role" color="medium">В клубе</ion-text>
+            </div>
+            <div *ngIf="!club.role" (click)="joinClub()">
+              <ion-icon
+                color="primary"
+                size="large"
+                name="enter-outline"
+              ></ion-icon>
+              <ion-text color="primary"> Вступить </ion-text>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <app-placeholder *ngIf="!loading" image="assets/sad.png">
+        Здесь пока еще пусто...
+      </app-placeholder>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,6 @@
+@import "~src/theme/variables.scss";
+
+:host {
+  overflow: auto;
+  flex: 1;
+}

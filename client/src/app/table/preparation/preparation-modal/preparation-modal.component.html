@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.toolbarTitle" | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outlined" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-list class="cards-list">
+  <div class="sticky top">
+    <!-- Add unauthorized user button-->
+    <div class="d-flex">
+      <ion-item
+        class="add-new"
+        data-cy="add-guest-item"
+        lines="none"
+        (click)="choosePlayer()"
+      >
+        <ion-icon slot="start" name="add" color="primary"></ion-icon>
+        <ion-label color="primary">
+          {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.addGuest" | translate }}
+        </ion-label>
+      </ion-item>
+    </div>
+    <!-- END Add unauthorized user button-->
+    <div class="app-divider"></div>
+  </div>
+</ion-list>
+
+<ion-content class="light">
+  <ion-list class="cards-list">
+    <ion-item
+      *ngFor="let user of users"
+      lines="none"
+      (click)="choosePlayer(user)"
+    >
+      <ion-avatar slot="start">
+        <img [src]="user.avatar ? user.avatar : defaultAvatar" />
+      </ion-avatar>
+      <ion-label>
+        <h3>{{ user.nickname }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

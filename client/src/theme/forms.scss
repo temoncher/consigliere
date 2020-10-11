@@ -1,0 +1,26 @@
+@import "./variables.scss";
+@import "./custom-variables.scss";
+
+.app-form {
+  &__error-container {
+    height: 16px;
+  }
+
+  &__title {
+    font-weight: bold;
+  }
+
+  ion-item {
+    --padding-start: 0;
+  }
+
+  ion-button {
+    margin-top: 32px;
+  }
+}
+
+ion-input.outlined {
+  border-radius: var(--app-border-radius);
+  border-width: 2px;
+  background-color: var(--app-color-light);
+}

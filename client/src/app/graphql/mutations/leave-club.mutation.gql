@@ -1,0 +1,3 @@
+mutation leaveClub($clubId: String!) {
+  leaveClub(clubId: $clubId)
+}

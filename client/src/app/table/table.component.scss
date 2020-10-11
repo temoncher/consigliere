@@ -1,0 +1,19 @@
+.table-menu {
+  display: flex;
+  flex-direction: column;
+
+  .hero-block {
+    padding: 64px 0 0 32px;
+    flex: 1;
+
+    &__title span {
+      display: block;
+    }
+  }
+
+  &__buttons-container {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+  }
+}

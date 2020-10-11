@@ -1,0 +1,125 @@
+@import "./custom-variables.scss";
+@import "./variables.scss";
+
+ion-card {
+  margin: var(--app-default-card-margin);
+}
+// Small card
+ion-card.small-card {
+  position: relative;
+  display: grid;
+  place-content: center;
+
+  width: 12.8vmin;
+  max-width: 60px;
+  height: 19vmin;
+  max-height: 90px;
+
+  ion-card-content {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
+
+// Large player card
+ion-card.large-card {
+  min-width: 59.5vmin;
+  max-width: 59.5vmin;
+  height: 80vmin;
+}
+
+.player-card {
+  position: relative;
+  min-width: 59.5vmin;
+  max-width: 59.5vmin;
+
+  &__header {
+    text-align: center;
+    padding-bottom: 0;
+
+    &__title {
+      font-size: 1.2rem;
+    }
+  }
+
+  &__content {
+    padding-top: 12px !important;
+  }
+
+  &__avatar {
+    width: 100%;
+    height: auto;
+    padding-bottom: 12%;
+  }
+
+  .progress {
+    position: relative;
+    padding-bottom: 12%;
+
+    &__circle {
+      background-size: contain;
+      border-radius: 100%;
+    }
+
+    &__badge {
+      position: absolute;
+      left: 70%;
+      top: 70%;
+
+      min-width: 12.8px;
+      padding: 4px 8px;
+      font-size: 1.8rem;
+    }
+  }
+
+  &.player-card--template {
+    min-width: unset;
+
+    &__header .clip-button {
+      font-size: 1.2rem;
+    }
+  }
+
+  .full-parent-overlay span {
+    font-size: 5rem;
+    font-weight: bold;
+  }
+}
+
+// Cards list
+.cards-list {
+  .clip-button {
+    font-size: 0.8rem;
+  }
+
+  ion-note {
+    padding: 8px;
+  }
+
+  ion-item {
+    margin: 8px;
+    border-radius: var(--app-border-radius);
+    box-shadow: var(--app-box-shadow);
+
+    ion-label {
+      padding: 8px 0;
+    }
+  }
+
+  ion-item.add-new {
+    padding: 0;
+    border: var(--app-border-width) solid var(--ion-color-primary);
+    box-shadow: unset;
+  }
+
+  ion-label {
+    h3 {
+      font-weight: bold;
+      color: var(--ion-color-dark-tint);
+    }
+
+    p {
+      height: 17px;
+    }
+  }
+}

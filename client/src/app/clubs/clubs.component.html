@@ -1,0 +1,52 @@
+<ion-content class="saturated">
+  <div class="clubs-page h100">
+    <div class="hero-block">
+      <ion-button
+        [ngClass]="{ 'flex-1': pageState === ClubsPageState.JOIN }"
+        size="large"
+        color="light"
+        (click)="create()"
+      >
+        <ion-icon
+          *ngIf="pageState !== ClubsPageState.JOIN"
+          slot="icon-only"
+          [color]="pageState === ClubsPageState.CREATE ? 'danger' : undefined"
+          [icon]="
+            pageState === ClubsPageState.CREATE
+              ? 'close-outline'
+              : 'add-outline'
+          "
+        ></ion-icon>
+        <ng-container *ngIf="pageState === ClubsPageState.JOIN">
+          Создать
+        </ng-container>
+      </ion-button>
+      <ion-button
+        [ngClass]="{ 'flex-1': pageState !== ClubsPageState.JOIN }"
+        size="large"
+        color="light"
+        (click)="join()"
+      >
+        <ion-icon
+          *ngIf="pageState === ClubsPageState.JOIN"
+          slot="icon-only"
+          icon="close-outline"
+          [color]="pageState === ClubsPageState.JOIN ? 'danger' : undefined"
+        ></ion-icon>
+        <ng-container *ngIf="pageState !== ClubsPageState.JOIN">
+          Присоединиться
+        </ng-container>
+      </ion-button>
+    </div>
+
+    <div class="clubs-page__content round-slide" [ngSwitch]="pageState">
+      <app-clubs-list
+        *ngSwitchCase="ClubsPageState.LIST"
+        [loading]="loading"
+        [clubs]="clubs"
+      ></app-clubs-list>
+      <app-create-club *ngSwitchCase="ClubsPageState.CREATE" (create)="resetPage()"></app-create-club>
+      <app-join-club *ngSwitchCase="ClubsPageState.JOIN"></app-join-club>
+    </div>
+  </div>
+</ion-content>

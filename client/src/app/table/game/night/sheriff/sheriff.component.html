@@ -1,0 +1,73 @@
+<app-portal selector="#game-buttons-outlet">
+  <ion-button id="next-stage-button" (click)="next()">
+    <ion-label color="primary">{{ 'TABS.TABLE.GAME.NIGHT.proceedToMorning' | translate }}</ion-label>
+    <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</app-portal>
+
+<div class="sheriff flex-centralize">
+  <app-table-template>
+    sheriffCheck$
+    <app-small-player-card
+      *ngFor="let player of players$ | async"
+      [slot]="player.number"
+      [playerId]="player.uid"
+      (cardClick)="navigateToPlayer(player.number)"
+    >
+      <div
+        *ngIf="(sheriffCheck$ | async) === player.uid"
+        slot="overlay"
+        class="full-parent-overlay grid-content-center background-color-warning"
+      >
+        <ion-icon name="star"></ion-icon>
+      </div>
+    </app-small-player-card>
+
+    <div slot="center">
+      <ion-card class="player-card player-card--template">
+        <ion-card-header class="player-card__header">
+          <div
+            class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
+          >
+            {{ (players$ | async)[currentPlayerIndex]?.number }}
+          </div>
+          <ion-card-title class="player-card__header__title text-color-dark">
+            {{ (players$ | async)[currentPlayerIndex]?.nickname }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content
+          class="player-card__content role-card__content ion-text-center"
+        >
+          <ion-avatar class="player-card__avatar">
+            <img
+              [src]="
+                (players$ | async)[currentPlayerIndex].avatar ||
+                defaultAvatar
+              "
+            />
+          </ion-avatar>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div slot="under" class="grid-content-center">
+      <div
+        *ngIf="
+          checkedPlayerIndex !== currentPlayerIndex;
+          then checkButton;
+          else nextButton
+        "
+      ></div>
+      <ng-template #checkButton>
+        <ion-button size="large" (click)="check()">
+          {{ "TABS.TABLE.GAME.NIGHT.SHERIFF.checkButton" | translate }}
+        </ion-button>
+      </ng-template>
+      <ng-template #nextButton>
+        <ion-button size="large" (click)="next()">
+          {{ "TABS.TABLE.GAME.NIGHT.SHERIFF.nextButton" | translate }}
+        </ion-button>
+      </ng-template>
+    </div>
+  </app-table-template>
+</div>

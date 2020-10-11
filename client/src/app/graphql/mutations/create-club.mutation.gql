@@ -1,0 +1,9 @@
+mutation createClub($club: club!) {
+  createClub(club: $club) {
+    id
+    avatar
+    title
+    role
+    location
+  }
+}
