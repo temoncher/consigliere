@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-client:
-    name: Build
+    name: Build client
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -35,11 +35,49 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: www
-          path: client/www
+          path: www
       - name: Deploy firebase hosting
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: dev
+  build-server:
+    name: Build server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: |
+          cd client
+          yarn install
+      - name: Build
+        run: |
+          cd client
+          yarn install
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+  deploy-functions:
+    name: Deploy functions
+    needs: build-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: server/dist
+      - name: Deploy firebase functions
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: dev
