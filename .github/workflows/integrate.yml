@@ -1,0 +1,29 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install client NPM dependencies
+        run: |
+          cd client
+          yarn install
+      - name: Lint client
+        run: |
+          cd client
+          yarn lint
