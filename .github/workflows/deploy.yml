@@ -1,4 +1,4 @@
-name: Firebase Continuous Deployment
+name: Firebase dev-stand deployment
 
 on:
   pull_request:
@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: www
-          path: client/www
+          path: www
   deploy-hosting:
     name: Deploy hosting
     needs: build-client
@@ -35,7 +35,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: www
-          path: www
+          path: client/www
       - name: Deploy firebase hosting
         uses: w9jds/firebase-action@master
         with:
