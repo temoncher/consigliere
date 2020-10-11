@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  lint:
+  client-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,4 +26,26 @@ jobs:
       - name: Lint client
         run: |
           cd client
+          yarn lint
+  server-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install server NPM dependencies
+        run: |
+          cd server
+          yarn install
+      - name: Lint server
+        run: |
+          cd server
           yarn lint
