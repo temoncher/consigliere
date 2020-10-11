@@ -9,7 +9,8 @@ import 'reflect-metadata';
 import { AppModule } from './app.module';
 
 console.log('Using emulators environment: ', process.env.FUNCTIONS_EMULATOR);
-console.log('on host: ', process.env.FIRESTORE_EMULATOR_HOST);
+console.log('Firestore is located on host: ', process.env.FIRESTORE_EMULATOR_HOST);
+console.log('Project:', process.env.GCLOUD_PROJECT);
 
 const server: express.Express = express();
 
