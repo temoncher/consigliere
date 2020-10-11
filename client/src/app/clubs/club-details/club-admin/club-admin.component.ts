@@ -51,11 +51,7 @@ export class ClubAdminComponent implements OnInit {
         refetchQueries: [{ query: ClubsPageDocument }],
       },
     ).subscribe(() => {
-      this.store.dispatch(new Navigate(
-        ['../'],
-        null,
-        { relativeTo: this.activateRoute },
-      ));
+      this.store.dispatch(new Navigate(['tabs', 'clubs']));
     });
   }
 

@@ -11,12 +11,16 @@
 
       <ion-button
         *ngIf="
-          club?.role === ClubRole.Admin && club?.role === ClubRole.Confidant
+          club?.role === ClubRole.Admin || club?.role === ClubRole.Confidant
         "
         fill="clear"
         routerLink="admin"
       >
-        <ion-icon color="light" slot="icon-only" name="settings"></ion-icon>
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="settings-outline"
+        ></ion-icon>
       </ion-button>
     </ion-header>
 

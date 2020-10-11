@@ -12,15 +12,15 @@ export class AuthGuard implements CanActivate {
   constructor(private firebaseAuth: FirebaseAuthenticationService) {}
 
   async canActivate(executionContextHost: ExecutionContextHost): Promise<boolean> {
-    const gqlContext = GqlExecutionContext.create(executionContextHost).getContext<IGQLContext>();
+    const gqlContextData = GqlExecutionContext.create(executionContextHost).getContext<IGQLContext>();
 
-    if (!gqlContext.headers.authorization) {
+    if (!gqlContextData.headers.authorization) {
       throw new AuthenticationError('Authorization header is missing');
     }
 
-    const decodedToken = await this.decodeToken(gqlContext.headers.authorization);
+    const decodedToken = await this.decodeToken(gqlContextData.headers.authorization);
 
-    gqlContext.user = await this.firebaseAuth.getUser(decodedToken.uid);
+    gqlContextData.user = await this.firebaseAuth.getUser(decodedToken.uid);
 
     return true;
   }

@@ -23,6 +23,12 @@ export class ClubDetailsComponent implements OnInit {
   loading = true;
   statusLoading = true;
 
+  leavePrompt = {
+    header: 'Вы уходите?',
+    defaultMessage: 'Вы точно хотите уйти из клуба?',
+    adminMessage: 'Глава должен сложить полномочия перед уходом.',
+  };
+
   defaultAvatar = consigliereLogo;
   ClubRole = ClubRole;
 
@@ -38,6 +44,7 @@ export class ClubDetailsComponent implements OnInit {
     public alertController: AlertController,
   ) {
     // TODO: ubsubscribe
+    // TODO: implement club not found page
     this.activateRoute.params.pipe(
       switchMap(({ clubId }) => this.clubDetailsPageGQL.watch({ id: clubId }).valueChanges),
     ).subscribe(({ data, loading }) => {
@@ -80,20 +87,30 @@ export class ClubDetailsComponent implements OnInit {
   }
 
   async presentLeaveAlert() {
+    const message = this.club.role === ClubRole.Admin ? this.leavePrompt.adminMessage : this.leavePrompt.defaultMessage;
+    const defaultButtons = [
+      {
+        text: 'Уйти',
+        role: 'confirm',
+        handler: () => this.leaveClub(),
+      },
+      {
+        text: 'Остаться',
+        role: 'cancel',
+      },
+    ];
+    const adminButtons = [
+      {
+        text: 'Остаться',
+        role: 'cancel',
+      },
+    ];
+    const buttons = this.club.role === ClubRole.Admin ? adminButtons : defaultButtons;
+
     const alert = await this.alertController.create({
-      header: 'Вы уходите?',
-      message: 'Вы точно хотите уйти из клуба?',
-      buttons: [
-        {
-          text: 'Уйти',
-          role: 'confirm',
-          handler: () => this.leaveClub(),
-        },
-        {
-          text: 'Остаться',
-          role: 'cancel',
-        },
-      ],
+      header: this.leavePrompt.header,
+      message,
+      buttons,
     });
 
     await alert.present();

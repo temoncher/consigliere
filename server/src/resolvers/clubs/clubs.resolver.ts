@@ -5,6 +5,7 @@ import { ApolloError, ForbiddenError } from 'apollo-server-express';
 import * as fbAdmin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
+import { ClubAdminGuard } from '@/guards/club-admin.guard';
 import { IClub } from '@/interfaces/club.interface';
 import { IDocumentMeta } from '@/interfaces/document-meta.interface';
 import { ClubsCollection, UsersCollection } from '@/models/collections.types';
@@ -13,7 +14,6 @@ import { AlgoliaService } from '@/services/algolia.service';
 import {
   ClubsInputName,
   GetClubArgs,
-  ResignArgs,
   NewClubInput,
   SearchClubArgs,
 } from './clubs.input';
@@ -73,6 +73,7 @@ export class ClubsResolver {
   }
 
   @Mutation(() => ID)
+  @UseGuards(ClubAdminGuard)
   async leaveClub(
     @Args('clubId') clubId: string,
       @Context('user') currentUser: fbAdmin.auth.UserRecord,
@@ -80,16 +81,8 @@ export class ClubsResolver {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
 
-    if (!clubData) {
-      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
-    }
-
     if (!clubData.members.includes(currentUser.uid)) {
       throw new ApolloError('You are not a member of this club', UserErrorCode.NOT_FOUND);
-    }
-
-    if (clubData.admin === currentUser.uid) {
-      throw new ApolloError('Club admin should resign before leaving', ClubAdminErrorCode.SHOULD_RESIGN);
     }
 
     const members = clubData.members.filter((memberId) => memberId !== currentUser.uid);
@@ -141,26 +134,27 @@ export class ClubsResolver {
   }
 
   @Mutation(() => ClubOutput)
+  @UseGuards(ClubAdminGuard)
+  async promoteToConfidant(
+    @Args('memberId') memberId: string,
+      @Context('user') currentUser: fbAdmin.auth.UserRecord,
+  ): Promise<ClubOutput> {}
+
+  @Mutation(() => ClubOutput)
+  @UseGuards(ClubAdminGuard)
   async resign(
-    @Args() resignArgs: ResignArgs,
+    @Args('clubId') clubId: string,
+      @Args('successorId') successorId: string,
       @Context('user') currentUser: fbAdmin.auth.UserRecord,
   ): Promise<ClubOutput> {
-    const clubDoc = await this.clubsCollection.doc(resignArgs.clubId).get();
+    const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
 
-    if (!clubData) {
-      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
-    }
-
-    if (clubData.admin !== currentUser.uid) {
-      throw new ApolloError('Only club admin can resign', ClubErrorCode.FORBIDDEN);
-    }
-
-    if (!clubData.confidants.includes(resignArgs.successorId)) {
+    if (!clubData.confidants.includes(successorId)) {
       throw new ApolloError('Successor should be club\'s confidant', ClubAdminErrorCode.SUCCESSOR_SHOULD_BE_CONFIDANT);
     }
 
-    const succcessorDoc = await this.usersCollection.doc(resignArgs.successorId).get();
+    const succcessorDoc = await this.usersCollection.doc(successorId).get();
     const succcessorData = succcessorDoc.data();
 
     if (!succcessorData) {
@@ -168,17 +162,17 @@ export class ClubsResolver {
     }
 
     const confidants = clubData.confidants.map((userId) => {
-      if (userId !== resignArgs.successorId) return userId;
+      if (userId !== successorId) return userId;
 
       return currentUser.uid;
     });
-    const admin = resignArgs.successorId;
+    const admin = successorId;
     const meta: Partial<IDocumentMeta> = {
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
 
-    await this.clubsCollection.doc(resignArgs.clubId).set({
+    await this.clubsCollection.doc(clubId).set({
       ...meta,
       admin,
       confidants,
@@ -195,20 +189,12 @@ export class ClubsResolver {
   }
 
   @Mutation(() => ClubOutput)
+  @UseGuards(ClubAdminGuard)
   async deleteClub(
     @Args('clubId') clubId: string,
-      @Context('user') currentUser: fbAdmin.auth.UserRecord,
   ): Promise<ClubOutput> {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
-
-    if (!clubData) {
-      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
-    }
-
-    if (clubData.admin !== currentUser.uid) {
-      throw new ForbiddenError('Only admins can delete clubs');
-    }
 
     await this.clubsCollection.doc(clubId).delete();
 
@@ -226,6 +212,11 @@ export class ClubsResolver {
   ): Promise<ClubOutput> {
     const clubDoc = await this.clubsCollection.doc(args.id).get();
     const clubData = clubDoc.data();
+
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
     let role: ClubRole;
 
     if (clubData.members.includes(currentUser.uid)) {
@@ -238,10 +229,6 @@ export class ClubsResolver {
 
     if (clubData.admin === currentUser.uid) {
       role = ClubRole.ADMIN;
-    }
-
-    if (!clubData) {
-      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
     return {
@@ -282,8 +269,10 @@ export class ClubsResolver {
   async searchClubs(
     @Args() { query, limit }: SearchClubArgs,
   ): Promise<ClubSearchOutput[]> {
-    const { hits } = await this.algoliaService.clubsIndex
-      .search<IClub & IDocumentMeta & { objectID: string }>(query, { hitsPerPage: limit || 10 });
+    const { hits } = await this.algoliaService.clubsIndex.search<IClub & IDocumentMeta & { objectID: string }>(
+      query,
+      { hitsPerPage: limit || 10 },
+    );
     const clubs = hits.map(({ objectID, ...hit }) => ({ ...hit, id: objectID }));
 
     return clubs;

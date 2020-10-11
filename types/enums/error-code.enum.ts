@@ -15,6 +15,7 @@ export enum ClubErrorCode {
 }
 
 export enum ClubAdminErrorCode {
+  NOT_ENOUGH_PERMISSIONS = 'club-admin/not-enough-permissions',
   SHOULD_RESIGN = 'club-admin/should-resign-before-leaving',
   SUCCESSOR_SHOULD_BE_CONFIDANT = 'club-admin/successor-should-be-confidant',
 }
