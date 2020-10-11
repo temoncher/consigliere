@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
 import { switchMap } from 'rxjs/operators';
 
 import {
   ClubDetailsPageGQL,
+  ClubDetailsPageDocument,
   ClubDetailsPageQuery,
   ClubRole,
-  ClubsPageDocument,
-  DeleteClubGQL,
+  JoinPublicClubGQL,
+  LeaveClubGQL,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -22,6 +21,7 @@ import { consigliereLogo } from '@/shared/constants/avatars';
 export class ClubDetailsComponent implements OnInit {
   club: ClubDetailsPageQuery['club'];
   loading = true;
+  statusLoading = true;
 
   defaultAvatar = consigliereLogo;
   ClubRole = ClubRole;
@@ -31,10 +31,10 @@ export class ClubDetailsComponent implements OnInit {
   }
 
   constructor(
-    private store: Store,
     private activateRoute: ActivatedRoute,
     private clubDetailsPageGQL: ClubDetailsPageGQL,
-    private deleteClubGQL: DeleteClubGQL,
+    private joinPublicClubGQL: JoinPublicClubGQL,
+    private leaveClubGQL: LeaveClubGQL,
     public alertController: AlertController,
   ) {
     // TODO: ubsubscribe
@@ -43,13 +43,40 @@ export class ClubDetailsComponent implements OnInit {
     ).subscribe(({ data, loading }) => {
       this.club = data.club;
       this.loading = loading;
+      this.statusLoading = loading;
     });
   }
 
   ngOnInit() {}
 
   leaveClub() {
+    const clubId = this.club.id;
 
+    this.statusLoading = true;
+    this.leaveClubGQL.mutate(
+      { clubId },
+      {
+        refetchQueries: [{
+          query: ClubDetailsPageDocument,
+          variables: { id: clubId },
+        }],
+      },
+    ).subscribe();
+  }
+
+  joinClub() {
+    const clubId = this.club.id;
+
+    this.statusLoading = true;
+    this.joinPublicClubGQL.mutate(
+      { clubId },
+      {
+        refetchQueries: [{
+          query: ClubDetailsPageDocument,
+          variables: { id: clubId },
+        }],
+      },
+    ).subscribe();
   }
 
   async presentLeaveAlert() {

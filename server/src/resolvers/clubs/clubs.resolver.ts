@@ -84,12 +84,49 @@ export class ClubsResolver {
       throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
+    if (!clubData.members.includes(currentUser.uid)) {
+      throw new ApolloError('You are not a member of this club', UserErrorCode.NOT_FOUND);
+    }
+
     if (clubData.admin === currentUser.uid) {
       throw new ApolloError('Club admin should resign before leaving', ClubAdminErrorCode.SHOULD_RESIGN);
     }
 
     const members = clubData.members.filter((memberId) => memberId !== currentUser.uid);
+    const meta: Partial<IDocumentMeta> = {
+      updatedAt: fbAdmin.firestore.Timestamp.now(),
+      updatedBy: currentUser.uid,
+    };
 
+    await this.clubsCollection.doc(clubId).set({
+      ...meta,
+      members,
+    }, { merge: true });
+
+    return clubDoc.id;
+  }
+
+  @Mutation(() => ID)
+  async joinPublicClub(
+    @Args('clubId') clubId: string,
+      @Context('user') currentUser: fbAdmin.auth.UserRecord,
+  ): Promise<string> {
+    const clubDoc = await this.clubsCollection.doc(clubId).get();
+    const clubData = clubDoc.data();
+
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
+    if (clubData.members.includes(currentUser.uid)) {
+      throw new ApolloError('You are already a member of this club', ClubErrorCode.ALREADY_A_MEMBER);
+    }
+
+    if (!clubData.public) {
+      throw new ApolloError('This club is private', ClubErrorCode.PRIVATE);
+    }
+
+    const members = [...clubData.members, currentUser.uid];
     const meta: Partial<IDocumentMeta> = {
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,

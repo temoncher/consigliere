@@ -7,6 +7,8 @@ export enum ErrorCode {
 }
 
 export enum ClubErrorCode {
+  PRIVATE = 'club/is-private',
+  ALREADY_A_MEMBER = 'club/already-a-member',
   FORBIDDEN = 'club/not-enough-permissions',
   NOT_FOUND = 'club/not-found',
   ALREADY_EXISTS = 'club/already-exists',

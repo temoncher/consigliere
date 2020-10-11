@@ -20,10 +20,13 @@ export class AlgoliaSingleton {
     const config: FunctionsConfig = functions.config() as FunctionsConfig;
     const APP_ID = config.algolia.app;
     const ADMIN_KEY = config.algolia.key;
-
-    const prefix = process.env.FUNCTIONS_EMULATOR ? AlgoliaPrefix.DEVELOPMENT : AlgoliaPrefix.PRODUCTION;
     const algoliaClient = algoliasearch(APP_ID, ADMIN_KEY);
 
-    this.clubsIndex = algoliaClient.initIndex(`${prefix}_${AlgoliaIndex.CLUBS}`);
+    const prefix = process.env.FUNCTIONS_EMULATOR ? AlgoliaPrefix.DEVELOPMENT : AlgoliaPrefix.PRODUCTION;
+    const clubsIndexName = `${prefix}_${AlgoliaIndex.CLUBS}`;
+
+    console.log('Initialized Algolia');
+    this.clubsIndex = algoliaClient.initIndex(clubsIndexName);
+    console.log('Clubs:', clubsIndexName);
   }
 }

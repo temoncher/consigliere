@@ -29,14 +29,25 @@ ion-header {
   display: flex;
   justify-content: space-between;
 
-  > div {
+  .action {
     display: flex;
+    justify-content: center;
     align-items: center;
-    flex-direction: column;
-    margin-right: 32px;
+    height: 8vh;
+    width: 20vw;
 
-    ion-icon {
-      margin-bottom: 4px;
+    > div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      ion-icon {
+        margin-bottom: 4px;
+      }
+
+      ion-spinner {
+        margin: 4px;
+      }
     }
   }
 

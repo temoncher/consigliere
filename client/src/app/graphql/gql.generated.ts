@@ -230,6 +230,9 @@ export type JoinRequest = {
 export type Mutation = {
   __typename?: 'Mutation';
   createClub: ClubOutput;
+  leaveClub: Scalars['ID'];
+  joinPublicClub: Scalars['ID'];
+  resign: ClubOutput;
   deleteClub: ClubOutput;
   addGame: GameOutput;
   createJoinRequest: JoinRequestOutput;
@@ -239,6 +242,22 @@ export type Mutation = {
 
 export type MutationCreateClubArgs = {
   club: Club;
+};
+
+
+export type MutationLeaveClubArgs = {
+  clubId: Scalars['String'];
+};
+
+
+export type MutationJoinPublicClubArgs = {
+  clubId: Scalars['String'];
+};
+
+
+export type MutationResignArgs = {
+  clubId: Scalars['String'];
+  successorId: Scalars['String'];
 };
 
 
@@ -332,6 +351,26 @@ export type DeleteClubMutation = (
     { __typename?: 'ClubOutput' }
     & Pick<ClubOutput, 'id'>
   ) }
+);
+
+export type JoinPublicClubMutationVariables = Exact<{
+  clubId: Scalars['String'];
+}>;
+
+
+export type JoinPublicClubMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'joinPublicClub'>
+);
+
+export type LeaveClubMutationVariables = Exact<{
+  clubId: Scalars['String'];
+}>;
+
+
+export type LeaveClubMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'leaveClub'>
 );
 
 export type ClubAdminPageQueryVariables = Exact<{
@@ -435,6 +474,38 @@ export const DeleteClubDocument = gql`
   })
   export class DeleteClubGQL extends Apollo.Mutation<DeleteClubMutation, DeleteClubMutationVariables> {
     document = DeleteClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const JoinPublicClubDocument = gql`
+    mutation joinPublicClub($clubId: String!) {
+  joinPublicClub(clubId: $clubId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class JoinPublicClubGQL extends Apollo.Mutation<JoinPublicClubMutation, JoinPublicClubMutationVariables> {
+    document = JoinPublicClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LeaveClubDocument = gql`
+    mutation leaveClub($clubId: String!) {
+  leaveClub(clubId: $clubId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LeaveClubGQL extends Apollo.Mutation<LeaveClubMutation, LeaveClubMutationVariables> {
+    document = LeaveClubDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

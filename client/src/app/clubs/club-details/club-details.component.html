@@ -10,15 +10,13 @@
       </ion-button>
 
       <ion-button
-        *ngIf="club?.role === ClubRole.Admin && club?.role === ClubRole.Confidant"
+        *ngIf="
+          club?.role === ClubRole.Admin && club?.role === ClubRole.Confidant
+        "
         fill="clear"
         routerLink="admin"
       >
-        <ion-icon
-          color="light"
-          slot="icon-only"
-          name="settings"
-        ></ion-icon>
+        <ion-icon color="light" slot="icon-only" name="settings"></ion-icon>
       </ion-button>
     </ion-header>
 
@@ -40,26 +38,31 @@
     </div>
 
     <div class="club-details__content round-slide with-actions">
-      <div class="round-slide__actions club-actions">
-        <div *ngIf="club?.role" (click)="leaveClub()">
-          <ion-icon
-            color="medium"
-            size="large"
-            name="checkbox-outline"
-          ></ion-icon>
-          <ion-text color="medium">
-            В клубе
-          </ion-text>
-        </div>
-        <div *ngIf="!club?.role">
-          <ion-icon
-            color="primary"
-            size="large"
-            name="enter-outline"
-          ></ion-icon>
-          <ion-text color="primary">
-            Вступить
-          </ion-text>
+      <div *ngIf="club" class="round-slide__actions club-actions">
+        <div class="action">
+          <div [hidden]="!statusLoading">
+            <ion-spinner name="crescent" color="dark"></ion-spinner>
+            <ion-text color="medium">...</ion-text>
+          </div>
+          <ng-container *ngIf="!statusLoading">
+            <div (click)="presentLeaveAlert()">
+              <ion-icon
+                *ngIf="club.role"
+                color="medium"
+                size="large"
+                name="checkbox-outline"
+              ></ion-icon>
+              <ion-text *ngIf="club.role" color="medium">В клубе</ion-text>
+            </div>
+            <div *ngIf="!club.role" (click)="joinClub()">
+              <ion-icon
+                color="primary"
+                size="large"
+                name="enter-outline"
+              ></ion-icon>
+              <ion-text color="primary"> Вступить </ion-text>
+            </div>
+          </ng-container>
         </div>
       </div>
 
