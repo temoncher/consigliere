@@ -7,9 +7,7 @@ import { IRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 
 import { GameResult } from '~types/enums/game-result.enum';
-import { Role } from '~types/enums/role.enum';
 import { VoteResult } from '~types/enums/vote-result.enum';
-import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @ArgsType()
 export class GetGameArgs {

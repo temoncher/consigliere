@@ -1,9 +1,8 @@
-import { FirebaseAuthenticationService, FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
+import { FirebaseFirestoreService } from '@aginix/nestjs-firebase-admin';
 import { CanActivate, Injectable } from '@nestjs/common';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthenticationError, ApolloError } from 'apollo-server-express';
-import * as admin from 'firebase-admin';
+import { ApolloError } from 'apollo-server-express';
 
 import { IGQLContext } from '@/interfaces/gql-context.interface';
 import { ClubsCollection } from '@/models/collections.types';
