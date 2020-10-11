@@ -13,7 +13,7 @@ import { GameInput, GetGameArgs, GetLastGamesByPlayerIdArgs } from './games.inpu
 import { GameOutput, LastGamesByPlayerIdOutput } from './games.output';
 
 import { CollectionName } from '~types/enums/colletion-name.enum';
-import { ErrorCode } from '~types/enums/error-code.enum';
+import { ErrorCode, GameErrorCode } from '~types/enums/error-code.enum';
 import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 
@@ -73,7 +73,7 @@ export class GamesResolver {
     const gameData = gameDoc.data();
 
     if (!gameData) {
-      throw new ApolloError('Game not found', ErrorCode.NOT_FOUND);
+      throw new ApolloError('Game not found', GameErrorCode.NOT_FOUND);
     }
 
     return { ...gameData, id: gameDoc.id };

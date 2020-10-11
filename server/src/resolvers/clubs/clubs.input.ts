@@ -13,6 +13,14 @@ export class GetClubArgs {
 }
 
 @ArgsType()
+export class ResignArgs {
+  @Field()
+  clubId: string;
+  @Field()
+  successorId: string;
+}
+
+@ArgsType()
 export class SearchClubArgs {
   @Field()
   query: string;

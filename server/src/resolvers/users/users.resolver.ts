@@ -10,7 +10,7 @@ import { GetUserArgs, GetUsersArgs } from './users.input';
 import { UserOutput } from './users.output';
 
 import { CollectionName } from '~types/enums/colletion-name.enum';
-import { ErrorCode } from '~types/enums/error-code.enum';
+import { UserErrorCode } from '~types/enums/error-code.enum';
 
 @Resolver()
 @UseGuards(AuthGuard)
@@ -37,14 +37,14 @@ export class UsersResolver {
       const userDocs = await this.usersCollection.where('nickname', '==', args.nickname).get();
 
       if (userDocs.size === 0) {
-        throw new ApolloError(`User with nickname "${args.nickname}" is not found`, ErrorCode.NOT_FOUND);
+        throw new ApolloError(`User with nickname "${args.nickname}" is not found`, UserErrorCode.NOT_FOUND);
       }
 
       userData = userDocs.docs[0].data();
     }
 
     if (!userData) {
-      throw new ApolloError('User not found', ErrorCode.NOT_FOUND);
+      throw new ApolloError('User not found', UserErrorCode.NOT_FOUND);
     }
 
     return userData;

@@ -5,3 +5,22 @@ export enum ErrorCode {
   TOO_MANY_REQUESTS = 'auth/too-many-requests',
   EMAIL_ALREADY_IN_USE = 'auth/email-already-in-use',
 }
+
+export enum ClubErrorCode {
+  FORBIDDEN = 'club/not-enough-permissions',
+  NOT_FOUND = 'club/not-found',
+  ALREADY_EXISTS = 'club/already-exists',
+}
+
+export enum ClubAdminErrorCode {
+  SHOULD_RESIGN = 'club-admin/should-resign-before-leaving',
+  SUCCESSOR_SHOULD_BE_CONFIDANT = 'club-admin/successor-should-be-confidant',
+}
+
+export enum UserErrorCode {
+  NOT_FOUND = 'user/not-found',
+}
+
+export enum GameErrorCode {
+  NOT_FOUND = 'game/not-found',
+}

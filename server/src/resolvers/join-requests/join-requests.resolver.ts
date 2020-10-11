@@ -13,7 +13,7 @@ import { JoinRequestInput, JoinRequestInputNames } from './join-requests.input';
 import { JoinRequestOutput } from './join-requests.output';
 
 import { CollectionName } from '~types/enums/colletion-name.enum';
-import { ErrorCode } from '~types/enums/error-code.enum';
+import { ClubErrorCode, ErrorCode } from '~types/enums/error-code.enum';
 import { InvitationStatus } from '~types/enums/invitation-status.enum';
 
 @Resolver()
@@ -33,7 +33,7 @@ export class JoinRequestsResolver {
     const clubData = clubDoc.data();
 
     if (!clubData) {
-      throw new ApolloError('Club not found', ErrorCode.NOT_FOUND);
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
     if (clubData.members.includes(currentUser.uid)) {
@@ -112,7 +112,7 @@ export class JoinRequestsResolver {
     const clubData = clubDoc.data();
 
     if (clubData) {
-      throw new ApolloError('Club not found', ErrorCode.NOT_FOUND);
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
     const isAdmin = clubData.admin === currentUser.uid;
