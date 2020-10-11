@@ -51,11 +51,11 @@ jobs:
         uses: actions/checkout@master
       - name: Install Dependencies
         run: |
-          cd client
+          cd server
           yarn install
       - name: Build
         run: |
-          cd client
+          cd server
           yarn install
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
