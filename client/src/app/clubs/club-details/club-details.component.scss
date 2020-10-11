@@ -14,8 +14,20 @@ ion-header {
     &__title {
       margin: 8px 0 0 16px;
 
-      ion-skeleton-text {
-        height: 18px;
+      .primary-text {
+        margin: 0;
+
+        ion-skeleton-text {
+          height: 18px;
+        }
+      }
+
+      .secondary-text {
+        margin: 0;
+
+        ion-skeleton-text {
+          height: 14px;
+        }
       }
     }
   }

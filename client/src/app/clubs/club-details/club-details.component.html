@@ -21,19 +21,35 @@
     </ion-header>
 
     <div class="hero-block">
-      <ion-thumbnail *ngIf="!loading" class="square-avatar">
-        <img [src]="club.avatar || defaultAvatar" />
-      </ion-thumbnail>
-      <h2 *ngIf="club" class="hero-block__title">
-        {{ club.title }}
-      </h2>
+      <ng-container *ngIf="club">
+        <ion-thumbnail *ngIf="!loading" class="square-avatar">
+          <img [src]="club.avatar || defaultAvatar" />
+        </ion-thumbnail>
+        <div class="hero-block__title">
+          <h2 class="primary-text" *ngIf="club">
+            {{ club.title }}
+          </h2>
+          <p class="secondary-text">{{ club.location }}</p>
+        </div>
+      </ng-container>
       <ng-container *ngIf="loading">
         <ion-thumbnail class="square-avatar">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-thumbnail>
-        <h2 class="hero-block__title">
-          <ion-skeleton-text style="width: 200px" animated></ion-skeleton-text>
-        </h2>
+        <div class="hero-block__title">
+          <h2 class="primary-text">
+            <ion-skeleton-text
+              style="width: 200px"
+              animated
+            ></ion-skeleton-text>
+          </h2>
+          <p class="secondary-text">
+            <ion-skeleton-text
+              style="width: 100px"
+              animated
+            ></ion-skeleton-text>
+          </p>
+        </div>
       </ng-container>
     </div>
 
