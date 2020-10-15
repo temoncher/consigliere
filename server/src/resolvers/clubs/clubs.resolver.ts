@@ -73,7 +73,6 @@ export class ClubsResolver {
   }
 
   @Mutation(() => ID)
-  @UseGuards(ClubAdminGuard)
   async leaveClub(
     @Args('clubId') clubId: string,
       @Context('user') currentUser: fbAdmin.auth.UserRecord,
@@ -196,6 +195,17 @@ export class ClubsResolver {
       id: clubId,
       role: ClubRole.ADMIN,
     };
+  }
+
+  @Query(() => [String], { name: 'playerSuggestions' })
+  @UseGuards(ClubAdminGuard)
+  async getPlayerSuggestions(
+    @Args('clubId') clubId: string,
+  ): Promise<string[]> {
+    const clubDoc = await this.clubsCollection.doc(clubId).get();
+    const clubData = clubDoc.data();
+
+    return clubData.members;
   }
 
   @Query(() => ClubOutput, { name: 'club' })

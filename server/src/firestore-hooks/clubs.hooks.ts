@@ -4,7 +4,6 @@ import { AlgoliaSingleton } from './algolia-singleton';
 
 export const createClubIndex = functions.firestore.document('clubs/{clubId}')
   .onCreate((clubSnapshot) => {
-    console.log('CREATED');
     const clubData = clubSnapshot.data();
     const objectID = clubSnapshot.id;
 

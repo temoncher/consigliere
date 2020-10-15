@@ -1,0 +1,3 @@
+query playerSuggestions($clubId: String!) {
+  playerSuggestions(clubId: $clubId)
+}

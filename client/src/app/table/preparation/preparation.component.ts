@@ -41,12 +41,12 @@ export class PreparationComponent implements OnInit, OnDestroy {
   readyPlayersNumber = 0;
 
   constructor(
+    private store: Store,
+    private gameService: GameService,
+    private translate: TranslateService,
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private gameService: GameService,
-    private translate: TranslateService,
-    private store: Store,
   ) {
     this.translate.get('TABS.TABLE.PREPARATION.hostPropmpt')
       .pipe(takeUntil(this.destroy))

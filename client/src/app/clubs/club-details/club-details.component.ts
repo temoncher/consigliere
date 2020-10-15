@@ -10,6 +10,7 @@ import {
   ClubRole,
   JoinPublicClubGQL,
   LeaveClubGQL,
+  ClubsPageDocument,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -63,10 +64,13 @@ export class ClubDetailsComponent implements OnInit {
     this.leaveClubGQL.mutate(
       { clubId },
       {
-        refetchQueries: [{
-          query: ClubDetailsPageDocument,
-          variables: { id: clubId },
-        }],
+        refetchQueries: [
+          { query: ClubsPageDocument },
+          {
+            query: ClubDetailsPageDocument,
+            variables: { id: clubId },
+          },
+        ],
       },
     ).subscribe();
   }
@@ -78,10 +82,13 @@ export class ClubDetailsComponent implements OnInit {
     this.joinPublicClubGQL.mutate(
       { clubId },
       {
-        refetchQueries: [{
-          query: ClubDetailsPageDocument,
-          variables: { id: clubId },
-        }],
+        refetchQueries: [
+          { query: ClubsPageDocument },
+          {
+            query: ClubDetailsPageDocument,
+            variables: { id: clubId },
+          },
+        ],
       },
     ).subscribe();
   }
