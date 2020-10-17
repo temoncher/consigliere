@@ -12,6 +12,8 @@ export type Scalars = {
   Float: number;
   /** Firebase timestamp */
   FirebaseTimestamp: any;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
 };
 
 
@@ -87,18 +89,13 @@ export type UserOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  playerSuggestions: Array<Scalars['String']>;
   club: ClubOutput;
   currentPlayerClubs: Array<ClubOutput>;
   searchClubs: Array<ClubSearchOutput>;
   clubJoinRequests: Array<JoinRequestOutput>;
   user: UserOutput;
   users: Array<UserOutput>;
-};
-
-
-export type QueryPlayerSuggestionsArgs = {
-  clubId: Scalars['String'];
+  usersByClub: Array<UserOutput>;
 };
 
 
@@ -129,6 +126,11 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
+
+export type QueryUsersByClubArgs = {
+  clubId: Scalars['String'];
+};
+
 export type JoinRequest = {
   clubId: Scalars['ID'];
   statuses?: Maybe<Array<InvitationStatus>>;
@@ -141,6 +143,7 @@ export type Mutation = {
   joinPublicClub: Scalars['ID'];
   resign: ClubOutput;
   deleteClub: ClubOutput;
+  createGame: Scalars['ID'];
   createJoinRequest: JoinRequestOutput;
   revokeJoinRequest: JoinRequestOutput;
 };
@@ -172,6 +175,11 @@ export type MutationDeleteClubArgs = {
 };
 
 
+export type MutationCreateGameArgs = {
+  game: Game;
+};
+
+
 export type MutationCreateJoinRequestArgs = {
   clubId: Scalars['String'];
 };
@@ -186,6 +194,36 @@ export type Club = {
   location?: Maybe<Scalars['String']>;
 };
 
+export type Game = {
+  club?: Maybe<Scalars['String']>;
+  gameNumber: Scalars['Int'];
+  date: Scalars['FirebaseTimestamp'];
+  host: PlayerInput;
+  triple: Array<Scalars['String']>;
+  result: GameResult;
+  players: Array<PlayerInput>;
+  falls: Scalars['JSONObject'];
+  quitPhases: Scalars['JSONObject'];
+  votes: Scalars['JSONObject'];
+  roles: Scalars['JSONObject'];
+  donChecks: Array<Scalars['String']>;
+  sheriffChecks: Array<Scalars['String']>;
+};
+
+export type PlayerInput = {
+  uid: Scalars['ID'];
+  nickname: Scalars['String'];
+  number?: Maybe<Scalars['Int']>;
+  isGuest: Scalars['Boolean'];
+};
+
+export enum GameResult {
+  Mafia = 'MAFIA',
+  Civilians = 'CIVILIANS',
+  Tie = 'TIE'
+}
+
+
 export type CreateClubMutationVariables = Exact<{
   club: Club;
 }>;
@@ -197,6 +235,16 @@ export type CreateClubMutation = (
     { __typename?: 'ClubOutput' }
     & Pick<ClubOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
   ) }
+);
+
+export type CreateGameMutationVariables = Exact<{
+  game: Game;
+}>;
+
+
+export type CreateGameMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createGame'>
 );
 
 export type DeleteClubMutationVariables = Exact<{
@@ -276,7 +324,10 @@ export type PlayerSuggestionsQueryVariables = Exact<{
 
 export type PlayerSuggestionsQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'playerSuggestions'>
+  & { usersByClub: Array<(
+    { __typename?: 'UserOutput' }
+    & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
+  )> }
 );
 
 export type ProfilePageQueryVariables = Exact<{
@@ -322,6 +373,22 @@ export const CreateClubDocument = gql`
   })
   export class CreateClubGQL extends Apollo.Mutation<CreateClubMutation, CreateClubMutationVariables> {
     document = CreateClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateGameDocument = gql`
+    mutation createGame($game: game!) {
+  createGame(game: $game)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateGameGQL extends Apollo.Mutation<CreateGameMutation, CreateGameMutationVariables> {
+    document = CreateGameDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -449,7 +516,11 @@ export const ClubsPageDocument = gql`
   }
 export const PlayerSuggestionsDocument = gql`
     query playerSuggestions($clubId: String!) {
-  playerSuggestions(clubId: $clubId)
+  usersByClub(clubId: $clubId) {
+    uid
+    nickname
+    avatar
+  }
 }
     `;
 

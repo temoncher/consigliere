@@ -197,17 +197,6 @@ export class ClubsResolver {
     };
   }
 
-  @Query(() => [String], { name: 'playerSuggestions' })
-  @UseGuards(ClubAdminGuard)
-  async getPlayerSuggestions(
-    @Args('clubId') clubId: string,
-  ): Promise<string[]> {
-    const clubDoc = await this.clubsCollection.doc(clubId).get();
-    const clubData = clubDoc.data();
-
-    return clubData.members;
-  }
-
   @Query(() => ClubOutput, { name: 'club' })
   async getClub(
     @Args() args: GetClubArgs,

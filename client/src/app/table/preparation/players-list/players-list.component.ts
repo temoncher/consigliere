@@ -121,7 +121,9 @@ export class PlayersListComponent implements OnInit {
         {
           cssClass: 'submit-button',
           text: this.playerPrompt.confirmButton,
-          handler: (player) => this.addNewPlayer(player),
+          handler: ({ nickname }: { nickname: string }) => {
+            this.addNewPlayer(new Player({ nickname }));
+          },
         },
       ],
     });
@@ -132,10 +134,10 @@ export class PlayersListComponent implements OnInit {
   }
 
   private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
-    const { data: player, role } = await modal.onWillDismiss();
+    const { data: user, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {
-      this.addNewPlayer(player);
+      this.addNewPlayer(new Player(user));
 
       return;
     }

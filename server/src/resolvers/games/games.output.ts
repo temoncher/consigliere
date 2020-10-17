@@ -40,24 +40,24 @@ export class GameOutput extends DocumentMeta implements IFireStoreGame, IFireSto
   @Field(() => PlayerOutput)
   host: IFireStorePlayer;
   @Field(() => [String])
-  bestTurn?: [string, string, string];
+  triple: [string, string, string];
   @Field(() => GameResult)
   result: GameResult;
   @Field(() => [PlayerOutput])
   players: IFireStorePlayer[];
   @Field(() => GraphQLJSONObject, { nullable: true })
-  falls?: Record<string, number>;
+  falls: Record<string, number>;
   @Field(() => GraphQLJSONObject)
   quitPhases: Record<string, IQuitPhase>;
   @Field(() => [GraphQLJSONObject], {
     nullable: true,
     description: 'Record<string, number[]>[]; <candidatePlayerId, votesNumber>[]',
   })
-  votes?: Record<string, number[]>[];
+  votes: Record<string, number[]>[];
   @Field(() => GraphQLJSONObject)
   roles: Record<string, Role>;
   @Field(() => [String], { nullable: true })
-  donChecks?: string[];
+  donChecks: string[];
   @Field(() => [String], { nullable: true })
-  sheriffChecks?: string[];
+  sheriffChecks: string[];
 }

@@ -16,7 +16,7 @@ import { Role } from '~types/enums/role.enum';
           (click)="chooseRole(role.value)"
         >
           <!-- TODO: translate this-->
-          {{ role.value }}
+          {{ "ROLE." + role.value | translate }}
         </ion-item>
       </ng-container>
     </ion-list>

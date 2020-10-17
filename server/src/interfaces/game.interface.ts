@@ -13,7 +13,7 @@ export interface IFireStoreGame {
   gameNumber: number;
   date: fbAdmin.firestore.Timestamp;
   host: IFireStorePlayer;
-  bestTurn: [string, string, string];
+  triple: [string, string, string];
   result: GameResult;
   players: IFireStorePlayer[];
   falls: Record<string, number>;

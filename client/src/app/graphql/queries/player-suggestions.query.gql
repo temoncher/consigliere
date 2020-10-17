@@ -1,3 +1,7 @@
 query playerSuggestions($clubId: String!) {
-  playerSuggestions(clubId: $clubId)
+  usersByClub(clubId: $clubId) {
+    uid
+    nickname
+    avatar
+  }
 }

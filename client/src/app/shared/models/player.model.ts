@@ -10,14 +10,17 @@ export interface IPlayer {
 
 export type ISerializedPlayer = Omit<IPlayer, 'avatar'>;
 
-export type PlayerInput = Omit<IPlayer, 'isGuest' | 'uid'> & { uid?: string };
+export type PlayerInput = Omit<IPlayer, 'isGuest' | 'uid'> & {
+  isGuest?: boolean;
+  uid?: string;
+};
 
 export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
   uid: string;
   nickname: string;
   number?: number;
   avatar?: string;
-  isGuest = false;
+  isGuest: boolean;
 
   constructor(player: PlayerInput) {
     this.nickname = player.nickname;
@@ -26,16 +29,12 @@ export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
       this.avatar = player.avatar;
     }
 
-    if (typeof player.number !== 'undefined') {
+    if (player.number !== undefined) {
       this.number = player.number;
     }
 
-    if (player.uid) {
-      this.uid = player.uid;
-    } else {
-      this.uid = Date.now().toString();
-      this.isGuest = true;
-    }
+    this.isGuest = player.isGuest === undefined || this.isGuest;
+    this.uid = player.uid || Date.now().toString();
   }
 
   serialize(): ISerializedPlayer {
@@ -45,11 +44,7 @@ export class Player implements IPlayer, ISerializable<ISerializedPlayer> {
       isGuest: this.isGuest,
     };
 
-    if (this.isGuest) {
-      serializedPlayer.isGuest = this.isGuest;
-    }
-
-    if (typeof this.number !== 'undefined') {
+    if (this.number !== undefined) {
       serializedPlayer.number = this.number;
     }
 

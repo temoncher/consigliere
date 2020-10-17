@@ -21,7 +21,7 @@
       class="result-container__sticky__text"
       [ngSwitch]="gameResult$ | async"
     >
-      <ng-container *ngSwitchCase="GameResult.MAFIA">
+      <ng-container *ngSwitchCase="GameResult.Mafia">
         <span>
           <ion-text color="danger">
             {{ "TABS.TABLE.GAME.RESULT.mafia" | translate }}
@@ -29,7 +29,7 @@
         </span>
         <span>{{ "TABS.TABLE.GAME.RESULT.mafiaWon" | translate }}</span>
       </ng-container>
-      <ng-container *ngSwitchCase="GameResult.CIVILIANS">
+      <ng-container *ngSwitchCase="GameResult.Civilians">
         <span>
           <ion-text color="primary">
             {{ "TABS.TABLE.GAME.RESULT.civilians" | translate }}
@@ -43,13 +43,13 @@
   </div>
 
   <div class="result-container__list" [ngSwitch]="gameResult$ | async">
-    <ng-container *ngSwitchCase="GameResult.MAFIA">
+    <ng-container *ngSwitchCase="GameResult.Mafia">
       <app-result-list
         [players]="mafiaPlayers$ | async"
         [roles]="roles$ | async"
       ></app-result-list>
     </ng-container>
-    <ng-container *ngSwitchCase="GameResult.CIVILIANS">
+    <ng-container *ngSwitchCase="GameResult.Civilians">
       <app-result-list
         class="result-container__list"
         [players]="citizenPlayers$ | async"

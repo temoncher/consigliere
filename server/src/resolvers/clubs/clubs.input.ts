@@ -1,6 +1,6 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
 
-import { IClub } from '@/interfaces/club.interface';
+import { IFireStoreClub } from '@/interfaces/club.interface';
 
 export enum ClubsInputName {
   NEW_CLUB = 'club'
@@ -21,7 +21,7 @@ export class SearchClubArgs {
 }
 
 @InputType(ClubsInputName.NEW_CLUB)
-export class NewClubInput implements Partial<IClub> {
+export class NewClubInput implements Partial<IFireStoreClub> {
   @Field()
   title: string;
   @Field({ nullable: true })

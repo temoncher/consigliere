@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 
+import { GameResult } from '@/graphql/gql.generated';
 import { VotePhase } from '@/table/models/vote-phase.enum';
 
 import { IRound } from '../models/round.interface';
@@ -17,11 +18,11 @@ import {
   AddRound,
 } from './table.actions';
 
-import { GameResult } from '~types/enums/game-result.enum';
 import { RoundPhase } from '~types/enums/round-phase.enum';
 
 export interface TableStateModel {
   rounds: IRound[];
+  club?: string;
   isNextVotingDisabled: boolean;
   isGameStarted: boolean;
   gameResult?: GameResult;
@@ -31,6 +32,7 @@ export interface TableStateModel {
   name: 'table',
   defaults: {
     rounds: [],
+    club: 'Wk1xFuaxxoP28m6NquGi', // TODO: collect data from user
     isNextVotingDisabled: false,
     isGameStarted: false,
   },
@@ -42,6 +44,11 @@ export interface TableStateModel {
 })
 @Injectable()
 export class TableState {
+  @Selector()
+  static getClub({ club }: TableStateModel) {
+    return club;
+  }
+
   @Selector()
   static getRounds({ rounds }: TableStateModel) {
     return rounds;

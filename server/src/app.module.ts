@@ -17,9 +17,6 @@ import { ResolversModule } from './resolvers/resolvers.module';
       autoSchemaFile: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       context: ({ req }) => ({ headers: req.headers }),
-      buildSchemaOptions: {
-        dateScalarMode: 'timestamp',
-      },
     }),
     ResolversModule,
   ],

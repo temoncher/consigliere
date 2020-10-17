@@ -1,9 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Select, Store } from '@ngxs/store';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { PlayerSuggestionsGQL, PlayerSuggestionsQuery } from '@/graphql/gql.generated';
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
-import { Player } from '@/shared/models/player.model';
-import { IUser } from '@/shared/models/user.interface';
+import { Player, IPlayer } from '@/shared/models/player.model';
+import { PlayersState } from '@/table/store/players/players.state';
+import { TableState } from '@/table/store/table.state';
 
 @Component({
   selector: 'app-preparation-modal',
@@ -15,10 +20,28 @@ import { IUser } from '@/shared/models/user.interface';
   `],
 })
 export class PreparationModalComponent implements OnInit {
-  defaultAvatar = defaultAvatarSrc;
-  @Input() users: IUser[];
+  @Select(PlayersState.getPlayers) players$: Observable<IPlayer[]>;
+  @Input() users: PlayerSuggestionsQuery['usersByClub'];
 
-  constructor(private modalController: ModalController) { }
+  defaultAvatar = defaultAvatarSrc;
+
+  constructor(
+    private store: Store,
+    private modalController: ModalController,
+    private usersByClubGQL: PlayerSuggestionsGQL,
+  ) {
+    const clubId = this.store.selectSnapshot(TableState.getClub);
+    const suggestedPlayers$ = this.usersByClubGQL.watch({ clubId })
+      .valueChanges.pipe(
+        map(({ data }) => data.usersByClub),
+      );
+
+    combineLatest([suggestedPlayers$, this.players$]).subscribe(([suggestedPlayers, tablePlayers]) => {
+      const tablePlayersIds = tablePlayers.map((player) => player.uid);
+
+      this.users = suggestedPlayers.filter(({ uid }) => !tablePlayersIds.includes(uid));
+    });
+  }
 
   ngOnInit() { }
 
