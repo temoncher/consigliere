@@ -46,7 +46,6 @@ export class ClubDetailsComponent implements OnInit, OnDestroy {
     private leaveClubGQL: LeaveClubGQL,
     public alertController: AlertController,
   ) {
-    // TODO: implement club not found page
     this.activateRoute.params.pipe(
       takeUntil(this.destroy),
       switchMap(({ clubId }) => this.clubDetailsPageGQL.watch({ id: clubId }).valueChanges),

@@ -37,7 +37,6 @@
 
       <ion-label>
         <h3>{{ player.nickname }}</h3>
-        <!-- TODO: translate this -->
         <div *ngIf="getPlayersRole(player); then hasRole; else hasNoRole">
           {{
             "TABS.TABLE.PREPARATION.PLAYERS_LIST" +

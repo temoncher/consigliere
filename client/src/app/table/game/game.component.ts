@@ -30,7 +30,6 @@ export class GameComponent implements OnInit, CanDeactivate<GameComponent> {
 
   RoundPhase = RoundPhase;
 
-  // TODO: translate this
   private readonly discardGamePrompt: DiscardGamePrompt = {
     header: 'Вы уже уходите?',
     text: 'Игра не сохранится, если вы уйдете сейчас :(',

@@ -157,7 +157,7 @@ export class GameService {
     const host = this.store.selectSnapshot(PlayersState.getHost);
 
     const newGame: CreateGameMutationVariables['game'] = {
-      // TODO: populate fields
+      // TODO: populate fields wit real values
       gameNumber: 1,
       date: Date.now(),
       triple: [],
