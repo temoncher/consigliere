@@ -1,7 +1,6 @@
 
+import { GameResult } from '@/graphql/gql.generated';
 import { IRound } from '@/table/models/round.interface';
-
-import { GameResult } from '~types/enums/game-result.enum';
 
 export const gameActionsPrefix = 'Game';
 

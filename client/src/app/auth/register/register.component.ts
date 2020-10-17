@@ -22,7 +22,6 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.maxLength(24),
         Validators.minLength(2),
-        Validators.pattern(/^[а-яА-Яa-zA-Z0-9\s-]*$/g),
       ],
     ],
     email: [

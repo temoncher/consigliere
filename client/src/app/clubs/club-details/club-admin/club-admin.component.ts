@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
-import { switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import {
   DeleteClubGQL,
@@ -19,7 +20,8 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './club-admin.component.html',
   styleUrls: ['./club-admin.component.scss'],
 })
-export class ClubAdminComponent implements OnInit {
+export class ClubAdminComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
   club: ClubAdminPageQuery['club'];
   loading = true;
 
@@ -33,8 +35,8 @@ export class ClubAdminComponent implements OnInit {
     private deleteClubGQL: DeleteClubGQL,
     public alertController: AlertController,
   ) {
-    // TODO: ubsubscribe
     this.activateRoute.params.pipe(
+      takeUntil(this.destroy),
       switchMap(({ clubId }) => this.clubAdminPageGQL.watch({ id: clubId }).valueChanges),
     ).subscribe(({ data, loading }) => {
       this.club = data.club;
@@ -43,6 +45,11 @@ export class ClubAdminComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
 
   deleteClub() {
     this.deleteClubGQL.mutate(

@@ -6,8 +6,8 @@ import * as fbAdmin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
 import { ClubAdminGuard } from '@/guards/club-admin.guard';
-import { IClub } from '@/interfaces/club.interface';
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreClub } from '@/interfaces/club.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
 import { ClubsCollection, UsersCollection } from '@/models/collections.types';
 import { AlgoliaService } from '@/services/algolia.service';
 
@@ -45,13 +45,13 @@ export class ClubsResolver {
       throw new ApolloError('Club with this title already exists', ClubErrorCode.ALREADY_EXISTS);
     }
 
-    const meta: IDocumentMeta = {
+    const meta: IFireStoreDocumentMeta = {
       createdAt: fbAdmin.firestore.Timestamp.now(),
       createdBy: currentUser.uid,
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
-    const newClubData: Omit<IClub, 'id'> = {
+    const newClubData: Omit<IFireStoreClub, 'id'> = {
       ...newClubInput,
       public: true, // TODO: implement private clubs
       admin: currentUser.uid,
@@ -63,7 +63,7 @@ export class ClubsResolver {
       ...meta,
     };
 
-    const { id } = await this.clubsCollection.add(newClub as IClub & IDocumentMeta);
+    const { id } = await this.clubsCollection.add(newClub);
 
     return {
       ...newClub,
@@ -73,7 +73,6 @@ export class ClubsResolver {
   }
 
   @Mutation(() => ID)
-  @UseGuards(ClubAdminGuard)
   async leaveClub(
     @Args('clubId') clubId: string,
       @Context('user') currentUser: fbAdmin.auth.UserRecord,
@@ -86,7 +85,7 @@ export class ClubsResolver {
     }
 
     const members = clubData.members.filter((memberId) => memberId !== currentUser.uid);
-    const meta: Partial<IDocumentMeta> = {
+    const meta: Partial<IFireStoreDocumentMeta> = {
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
@@ -120,7 +119,7 @@ export class ClubsResolver {
     }
 
     const members = [...clubData.members, currentUser.uid];
-    const meta: Partial<IDocumentMeta> = {
+    const meta: Partial<IFireStoreDocumentMeta> = {
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
@@ -160,7 +159,7 @@ export class ClubsResolver {
       return currentUser.uid;
     });
     const admin = successorId;
-    const meta: Partial<IDocumentMeta> = {
+    const meta: Partial<IFireStoreDocumentMeta> = {
       updatedAt: fbAdmin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
@@ -262,7 +261,7 @@ export class ClubsResolver {
   async searchClubs(
     @Args() { query, limit }: SearchClubArgs,
   ): Promise<ClubSearchOutput[]> {
-    const { hits } = await this.algoliaService.clubsIndex.search<IClub & IDocumentMeta & { objectID: string }>(
+    const { hits } = await this.algoliaService.clubsIndex.search<IFireStoreClub & IFireStoreDocumentMeta & { objectID: string }>(
       query,
       { hitsPerPage: limit || 10 },
     );

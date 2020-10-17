@@ -4,7 +4,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ApolloError, ValidationError } from 'apollo-server-express';
 
 import { AuthGuard } from '@/guards/auth.guard';
-import { UsersCollection } from '@/models/collections.types';
+import { UsersCollection, ClubsCollection } from '@/models/collections.types';
 
 import { GetUserArgs, GetUsersArgs } from './users.input';
 import { UserOutput } from './users.output';
@@ -15,6 +15,7 @@ import { UserErrorCode } from '~types/enums/error-code.enum';
 @Resolver()
 @UseGuards(AuthGuard)
 export class UsersResolver {
+  private clubsCollection = this.firestore.collection(CollectionName.CLUBS) as ClubsCollection;
   private usersCollection = this.firestore.collection(CollectionName.USERS) as UsersCollection;
 
   constructor(private firestore: FirebaseFirestoreService) {}
@@ -71,5 +72,16 @@ export class UsersResolver {
     }
 
     throw new ValidationError('Incorrect arguments passed');
+  }
+
+  @Query(() => [UserOutput], { name: 'usersByClub' })
+  async getUsersByClub(@Args('clubId') clubId: string): Promise<UserOutput[]> {
+    const clubDoc = await this.clubsCollection.doc(clubId).get();
+    const { members } = clubDoc.data();
+
+    const userDocs = await this.usersCollection.where('uid', 'in', members).get();
+    const usersData = userDocs.docs.map((doc) => doc.data());
+
+    return usersData;
   }
 }

@@ -11,7 +11,7 @@ import { CollectionName } from '~types/enums/colletion-name.enum';
 import { ClubErrorCode, ClubAdminErrorCode } from '~types/enums/error-code.enum';
 
 @Injectable()
-export class ClubAdminGuard implements CanActivate {
+export class ClubMemberGuard implements CanActivate {
   private clubsCollection = this.firestore.collection(CollectionName.CLUBS) as ClubsCollection;
 
   constructor(private firestore: FirebaseFirestoreService) {}
@@ -28,8 +28,8 @@ export class ClubAdminGuard implements CanActivate {
       throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
-    if (clubData.admin !== user.uid) {
-      throw new ApolloError('Only admin can perform this action', ClubAdminErrorCode.NOT_ENOUGH_PERMISSIONS);
+    if (clubData.members.includes(user.uid)) {
+      throw new ApolloError('Only club member can add games for a club', ClubAdminErrorCode.NOT_ENOUGH_PERMISSIONS);
     }
 
     return true;

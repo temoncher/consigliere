@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
-import { debounceTime, filter, switchMap, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, filter, switchMap, tap, takeUntil } from 'rxjs/operators';
 
 import { SearchClubsGQL, SearchClubsQuery } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
@@ -13,7 +14,8 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './join-club.component.html',
   styleUrls: ['./join-club.component.scss'],
 })
-export class JoinClubComponent implements OnInit {
+export class JoinClubComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
   clubs: SearchClubsQuery['searchClubs'];
 
   search = new FormControl('');
@@ -26,8 +28,8 @@ export class JoinClubComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private searchClubsGQL: SearchClubsGQL,
   ) {
-    // TODO: unsubscribe
     this.search.valueChanges.pipe(
+      takeUntil(this.destroy),
       filter((query) => !!query),
       debounceTime(500),
       tap(() => this.loading = true),
@@ -39,6 +41,11 @@ export class JoinClubComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
 
   navigateToClub(clubId: string) {
     this.store.dispatch(new Navigate(

@@ -41,12 +41,12 @@ export class PreparationComponent implements OnInit, OnDestroy {
   readyPlayersNumber = 0;
 
   constructor(
+    private store: Store,
+    private gameService: GameService,
+    private translate: TranslateService,
     private modalController: ModalController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private gameService: GameService,
-    private translate: TranslateService,
-    private store: Store,
   ) {
     this.translate.get('TABS.TABLE.PREPARATION.hostPropmpt')
       .pipe(takeUntil(this.destroy))
@@ -90,11 +90,11 @@ export class PreparationComponent implements OnInit, OnDestroy {
   }
 
   private async awaitHostModalResult(modal: HTMLIonModalElement) {
-    const { data: player, role } = await modal.onWillDismiss();
+    const { data: user, role } = await modal.onWillDismiss();
 
     switch (role) {
       case 'authenticated':
-        this.setHost(player);
+        this.setHost(new Player(user));
 
         return;
       case 'guest':
@@ -124,7 +124,9 @@ export class PreparationComponent implements OnInit, OnDestroy {
         }, {
           cssClass: 'submit-button',
           text: this.hostPropmpt.confirmButton,
-          handler: (player) => this.setHost(player),
+          handler: ({ nickname }: { nickname: string }) => {
+            this.setHost(new Player({ nickname }));
+          },
         },
       ],
     });

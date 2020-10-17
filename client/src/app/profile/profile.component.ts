@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 
-import { ProfilePageGQL, ProfilePageQuery } from '@/graphql/gql.generated';
+import { ProfilePageGQL, ProfilePageQuery, GameResult } from '@/graphql/gql.generated';
 import { consigliereLogo, defaultAvatarSrc } from '@/shared/constants/avatars';
 import { AuthService } from '@/shared/services/auth.service';
 
 import { SettingsMenuComponent } from './settings-menu.component';
-
-import { GameResult } from '~types/enums/game-result.enum';
 
 type WinnerMap = {
   [key in GameResult]: string;
@@ -22,15 +20,15 @@ type WinnerMap = {
 })
 export class ProfileComponent {
   user: ProfilePageQuery['user'];
-  games: ProfilePageQuery['playersLastGames'];
+  games = [];
   loading = true;
 
   defaultGameAvatar = consigliereLogo;
   defaultAvatar = defaultAvatarSrc;
   winnerText: WinnerMap = {
-    [GameResult.CIVILIANS]: 'Мирные',
-    [GameResult.MAFIA]: 'Мафия',
-    [GameResult.TIE]: 'Ничья',
+    [GameResult.Civilians]: 'Мирные',
+    [GameResult.Mafia]: 'Мафия',
+    [GameResult.Tie]: 'Ничья',
   };
 
   constructor(
@@ -45,7 +43,6 @@ export class ProfileComponent {
     ).subscribe(({ data, loading }) => {
       this.loading = loading;
       this.user = data.user;
-      this.games = data.playersLastGames;
     });
   }
 

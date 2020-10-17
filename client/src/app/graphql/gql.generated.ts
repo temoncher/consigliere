@@ -58,90 +58,6 @@ export enum ClubRole {
   Member = 'MEMBER'
 }
 
-export type PlayerOutput = {
-  __typename?: 'PlayerOutput';
-  uid: Scalars['ID'];
-  nickname: Scalars['String'];
-  number?: Maybe<Scalars['Int']>;
-  isGuest: Scalars['Boolean'];
-};
-
-export type RoundOutput = {
-  __typename?: 'RoundOutput';
-  /** Kicked player id */
-  kickedPlayers?: Maybe<Array<Scalars['ID']>>;
-  /** Mafia shots, Record<string, string>; // { [mafiaId]: playerId } */
-  shots?: Maybe<Scalars['JSONObject']>;
-  murderedPlayer?: Maybe<Scalars['ID']>;
-  donCheck?: Maybe<Scalars['ID']>;
-  sheriffCheck?: Maybe<Scalars['ID']>;
-  /** Players' timers, Record<string, number>; // { [playerId]: timeElapsed } */
-  timers?: Maybe<Scalars['JSONObject']>;
-  /** Proposed players, Record<string, string>; // { [candidateId]: playerId } */
-  proposedPlayers?: Maybe<Scalars['JSONObject']>;
-  isVoteDisabled?: Maybe<Scalars['Boolean']>;
-  /** Votes, Record<string, string[]>; // { [candidatePlayerId]: votePlayerId[] } */
-  votes?: Maybe<Scalars['JSONObject']>;
-  /** Votes, Record<string, boolean>; // { [playerId]: isAgreed } */
-  eliminateAllVote?: Maybe<Scalars['JSONObject']>;
-  voteResult: VoteResult;
-};
-
-
-export enum VoteResult {
-  NoCandidates = 'NO_CANDIDATES',
-  SingleCandidateAndZeroDay = 'SINGLE_CANDIDATE_AND_ZERO_DAY',
-  VoteIsDisabled = 'VOTE_IS_DISABLED',
-  PlayersEliminated = 'PLAYERS_ELIMINATED',
-  PlayersKeptAlive = 'PLAYERS_KEPT_ALIVE'
-}
-
-export type GameOutput = {
-  __typename?: 'GameOutput';
-  createdBy: Scalars['ID'];
-  updatedBy: Scalars['ID'];
-  createdAt: Scalars['FirebaseTimestamp'];
-  updatedAt: Scalars['FirebaseTimestamp'];
-  id: Scalars['ID'];
-  participants: Array<Scalars['ID']>;
-  creatorId: Scalars['ID'];
-  rounds: Array<RoundOutput>;
-  result: GameResult;
-  players: Array<PlayerOutput>;
-  roles: Scalars['JSONObject'];
-  host: PlayerOutput;
-  falls?: Maybe<Scalars['JSONObject']>;
-  quitPhases: Scalars['JSONObject'];
-  speechSkips?: Maybe<Scalars['JSONObject']>;
-};
-
-export enum GameResult {
-  Mafia = 'MAFIA',
-  Civilians = 'CIVILIANS',
-  Tie = 'TIE'
-}
-
-export type LastGamesByPlayerIdOutput = {
-  __typename?: 'LastGamesByPlayerIdOutput';
-  createdBy: Scalars['ID'];
-  updatedBy: Scalars['ID'];
-  createdAt: Scalars['FirebaseTimestamp'];
-  updatedAt: Scalars['FirebaseTimestamp'];
-  id: Scalars['ID'];
-  participants: Array<Scalars['ID']>;
-  creatorId: Scalars['ID'];
-  rounds: Array<RoundOutput>;
-  result: GameResult;
-  players: Array<PlayerOutput>;
-  roles: Scalars['JSONObject'];
-  host: PlayerOutput;
-  falls?: Maybe<Scalars['JSONObject']>;
-  quitPhases: Scalars['JSONObject'];
-  speechSkips?: Maybe<Scalars['JSONObject']>;
-  /** Will remain undefined if plaer hosted this game, or if game resulted in tie */
-  won?: Maybe<Scalars['Boolean']>;
-};
-
 export type JoinRequestOutput = {
   __typename?: 'JoinRequestOutput';
   createdBy: Scalars['ID'];
@@ -176,11 +92,10 @@ export type Query = {
   club: ClubOutput;
   currentPlayerClubs: Array<ClubOutput>;
   searchClubs: Array<ClubSearchOutput>;
-  game: GameOutput;
-  playersLastGames: Array<LastGamesByPlayerIdOutput>;
   clubJoinRequests: Array<JoinRequestOutput>;
   user: UserOutput;
   users: Array<UserOutput>;
+  usersByClub: Array<UserOutput>;
 };
 
 
@@ -192,17 +107,6 @@ export type QueryClubArgs = {
 export type QuerySearchClubsArgs = {
   query: Scalars['String'];
   limit?: Maybe<Scalars['Float']>;
-};
-
-
-export type QueryGameArgs = {
-  id?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryPlayersLastGamesArgs = {
-  playerId: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -222,6 +126,11 @@ export type QueryUsersArgs = {
   nicknames?: Maybe<Array<Scalars['String']>>;
 };
 
+
+export type QueryUsersByClubArgs = {
+  clubId: Scalars['String'];
+};
+
 export type JoinRequest = {
   clubId: Scalars['ID'];
   statuses?: Maybe<Array<InvitationStatus>>;
@@ -234,7 +143,7 @@ export type Mutation = {
   joinPublicClub: Scalars['ID'];
   resign: ClubOutput;
   deleteClub: ClubOutput;
-  addGame: GameOutput;
+  createGame: Scalars['ID'];
   createJoinRequest: JoinRequestOutput;
   revokeJoinRequest: JoinRequestOutput;
 };
@@ -256,8 +165,8 @@ export type MutationJoinPublicClubArgs = {
 
 
 export type MutationResignArgs = {
-  clubId: Scalars['String'];
   successorId: Scalars['String'];
+  clubId: Scalars['String'];
 };
 
 
@@ -266,8 +175,8 @@ export type MutationDeleteClubArgs = {
 };
 
 
-export type MutationAddGameArgs = {
-  addGameData: GameInput;
+export type MutationCreateGameArgs = {
+  game: Game;
 };
 
 
@@ -285,39 +194,20 @@ export type Club = {
   location?: Maybe<Scalars['String']>;
 };
 
-export type GameInput = {
-  rounds: Array<RoundInput>;
-  club?: Maybe<Scalars['ID']>;
+export type Game = {
+  club?: Maybe<Scalars['String']>;
+  gameNumber: Scalars['Int'];
+  date: Scalars['FirebaseTimestamp'];
+  host: PlayerInput;
+  triple: Array<Scalars['String']>;
   result: GameResult;
   players: Array<PlayerInput>;
-  roles: Scalars['JSONObject'];
-  host: PlayerInput;
-  falls?: Maybe<Scalars['JSONObject']>;
+  falls: Scalars['JSONObject'];
   quitPhases: Scalars['JSONObject'];
-  speechSkips?: Maybe<Scalars['JSONObject']>;
-};
-
-export type RoundInput = {
-  /** Kicked player id */
-  kickedPlayers?: Maybe<Array<Scalars['ID']>>;
-  /** Mafia shots, Record<string, string>; // { [mafiaId]: playerId } */
-  shots?: Maybe<Scalars['JSONObject']>;
-  /** murdered player id */
-  murderedPlayer?: Maybe<Scalars['ID']>;
-  /** id of player checked by Don */
-  donCheck?: Maybe<Scalars['ID']>;
-  /** id of player checked by Sheriff */
-  sheriffCheck?: Maybe<Scalars['ID']>;
-  /** Players' timers, Record<string, number>; // { [playerId]: timeElapsed } */
-  timers?: Maybe<Scalars['JSONObject']>;
-  /** Proposed players, Record<string, string>; // { [candidateId]: playerId } */
-  proposedPlayers?: Maybe<Scalars['JSONObject']>;
-  isVoteDisabled?: Maybe<Scalars['Boolean']>;
-  /** Votes, Record<string, string[]>; // { [candidatePlayerId]: votePlayerId[] } */
-  votes?: Maybe<Scalars['JSONObject']>;
-  /** Votes, Record<string, boolean>; // { [playerId]: isAgreed } */
-  eliminateAllVote?: Maybe<Scalars['JSONObject']>;
-  voteResult: VoteResult;
+  votes: Scalars['JSONObject'];
+  roles: Scalars['JSONObject'];
+  donChecks: Array<Scalars['String']>;
+  sheriffChecks: Array<Scalars['String']>;
 };
 
 export type PlayerInput = {
@@ -326,6 +216,13 @@ export type PlayerInput = {
   number?: Maybe<Scalars['Int']>;
   isGuest: Scalars['Boolean'];
 };
+
+export enum GameResult {
+  Mafia = 'MAFIA',
+  Civilians = 'CIVILIANS',
+  Tie = 'TIE'
+}
+
 
 export type CreateClubMutationVariables = Exact<{
   club: Club;
@@ -338,6 +235,16 @@ export type CreateClubMutation = (
     { __typename?: 'ClubOutput' }
     & Pick<ClubOutput, 'id' | 'avatar' | 'title' | 'role' | 'location'>
   ) }
+);
+
+export type CreateGameMutationVariables = Exact<{
+  game: Game;
+}>;
+
+
+export type CreateGameMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createGame'>
 );
 
 export type DeleteClubMutationVariables = Exact<{
@@ -410,6 +317,19 @@ export type ClubsPageQuery = (
   )> }
 );
 
+export type PlayerSuggestionsQueryVariables = Exact<{
+  clubId: Scalars['String'];
+}>;
+
+
+export type PlayerSuggestionsQuery = (
+  { __typename?: 'Query' }
+  & { usersByClub: Array<(
+    { __typename?: 'UserOutput' }
+    & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
+  )> }
+);
+
 export type ProfilePageQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -420,10 +340,7 @@ export type ProfilePageQuery = (
   & { user: (
     { __typename?: 'UserOutput' }
     & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
-  ), playersLastGames: Array<(
-    { __typename?: 'LastGamesByPlayerIdOutput' }
-    & Pick<LastGamesByPlayerIdOutput, 'createdAt' | 'id' | 'result' | 'roles' | 'won'>
-  )> }
+  ) }
 );
 
 export type SearchClubsQueryVariables = Exact<{
@@ -456,6 +373,22 @@ export const CreateClubDocument = gql`
   })
   export class CreateClubGQL extends Apollo.Mutation<CreateClubMutation, CreateClubMutationVariables> {
     document = CreateClubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateGameDocument = gql`
+    mutation createGame($game: game!) {
+  createGame(game: $game)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateGameGQL extends Apollo.Mutation<CreateGameMutation, CreateGameMutationVariables> {
+    document = CreateGameDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -581,19 +514,32 @@ export const ClubsPageDocument = gql`
       super(apollo);
     }
   }
+export const PlayerSuggestionsDocument = gql`
+    query playerSuggestions($clubId: String!) {
+  usersByClub(clubId: $clubId) {
+    uid
+    nickname
+    avatar
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class PlayerSuggestionsGQL extends Apollo.Query<PlayerSuggestionsQuery, PlayerSuggestionsQueryVariables> {
+    document = PlayerSuggestionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ProfilePageDocument = gql`
     query profilePage($id: String!) {
   user(id: $id) {
     uid
     nickname
     avatar
-  }
-  playersLastGames(playerId: $id, limit: 10) {
-    createdAt
-    id
-    result
-    roles
-    won
   }
 }
     `;

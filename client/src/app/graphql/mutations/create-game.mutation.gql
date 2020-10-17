@@ -1,0 +1,3 @@
+mutation createGame($game: game!) {
+  createGame(game: $game)
+}

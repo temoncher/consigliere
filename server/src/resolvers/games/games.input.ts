@@ -1,15 +1,21 @@
 import { Field, ArgsType, Int, ID, InputType } from '@nestjs/graphql';
+import * as fbAdmin from 'firebase-admin';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
-import { IGame } from '@/interfaces/game.interface';
-import { IPlayer } from '@/interfaces/player.interface';
-import { IRound } from '@/interfaces/round.interface';
+import { IFireStoreGame } from '@/interfaces/game.interface';
+import { IFireStorePlayer } from '@/interfaces/player.interface';
+import { IFireStoreRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
+import { FirebaseTimestampScalar } from '@/scalars/firebase-timestamp.scalar';
 
 import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 import { VoteResult } from '~types/enums/vote-result.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
+
+export enum GamesInputName {
+  GAME = 'game'
+}
 
 @ArgsType()
 export class GetGameArgs {
@@ -27,7 +33,7 @@ export class GetLastGamesByPlayerIdArgs {
 }
 
 @InputType()
-export class RoundInput implements IRound {
+export class RoundInput implements IFireStoreRound {
   @Field(() => [ID], {
     nullable: true,
     description: 'Kicked player id',
@@ -86,7 +92,7 @@ export class RoundInput implements IRound {
 }
 
 @InputType()
-export class PlayerInput implements IPlayer {
+export class PlayerInput implements IFireStorePlayer {
   @Field(() => ID)
   uid: string;
   @Field()
@@ -97,8 +103,34 @@ export class PlayerInput implements IPlayer {
   isGuest: boolean;
 }
 
-@InputType()
-export class GameInput extends DocumentMeta implements Partial<IGame> {
+@InputType(GamesInputName.GAME)
+export class GameInput extends DocumentMeta implements Partial<IFireStoreGame> {
+  @Field(() => String, { nullable: true })
+  club?: string;
+
+  @Field(() => Int)
+  gameNumber: number;
+  @Field(() => FirebaseTimestampScalar)
+  date: fbAdmin.firestore.Timestamp;
+  @Field(() => PlayerInput)
+  host: IFireStorePlayer;
+  @Field(() => [String])
+  triple: [string, string, string];
   @Field(() => GameResult)
   result: GameResult;
+  @Field(() => [PlayerInput])
+  players: IFireStorePlayer[];
+  @Field(() => GraphQLJSONObject)
+  falls: Record<string, number>;
+  @Field(() => GraphQLJSONObject)
+  quitPhases: Record<string, IQuitPhase>;
+  /** <candidatePlayerId, votesNumber[]> */
+  @Field(() => GraphQLJSONObject)
+  votes: Record<string, number[]>[];
+  @Field(() => GraphQLJSONObject)
+  roles: Record<string, Role>;
+  @Field(() => [String])
+  donChecks: string[];
+  @Field(() => [String])
+  sheriffChecks: string[];
 }

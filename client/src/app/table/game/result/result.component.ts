@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
+import { GameResult } from '@/graphql/gql.generated';
 import { Player } from '@/shared/models/player.model';
 import { GameService } from '@/table/services/game.service';
 import { PlayersState } from '@/table/store/players/players.state';
 import { TableState } from '@/table/store/table.state';
 
-import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 
 @Component({

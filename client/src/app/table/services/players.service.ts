@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 
+import { GameResult } from '@/graphql/gql.generated';
+
 import { ResetPlayer, KillPlayer, AssignFall, SkipSpeech } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 import { ResetPlayerTimer, SetPlayerTimer } from '../store/round/current-day/current-day.actions';
@@ -10,7 +12,6 @@ import { TableState } from '../store/table.state';
 
 import { TimersService } from './timers.service';
 
-import { GameResult } from '~types/enums/game-result.enum';
 import { Role } from '~types/enums/role.enum';
 import { RoundPhase } from '~types/enums/round-phase.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
@@ -25,7 +26,7 @@ export class PlayersService {
     private actions$: Actions,
   ) {
     this.catchFallAssignment();
-    this.catchPlayerMurder();
+    this.watchPlayerMurder();
     this.catchPlayerReset();
   }
 
@@ -61,7 +62,7 @@ export class PlayersService {
     });
   }
 
-  private catchPlayerMurder() {
+  private watchPlayerMurder() {
     this.actions$.pipe(
       ofActionSuccessful(KillPlayer),
     ).subscribe(({ playerId, quitPhase }: KillPlayer) => {
@@ -105,11 +106,11 @@ export class PlayersService {
     let gameResult: GameResult;
 
     if (aliveMafia.length >= alivePlayers.length / 2) {
-      gameResult = GameResult.MAFIA;
+      gameResult = GameResult.Mafia;
     }
 
     if (!aliveMafia.length) {
-      gameResult = GameResult.CIVILIANS;
+      gameResult = GameResult.Civilians;
     }
 
     if (gameResult) {

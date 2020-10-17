@@ -3,9 +3,7 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
-import { IGame } from '@/shared/models/game.interface';
-import { ApiService } from '@/shared/services/api/api.service';
-import { UserState } from '@/shared/store/user/user.state';
+import { CreateGameGQL, CreateGameMutationVariables } from '@/graphql/gql.generated';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
 
@@ -39,9 +37,9 @@ export class GameService {
     private voteService: VoteService,
     private timersService: TimersService,
     private playersService: PlayersService,
-    private apiService: ApiService,
+    private createGameGQL: CreateGameGQL,
   ) {
-    this.catchPlayerKick();
+    this.watchPlayerKick();
     this.watchGameEnd();
   }
 
@@ -114,12 +112,14 @@ export class GameService {
   saveGame() {
     const newGame = this.composeGame();
 
-    this.apiService.games.create(newGame);
-
-    this.store.dispatch([
-      new StateReset(TableState),
-      new Navigate(['tabs', 'table']),
-    ]);
+    this.createGameGQL.mutate({
+      game: newGame,
+    }).subscribe(() => {
+      this.store.dispatch([
+        new StateReset(TableState),
+        new Navigate(['tabs', 'table']),
+      ]);
+    });
   }
 
   private startNewRound() {
@@ -151,33 +151,31 @@ export class GameService {
     return round;
   }
 
-  private composeGame() {
-    const { players, falls, quitPhases, speechSkips, roles } = this.store.selectSnapshot(PlayersState.getState);
+  private composeGame(): CreateGameMutationVariables['game'] {
+    const { players, falls, quitPhases, roles } = this.store.selectSnapshot(PlayersState.getState);
     const result = this.store.selectSnapshot(TableState.getGameResult);
-    const rounds = this.store.selectSnapshot(TableState.getRounds);
     const host = this.store.selectSnapshot(PlayersState.getHost);
-    const user = this.store.selectSnapshot(UserState.getState);
-    const playersIds = players
-      .filter(({ isGuest }) => !isGuest)
-      .map(({ uid }) => uid);
 
-    const newGame: IGame = {
-      participants: [host.uid, ...playersIds],
-      createdBy: user.uid,
+    const newGame: CreateGameMutationVariables['game'] = {
+      // TODO: populate fields wit real values
+      gameNumber: 1,
+      date: Date.now(),
+      triple: [],
+      donChecks: [],
+      sheriffChecks: [],
+      votes: {},
       players: players.map((player) => player.serialize()),
       falls,
       roles,
       quitPhases,
-      speechSkips,
       host: host.serialize(),
-      rounds,
       result,
     };
 
     return newGame;
   }
 
-  private catchPlayerKick() {
+  private watchPlayerKick() {
     this.actions$.pipe(
       ofActionSuccessful(KickPlayer),
     ).subscribe(({ playerId }: KickPlayer) => {

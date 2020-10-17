@@ -1,14 +1,14 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
 
 import { CollectionName } from '~types/enums/colletion-name.enum';
 
 export const usersCreatedAt = functions.firestore
   .document(`/${CollectionName.USERS}/{userId}`)
   .onCreate((userSnapshot, context) => {
-    const meta: IDocumentMeta = {
+    const meta: IFireStoreDocumentMeta = {
       createdBy: context.auth.uid,
       updatedBy: context.auth.uid,
       createdAt: admin.firestore.Timestamp.now(),
@@ -26,7 +26,7 @@ export const usersOnUpdate = functions.firestore
   .onUpdate((userChange, context) => {
     const userId = userChange.after.id;
     const userDoc = admin.firestore().collection(CollectionName.USERS).doc(userId);
-    const meta: Partial<IDocumentMeta> = {
+    const meta: Partial<IFireStoreDocumentMeta> = {
       updatedBy: context.auth.uid,
       updatedAt: admin.firestore.Timestamp.now(),
     };

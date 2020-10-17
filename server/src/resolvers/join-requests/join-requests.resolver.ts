@@ -5,8 +5,8 @@ import { ApolloError, ForbiddenError, ValidationError } from 'apollo-server-expr
 import * as admin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
-import { IJoinRequest } from '@/interfaces/join-request.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreJoinRequest } from '@/interfaces/join-request.interface';
 import { ClubsCollection, JoinRequestsCollection } from '@/models/collections.types';
 
 import { JoinRequestInput, JoinRequestInputNames } from './join-requests.input';
@@ -50,13 +50,13 @@ export class JoinRequestsResolver {
       throw new ValidationError('Player has already sent request to this club');
     }
 
-    const meta: IDocumentMeta = {
+    const meta: IFireStoreDocumentMeta = {
       createdAt: admin.firestore.Timestamp.now(),
       createdBy: currentUser.uid,
       updatedAt: admin.firestore.Timestamp.now(),
       updatedBy: currentUser.uid,
     };
-    const joinRequest: Omit<IJoinRequest, 'id'> = {
+    const joinRequest: Omit<IFireStoreJoinRequest, 'id'> = {
       clubId,
       playerId: currentUser.uid,
       status: InvitationStatus.PENDING,
@@ -67,7 +67,7 @@ export class JoinRequestsResolver {
       ...meta,
     };
 
-    const { id } = await this.joinRequestsCollection.add(newJoinRequest as IJoinRequest & IDocumentMeta);
+    const { id } = await this.joinRequestsCollection.add(newJoinRequest);
 
     return {
       ...newJoinRequest,

@@ -4,13 +4,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import * as admin from 'firebase-admin';
 
 import { ResolversModule } from './resolvers/resolvers.module';
-import * as credentials from './service-account.json';
 
 @Module({
   imports: [
     FirebaseAdminModule.forRootAsync({
       useFactory: () => ({
-        credential: admin.credential.cert(credentials as any),
+        credential: admin.credential.applicationDefault(),
       }),
     }),
     GraphQLModule.forRoot({
@@ -18,9 +17,6 @@ import * as credentials from './service-account.json';
       autoSchemaFile: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       context: ({ req }) => ({ headers: req.headers }),
-      buildSchemaOptions: {
-        dateScalarMode: 'timestamp',
-      },
     }),
     ResolversModule,
   ],

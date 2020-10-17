@@ -15,7 +15,7 @@
     </ion-item>
     <!-- END Add new player button-->
     <ion-item
-      *ngFor="let player of (players$ | async); let i = index"
+      *ngFor="let player of players$ | async; let i = index"
       class="player-list__item"
       lines="none"
     >
@@ -37,14 +37,7 @@
 
       <ion-label>
         <h3>{{ player.nickname }}</h3>
-        <!-- TODO: translate this -->
-        <div
-          *ngIf="
-            getPlayersRole(player);
-            then hasRole;
-            else hasNoRole
-          "
-        >
+        <div *ngIf="getPlayersRole(player); then hasRole; else hasNoRole">
           {{
             "TABS.TABLE.PREPARATION.PLAYERS_LIST" +
               (player.isGuest ? ".guest" : ".authorizedUser") | translate
@@ -52,7 +45,11 @@
         </div>
         <ng-template #hasRole>
           <p>
-            <ion-text [color]="(validRoles$ | async)[getPlayersRole(player)] || 'danger'">
+            <ion-text
+              [color]="
+                (validRoles$ | async)[getPlayersRole(player)] || 'danger'
+              "
+            >
               {{ "ROLE." + getPlayersRole(player) | translate }}
             </ion-text>
           </p>

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import {
   ClubDetailsPageGQL,
@@ -10,6 +11,7 @@ import {
   ClubRole,
   JoinPublicClubGQL,
   LeaveClubGQL,
+  ClubsPageDocument,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -18,7 +20,8 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './club-details.component.html',
   styleUrls: ['./club-details.component.scss'],
 })
-export class ClubDetailsComponent implements OnInit {
+export class ClubDetailsComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
   club: ClubDetailsPageQuery['club'];
   loading = true;
   statusLoading = true;
@@ -43,9 +46,8 @@ export class ClubDetailsComponent implements OnInit {
     private leaveClubGQL: LeaveClubGQL,
     public alertController: AlertController,
   ) {
-    // TODO: ubsubscribe
-    // TODO: implement club not found page
     this.activateRoute.params.pipe(
+      takeUntil(this.destroy),
       switchMap(({ clubId }) => this.clubDetailsPageGQL.watch({ id: clubId }).valueChanges),
     ).subscribe(({ data, loading }) => {
       this.club = data.club;
@@ -56,6 +58,11 @@ export class ClubDetailsComponent implements OnInit {
 
   ngOnInit() {}
 
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
+
   leaveClub() {
     const clubId = this.club.id;
 
@@ -63,10 +70,13 @@ export class ClubDetailsComponent implements OnInit {
     this.leaveClubGQL.mutate(
       { clubId },
       {
-        refetchQueries: [{
-          query: ClubDetailsPageDocument,
-          variables: { id: clubId },
-        }],
+        refetchQueries: [
+          { query: ClubsPageDocument },
+          {
+            query: ClubDetailsPageDocument,
+            variables: { id: clubId },
+          },
+        ],
       },
     ).subscribe();
   }
@@ -78,10 +88,13 @@ export class ClubDetailsComponent implements OnInit {
     this.joinPublicClubGQL.mutate(
       { clubId },
       {
-        refetchQueries: [{
-          query: ClubDetailsPageDocument,
-          variables: { id: clubId },
-        }],
+        refetchQueries: [
+          { query: ClubsPageDocument },
+          {
+            query: ClubDetailsPageDocument,
+            variables: { id: clubId },
+          },
+        ],
       },
     ).subscribe();
   }

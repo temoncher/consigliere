@@ -16,6 +16,7 @@ import { TableTemplateComponent } from './components/table-template/table-templa
 
 @NgModule({
   imports: [
+    TranslateModule,
     PortalModule,
     CommonModule,
     IonicModule,

@@ -1,10 +1,10 @@
-import { IClub } from '@/interfaces/club.interface';
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
-import { IGame } from '@/interfaces/game.interface';
-import { IJoinRequest } from '@/interfaces/join-request.interface';
-import { IUser } from '@/interfaces/user.interface';
+import { IFireStoreClub } from '@/interfaces/club.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreGame } from '@/interfaces/game.interface';
+import { IFireStoreJoinRequest } from '@/interfaces/join-request.interface';
+import { IFireStoreUser } from '@/interfaces/user.interface';
 
-export type GamesCollection = FirebaseFirestore.CollectionReference<IGame & IDocumentMeta>;
-export type ClubsCollection = FirebaseFirestore.CollectionReference<IClub & IDocumentMeta>;
-export type UsersCollection = FirebaseFirestore.CollectionReference<IUser & IDocumentMeta>;
-export type JoinRequestsCollection = FirebaseFirestore.CollectionReference<IJoinRequest & IDocumentMeta>;
+export type GamesCollection = FirebaseFirestore.CollectionReference<IFireStoreGame & IFireStoreDocumentMeta>;
+export type ClubsCollection = FirebaseFirestore.CollectionReference<IFireStoreClub & IFireStoreDocumentMeta>;
+export type UsersCollection = FirebaseFirestore.CollectionReference<IFireStoreUser & IFireStoreDocumentMeta>;
+export type JoinRequestsCollection = FirebaseFirestore.CollectionReference<IFireStoreJoinRequest & IFireStoreDocumentMeta>;

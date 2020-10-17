@@ -1,11 +1,11 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
-import { IUser } from '@/interfaces/user.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreUser } from '@/interfaces/user.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 
 @ObjectType()
-export class UserOutput extends DocumentMeta implements IUser, IDocumentMeta {
+export class UserOutput extends DocumentMeta implements IFireStoreUser, IFireStoreDocumentMeta {
   @Field(() => ID)
   uid: string;
 

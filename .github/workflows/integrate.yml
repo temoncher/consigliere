@@ -1,0 +1,97 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  client-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-client-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install client NPM dependencies
+        run: |
+          cd client
+          yarn install
+      - name: Lint client
+        run: |
+          cd client
+          yarn lint
+  client-build:
+    runs-on: ubuntu-latest
+    needs: client-lint
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-client-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install client NPM dependencies
+        run: |
+          cd client
+          yarn install
+      - name: Build client
+        run: |
+          cd client
+          yarn build
+  server-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-server-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install server NPM dependencies
+        run: |
+          cd server
+          yarn install
+      - name: Lint server
+        run: |
+          cd server
+          yarn lint
+  server-build:
+    runs-on: ubuntu-latest
+    needs: server-lint
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-server-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install server NPM dependencies
+        run: |
+          cd server
+          yarn install
+      - name: Build server
+        run: |
+          cd server
+          yarn build
