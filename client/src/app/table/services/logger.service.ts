@@ -2,9 +2,7 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class LoggerService {
   constructor(private errorHandler: ErrorHandler) {}
 

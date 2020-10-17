@@ -4,7 +4,7 @@ import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
 import { IGame } from '@/shared/models/game.interface';
-import { ApiService } from '@/shared/services/api/api.service';
+import { GamesApi } from '@/shared/services/api/games.api';
 import { UserState } from '@/shared/store/user/user.state';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
@@ -29,9 +29,7 @@ import { VoteService } from './vote.service';
 import { Role } from '~types/enums/role.enum';
 import { RoundPhase } from '~types/enums/round-phase.enum';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class GameService {
   constructor(
     private store: Store,
@@ -39,7 +37,7 @@ export class GameService {
     private voteService: VoteService,
     private timersService: TimersService,
     private playersService: PlayersService,
-    private apiService: ApiService,
+    private gamesApi: GamesApi,
   ) {
     this.catchPlayerKick();
     this.watchGameEnd();
@@ -114,7 +112,7 @@ export class GameService {
   saveGame() {
     const newGame = this.composeGame();
 
-    this.apiService.games.create(newGame);
+    this.gamesApi.create(newGame);
 
     this.store.dispatch([
       new StateReset(TableState),

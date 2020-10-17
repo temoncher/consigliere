@@ -1,12 +1,12 @@
 <app-placeholder
-  *ngIf="!loading && !clubs.length"
+  *ngIf="!loading && !clubs?.length"
   style="height: 80%"
   image="assets/sad.png"
 >
   Здесь пока еще пусто...
 </app-placeholder>
 
-<ng-container *ngIf="loading || clubs.length">
+<ng-container *ngIf="loading || clubs?.length">
   <ion-list class="cards-list">
     <ng-container *ngIf="loading">
       <ion-list-header>

@@ -1,12 +1,12 @@
+import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 import { IGame } from '@/shared/models/game.interface';
 
-import { IApi } from './api.interface';
-
 import { CollectionName } from '~types/enums/colletion-name.enum';
 
-export class GamesApi implements IApi<IGame> {
+@Injectable({ providedIn: 'root' })
+export class GamesApi {
   private gamesCollection = this.firestore.collection<IGame>(CollectionName.GAMES);
 
   constructor(private firestore: AngularFirestore) {}

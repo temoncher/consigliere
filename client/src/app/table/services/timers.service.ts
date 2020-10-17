@@ -6,9 +6,7 @@ import { Timer } from '../models/timer.model';
 import { PlayersState } from '../store/players/players.state';
 import { TableState } from '../store/table.state';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TimersService {
   timers = new Map<string, Timer>();
 

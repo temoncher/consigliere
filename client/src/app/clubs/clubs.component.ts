@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
-import { ClubsPageGQL, ClubsPageQuery } from '@/graphql/gql.generated';
+import { IClub } from '@/shared/interfaces/club.interface';
+import { ClubsApi } from '@/shared/services/api/clubs.api';
 
 enum ClubsPageState {
   CREATE = 'CREATE',
@@ -16,22 +17,16 @@ enum ClubsPageState {
   styleUrls: ['clubs.component.scss'],
 })
 export class ClubsComponent {
-  clubs: ClubsPageQuery['currentPlayerClubs'];
+  clubs$: Observable<IClub[]> = this.clubsApi.userClubs$;
   loading = true;
 
   ClubsPageState = ClubsPageState;
   pageState = ClubsPageState.LIST;
 
-  constructor(
-    private fireauth: AngularFireAuth,
-    private clubsPageGQL: ClubsPageGQL,
-  ) {
-    this.fireauth.user.pipe(
-      switchMap(() => this.clubsPageGQL.watch().valueChanges),
-    ).subscribe(({ data, loading }) => {
-      this.loading = loading;
-      this.clubs = data.currentPlayerClubs;
-    });
+  constructor(private clubsApi: ClubsApi) {
+    this.clubs$.pipe(
+      take(1),
+    ).subscribe(() => this.loading = false);
   }
 
   join() {

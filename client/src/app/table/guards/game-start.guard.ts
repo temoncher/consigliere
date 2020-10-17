@@ -4,9 +4,7 @@ import { Store } from '@ngxs/store';
 
 import { TableState } from '@/table/store/table.state';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class GameStartGuard implements CanActivate {
   constructor(
     private store: Store,

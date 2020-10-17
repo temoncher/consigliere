@@ -6,9 +6,7 @@ import { LanguageCode, ILanguage } from '@/shared/models/language.interface';
 
 const LNG_KEY = 'SELECTED_LANGUAGE';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class LanguageService {
   DEFAULT_LANGUAGE = LanguageCode.RUSSIAN;
   selectedLanguageCode = '';

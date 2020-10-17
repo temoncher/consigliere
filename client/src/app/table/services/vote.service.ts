@@ -23,9 +23,7 @@ import { PlayersService } from './players.service';
 import { RoundPhase } from '~types/enums/round-phase.enum';
 import { VoteResult } from '~types/enums/vote-result.enum';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class VoteService {
   constructor(
     private store: Store,

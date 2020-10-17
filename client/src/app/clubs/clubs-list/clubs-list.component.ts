@@ -3,8 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
-import { ClubRole, ClubsPageQuery } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
+import { IClub } from '@/shared/interfaces/club.interface';
+
+import { ClubRole } from '~types/enums/club-role.enum';
 
 @Component({
   selector: 'app-clubs-list',
@@ -13,18 +15,18 @@ import { consigliereLogo } from '@/shared/constants/avatars';
 })
 export class ClubsListComponent implements OnInit {
   @Input() loading: boolean;
-  @Input() clubs: ClubsPageQuery['currentPlayerClubs'];
+  @Input() clubs?: IClub[];
 
   get administratedClubs() {
-    return this.clubs.filter(({ role }) => role === ClubRole.Admin);
+    return this.clubs.filter(({ role }) => role === ClubRole.ADMIN);
   }
 
   get confidantClubs() {
-    return this.clubs.filter(({ role }) => role === ClubRole.Confidant);
+    return this.clubs.filter(({ role }) => role === ClubRole.CONFIDANT);
   }
 
   get memberClubs() {
-    return this.clubs.filter(({ role }) => role === ClubRole.Member);
+    return this.clubs.filter(({ role }) => role === ClubRole.MEMBER);
   }
 
   defaultClubAvatar = consigliereLogo;

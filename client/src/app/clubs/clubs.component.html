@@ -43,9 +43,12 @@
       <app-clubs-list
         *ngSwitchCase="ClubsPageState.LIST"
         [loading]="loading"
-        [clubs]="clubs"
+        [clubs]="clubs$ | async"
       ></app-clubs-list>
-      <app-create-club *ngSwitchCase="ClubsPageState.CREATE" (create)="resetPage()"></app-create-club>
+      <app-create-club
+        *ngSwitchCase="ClubsPageState.CREATE"
+        (create)="resetPage()"
+      ></app-create-club>
       <app-join-club *ngSwitchCase="ClubsPageState.JOIN"></app-join-club>
     </div>
   </div>

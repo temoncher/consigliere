@@ -7,17 +7,15 @@ import { filter, tap } from 'rxjs/operators';
 import { IUser } from '@/shared/models/user.interface';
 import { LoggerService } from '@/table/services/logger.service';
 
-import { ApiService } from './api/api.service';
+import { UsersApi } from './api/users.api';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   currentUser: firebase.User;
 
   constructor(
     private store: Store,
-    private apiService: ApiService,
+    private usersApi: UsersApi,
     private fireauth: AngularFireAuth,
     private logger: LoggerService,
   ) {
@@ -31,7 +29,7 @@ export class AuthService {
       nickname,
     };
 
-    await this.apiService.users.create(newUser);
+    await this.usersApi.create(newUser);
 
     // TODO: make this navigation relative
     this.store.dispatch(new Navigate(['tabs', 'table']));

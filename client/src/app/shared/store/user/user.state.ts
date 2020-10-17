@@ -10,7 +10,7 @@ import {
 import { filter, switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@/shared/models/user.interface';
-import { ApiService } from '@/shared/services/api/api.service';
+import { UsersApi } from '@/shared/services/api/users.api';
 import { LoggerService } from '@/table/services/logger.service';
 
 import { SetUser } from './user.actions';
@@ -30,7 +30,7 @@ export class UserState implements NgxsOnInit {
 
   constructor(
     private fireauth: AngularFireAuth,
-    private apiService: ApiService,
+    private usersApi: UsersApi,
     private logger: LoggerService,
   ) {}
 
@@ -53,7 +53,7 @@ export class UserState implements NgxsOnInit {
       tap((user) => {
         this.logUser(user);
       }),
-      switchMap(({ uid }) => this.apiService.users.getOne(uid)),
+      switchMap(({ uid }) => this.usersApi.getOne(uid)),
     ).subscribe((user) => {
       context.setState(user);
     });

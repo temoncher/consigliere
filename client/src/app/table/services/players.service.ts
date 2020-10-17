@@ -15,9 +15,7 @@ import { Role } from '~types/enums/role.enum';
 import { RoundPhase } from '~types/enums/round-phase.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class PlayersService {
   constructor(
     private store: Store,
