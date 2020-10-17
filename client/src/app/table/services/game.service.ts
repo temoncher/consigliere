@@ -4,7 +4,6 @@ import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
 import { IGame } from '@/shared/models/game.interface';
-import { ApiService } from '@/shared/services/api/api.service';
 import { UserState } from '@/shared/store/user/user.state';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
@@ -39,7 +38,6 @@ export class GameService {
     private voteService: VoteService,
     private timersService: TimersService,
     private playersService: PlayersService,
-    private apiService: ApiService,
   ) {
     this.catchPlayerKick();
     this.watchGameEnd();
@@ -114,7 +112,7 @@ export class GameService {
   saveGame() {
     const newGame = this.composeGame();
 
-    this.apiService.games.create(newGame);
+    // TODO: this.apiService.games.create(newGame);
 
     this.store.dispatch([
       new StateReset(TableState),
