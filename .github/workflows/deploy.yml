@@ -1,5 +1,4 @@
-# name: Firebase dev-stand deployment
-
+name: Firebase dev-stand deployment
 # on:
 #   push:
 #     branches: [master]
