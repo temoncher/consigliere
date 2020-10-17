@@ -1,9 +1,9 @@
 import { Field, ArgsType, Int, ID, InputType } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
-import { IGame } from '@/interfaces/game.interface';
-import { IPlayer } from '@/interfaces/player.interface';
-import { IRound } from '@/interfaces/round.interface';
+import { IFireStoreGame } from '@/interfaces/game.interface';
+import { IFireStorePlayer } from '@/interfaces/player.interface';
+import { IFireStoreRound } from '@/interfaces/round.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 
 import { GameResult } from '~types/enums/game-result.enum';
@@ -25,7 +25,7 @@ export class GetLastGamesByPlayerIdArgs {
 }
 
 @InputType()
-export class RoundInput implements IRound {
+export class RoundInput implements IFireStoreRound {
   @Field(() => [ID], {
     nullable: true,
     description: 'Kicked player id',
@@ -84,7 +84,7 @@ export class RoundInput implements IRound {
 }
 
 @InputType()
-export class PlayerInput implements IPlayer {
+export class PlayerInput implements IFireStorePlayer {
   @Field(() => ID)
   uid: string;
   @Field()
@@ -96,7 +96,7 @@ export class PlayerInput implements IPlayer {
 }
 
 @InputType()
-export class GameInput extends DocumentMeta implements Partial<IGame> {
+export class GameInput extends DocumentMeta implements Partial<IFireStoreGame> {
   @Field(() => GameResult)
   result: GameResult;
 }

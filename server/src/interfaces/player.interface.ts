@@ -1,5 +1,5 @@
 
-export interface IPlayer {
+export interface IFireStorePlayer {
   uid: string;
   nickname: string;
   number?: number;

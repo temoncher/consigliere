@@ -1,6 +1,6 @@
 import { VoteResult } from '~types/enums/vote-result.enum';
 
-export interface IRound {
+export interface IFireStoreRound {
   // Day
   /** <playerId, timeLeft> */
   timers?: Record<string, number>;

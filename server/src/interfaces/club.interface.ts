@@ -1,4 +1,4 @@
-export interface IClub {
+export interface IFireStoreClub {
   title: string;
   location?: string;
   avatar?: string;

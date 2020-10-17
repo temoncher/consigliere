@@ -3,9 +3,9 @@ import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import * as fbAdmin from 'firebase-admin';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
-import { IDocumentMeta } from '@/interfaces/document-meta.interface';
-import { IGame } from '@/interfaces/game.interface';
-import { IPlayer } from '@/interfaces/player.interface';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreGame } from '@/interfaces/game.interface';
+import { IFireStorePlayer } from '@/interfaces/player.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 import { FirebaseTimestampScalar } from '@/scalars/firebase-timestamp.scalar';
 
@@ -14,7 +14,7 @@ import { Role } from '~types/enums/role.enum';
 import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 
 @ObjectType()
-export class PlayerOutput implements IPlayer {
+export class PlayerOutput implements IFireStorePlayer {
   @Field(() => ID)
   uid: string;
   @Field()
@@ -26,7 +26,7 @@ export class PlayerOutput implements IPlayer {
 }
 
 @ObjectType()
-export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
+export class GameOutput extends DocumentMeta implements IFireStoreGame, IFireStoreDocumentMeta {
   @Field(() => ID)
   id: string;
   @Field(() => ID, { nullable: true })
@@ -38,12 +38,13 @@ export class GameOutput extends DocumentMeta implements IGame, IDocumentMeta {
   @Field(() => FirebaseTimestampScalar)
   date: fbAdmin.firestore.Timestamp;
   @Field(() => PlayerOutput)
-  host: IPlayer;
-  bestTurn?: [number, number, number];
+  host: IFireStorePlayer;
+  @Field(() => [String])
+  bestTurn?: [string, string, string];
   @Field(() => GameResult)
   result: GameResult;
   @Field(() => [PlayerOutput])
-  players: IPlayer[];
+  players: IFireStorePlayer[];
   @Field(() => GraphQLJSONObject, { nullable: true })
   falls?: Record<string, number>;
   @Field(() => GraphQLJSONObject)

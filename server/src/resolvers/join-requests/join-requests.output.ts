@@ -1,12 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { IJoinRequest } from '@/interfaces/join-request.interface';
+import { IFireStoreJoinRequest } from '@/interfaces/join-request.interface';
 import { DocumentMeta } from '@/models/document-with-meta.model';
 
 import { InvitationStatus } from '~types/enums/invitation-status.enum';
 
 @ObjectType()
-export class JoinRequestOutput extends DocumentMeta implements IJoinRequest {
+export class JoinRequestOutput extends DocumentMeta implements IFireStoreJoinRequest {
   @Field(() => ID)
   id: string;
   @Field(() => ID)

@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-export interface IDocumentMeta {
+export interface IFireStoreDocumentMeta {
   createdBy: string;
   updatedBy: string;
   createdAt: admin.firestore.Timestamp;
