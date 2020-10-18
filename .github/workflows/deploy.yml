@@ -15,7 +15,7 @@ jobs:
         run: |
           cd client
           yarn install
-      - name: Build
+      - name: Build client
         run: |
           cd client
           yarn build:dev
@@ -36,13 +36,17 @@ jobs:
         with:
           name: www
           path: client/www
-      - name: Deploy firebase hosting
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
+      - name: Install firebse tools
+        run: npm i -g firebase-tools
+      - name: Set firebase project to dev
+        run: firebase use $PROJECT_ID --token $FIREBASE_TOKEN
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: dev
+      - name: Deploy firebase hosting
+        run: firebase deploy --only hosting -m "Workflow $GITHUB_WORKFLOW, action $GITHUB_ACTION" --non-interactive --token $FIREBASE_TOKEN
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
   build-server:
     name: Build server
     runs-on: ubuntu-latest
@@ -53,7 +57,7 @@ jobs:
         run: |
           cd server
           yarn install
-      - name: Build
+      - name: Build server
         run: |
           cd server
           yarn build
@@ -74,10 +78,14 @@ jobs:
         with:
           name: dist
           path: server/dist
-      - name: Deploy firebase functions
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only functions -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
+      - name: Install firebse tools
+        run: npm i -g firebase-tools
+      - name: Set firebase project to dev
+        run: firebase use $PROJECT_ID --token $FIREBASE_TOKEN
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: dev
+      - name: Deploy firebase functions
+        run: firebase deploy --only functions -m "Workflow $GITHUB_WORKFLOW, action $GITHUB_ACTION" --non-interactive --token $FIREBASE_TOKEN
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

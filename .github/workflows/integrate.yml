@@ -49,7 +49,7 @@ jobs:
       - name: Build client
         run: |
           cd client
-          yarn build
+          yarn build:dev
   server-lint:
     runs-on: ubuntu-latest
     steps:
