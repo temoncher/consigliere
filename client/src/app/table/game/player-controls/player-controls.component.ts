@@ -1,5 +1,10 @@
 import {
-  Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy,
+  Component,
+  Input,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';

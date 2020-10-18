@@ -6,7 +6,6 @@ export const gameActionsPrefix = 'Game';
 
 export class ResetIsNextVotingDisabled {
   static readonly type = `[${gameActionsPrefix}] Reset next voting disabled`;
-  constructor() { }
 }
 
 export class AddRound {

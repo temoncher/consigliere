@@ -1,6 +1,4 @@
-import {
-  Component, OnInit, ViewChild, OnDestroy,
-} from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';

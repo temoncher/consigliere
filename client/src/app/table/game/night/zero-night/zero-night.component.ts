@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { PlayersState } from '@/table/store/players/players.state';
   templateUrl: './zero-night.component.html',
   styleUrls: ['./zero-night.component.scss'],
 })
-export class ZeroNightComponent implements OnInit, OnDestroy {
+export class ZeroNightComponent implements OnDestroy {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getDon) don$: Observable<Player>;
@@ -27,19 +27,15 @@ export class ZeroNightComponent implements OnInit, OnDestroy {
   time = 20;
   sheriffTimer = new Timer({ time: this.time });
 
-  constructor() { }
-
-  ngOnInit() {}
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sheriffTimer.pauseTimer();
   }
 
-  nextStage() {
+  nextStage(): void {
     this.nextClick.emit();
   }
 
-  switchTimer() {
+  switchTimer(): void {
     this.sheriffTimer.switchTimer();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';

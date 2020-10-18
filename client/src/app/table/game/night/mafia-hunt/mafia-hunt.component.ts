@@ -1,5 +1,8 @@
 import {
-  Component, OnInit, Output, EventEmitter, OnDestroy,
+  Component,
+  Output,
+  EventEmitter,
+  OnDestroy,
 } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject, combineLatest } from 'rxjs';

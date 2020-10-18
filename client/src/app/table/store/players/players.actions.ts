@@ -15,7 +15,6 @@ export class SetHost {
 
 export class GiveRoles {
   static readonly type = `[${playersActionsPrefix}] Give roles`;
-  constructor() { }
 }
 
 export class AddPlayer {
@@ -38,12 +37,10 @@ export class KillPlayer {
 
 export class ShufflePlayers {
   static readonly type = `[${playersActionsPrefix}] Shuffle players`;
-  constructor() { }
 }
 
 export class SetPlayersNumbers {
   static readonly type = `[${playersActionsPrefix}] Set players' numbers`;
-  constructor() { }
 }
 
 export class AssignFall {

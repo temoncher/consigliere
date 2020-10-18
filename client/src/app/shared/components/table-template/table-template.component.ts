@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -11,10 +11,6 @@ import { PlayersState } from '@/table/store/players/players.state';
   styleUrls: ['./table-template.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class TableTemplateComponent implements OnInit {
+export class TableTemplateComponent {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-
-  constructor() { }
-
-  ngOnInit() { }
 }

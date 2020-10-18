@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-placeholder',
@@ -32,10 +32,6 @@ import { Component, Input, OnInit } from '@angular/core';
     }
   `],
 })
-export class PlaceholderComponent implements OnInit {
+export class PlaceholderComponent {
   @Input() image: string;
-
-  constructor() { }
-
-  ngOnInit() {}
 }
