@@ -24,6 +24,15 @@ export class SetIsNextVotingDisabled {
   constructor(public isNextVotingDisabled: boolean) { }
 }
 
+export class SetTableMeta {
+  static readonly type = `[${gameActionsPrefix}] Set next voting disabling condition`;
+  constructor(public tableMeta: {
+    title: string;
+    date: string;
+    club?: string;
+  }) { }
+}
+
 export class EndGame {
   static readonly type = `[${gameActionsPrefix}] End game`;
   constructor(public gameResult: GameResult) { }

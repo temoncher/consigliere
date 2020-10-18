@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { switchMap } from 'rxjs/operators';
 
-import { ClubsPageGQL, ClubsPageQuery } from '@/graphql/gql.generated';
+import { CurrentPlayerClubsGQL, CurrentPlayerClubsQuery } from '@/graphql/gql.generated';
 
 enum ClubsPageState {
   CREATE = 'CREATE',
@@ -16,7 +16,7 @@ enum ClubsPageState {
   styleUrls: ['clubs.component.scss'],
 })
 export class ClubsComponent {
-  clubs: ClubsPageQuery['currentPlayerClubs'];
+  clubs: CurrentPlayerClubsQuery['currentPlayerClubs'];
   loading = true;
 
   ClubsPageState = ClubsPageState;
@@ -24,7 +24,7 @@ export class ClubsComponent {
 
   constructor(
     private fireauth: AngularFireAuth,
-    private clubsPageGQL: ClubsPageGQL,
+    private clubsPageGQL: CurrentPlayerClubsGQL,
   ) {
     this.fireauth.user.pipe(
       switchMap(() => this.clubsPageGQL.watch().valueChanges),

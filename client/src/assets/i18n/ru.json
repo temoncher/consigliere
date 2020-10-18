@@ -36,6 +36,14 @@
           "confirmButton": "Подтвердить"
         },
         "PREPARATION_MODAL": {
+          "toolbarTitle": "Подготовка к игре",
+          "addClub": "Добавить клуб",
+          "CLUB_SUGGESTIONS_MODAL": {
+            "toolbarTitle": "Выбор клуба",
+            "noClub": "Без клуба"
+          }
+        },
+        "PLAYER_SUGGESTIONS_MODAL": {
           "toolbarTitle": "Выбор игрока",
           "addGuest": "Добавить гостя"
         },

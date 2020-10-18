@@ -16,25 +16,29 @@ import {
   SetIsGameStarted,
   EndGame,
   AddRound,
+  SetTableMeta,
 } from './table.actions';
 
 import { RoundPhase } from '~types/enums/round-phase.enum';
 
 export interface TableStateModel {
-  rounds: IRound[];
+  title: string;
+  date: string;
   club?: string;
   isNextVotingDisabled: boolean;
   isGameStarted: boolean;
   gameResult?: GameResult;
+  rounds: IRound[];
 }
 
 @State<TableStateModel>({
   name: 'table',
   defaults: {
-    rounds: [],
-    club: 'Wk1xFuaxxoP28m6NquGi', // TODO: collect data from user
+    title: '',
+    date: '',
     isNextVotingDisabled: false,
     isGameStarted: false,
+    rounds: [],
   },
   children: [
     PlayersState,
@@ -45,8 +49,8 @@ export interface TableStateModel {
 @Injectable()
 export class TableState {
   @Selector()
-  static getClub({ club }: TableStateModel) {
-    return club;
+  static getTableMeta({ club, title, date }: TableStateModel) {
+    return { club, title, date };
   }
 
   @Selector()
@@ -87,6 +91,14 @@ export class TableState {
   @Selector()
   static getGameResult({ gameResult }: TableStateModel) {
     return gameResult;
+  }
+
+  @Action(SetTableMeta)
+  setTableMeta(
+    { patchState }: StateContext<TableStateModel>,
+    { tableMeta }: SetTableMeta,
+  ) {
+    patchState({ ...tableMeta });
   }
 
   @Action(SetIsGameStarted)

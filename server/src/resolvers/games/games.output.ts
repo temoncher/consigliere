@@ -29,14 +29,14 @@ export class PlayerOutput implements IFireStorePlayer {
 export class GameOutput extends DocumentMeta implements IFireStoreGame, IFireStoreDocumentMeta {
   @Field(() => ID)
   id: string;
+
   @Field(() => ID, { nullable: true })
   club?: string;
   @Field()
-  detailed: boolean;
-  @Field()
-  gameNumber: number;
+  title: string;
   @Field(() => FirebaseTimestampScalar)
   date: fbAdmin.firestore.Timestamp;
+
   @Field(() => PlayerOutput)
   host: IFireStorePlayer;
   @Field(() => [String])

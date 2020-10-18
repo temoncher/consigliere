@@ -5,7 +5,7 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 
 import {
-  ClubsPageDocument,
+  CurrentPlayerClubsDocument,
   CreateClubGQL,
   CreateClubMutation,
   CreateClubMutationVariables,
@@ -76,7 +76,7 @@ export class CreateClubComponent implements OnInit {
     this.createClubGQL.mutate(
       { club },
       {
-        refetchQueries: [{ query: ClubsPageDocument }],
+        refetchQueries: [{ query: CurrentPlayerClubsDocument }],
       },
     ).subscribe(({ data }) => {
       this.create.emit(data.createClub);

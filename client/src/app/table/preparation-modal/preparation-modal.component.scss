@@ -1,0 +1,35 @@
+.preparation-modal {
+  display: flex;
+  flex-direction: column;
+
+  &__hero-block {
+    position: relative;
+    flex: 1;
+
+    &__image {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    padding: 64px 24px 0;
+    flex: 7;
+
+    .add-club-list {
+      margin-top: 16px;
+
+      ion-item {
+        padding-left: 16px;
+      }
+    }
+
+    .proceed-button {
+      margin-bottom: 16px;
+    }
+  }
+}

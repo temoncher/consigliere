@@ -10,8 +10,8 @@ import {
   DeleteClubGQL,
   ClubAdminPageGQL,
   ClubAdminPageQuery,
-  ClubsPageDocument,
   ClubRole,
+  CurrentPlayerClubsDocument,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -55,7 +55,7 @@ export class ClubAdminComponent implements OnInit, OnDestroy {
     this.deleteClubGQL.mutate(
       { clubId: this.club.id },
       {
-        refetchQueries: [{ query: ClubsPageDocument }],
+        refetchQueries: [{ query: CurrentPlayerClubsDocument }],
       },
     ).subscribe(() => {
       this.store.dispatch(new Navigate(['tabs', 'clubs']));

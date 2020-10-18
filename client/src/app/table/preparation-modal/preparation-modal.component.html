@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <!-- TODO: come up with different text -->
+      {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.toolbarTitle" | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outlined" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="preparation-modal h100">
+    <div class="preparation-modal__hero-block saturated">
+      <ion-thumbnail class="preparation-modal__hero-block__image square-avatar">
+        <ion-img [src]="consigliereLogo"></ion-img>
+      </ion-thumbnail>
+    </div>
+
+    <form
+      class="preparation-modal__content app-form"
+      [formGroup]="openTableForm"
+      (ngSubmit)="openTable()"
+      (keydown)="submitOnEnterKey($event)"
+    >
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked" color="medium">Заголовок</ion-label>
+          <ion-input
+            formControlName="title"
+            inputmode="text"
+            type="text"
+            placeholder="Стол 1, Игра 1"
+          ></ion-input>
+        </ion-item>
+        <div class="app-form__error-container">
+          <small class="text-color-danger" *ngIf="title.touched">
+            <ng-container *ngIf="title.errors?.required">
+              Заголовок - это обязательное поле
+            </ng-container>
+            <ng-container *ngIf="title.errors?.minlength">
+              Заголовок должен быть минимум из
+              {{ title.errors?.minlength.requiredLength }} символов
+            </ng-container>
+            <ng-container *ngIf="title.errors?.maxLength">
+              Заголовок должен быть максимум из
+              {{ title.errors?.minlength.requiredLength }} символов
+            </ng-container>
+          </small>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked" color="medium">Дата</ion-label>
+          <ion-datetime
+            display-format="DD.MM.YYYY"
+            doneText="Сохранить"
+            cancelText="Отмена"
+            animated
+            [value]="date.value"
+            (ionChange)="changeDate($event)"
+          ></ion-datetime>
+        </ion-item>
+      </ion-list>
+
+      <ion-list class="cards-list add-club-list">
+        <ion-item
+          *ngIf="!club"
+          class="add-new"
+          lines="none"
+          (click)="presentClubSuggestionsModal()"
+        >
+          <ion-icon slot="start" name="add" color="primary"></ion-icon>
+          <ion-label color="primary">
+            {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.addClub" | translate }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item
+          *ngIf="club"
+          lines="none"
+          (click)="presentClubSuggestionsModal()"
+        >
+          <ion-avatar slot="start">
+            <img [src]="club.avatar ? club.avatar : consigliereLogo" />
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ club.title }}</h3>
+            <p>{{ club.location }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="app-spacer"></div>
+
+      <ion-button
+        class="proceed-button"
+        type="submit"
+        expand="block"
+        shape="round"
+        [disabled]="openTableForm.invalid"
+      >
+        К выбору игроков
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

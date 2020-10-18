@@ -25,9 +25,7 @@
         data-cy="new-game-button"
         color="primary"
         shape="round"
-        routerLink="preparation"
-        routerDirection="forward"
-        (click)="resetGameState()"
+        (click)="presentPreparationModal()"
       >
         {{ "TABS.TABLE.newGame" | translate }}
       </ion-button>
