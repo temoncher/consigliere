@@ -6,6 +6,8 @@ import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
+import { LoggerService } from './table/services/logger.service';
+
 const REGION = 'us-central1';
 const PROJECT_ID = environment.firebaseConfig.projectId;
 
@@ -14,7 +16,15 @@ const REMOTE_URL = `https://${REGION}-${PROJECT_ID}.cloudfunctions.net/api/graph
 
 const uri = environment.emulation ? EMULATOR_URL : REMOTE_URL;
 
-export function createApollo(httpLink: HttpLink, fireauth: AngularFireAuth): ApolloClientOptions<any> {
+export function createApollo(
+  httpLink: HttpLink,
+  fireauth: AngularFireAuth,
+  logger: LoggerService,
+): ApolloClientOptions<any> {
+  logger.log('Creating apollo client...');
+  logger.log('Using project: ', PROJECT_ID);
+  logger.log('On URI: ', uri);
+
   const basic = setContext(() => ({
     headers: {
       Accept: 'charset=utf-8',
@@ -47,7 +57,7 @@ export function createApollo(httpLink: HttpLink, fireauth: AngularFireAuth): Apo
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink, AngularFireAuth],
+      deps: [HttpLink, AngularFireAuth, LoggerService],
     },
   ],
 })
