@@ -5,8 +5,9 @@ query profilePage($id: String!) {
     avatar
   }
   lastGamesByUserId(userId: $id) {
-    createdAt
     id
+    title
+    date
     result
     roles
     won

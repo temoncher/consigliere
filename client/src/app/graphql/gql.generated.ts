@@ -380,7 +380,7 @@ export type ProfilePageQuery = (
     & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
   ), lastGamesByUserId: Array<(
     { __typename?: 'GameOutput' }
-    & Pick<GameOutput, 'createdAt' | 'id' | 'result' | 'roles' | 'won'>
+    & Pick<GameOutput, 'id' | 'title' | 'date' | 'result' | 'roles' | 'won'>
   )> }
 );
 
@@ -583,8 +583,9 @@ export const ProfilePageDocument = gql`
     avatar
   }
   lastGamesByUserId(userId: $id) {
-    createdAt
     id
+    title
+    date
     result
     roles
     won

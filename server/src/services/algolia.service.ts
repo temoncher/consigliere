@@ -10,6 +10,7 @@ import { FunctionsConfig } from '@/interfaces/functions-config.interface';
 })
 export class AlgoliaService {
   clubsIndex: SearchIndex;
+  gamesByParticipantIndex: SearchIndex;
 
   constructor() {
     const config: FunctionsConfig = functions.config() as FunctionsConfig;
@@ -19,6 +20,13 @@ export class AlgoliaService {
     const prefix = process.env.FUNCTIONS_EMULATOR ? AlgoliaPrefix.DEVELOPMENT : AlgoliaPrefix.PRODUCTION;
     const algoliaClient = algoliasearch(APP_ID, ADMIN_KEY);
 
-    this.clubsIndex = algoliaClient.initIndex(`${prefix}_${AlgoliaIndex.CLUBS}`);
+    const clubsIndexName = `${prefix}_${AlgoliaIndex.CLUBS}`;
+    const gamesByParticipantIndexName = `${prefix}_${AlgoliaIndex.GAMES_BY_PARTICIPANT}`;
+
+    console.log('Initialized Algolia with prefix:', prefix);
+    this.clubsIndex = algoliaClient.initIndex(clubsIndexName);
+    this.gamesByParticipantIndex = algoliaClient.initIndex(gamesByParticipantIndexName);
+    console.log('Clubs:', clubsIndexName);
+    console.log('Games:', gamesByParticipantIndexName);
   }
 }

@@ -5,7 +5,10 @@ import { ApolloError } from 'apollo-server-express';
 import * as fbAdmin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
+import { IFireStoreDocumentMeta } from '@/interfaces/document-meta.interface';
+import { IFireStoreGame } from '@/interfaces/game.interface';
 import { ClubsCollection, GamesCollection } from '@/models/collections.types';
+import { AlgoliaService } from '@/services/algolia.service';
 
 import { GameInput, GamesInputName } from './games.input';
 import { GameOutput } from './games.output';
@@ -21,7 +24,10 @@ export class GamesResolver {
   private gamesCollection = this.firestore.collection(CollectionName.GAMES) as GamesCollection;
   private clubsCollection = this.firestore.collection(CollectionName.CLUBS) as ClubsCollection;
 
-  constructor(private firestore: FirebaseFirestoreService) {}
+  constructor(
+    private firestore: FirebaseFirestoreService,
+    private algoliaService: AlgoliaService,
+  ) {}
 
   @Mutation(() => ID)
   async createGame(
@@ -41,7 +47,18 @@ export class GamesResolver {
       }
     }
 
-    const { id } = await this.gamesCollection.add(gameInput);
+    const meta: IFireStoreDocumentMeta = {
+      createdAt: fbAdmin.firestore.Timestamp.now(),
+      createdBy: currentUser.uid,
+      updatedAt: fbAdmin.firestore.Timestamp.now(),
+      updatedBy: currentUser.uid,
+    };
+    const newGame = {
+      ...gameInput,
+      ...meta,
+    };
+
+    const { id } = await this.gamesCollection.add(newGame);
 
     return id;
   }
@@ -50,24 +67,30 @@ export class GamesResolver {
   async getLastGamesByUserId(
     @Args('userId') userId: string,
   ): Promise<GameOutput[]> {
-    // TODO: add hosted games
-    const gamesDocs = await this.gamesCollection
-      .where('members', 'array-contains', userId)
-      .limit(25)
-      .get();
-    const gamesData = gamesDocs.docs
-      .map((gameDoc) => {
-        const gameData = gameDoc.data();
-        const userRole = gameData.roles[userId];
+    const { hits } = await this.algoliaService.gamesByParticipantIndex
+      .search<IFireStoreGame & IFireStoreDocumentMeta & { objectID: string }>(
+      userId,
+      { hitsPerPage: 25 },
+    );
+    const games = hits.map(({ objectID, ...hit }) => ({ ...hit, id: objectID }));
+    const gamesData = games
+      .map((game) => {
+        if (game.host.uid === userId) {
+          return {
+            ...game,
+            won: undefined,
+          };
+        }
+
+        const userRole = game.roles[userId];
         const isUserMafia = userRole === Role.MAFIA || userRole === Role.DON;
         const isUserCivilian = userRole === Role.CITIZEN || userRole === Role.SHERIFF;
-        const isUserWonAsMafia = isUserMafia && gameData.result === GameResult.MAFIA;
-        const isUserWonAsCivilian = isUserCivilian && gameData.result === GameResult.CIVILIANS;
+        const isUserWonAsMafia = isUserMafia && game.result === GameResult.MAFIA;
+        const isUserWonAsCivilian = isUserCivilian && game.result === GameResult.CIVILIANS;
         const won = isUserWonAsMafia || isUserWonAsCivilian;
 
         return {
-          ...gameData,
-          id: gameDoc.id,
+          ...game,
           won,
         };
       });

@@ -2,11 +2,7 @@
   <div class="profile-page h100">
     <ion-header>
       <ion-button fill="clear" (click)="logout()">
-        <ion-icon
-          color="light"
-          slot="icon-only"
-          name="exit-outline"
-        ></ion-icon>
+        <ion-icon color="light" slot="icon-only" name="exit-outline"></ion-icon>
       </ion-button>
     </ion-header>
 
@@ -31,7 +27,7 @@
       <ion-list-header>Игры</ion-list-header>
       <app-placeholder
         *ngIf="!loading && !games?.length"
-        style="height: 80%;"
+        style="height: 80%"
         image="assets/sad.png"
       >
         Здесь пока еще пусто...
@@ -46,20 +42,32 @@
 
             <ion-label>
               <h3><ion-skeleton-text animated></ion-skeleton-text></h3>
-              <p><ion-skeleton-text style="width: 50%;" animated></ion-skeleton-text></p>
+              <p>
+                <ion-skeleton-text
+                  style="width: 50%"
+                  animated
+                ></ion-skeleton-text>
+              </p>
             </ion-label>
           </ion-item>
         </ng-container>
 
         <ng-container *ngIf="games?.length">
-          <ion-item *ngFor="let game of games" lines="none">
+          <ion-item
+            *ngFor="let game of games"
+            [ngClass]="{
+              won: game.won === true,
+              lost: game.won === false
+            }"
+            lines="none"
+          >
             <ion-avatar slot="start">
               <img [src]="defaultGameAvatar" />
             </ion-avatar>
 
             <ion-label>
-              <h3>{{ "lol" }}</h3>
-              <p>{{ "ROLE." + game.roles[user.uid] | translate }}</p>
+              <h3>{{ game.title }}</h3>
+              <p>{{ game.date }}</p>
             </ion-label>
           </ion-item>
         </ng-container>

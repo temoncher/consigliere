@@ -32,5 +32,6 @@ export class AlgoliaSingleton {
     this.clubsIndex = algoliaClient.initIndex(clubsIndexName);
     this.gamesByParticipantIndex = algoliaClient.initIndex(gamesByParticipantIndexName);
     console.log('Clubs:', clubsIndexName);
+    console.log('Games:', gamesByParticipantIndexName);
   }
 }
