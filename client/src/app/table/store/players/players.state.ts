@@ -51,9 +51,9 @@ export interface PlayersStateModel {
 @State<PlayersStateModel>({
   name: 'players',
   defaults: {
-    players: environment.production ? [] : dummyPlayers,
-    host: environment.production ? null : dummyHost,
-    roles: environment.production ? {} : dummyPlayersRoles,
+    players: [],
+    host: null,
+    roles: {},
     falls: {},
     quitPhases: {},
     speechSkips: {},

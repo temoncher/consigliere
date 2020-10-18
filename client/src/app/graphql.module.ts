@@ -8,7 +8,8 @@ import { environment } from 'src/environments/environment';
 
 const region = 'us-central1';
 const emulatorUrl = `http://localhost:5001/mafia-consigliere-develop/${region}/api/graphql`;
-const projectName = environment.production ? 'mafia-consigliere' : 'mafia-consigliere-develop';
+
+const projectName = environment.firebaseConfig.projectId;
 const remoteUrl = `https://${region}-${projectName}.cloudfunctions.net/api/graphql`;
 const uri = environment.emulation ? emulatorUrl : remoteUrl;
 
