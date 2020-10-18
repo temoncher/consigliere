@@ -21,7 +21,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(CurrentVoteState.getPhase) votePhase$: Observable<VotePhase>;
 
-  currentVotePhase: VotePhase;
+  currentVotePhase?: VotePhase;
 
   VotePhase = VotePhase;
 

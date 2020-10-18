@@ -21,6 +21,8 @@ import {
   SetVoteResult,
 } from './current-vote.actions';
 
+import { VoteResult } from '~types/enums/vote-result.enum';
+
 export interface CurrentVoteStateModel extends IVote {
   currentPhase?: VotePhase;
   previousLeadersIds?: string[];
@@ -37,37 +39,37 @@ export interface CurrentVoteStateModel extends IVote {
 export class CurrentVoteState {
   // TODO: Refactor state to remove unnecessary getters
   @Selector()
-  static getPhase({ currentPhase }: CurrentVoteStateModel) {
+  static getPhase({ currentPhase }: CurrentVoteStateModel): VotePhase | undefined {
     return currentPhase;
   }
 
   @Selector()
-  static getPreviousLeadersIds({ previousLeadersIds }: CurrentVoteStateModel) {
+  static getPreviousLeadersIds({ previousLeadersIds }: CurrentVoteStateModel): string[] | undefined {
     return previousLeadersIds;
   }
 
   @Selector()
-  static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel) {
-    return isVoteDisabled;
+  static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel): boolean {
+    return Boolean(isVoteDisabled);
   }
 
   @Selector()
-  static getVotes({ votes }: CurrentVoteStateModel) {
+  static getVotes({ votes }: CurrentVoteStateModel): Record<string, string[]>[] {
     return votes;
   }
 
   @Selector()
-  static getCurrentVote({ votes }: CurrentVoteStateModel) {
+  static getCurrentVote({ votes }: CurrentVoteStateModel): Record<string, string[]> | undefined {
     return votes[votes.length - 1];
   }
 
   @Selector()
-  static getVoteResult({ voteResult }: CurrentVoteStateModel) {
+  static getVoteResult({ voteResult }: CurrentVoteStateModel): VoteResult | undefined {
     return voteResult;
   }
 
   @Selector()
-  static getEliminateVote({ eliminateAllVote }: CurrentVoteStateModel) {
+  static getEliminateVote({ eliminateAllVote }: CurrentVoteStateModel): Record<string, boolean> | undefined {
     return eliminateAllVote;
   }
 
@@ -133,7 +135,7 @@ export class CurrentVoteState {
     { playerId }: VoteForElimination,
   ) {
     const { eliminateAllVote } = getState();
-    const newEliminateAllVote = { ...eliminateAllVote };
+    const newEliminateAllVote = eliminateAllVote ? { ...eliminateAllVote } : {};
     const previousDecision = newEliminateAllVote[playerId];
 
     if (previousDecision) {

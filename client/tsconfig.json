@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
+    "strictPropertyInitialization": false,
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
