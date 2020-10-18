@@ -25,7 +25,6 @@ export class WithdrawPlayer {
 
 export class ResetProposedPlayers {
   static readonly type = `[${dayActionsPrefix}] Reset proposed players`;
-  constructor() { }
 }
 
 export class ResetPlayerTimer {

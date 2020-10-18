@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -7,9 +7,6 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent {
   consigliereLogo = consigliereLogo;
-  constructor() { }
-
-  ngOnInit() {}
 }

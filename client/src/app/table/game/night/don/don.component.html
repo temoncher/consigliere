@@ -1,14 +1,16 @@
 <app-portal selector="#game-buttons-outlet">
   <ion-button id="next-stage-button" (click)="next()">
-    <ion-label color="primary">{{ 'TABS.TABLE.GAME.NIGHT.proceedToSheriff' | translate }}</ion-label>
+    <ion-label color="primary">{{
+      "TABS.TABLE.GAME.NIGHT.proceedToSheriff" | translate
+    }}</ion-label>
     <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
   </ion-button>
 </app-portal>
 
 <div class="don flex-centralize">
-  <app-table-template>
+  <app-table-template *ngIf="players$ | async as players">
     <app-small-player-card
-      *ngFor="let player of players$ | async"
+      *ngFor="let player of players"
       [slot]="player.number"
       [playerId]="player.uid"
       (cardClick)="navigateToPlayer(player.number)"
@@ -28,22 +30,17 @@
           <div
             class="clip-button top-left text-only text-color-dark-contrast background-color-primary"
           >
-            {{ (players$ | async)[currentPlayerIndex].number }}
+            {{ players[currentPlayerIndex].number }}
           </div>
           <ion-card-title class="player-card__header__title text-color-dark">
-            {{ (players$ | async)[currentPlayerIndex].nickname }}
+            {{ players[currentPlayerIndex].nickname }}
           </ion-card-title>
         </ion-card-header>
         <ion-card-content
           class="player-card__content role-card__content ion-text-center"
         >
           <ion-avatar class="player-card__avatar">
-            <img
-              [src]="
-                (players$ | async)[currentPlayerIndex].avatar ||
-                defaultAvatar
-              "
-            />
+            <img [src]="players[currentPlayerIndex].avatar || defaultAvatar" />
           </ion-avatar>
         </ion-card-content>
       </ion-card>

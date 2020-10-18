@@ -52,5 +52,4 @@ export class SetEliminateAllVote {
 
 export class DisableCurrentVote {
   static readonly type = `[${voteActionsPrefix}] Disable current vote`;
-  constructor() { }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
 import { Player } from '@/shared/models/player.model';
@@ -10,13 +10,9 @@ import { Role } from '~types/enums/role.enum';
   templateUrl: './result-list.component.html',
   styleUrls: ['./result-list.component.scss'],
 })
-export class ResultListComponent implements OnInit {
+export class ResultListComponent {
   @Input() players: Player[];
   @Input() roles: Record<string, Role>;
 
   defaultAvatar = defaultAvatarSrc;
-
-  constructor() { }
-
-  ngOnInit() {}
 }

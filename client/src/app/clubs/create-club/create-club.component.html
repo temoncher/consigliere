@@ -21,7 +21,7 @@
       ></ion-input>
     </ion-item>
     <div class="app-form__error-container">
-      <small class="text-color-danger" *ngIf="title.touched">
+      <small class="text-color-danger" *ngIf="title && title.touched">
         <ng-container *ngIf="title.errors?.required">
           Название - это обязательное поле
         </ng-container>
@@ -29,10 +29,12 @@
           Название не должно включать специальных символов
         </ng-container>
         <ng-container *ngIf="title.errors?.minlength">
-          Название должно быть не менее {{ title.errors?.minlength.requiredLength }} символов
+          Название должно быть не менее
+          {{ title.errors?.minlength.requiredLength }} символов
         </ng-container>
         <ng-container *ngIf="title.errors?.maxlength">
-          Название должно быть не более {{ title.errors?.maxlength.requiredLength }} символов
+          Название должно быть не более
+          {{ title.errors?.maxlength.requiredLength }} символов
         </ng-container>
       </small>
     </div>
@@ -47,12 +49,14 @@
       ></ion-input>
     </ion-item>
     <div class="app-form__error-container">
-      <small class="text-color-danger" *ngIf="location.touched">
+      <small class="text-color-danger" *ngIf="location && location.touched">
         <ng-container *ngIf="location.errors?.minlength">
-          Город должен быть не менее {{ location.errors?.minlength.requiredLength }} символов
+          Город должен быть не менее
+          {{ location.errors?.minlength.requiredLength }} символов
         </ng-container>
         <ng-container *ngIf="location.errors?.maxlength">
-          Город должен быть не более {{ location.errors?.maxlength.requiredLength }} символов
+          Город должен быть не более
+          {{ location.errors?.maxlength.requiredLength }} символов
         </ng-container>
       </small>
     </div>

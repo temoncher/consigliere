@@ -12,6 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'preparation',
+    canActivate: [GameStartGuard],
     loadChildren: () => import('@/table/preparation/preparation.module').then((m) => m.PreparationModule),
   },
   {

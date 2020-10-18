@@ -4,14 +4,8 @@ import { IRound } from '@/table/models/round.interface';
 
 export const gameActionsPrefix = 'Game';
 
-export class SetIsGameStarted {
-  static readonly type = `[${gameActionsPrefix}] Set game started flag`;
-  constructor(public isGameStarted: boolean) { }
-}
-
 export class ResetIsNextVotingDisabled {
   static readonly type = `[${gameActionsPrefix}] Reset next voting disabled`;
-  constructor() { }
 }
 
 export class AddRound {
@@ -30,6 +24,7 @@ export class SetTableMeta {
     title: string;
     date: string;
     club?: string;
+    isGameStarted: true;
   }) { }
 }
 

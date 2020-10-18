@@ -19,11 +19,9 @@ import { GameMenuStateModel } from './game-menu.model';
 })
 @Injectable()
 export class GameMenuState {
-  static getBasicProp(propName: keyof GameMenuStateModel) {
+  static getBasicProp(propName: keyof GameMenuStateModel): (state: GameMenuStateModel) => boolean {
     return createSelector([GameMenuState], (state: GameMenuStateModel) => {
-      if (typeof state[propName] === 'undefined') {
-        throw new Error(`Property '${propName}' does not exist on GameMenuStateModel`);
-      }
+      if (state[propName] === undefined) throw new Error(`Property '${propName}' does not exist on GameMenuStateModel`);
 
       return state[propName];
     });
@@ -33,11 +31,9 @@ export class GameMenuState {
   toggleGameMenuBoolean(
     { patchState, getState }: StateContext<GameMenuStateModel>,
     { propName }: ToggleGameMenuBoolean,
-  ) {
+  ): void {
     const { [propName]: oldPropValue } = getState();
 
-    return patchState({
-      [propName]: !oldPropValue,
-    });
+    patchState({ [propName]: !oldPropValue });
   }
 }

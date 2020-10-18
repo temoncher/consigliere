@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   templateUrl: './vote-stage.component.html',
   styleUrls: ['./vote-stage.component.scss'],
 })
-export class VoteStageComponent implements OnInit, OnDestroy {
+export class VoteStageComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentVoteState.getCurrentVote) vote$: Observable<Record<string, string[]>>;
@@ -29,6 +29,7 @@ export class VoteStageComponent implements OnInit, OnDestroy {
   players: Player[];
   proposedPlayers: Player[] = [];
   vote: Record<string, string[]>;
+  quitPhases: Record<string, IQuitPhase>;
 
   voteInfoMap: Map<string, Player> = new Map<string, Player>();
   numberSliderConfig: SwiperOptions = {
@@ -48,10 +49,16 @@ export class VoteStageComponent implements OnInit, OnDestroy {
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const proposedPlayers: Player[] = [];
 
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
+
     // Implemented to keep players proposal order
     if (currentVote) {
       for (const candidateId of Object.keys(currentVote)) {
         const candidate = alivePlayers.find((player) => player.uid === candidateId);
+
+        if (!candidate) throw new Error('No candidate found');
 
         proposedPlayers.push(candidate);
       }
@@ -78,6 +85,8 @@ export class VoteStageComponent implements OnInit, OnDestroy {
           for (const [candidateId, votedPlayersIds] of Object.entries(voteMap)) {
             const candidate = this.players.find((player) => player.uid === candidateId);
 
+            if (!candidate) throw new Error('No candidate found');
+
             if (votedPlayersIds.length > newNumberOfLeaderVotes) {
               newNumberOfLeaderVotes = votedPlayersIds.length;
             }
@@ -94,34 +103,32 @@ export class VoteStageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  switchVote(playerId: string) {
+  switchVote(playerId: string): void {
     this.store.dispatch(new VoteForCandidate(playerId, this.proposedPlayers[this.currentPlayerIndex].uid));
   }
 
-  next() {
+  next(): void {
     if (this.currentPlayerIndex + 1 < this.proposedPlayers.length) {
       this.currentPlayerIndex += 1;
     }
   }
 
-  previous() {
+  previous(): void {
     if (this.currentPlayerIndex > 0) {
       this.currentPlayerIndex -= 1;
     }
   }
 
-  endVote() {
+  endVote(): void {
     this.voteService.endVoteStage();
   }
 
-  navigateToPlayer(playerIndex: number) {
+  navigateToPlayer(playerIndex: number): void {
     this.currentPlayerIndex = playerIndex;
   }
 }

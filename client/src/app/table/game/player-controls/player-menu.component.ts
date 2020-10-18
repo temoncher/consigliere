@@ -53,8 +53,8 @@ export class PlayerMenuComponent implements OnInit, OnDestroy {
 
   PlayerControlsAction = PlayerControlsAction;
 
-  player: Player;
-  playerQuitPhase: string;
+  player?: Player;
+  playerQuitPhase?: string;
 
   refreshText = 'Сбросить';
   fallText = 'Фол';
@@ -66,7 +66,7 @@ export class PlayerMenuComponent implements OnInit, OnDestroy {
     private popoverController: PopoverController,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.store.select(PlayersState.getPlayer(this.playerId))
       .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);
@@ -76,16 +76,16 @@ export class PlayerMenuComponent implements OnInit, OnDestroy {
       .subscribe((playerQuitPhase) => this.playerQuitPhase = playerQuitPhase);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  chooseOption(option: PlayerControlsAction) {
+  chooseOption(option: PlayerControlsAction): void {
     this.popoverController.dismiss(null, option);
   }
 
-  dismissPopover() {
+  dismissPopover(): void {
     this.popoverController.dismiss(null, 'cancel');
   }
 }

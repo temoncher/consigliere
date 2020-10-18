@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
 import { CurrentPlayerClubsQuery } from '@/graphql/gql.generated';
@@ -12,7 +12,7 @@ import { ClubSuggestionsModalComponent } from './club-suggestions-modal/club-sug
   templateUrl: './preparation-modal.component.html',
   styleUrls: ['./preparation-modal.component.scss'],
 })
-export class PreparationModalComponent implements OnInit {
+export class PreparationModalComponent {
   openTableForm: FormGroup = this.formBuilder.group({
     title: [
       'Стол 1, Игра 1',
@@ -31,11 +31,11 @@ export class PreparationModalComponent implements OnInit {
 
   consigliereLogo = consigliereLogo;
 
-  get title() {
+  get title(): AbstractControl | null {
     return this.openTableForm.get('title');
   }
 
-  get date() {
+  get date(): AbstractControl | null {
     return this.openTableForm.get('date');
   }
 
@@ -44,9 +44,7 @@ export class PreparationModalComponent implements OnInit {
     private modalController: ModalController,
   ) { }
 
-  ngOnInit() { }
-
-  async presentClubSuggestionsModal() {
+  async presentClubSuggestionsModal(): Promise<void> {
     const modal = await this.modalController.create({
       component: ClubSuggestionsModalComponent,
       swipeToClose: true,
@@ -54,14 +52,16 @@ export class PreparationModalComponent implements OnInit {
 
     await modal.present();
 
-    const { data: { club }, role } = await modal.onWillDismiss();
+    const { data, role } = await modal.onWillDismiss<{ club: CurrentPlayerClubsQuery['currentPlayerClubs'][0] }>();
 
     if (role === 'choose') {
-      this.club = club;
+      this.club = data?.club;
     }
   }
 
-  openTable() {
+  openTable(): void {
+    if (!this.title || !this.date) throw new Error('Title or date input is missing');
+
     const data = {
       title: this.title.value,
       date: this.date.value,
@@ -71,17 +71,19 @@ export class PreparationModalComponent implements OnInit {
     this.modalController.dismiss(data, 'start');
   }
 
-  close() {
+  close(): void {
     this.modalController.dismiss(undefined, 'cancel');
   }
 
-  changeDate(event: { detail: { value: string } }) {
+  changeDate(event: { detail: { value: string } }): void {
     const { detail: { value } } = event;
+
+    if (!this.date) throw new Error('Date input is missing');
 
     this.date.setValue(value);
   }
 
-  submitOnEnterKey({ key }: KeyboardEvent) {
+  submitOnEnterKey({ key }: KeyboardEvent): void {
     if (key !== 'Enter') return;
 
     this.openTable();

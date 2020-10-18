@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { SETTINGS } from '@angular/fire/firestore';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -11,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 
@@ -43,6 +43,7 @@ const devModules = [
     NgxsModule.forRoot(ApplicationStates, { developmentMode: !environment.production }),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot(),
     GraphQLModule,
     environment.emulation || !environment.production ? devModules : [],
   ],

@@ -1,9 +1,8 @@
-import {
-  Component, OnInit, ViewChild, OnDestroy,
-} from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { playerSliderConfig } from '@/shared/constants/slider';
 import { Player } from '@/shared/models/player.model';
@@ -19,8 +18,13 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 @Component({
   selector: 'app-day',
   templateUrl: './day.component.html',
+  styles: [`
+    .day {
+      padding-top: 32px
+    }
+  `],
 })
-export class DayComponent implements OnInit, OnDestroy {
+export class DayComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
@@ -29,39 +33,43 @@ export class DayComponent implements OnInit, OnDestroy {
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
+  quitPhases: Record<string, IQuitPhase>;
+
   playerSliderConfig = playerSliderConfig;
 
   constructor(
     private store: Store,
     private timersService: TimersService,
     private gameService: GameService,
-  ) { }
+  ) {
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
+  }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  navigateToSlide(index: number) {
+  navigateToSlide(index: number): void {
     this.playerSlider.slideTo(index);
   }
 
-  endSpeech(playerId: string) {
+  endSpeech(playerId: string): void {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const finishedPlayerIndex = players.findIndex((player) => player.uid === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
       const slideIndex = players.findIndex(({ uid }) => !quitPhases[uid]
-        && !this.timersService.getPlayerTimer(uid).isSpeechEnded);
+        && !this.timersService.getPlayerTimer(uid)?.isSpeechEnded);
 
       this.navigateToSlide(slideIndex);
     }
   }
 
-  endDay() {
+  endDay(): void {
     this.gameService.endDay();
   }
 }

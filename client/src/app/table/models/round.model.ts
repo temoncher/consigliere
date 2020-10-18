@@ -1,7 +1,8 @@
 import { IDay } from './day.interface';
 import { INight } from './night.interface';
-import { VoteResult } from './vote-result.enum';
 import { IVote } from './vote.interface';
+
+import { VoteResult } from '~types/enums/vote-result.enum';
 
 export interface IRound extends INight, IDay, IVote {
   kickedPlayers: string[];

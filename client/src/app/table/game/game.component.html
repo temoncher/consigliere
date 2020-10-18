@@ -44,12 +44,23 @@
           </ion-toolbar>
         </ion-header>
 
-        <div class="game">
+        <div class="stage-container h100">
           <app-player-controls data-cy="player-controls"></app-player-controls>
 
-          <app-day *ngSwitchCase="RoundPhase.DAY"></app-day>
-          <app-night *ngSwitchCase="RoundPhase.NIGHT"></app-night>
-          <app-vote *ngSwitchCase="RoundPhase.VOTE"></app-vote>
+          <div class="stage-container__content">
+            <app-day
+              class="d-block h100"
+              *ngSwitchCase="RoundPhase.DAY"
+            ></app-day>
+            <app-night
+              class="d-block h100"
+              *ngSwitchCase="RoundPhase.NIGHT"
+            ></app-night>
+            <app-vote
+              class="d-block h100"
+              *ngSwitchCase="RoundPhase.VOTE"
+            ></app-vote>
+          </div>
         </div>
       </ion-content>
     </ion-split-pane>

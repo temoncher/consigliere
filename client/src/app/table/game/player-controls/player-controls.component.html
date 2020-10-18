@@ -7,10 +7,7 @@
   >
     <ng-container *ngFor="let player of players">
       <ion-slide
-        [hidden]="
-          (isQuittedHidden$ | async) &&
-          !!(quitPhases$ | async)[player.uid]
-        "
+        [hidden]="(isQuittedHidden$ | async) && !!quitPhases[player.uid]"
       >
         <app-manage-player-card
           [playerId]="player.uid"

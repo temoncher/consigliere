@@ -20,16 +20,12 @@
   <div class="sticky top host-container">
     <div class="d-flex">
       <!-- Host card -->
-      <ion-item *ngIf="host$ | async" data-cy="host-card" lines="none">
+      <ion-item *ngIf="host" data-cy="host-card" lines="none">
         <ion-avatar slot="start">
-          <img
-            [src]="
-              (host$ | async)?.avatar ? (host$ | async).avatar : defaultAvatar
-            "
-          />
+          <img [src]="host?.avatar ? host.avatar : defaultAvatar" />
         </ion-avatar>
         <ion-label>
-          <h3>{{ (host$ | async)?.nickname }}</h3>
+          <h3>{{ host?.nickname }}</h3>
           <p>{{ "TABS.TABLE.PREPARATION.hostTitle" | translate }}</p>
         </ion-label>
         <ion-icon
@@ -44,7 +40,7 @@
 
       <!-- Add new host button-->
       <ion-item
-        *ngIf="(host$ | async) === null"
+        *ngIf="host === null"
         data-cy="add-host-item"
         class="add-new"
         lines="none"
@@ -59,14 +55,14 @@
 
       <div class="proceed-button-container">
         <ion-label
-          *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) < 11"
+          *ngIf="readyPlayersNumber + (!!host ? 1 : 0) < 11"
           color="primary"
         >
-          {{ readyPlayersNumber + (!!(host$ | async) ? 1 : 0) }}/11</ion-label
+          {{ readyPlayersNumber + (!!host ? 1 : 0) }}/11</ion-label
         >
 
         <ion-button
-          *ngIf="readyPlayersNumber + (!!(host$ | async) ? 1 : 0) === 11"
+          *ngIf="readyPlayersNumber + (!!host ? 1 : 0) === 11"
           data-cy="proceed-button"
           fill="outlined"
           size="large"

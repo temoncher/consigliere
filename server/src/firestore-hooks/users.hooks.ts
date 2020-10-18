@@ -8,6 +8,8 @@ import { CollectionName } from '~types/enums/colletion-name.enum';
 export const usersCreatedAt = functions.firestore
   .document(`/${CollectionName.USERS}/{userId}`)
   .onCreate((userSnapshot, context) => {
+    if (!context.auth) throw new Error('Unauthorized');
+
     const meta: IFireStoreDocumentMeta = {
       createdBy: context.auth.uid,
       updatedBy: context.auth.uid,
@@ -24,6 +26,8 @@ export const usersCreatedAt = functions.firestore
 export const usersOnUpdate = functions.firestore
   .document(`/${CollectionName.USERS}/{userId}`)
   .onUpdate((userChange, context) => {
+    if (!context.auth) throw new Error('Unauthorized');
+
     const userId = userChange.after.id;
     const userDoc = admin.firestore().collection(CollectionName.USERS).doc(userId);
     const meta: Partial<IFireStoreDocumentMeta> = {

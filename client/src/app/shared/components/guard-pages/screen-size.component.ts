@@ -9,6 +9,4 @@ import { Component } from '@angular/core';
     </app-placeholder>
   `,
 })
-export class ScreenSizeComponent {
-  constructor() {}
-}
+export class ScreenSizeComponent {}

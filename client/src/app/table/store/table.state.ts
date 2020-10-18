@@ -13,7 +13,6 @@ import { RoundState } from './round/round.state';
 import {
   ResetIsNextVotingDisabled,
   SetIsNextVotingDisabled,
-  SetIsGameStarted,
   EndGame,
   AddRound,
   SetTableMeta,
@@ -99,14 +98,6 @@ export class TableState {
     { tableMeta }: SetTableMeta,
   ) {
     patchState({ ...tableMeta });
-  }
-
-  @Action(SetIsGameStarted)
-  startGame(
-    { patchState }: StateContext<TableStateModel>,
-    { isGameStarted }: SetIsGameStarted,
-  ) {
-    patchState({ isGameStarted });
   }
 
   @Action(AddRound)

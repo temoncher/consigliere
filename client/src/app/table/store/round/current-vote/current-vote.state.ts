@@ -1,6 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { State, Selector, StateContext, Action } from '@ngxs/store';
+import { patch, updateItem } from '@ngxs/store/operators';
 
 import { Player } from '@/shared/models/player.model';
 import { VotePhase } from '@/table/models/vote-phase.enum';
@@ -20,6 +21,8 @@ import {
   SetVoteResult,
 } from './current-vote.actions';
 
+import { VoteResult } from '~types/enums/vote-result.enum';
+
 export interface CurrentVoteStateModel extends IVote {
   currentPhase?: VotePhase;
   previousLeadersIds?: string[];
@@ -36,37 +39,37 @@ export interface CurrentVoteStateModel extends IVote {
 export class CurrentVoteState {
   // TODO: Refactor state to remove unnecessary getters
   @Selector()
-  static getPhase({ currentPhase }: CurrentVoteStateModel) {
+  static getPhase({ currentPhase }: CurrentVoteStateModel): VotePhase | undefined {
     return currentPhase;
   }
 
   @Selector()
-  static getPreviousLeadersIds({ previousLeadersIds }: CurrentVoteStateModel) {
+  static getPreviousLeadersIds({ previousLeadersIds }: CurrentVoteStateModel): string[] | undefined {
     return previousLeadersIds;
   }
 
   @Selector()
-  static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel) {
-    return isVoteDisabled;
+  static getIsVoteDisabled({ isVoteDisabled }: CurrentVoteStateModel): boolean {
+    return Boolean(isVoteDisabled);
   }
 
   @Selector()
-  static getVotes({ votes }: CurrentVoteStateModel) {
+  static getVotes({ votes }: CurrentVoteStateModel): Record<string, string[]>[] {
     return votes;
   }
 
   @Selector()
-  static getCurrentVote({ votes }: CurrentVoteStateModel) {
+  static getCurrentVote({ votes }: CurrentVoteStateModel): Record<string, string[]> | undefined {
     return votes[votes.length - 1];
   }
 
   @Selector()
-  static getVoteResult({ voteResult }: CurrentVoteStateModel) {
+  static getVoteResult({ voteResult }: CurrentVoteStateModel): VoteResult | undefined {
     return voteResult;
   }
 
   @Selector()
-  static getEliminateVote({ eliminateAllVote }: CurrentVoteStateModel) {
+  static getEliminateVote({ eliminateAllVote }: CurrentVoteStateModel): Record<string, boolean> | undefined {
     return eliminateAllVote;
   }
 
@@ -132,7 +135,7 @@ export class CurrentVoteState {
     { playerId }: VoteForElimination,
   ) {
     const { eliminateAllVote } = getState();
-    const newEliminateAllVote = { ...eliminateAllVote };
+    const newEliminateAllVote = eliminateAllVote ? { ...eliminateAllVote } : {};
     const previousDecision = newEliminateAllVote[playerId];
 
     if (previousDecision) {
@@ -146,34 +149,40 @@ export class CurrentVoteState {
 
   @Action(VoteForCandidate)
   voteForCandidate(
-    { patchState, getState }: StateContext<CurrentVoteStateModel>,
+    { setState, getState }: StateContext<CurrentVoteStateModel>,
     {
       playerId,
       proposedPlayerId,
     }: VoteForCandidate,
   ) {
     const { votes } = getState();
-    const newVotes = [...votes];
-    const vote = newVotes[votes.length - 1];
-    const isAlreadyVotedForThisPlayer = vote[proposedPlayerId].includes(playerId);
+    const voteNumber = votes.length - 1;
+    const currentVote = { ...votes[voteNumber] };
+
+    const isAlreadyVotedForThisPlayer = currentVote[proposedPlayerId].includes(playerId);
 
     if (isAlreadyVotedForThisPlayer) {
-      vote[proposedPlayerId] = vote[proposedPlayerId].filter((votedPlayerId) => playerId !== votedPlayerId);
+      currentVote[proposedPlayerId] = currentVote[proposedPlayerId]
+        .filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      patchState({ votes: newVotes });
+      setState(patch<CurrentVoteStateModel>({
+        votes: updateItem(voteNumber, currentVote),
+      }));
 
       return;
     }
 
-    for (const [candidateId, votedPlayers] of Object.entries(vote)) {
+    for (const [candidateId, votedPlayers] of Object.entries(currentVote)) {
       const newVotedPlayers = votedPlayers.filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      vote[candidateId] = newVotedPlayers;
+      currentVote[candidateId] = newVotedPlayers;
     }
 
-    vote[proposedPlayerId].push(playerId);
+    currentVote[proposedPlayerId].push(playerId);
 
-    patchState({ votes: newVotes });
+    setState(patch<CurrentVoteStateModel>({
+      votes: updateItem(voteNumber, currentVote),
+    }));
   }
 
   @Action(SetVotes)

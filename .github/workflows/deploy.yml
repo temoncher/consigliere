@@ -14,10 +14,10 @@ name: Firebase dev-stand deployment
 #         run: |
 #           cd client
 #           yarn install
-#       - name: Build
+#       - name: Build client
 #         run: |
 #           cd client
-#           yarn build
+#           yarn build:dev
 #       - name: Archive Production Artifact
 #         uses: actions/upload-artifact@master
 #         with:
@@ -38,7 +38,7 @@ name: Firebase dev-stand deployment
 #       - name: Deploy firebase hosting
 #         uses: w9jds/firebase-action@master
 #         with:
-#           args: deploy --only hosting -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
+#           args: deploy --only hosting -m "Workflow $GITHUB_WORKFLOW, action $GITHUB_ACTION"
 #         env:
 #           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 #           PROJECT_ID: dev
@@ -52,7 +52,7 @@ name: Firebase dev-stand deployment
 #         run: |
 #           cd server
 #           yarn install
-#       - name: Build
+#       - name: Build server
 #         run: |
 #           cd server
 #           yarn build
@@ -76,7 +76,7 @@ name: Firebase dev-stand deployment
 #       - name: Deploy firebase functions
 #         uses: w9jds/firebase-action@master
 #         with:
-#           args: deploy --only functions -m "Pipeline $GITHUB_WORKFLOW, build $GITHUB_ACTION"
+#           args: deploy --only functions -m "Workflow $GITHUB_WORKFLOW, action $GITHUB_ACTION"
 #         env:
 #           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 #           PROJECT_ID: dev

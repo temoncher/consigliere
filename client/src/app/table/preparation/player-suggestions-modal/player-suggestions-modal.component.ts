@@ -22,7 +22,7 @@ import { TableState } from '@/table/store/table.state';
 export class PlayerSuggestionsModalComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<IPlayer[]>;
-  @Select(PlayersState.getHost) host$: Observable<IPlayer>;
+  @Select(PlayersState.getHost) host$: Observable<IPlayer | null>;
   users: PlayerSuggestionsQuery['usersByClub'] = [];
   loading = false;
 
@@ -47,8 +47,9 @@ export class PlayerSuggestionsModalComponent implements OnInit, OnDestroy {
       ).subscribe(([suggestedPlayers, tablePlayers, host]) => {
         this.loading = false;
         const tablePlayersIds = tablePlayers.map((player) => player.uid);
+        const participantsIds = host ? [...tablePlayersIds, host.uid] : tablePlayersIds;
 
-        this.users = suggestedPlayers.filter(({ uid }) => !tablePlayersIds.includes(uid) || !(host.uid === uid));
+        this.users = suggestedPlayers.filter(({ uid }) => !(participantsIds.includes(uid)));
       });
     }
   }

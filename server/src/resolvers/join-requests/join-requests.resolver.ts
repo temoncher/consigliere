@@ -111,7 +111,7 @@ export class JoinRequestsResolver {
     const clubDoc = await this.clubsCollection.doc(joinRequestInput.clubId).get();
     const clubData = clubDoc.data();
 
-    if (clubData) {
+    if (!clubData) {
       throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 

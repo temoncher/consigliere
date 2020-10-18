@@ -32,7 +32,7 @@ export class VoteService {
     private playersService: PlayersService,
   ) { }
 
-  startVote(proposedPlayers: string[]) {
+  startVote(proposedPlayers: string[]): void {
     const votesSnapshot = this.store.selectSnapshot(CurrentVoteState.getVotes);
     const votes = [...votesSnapshot]; // to solve "object is not extensible" issue
     const isVoteDisabled = this.store.selectSnapshot(CurrentVoteState.getIsVoteDisabled);
@@ -69,13 +69,11 @@ export class VoteService {
     this.store.dispatch(new SetVotes(votes));
   }
 
-  endVoteStage() {
+  endVoteStage(): void {
     const previousLeadersIds = this.store.selectSnapshot(CurrentVoteState.getPreviousLeadersIds);
     const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
 
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
+    if (!leadersIds.length) throw new Error('Leader candidates not found');
 
     if (leadersIds.length === 1) {
       const quitPhase = this.playersService.getQuitPhase();
@@ -96,13 +94,11 @@ export class VoteService {
     this.switchVotePhase(VotePhase.SPEECH);
   }
 
-  endEliminateVote() {
+  endEliminateVote(): void {
     const eliminateAllVote = this.store.selectSnapshot(CurrentVoteState.getEliminateVote);
     const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
 
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
+    if (!leadersIds.length) throw new Error('Leader candidates not found');
 
     if (eliminateAllVote) {
       const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
@@ -124,14 +120,12 @@ export class VoteService {
     throw new Error('Eliminate vote is falsy');
   }
 
-  endAdditionalSpeech() {
+  endAdditionalSpeech(): void {
     const votesSnapshot = this.store.selectSnapshot(CurrentVoteState.getVotes);
     const votes = [...votesSnapshot];
     const leadersIds = this.store.selectSnapshot(CurrentVoteState.getLeaders);
 
-    if (!leadersIds.length) {
-      throw new Error('Leader candidates not found');
-    }
+    if (!leadersIds.length) throw new Error('Leader candidates not found');
 
     votes.push({});
     const vote = votes[votes.length - 1];
@@ -148,7 +142,7 @@ export class VoteService {
     this.switchVotePhase(VotePhase.VOTE);
   }
 
-  switchVotePhase(newVotePhase: VotePhase) {
+  switchVotePhase(newVotePhase: VotePhase): void {
     const isVoteDisabled = this.store.selectSnapshot(CurrentVoteState.getIsVoteDisabled);
     const eliminateAllVote = this.store.selectSnapshot(CurrentVoteState.getEliminateVote);
 
@@ -166,7 +160,7 @@ export class VoteService {
         return;
       }
 
-      const numberOfProposedPlayers = Object.keys(proposedPlayers).length;
+      const numberOfProposedPlayers = Object.keys(proposedPlayers || {}).length;
 
       if (!numberOfProposedPlayers) {
         this.store.dispatch([
@@ -186,7 +180,7 @@ export class VoteService {
         return;
       }
 
-      if (Object.keys(eliminateAllVote).length <= players.length / 2) {
+      if (Object.keys(eliminateAllVote || {}).length <= players.length / 2) {
         this.store.dispatch([
           new SetCurrentVotePhase(newVotePhase),
           new SetVoteResult(VoteResult.PLAYERS_KEPT_ALIVE),
@@ -215,7 +209,7 @@ export class VoteService {
     ]);
   }
 
-  disableVote() {
+  disableVote(): void {
     const roundPhase = this.store.selectSnapshot(RoundState.getRoundPhase);
     const isResultClear = this.store.selectSnapshot(CurrentVoteState.isResultClear);
 

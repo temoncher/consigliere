@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
 import { Role } from '~types/enums/role.enum';
@@ -9,7 +9,7 @@ import { Role } from '~types/enums/role.enum';
     <ion-list>
       <ng-container *ngFor="let role of Role | keyvalue">
         <ion-item
-          *ngIf="role.value !== Role.HOST && role.value !== Role.CREATOR"
+          *ngIf="role.value !== Role.HOST"
           [attr.data-cy]="role.value"
           button
           lines="none"
@@ -21,13 +21,11 @@ import { Role } from '~types/enums/role.enum';
     </ion-list>
   `,
 })
-export class RoleMenuComponent implements OnInit {
+export class RoleMenuComponent {
   Role = Role;
   constructor(private popoverController: PopoverController) { }
 
-  ngOnInit() {}
-
-  chooseRole(role: Role) {
+  chooseRole(role: Role): void {
     this.popoverController.dismiss(role);
   }
 }

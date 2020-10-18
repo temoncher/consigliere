@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
@@ -16,7 +16,7 @@ import {
   templateUrl: './create-club.component.html',
   styleUrls: ['./create-club.component.scss'],
 })
-export class CreateClubComponent implements OnInit {
+export class CreateClubComponent {
   @Output() create = new EventEmitter<CreateClubMutation['createClub']>();
 
   clubForm: FormGroup = this.formBuilder.group({
@@ -41,15 +41,15 @@ export class CreateClubComponent implements OnInit {
   startingTitle = 'Новый клуб!';
   errorMessage = '';
 
-  get formTitle() {
+  get formTitle(): string {
     return this.errorMessage || this.startingTitle;
   }
 
-  get title() {
+  get title(): AbstractControl | null {
     return this.clubForm.get('title');
   }
 
-  get location() {
+  get location(): AbstractControl | null {
     return this.clubForm.get('location');
   }
 
@@ -60,9 +60,9 @@ export class CreateClubComponent implements OnInit {
     private createClubGQL: CreateClubGQL,
   ) { }
 
-  ngOnInit() { }
+  createClub(): void {
+    if (!this.location || !this.title) throw new Error('Location or title inputs are missing');
 
-  createClub() {
     const location = this.location.value.trim();
     const title = this.title.value.trim();
     const club: CreateClubMutationVariables['club'] = {
@@ -79,17 +79,17 @@ export class CreateClubComponent implements OnInit {
         refetchQueries: [{ query: CurrentPlayerClubsDocument }],
       },
     ).subscribe(({ data }) => {
-      this.create.emit(data.createClub);
+      this.create.emit(data?.createClub);
 
       this.store.dispatch(new Navigate(
-        [data.createClub.id],
-        null,
+        [data?.createClub.id],
+        undefined,
         { relativeTo: this.activatedRoute },
       ));
     });
   }
 
-  submitOnEnterKey({ key }: KeyboardEvent) {
+  submitOnEnterKey({ key }: KeyboardEvent): void {
     if (key !== 'Enter') return;
 
     this.createClub();

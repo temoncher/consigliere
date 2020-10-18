@@ -25,12 +25,12 @@ export class PlayersService {
     private timersService: TimersService,
     private actions$: Actions,
   ) {
-    this.catchFallAssignment();
+    this.watchFallAssignment();
     this.watchPlayerMurder();
-    this.catchPlayerReset();
+    this.watchPlayerReset();
   }
 
-  getQuitPhase() {
+  getQuitPhase(): IQuitPhase {
     const rounds = this.store.selectSnapshot(TableState.getRounds);
     const currentStage = this.store.selectSnapshot(TableState.getCurrentGameStage);
 
@@ -42,8 +42,10 @@ export class PlayersService {
     return quitPhase;
   }
 
-  stopSpeech(playerId: string) {
+  stopSpeech(playerId: string): void {
     const playerTimer = this.timersService.getPlayerTimer(playerId);
+
+    if (!playerTimer) throw new Error('Player timer not found');
 
     playerTimer.endSpeech();
     const timeElapsed = 60 - playerTimer.time;
@@ -51,7 +53,7 @@ export class PlayersService {
     this.store.dispatch(new SetPlayerTimer(playerId, timeElapsed));
   }
 
-  private catchPlayerReset() {
+  private watchPlayerReset(): void {
     this.actions$.pipe(
       ofActionSuccessful(ResetPlayer),
     ).subscribe(({ playerId }: ResetPlayer) => {
@@ -62,7 +64,7 @@ export class PlayersService {
     });
   }
 
-  private watchPlayerMurder() {
+  private watchPlayerMurder(): void {
     this.actions$.pipe(
       ofActionSuccessful(KillPlayer),
     ).subscribe(({ playerId, quitPhase }: KillPlayer) => {
@@ -74,15 +76,18 @@ export class PlayersService {
     });
   }
 
-  private catchFallAssignment() {
+  private watchFallAssignment(): void {
     this.actions$.pipe(
       ofActionSuccessful(AssignFall),
     ).subscribe(({ playerId }: AssignFall) => {
       const currentDayNumber = this.store.selectSnapshot(TableState.getRoundNumber);
       const fallsNumber = this.store.selectSnapshot(PlayersState.getPlayerFalls(playerId));
-      const playerTimer = this.timersService.getPlayerTimer(playerId);
 
       if (fallsNumber === 3) {
+        const playerTimer = this.timersService.getPlayerTimer(playerId);
+
+        if (!playerTimer) return;
+
         this.store.dispatch(new SkipSpeech(playerId, playerTimer.isStarted ? currentDayNumber + 1 : currentDayNumber));
 
         if (!playerTimer.isStarted) {
@@ -98,12 +103,12 @@ export class PlayersService {
     });
   }
 
-  private checkGameEndingConditions() {
+  private checkGameEndingConditions(): void {
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const mafiaPlayers = this.store.selectSnapshot(PlayersState.getPlayersByRoles([Role.MAFIA, Role.DON]));
     const qutiPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const aliveMafia = mafiaPlayers.filter(({ uid }) => !qutiPhases[uid]);
-    let gameResult: GameResult;
+    let gameResult: GameResult | undefined;
 
     if (aliveMafia.length >= alivePlayers.length / 2) {
       gameResult = GameResult.Mafia;

@@ -1,5 +1,11 @@
 import {
-  Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, OnDestroy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
@@ -28,18 +34,18 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
 
   @Output() cardClick = new EventEmitter();
 
-  player: Player;
-  proposedPlayer: Player;
-  playerQuitPhase: string;
+  player?: Player;
+  proposedPlayer?: Player;
+  playerQuitPhase?: string;
   playerRole: Role;
 
   Role = Role;
 
   fallsNumber = 0;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.store.select(PlayersState.getPlayer(this.playerId))
       .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);
@@ -61,12 +67,12 @@ export class SmallPlayerCardComponent implements OnInit, OnDestroy {
       .subscribe((role) => this.playerRole = role);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  onClick(event: MouseEvent) {
+  onClick(event: MouseEvent): void {
     event.stopPropagation();
 
     if (!this.disabled) {

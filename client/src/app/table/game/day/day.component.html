@@ -7,17 +7,17 @@
   </ion-button>
 </app-portal>
 
-<ion-slides #playerSlider [options]="playerSliderConfig">
-  <ng-container *ngFor="let player of players$ | async">
-    <ion-slide
-      [hidden]="
-        (isQuittedHidden$ | async) && !!(quitPhases$ | async)[player.uid]
-      "
-    >
-      <app-player-timer
-        [playerId]="player.uid"
-        (speechEnd)="endSpeech($event)"
-      ></app-player-timer>
-    </ion-slide>
-  </ng-container>
-</ion-slides>
+<div class="day">
+  <ion-slides #playerSlider [options]="playerSliderConfig">
+    <ng-container *ngFor="let player of players$ | async">
+      <ion-slide
+        [hidden]="(isQuittedHidden$ | async) && !!quitPhases[player.uid]"
+      >
+        <app-player-timer
+          [playerId]="player.uid"
+          (speechEnd)="endSpeech($event)"
+        ></app-player-timer>
+      </ion-slide>
+    </ng-container>
+  </ion-slides>
+</div>

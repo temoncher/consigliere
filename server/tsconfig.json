@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "module": "commonjs",
     "removeComments": true,

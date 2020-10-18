@@ -11,14 +11,19 @@ import {
 // tslint:disable-next-line: no-empty-interface
 export type CurrentNightStateModel = INight;
 
-@State<CurrentNightStateModel>({ name: 'currentNight' })
+@State<CurrentNightStateModel>({
+  name: 'currentNight',
+  defaults: {
+    shots: {},
+  },
+})
 @Injectable()
 export class CurrentNightState {
   private readonly thisMafiaAlreadyShotText = 'Эта мафия уже сделала выстрел';
 
   @Selector()
   static getShots({ shots }: CurrentNightStateModel) {
-    return shots || {};
+    return shots;
   }
 
   @Selector()

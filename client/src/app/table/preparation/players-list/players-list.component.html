@@ -22,8 +22,9 @@
       <div slot="start">
         <div
           class="clip-button top-left text-only text-color-dark-contrast"
+          *ngIf="validRoles$ | async as validRoles"
           [ngClass]="
-            (validRoles$ | async)[getPlayersRole(player)]
+            validRoles[getPlayersRole(player)]
               ? 'background-color-primary'
               : 'background-color-danger'
           "
@@ -46,9 +47,8 @@
         <ng-template #hasRole>
           <p>
             <ion-text
-              [color]="
-                (validRoles$ | async)[getPlayersRole(player)] || 'danger'
-              "
+              *ngIf="validRoles$ | async as validRoles"
+              [color]="validRoles[getPlayersRole(player)] || 'danger'"
             >
               {{ "ROLE." + getPlayersRole(player) | translate }}
             </ion-text>
