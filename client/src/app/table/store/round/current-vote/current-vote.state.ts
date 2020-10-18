@@ -1,6 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { State, Selector, StateContext, Action } from '@ngxs/store';
+import { patch, updateItem } from '@ngxs/store/operators';
 
 import { Player } from '@/shared/models/player.model';
 import { VotePhase } from '@/table/models/vote-phase.enum';
@@ -146,34 +147,40 @@ export class CurrentVoteState {
 
   @Action(VoteForCandidate)
   voteForCandidate(
-    { patchState, getState }: StateContext<CurrentVoteStateModel>,
+    { setState, getState }: StateContext<CurrentVoteStateModel>,
     {
       playerId,
       proposedPlayerId,
     }: VoteForCandidate,
   ) {
     const { votes } = getState();
-    const newVotes = [...votes];
-    const vote = newVotes[votes.length - 1];
-    const isAlreadyVotedForThisPlayer = vote[proposedPlayerId].includes(playerId);
+    const voteNumber = votes.length - 1;
+    const currentVote = { ...votes[voteNumber] };
+
+    const isAlreadyVotedForThisPlayer = currentVote[proposedPlayerId].includes(playerId);
 
     if (isAlreadyVotedForThisPlayer) {
-      vote[proposedPlayerId] = vote[proposedPlayerId].filter((votedPlayerId) => playerId !== votedPlayerId);
+      currentVote[proposedPlayerId] = currentVote[proposedPlayerId]
+        .filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      patchState({ votes: newVotes });
+      setState(patch<CurrentVoteStateModel>({
+        votes: updateItem(voteNumber, currentVote),
+      }));
 
       return;
     }
 
-    for (const [candidateId, votedPlayers] of Object.entries(vote)) {
+    for (const [candidateId, votedPlayers] of Object.entries(currentVote)) {
       const newVotedPlayers = votedPlayers.filter((votedPlayerId) => playerId !== votedPlayerId);
 
-      vote[candidateId] = newVotedPlayers;
+      currentVote[candidateId] = newVotedPlayers;
     }
 
-    vote[proposedPlayerId].push(playerId);
+    currentVote[proposedPlayerId].push(playerId);
 
-    patchState({ votes: newVotes });
+    setState(patch<CurrentVoteStateModel>({
+      votes: updateItem(voteNumber, currentVote),
+    }));
   }
 
   @Action(SetVotes)

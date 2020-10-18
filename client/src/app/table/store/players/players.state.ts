@@ -69,7 +69,7 @@ export class PlayersState {
   }
 
   @Selector()
-  static getHost(state: PlayersStateModel): IPlayer | null {
+  static getHost(state: PlayersStateModel): Player | null {
     return state.host;
   }
 
@@ -84,7 +84,7 @@ export class PlayersState {
   }
 
   @Selector()
-  static getPlayers(state: PlayersStateModel): IPlayer[] {
+  static getPlayers(state: PlayersStateModel): Player[] {
     return state.players;
   }
 
