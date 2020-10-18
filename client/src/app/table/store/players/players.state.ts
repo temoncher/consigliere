@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { Action, State, Selector, StateContext, createSelector } from '@ngxs/store';
 import { compose, insertItem, patch, removeItem } from '@ngxs/store/operators';
 import { shuffle } from 'lodash';
-import { environment } from 'src/environments/environment';
 
-import { Player } from '@/shared/models/player.model';
+import { Player, IPlayer } from '@/shared/models/player.model';
 
-import { dummyPlayers, dummyHost, dummyPlayersRoles } from './players-mocks';
 import {
   GiveRoles,
   SetHost,
@@ -40,7 +38,7 @@ const rolesArray = [
 ];
 
 export interface PlayersStateModel {
-  host?: Player;
+  host: Player | null;
   players: Player[];
   falls: Record<string, number>; // <playerId, numberOfFalls>
   quitPhases: Record<string, IQuitPhase>; // <playerId, quitPhase>
@@ -66,33 +64,33 @@ export class PlayersState {
   private readonly isPlayerAlreadyHostText = 'Этот игрок уже избран ведущим.';
 
   @Selector()
-  static getState(state: PlayersStateModel) {
+  static getState(state: PlayersStateModel): PlayersStateModel {
     return state;
   }
 
   @Selector()
-  static getHost({ host }: PlayersStateModel) {
-    return host;
+  static getHost(state: PlayersStateModel): IPlayer | null {
+    return state.host;
   }
 
   @Selector()
-  static getRoles({ roles }: PlayersStateModel) {
-    return roles;
+  static getRoles(state: PlayersStateModel): Record<string, Role> {
+    return state.roles;
   }
 
   @Selector()
-  static getSpeechSkips({ speechSkips }: PlayersStateModel) {
-    return speechSkips;
+  static getSpeechSkips(state: PlayersStateModel): Record<string, number> {
+    return state.speechSkips;
   }
 
   @Selector()
-  static getPlayers({ players }: PlayersStateModel) {
-    return players;
+  static getPlayers(state: PlayersStateModel): IPlayer[] {
+    return state.players;
   }
 
   @Selector()
-  static getQuitPhases({ quitPhases }: PlayersStateModel) {
-    return quitPhases;
+  static getQuitPhases(state: PlayersStateModel): Record<string, IQuitPhase> {
+    return state.quitPhases;
   }
 
   @Selector()
@@ -253,7 +251,8 @@ export class PlayersState {
 
   @Action(AddPlayer)
   addPlayer({ patchState, getState }: StateContext<PlayersStateModel>, { player }: AddPlayer) {
-    const { host, players } = getState();
+    const { host, players, roles } = getState();
+    const newRoles = { ...roles };
 
     if (!player.nickname) {
       throw new Error(this.emptyNicknameText);
@@ -272,7 +271,9 @@ export class PlayersState {
     const newPlayer = new Player({ ...player, number: players.length });
     const newPlayers = [...players, newPlayer];
 
-    patchState({ players: newPlayers });
+    newRoles[player.uid] = Role.CITIZEN;
+
+    patchState({ players: newPlayers, roles: newRoles });
   }
 
   @Action(RemovePlayer)

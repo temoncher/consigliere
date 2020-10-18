@@ -31,7 +31,7 @@ interface IonicReorderEvent {
 })
 export class PlayersListComponent implements OnInit {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(PlayersState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getHost) host$: Observable<Player | null>;
   @Select(PlayersState.getRoles) roles$: Observable<Record<string, Role>>;
   @Select(PlayersState.getValidRoles) validRoles$: Observable<Partial<Record<keyof typeof Role, boolean>>>;
 

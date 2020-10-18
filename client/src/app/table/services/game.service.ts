@@ -20,7 +20,7 @@ import { SetIsVoteDisabled } from '../store/round/current-vote/current-vote.acti
 import { CurrentVoteState } from '../store/round/current-vote/current-vote.state';
 import { SwitchRoundPhase, KickPlayer } from '../store/round/round.actions';
 import { RoundState } from '../store/round/round.state';
-import { SetIsGameStarted, AddRound, EndGame } from '../store/table.actions';
+import { AddRound, EndGame } from '../store/table.actions';
 import { TableState } from '../store/table.state';
 
 import { VoteService } from './vote.service';
@@ -52,7 +52,6 @@ export class GameService {
       new SetPlayersNumbers(),
       // new GiveRoles(), // will be useful, when automatic roles shuffle will be implemented
       new Navigate(['tabs', 'table', 'game']),
-      new SetIsGameStarted(true),
     ]);
   }
 

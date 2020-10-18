@@ -32,7 +32,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
-  @Select(PlayersState.getHost) host$: Observable<Player>;
+  @Select(PlayersState.getHost) host$: Observable<Player | null>;
   @Select(PlayersState.getRolesNumbers) rolesNumbers$: Observable<Partial<Record<keyof typeof Role, number>>>;
   @Select(PlayersState.getValidRoles) validRoles$: Observable<Partial<Record<keyof typeof Role, boolean>>>;
   defaultAvatar = defaultAvatarSrc;

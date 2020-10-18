@@ -42,7 +42,7 @@ export class TableComponent {
 
     if (role === 'start') {
       this.store.dispatch([
-        new SetTableMeta(tableMeta),
+        new SetTableMeta({ ...tableMeta, isGameStarted: true }),
         new Navigate(['preparation'], null, { relativeTo: this.activatedRoute }),
       ]);
     }
