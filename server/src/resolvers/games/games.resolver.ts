@@ -16,7 +16,7 @@ import { ClubErrorCode, ClubAdminErrorCode } from '~types/enums/error-code.enum'
 @UseGuards(AuthGuard)
 export class GamesResolver {
   private gamesCollection = this.firestore.collection(CollectionName.GAMES) as GamesCollection;
-  private clubsCollection = this.firestore.collection(CollectionName.USERS) as ClubsCollection;
+  private clubsCollection = this.firestore.collection(CollectionName.CLUBS) as ClubsCollection;
 
   constructor(private firestore: FirebaseFirestoreService) {}
 
@@ -33,7 +33,7 @@ export class GamesResolver {
         throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
       }
 
-      if (clubData.members.includes(currentUser.uid)) {
+      if (!clubData.members.includes(currentUser.uid)) {
         throw new ApolloError('Only club member can add games for a club', ClubAdminErrorCode.NOT_ENOUGH_PERMISSIONS);
       }
     }

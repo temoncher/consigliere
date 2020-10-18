@@ -66,7 +66,7 @@ export class GameService {
 
     let murderedPlayer: string;
 
-    for (const [victimId, mafiaIds] of victimsMap) {
+    for (const [victimId, mafiaIds] of victimsMap.entries()) {
       if (mafiaIds.length === aliveMafia.length) {
         murderedPlayer = victimId;
       }
