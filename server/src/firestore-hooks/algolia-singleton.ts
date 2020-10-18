@@ -7,6 +7,7 @@ import { FunctionsConfig } from '@/interfaces/functions-config.interface';
 export class AlgoliaSingleton {
   private static instance: AlgoliaSingleton;
   clubsIndex: SearchIndex;
+  gamesByParticipantIndex: SearchIndex;
 
   static get client(): AlgoliaSingleton {
     if (!AlgoliaSingleton.instance) {
@@ -25,9 +26,11 @@ export class AlgoliaSingleton {
 
     const prefix = isProduction ? AlgoliaPrefix.PRODUCTION : AlgoliaPrefix.DEVELOPMENT;
     const clubsIndexName = `${prefix}_${AlgoliaIndex.CLUBS}`;
+    const gamesByParticipantIndexName = `${prefix}_${AlgoliaIndex.GAMES_BY_PARTICIPANT}`;
 
     console.log('Initialized Algolia with prefix:', prefix);
     this.clubsIndex = algoliaClient.initIndex(clubsIndexName);
+    this.gamesByParticipantIndex = algoliaClient.initIndex(gamesByParticipantIndexName);
     console.log('Clubs:', clubsIndexName);
   }
 }
