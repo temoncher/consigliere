@@ -57,17 +57,17 @@ export class AdditionalSpeechComponent implements OnDestroy {
 
     if (!(finishedPlayerIndex && playerId)) throw new Error('Finished player not found');
 
-    const playerTimer = this.timers.get(playerId);
-
-    if (!playerTimer) throw new Error('Player timer not found');
-
-    playerTimer.endSpeech();
-
     if (finishedPlayerIndex < this.leaders?.length - 1) {
       const slideIndex = this.leaders.findIndex(({ uid }) => !this.timers.get(uid)?.isSpeechEnded);
 
       this.playerSlider.slideTo(slideIndex);
     }
+
+    const playerTimer = this.timers.get(playerId);
+
+    if (!playerTimer) return;
+
+    playerTimer.endSpeech();
   }
 
   getTimeColor(playerId: string): 'medium' | 'danger' | 'primary' {

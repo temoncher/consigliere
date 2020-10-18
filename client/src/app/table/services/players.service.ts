@@ -82,11 +82,12 @@ export class PlayersService {
     ).subscribe(({ playerId }: AssignFall) => {
       const currentDayNumber = this.store.selectSnapshot(TableState.getRoundNumber);
       const fallsNumber = this.store.selectSnapshot(PlayersState.getPlayerFalls(playerId));
-      const playerTimer = this.timersService.getPlayerTimer(playerId);
-
-      if (!playerTimer) throw new Error('Player timer not found');
 
       if (fallsNumber === 3) {
+        const playerTimer = this.timersService.getPlayerTimer(playerId);
+
+        if (!playerTimer) return;
+
         this.store.dispatch(new SkipSpeech(playerId, playerTimer.isStarted ? currentDayNumber + 1 : currentDayNumber));
 
         if (!playerTimer.isStarted) {
