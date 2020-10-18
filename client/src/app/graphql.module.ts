@@ -6,12 +6,13 @@ import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
-const region = 'us-central1';
-const emulatorUrl = `http://localhost:5001/mafia-consigliere-develop/${region}/api/graphql`;
+const REGION = 'us-central1';
+const PROJECT_ID = environment.firebaseConfig.projectId;
 
-const projectName = environment.firebaseConfig.projectId;
-const remoteUrl = `https://${region}-${projectName}.cloudfunctions.net/api/graphql`;
-const uri = environment.emulation ? emulatorUrl : remoteUrl;
+const EMULATOR_URL = `http://localhost:5001/mafia-consigliere-develop/${REGION}/api/graphql`;
+const REMOTE_URL = `https://${REGION}-${PROJECT_ID}.cloudfunctions.net/api/graphql`;
+
+const uri = environment.emulation ? EMULATOR_URL : REMOTE_URL;
 
 export function createApollo(httpLink: HttpLink, fireauth: AngularFireAuth): ApolloClientOptions<any> {
   const basic = setContext(() => ({
