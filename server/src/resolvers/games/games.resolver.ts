@@ -5,7 +5,6 @@ import { ApolloError } from 'apollo-server-express';
 import * as fbAdmin from 'firebase-admin';
 
 import { AuthGuard } from '@/guards/auth.guard';
-import { IFireStoreGame } from '@/interfaces/game.interface';
 import { ClubsCollection, GamesCollection } from '@/models/collections.types';
 
 import { GameInput, GamesInputName } from './games.input';
