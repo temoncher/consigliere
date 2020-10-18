@@ -20,7 +20,7 @@ export class FirebaseTimestampScalar implements CustomScalar<number, admin.fires
     ).toMillis(); // value sent to the client
   }
 
-  parseLiteral(ast: ValueNode): admin.firestore.Timestamp {
+  parseLiteral(ast: ValueNode): admin.firestore.Timestamp | null {
     if (ast.kind === Kind.INT) {
       return admin.firestore.Timestamp.fromMillis(Number(ast.value));
     }

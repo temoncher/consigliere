@@ -10,7 +10,7 @@ import { GetUserArgs, GetUsersArgs } from './users.input';
 import { UserOutput } from './users.output';
 
 import { CollectionName } from '~types/enums/colletion-name.enum';
-import { UserErrorCode } from '~types/enums/error-code.enum';
+import { UserErrorCode, ClubErrorCode } from '~types/enums/error-code.enum';
 
 @Resolver()
 @UseGuards(AuthGuard)
@@ -26,7 +26,7 @@ export class UsersResolver {
       throw new ValidationError('Must provide only one property to query on');
     }
 
-    let userData: UserOutput;
+    let userData: UserOutput | undefined;
 
     if (args.id) {
       const userDoc = await this.usersCollection.doc(args.id).get();
@@ -77,9 +77,13 @@ export class UsersResolver {
   @Query(() => [UserOutput], { name: 'usersByClub' })
   async getUsersByClub(@Args('clubId') clubId: string): Promise<UserOutput[]> {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
-    const { members } = clubDoc.data();
+    const clubData = clubDoc.data();
 
-    const userDocs = await this.usersCollection.where('uid', 'in', members).get();
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
+    const userDocs = await this.usersCollection.where('uid', 'in', clubData.members).get();
     const usersData = userDocs.docs.map((doc) => doc.data());
 
     return usersData;

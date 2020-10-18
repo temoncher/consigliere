@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(executionContextHost: ExecutionContextHost): Promise<boolean> {
     const gqlContextData = GqlExecutionContext.create(executionContextHost).getContext<IGQLContext>();
 
-    if (!gqlContextData.headers.authorization) {
+    if (!gqlContextData.headers?.authorization) {
       throw new AuthenticationError('Authorization header is missing');
     }
 

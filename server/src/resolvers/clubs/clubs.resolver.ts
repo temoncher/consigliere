@@ -80,6 +80,10 @@ export class ClubsResolver {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
 
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
     if (!clubData.members.includes(currentUser.uid)) {
       throw new ApolloError('You are not a member of this club', UserErrorCode.NOT_FOUND);
     }
@@ -142,6 +146,10 @@ export class ClubsResolver {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
 
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
     if (!clubData.confidants.includes(successorId)) {
       throw new ApolloError('Successor should be club\'s confidant', ClubAdminErrorCode.SUCCESSOR_SHOULD_BE_CONFIDANT);
     }
@@ -188,6 +196,10 @@ export class ClubsResolver {
     const clubDoc = await this.clubsCollection.doc(clubId).get();
     const clubData = clubDoc.data();
 
+    if (!clubData) {
+      throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
+    }
+
     await this.clubsCollection.doc(clubId).delete();
 
     return {
@@ -209,7 +221,7 @@ export class ClubsResolver {
       throw new ApolloError('Club not found', ClubErrorCode.NOT_FOUND);
     }
 
-    let role: ClubRole;
+    let role: ClubRole | undefined;
 
     if (clubData.members.includes(currentUser.uid)) {
       role = ClubRole.MEMBER;
