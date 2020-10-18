@@ -43,7 +43,6 @@ export class ProfileComponent {
     ).subscribe(({ data, loading }) => {
       this.loading = loading;
       this.user = data.user;
-      console.log(data.lastGamesByUserId);
       this.games = data.lastGamesByUserId.map((game) => ({
         ...game,
         date: new Date(game.date).toLocaleDateString(),

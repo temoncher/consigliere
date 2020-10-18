@@ -23,7 +23,7 @@ export class AlgoliaService {
     const clubsIndexName = `${prefix}_${AlgoliaIndex.CLUBS}`;
     const gamesByParticipantIndexName = `${prefix}_${AlgoliaIndex.GAMES_BY_PARTICIPANT}`;
 
-    console.log('Initialized Algolia with prefix:', prefix);
+    console.log('Initialized Algolia service with prefix:', prefix);
     this.clubsIndex = algoliaClient.initIndex(clubsIndexName);
     this.gamesByParticipantIndex = algoliaClient.initIndex(gamesByParticipantIndexName);
     console.log('Clubs:', clubsIndexName);
