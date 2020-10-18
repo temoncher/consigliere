@@ -36,6 +36,8 @@ export class GameOutput extends DocumentMeta implements IFireStoreGame, IFireSto
   title: string;
   @Field(() => FirebaseTimestampScalar)
   date: fbAdmin.firestore.Timestamp;
+  @Field(() => Boolean, { nullable: true })
+  won?: boolean;
 
   @Field(() => PlayerOutput)
   host: IFireStorePlayer;

@@ -58,6 +58,45 @@ export enum ClubRole {
   Member = 'MEMBER'
 }
 
+export type PlayerOutput = {
+  __typename?: 'PlayerOutput';
+  uid: Scalars['ID'];
+  nickname: Scalars['String'];
+  number?: Maybe<Scalars['Int']>;
+  isGuest: Scalars['Boolean'];
+};
+
+export type GameOutput = {
+  __typename?: 'GameOutput';
+  createdBy: Scalars['ID'];
+  updatedBy: Scalars['ID'];
+  createdAt: Scalars['FirebaseTimestamp'];
+  updatedAt: Scalars['FirebaseTimestamp'];
+  id: Scalars['ID'];
+  club?: Maybe<Scalars['ID']>;
+  title: Scalars['String'];
+  date: Scalars['FirebaseTimestamp'];
+  won?: Maybe<Scalars['Boolean']>;
+  host: PlayerOutput;
+  triple: Array<Scalars['String']>;
+  result: GameResult;
+  players: Array<PlayerOutput>;
+  falls?: Maybe<Scalars['JSONObject']>;
+  quitPhases: Scalars['JSONObject'];
+  /** Record<string, number[]>[]; <candidatePlayerId, votesNumber>[] */
+  votes?: Maybe<Array<Scalars['JSONObject']>>;
+  roles: Scalars['JSONObject'];
+  donChecks?: Maybe<Array<Scalars['String']>>;
+  sheriffChecks?: Maybe<Array<Scalars['String']>>;
+};
+
+export enum GameResult {
+  Mafia = 'MAFIA',
+  Civilians = 'CIVILIANS',
+  Tie = 'TIE'
+}
+
+
 export type JoinRequestOutput = {
   __typename?: 'JoinRequestOutput';
   createdBy: Scalars['ID'];
@@ -92,6 +131,7 @@ export type Query = {
   club: ClubOutput;
   currentPlayerClubs: Array<ClubOutput>;
   searchClubs: Array<ClubSearchOutput>;
+  lastGamesByUserId: Array<GameOutput>;
   clubJoinRequests: Array<JoinRequestOutput>;
   user: UserOutput;
   users: Array<UserOutput>;
@@ -107,6 +147,11 @@ export type QueryClubArgs = {
 export type QuerySearchClubsArgs = {
   query: Scalars['String'];
   limit?: Maybe<Scalars['Float']>;
+};
+
+
+export type QueryLastGamesByUserIdArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -216,13 +261,6 @@ export type PlayerInput = {
   number?: Maybe<Scalars['Int']>;
   isGuest: Scalars['Boolean'];
 };
-
-export enum GameResult {
-  Mafia = 'MAFIA',
-  Civilians = 'CIVILIANS',
-  Tie = 'TIE'
-}
-
 
 export type CreateClubMutationVariables = Exact<{
   club: Club;
@@ -340,7 +378,10 @@ export type ProfilePageQuery = (
   & { user: (
     { __typename?: 'UserOutput' }
     & Pick<UserOutput, 'uid' | 'nickname' | 'avatar'>
-  ) }
+  ), lastGamesByUserId: Array<(
+    { __typename?: 'GameOutput' }
+    & Pick<GameOutput, 'id' | 'title' | 'date' | 'result' | 'roles' | 'won'>
+  )> }
 );
 
 export type SearchClubsQueryVariables = Exact<{
@@ -540,6 +581,14 @@ export const ProfilePageDocument = gql`
     uid
     nickname
     avatar
+  }
+  lastGamesByUserId(userId: $id) {
+    id
+    title
+    date
+    result
+    roles
+    won
   }
 }
     `;

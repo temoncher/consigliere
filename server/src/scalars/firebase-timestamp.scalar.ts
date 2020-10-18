@@ -1,3 +1,4 @@
+
 import { Scalar, CustomScalar } from '@nestjs/graphql';
 import * as admin from 'firebase-admin';
 import { ValueNode, Kind } from 'graphql';
@@ -10,8 +11,13 @@ export class FirebaseTimestampScalar implements CustomScalar<number, admin.fires
     return admin.firestore.Timestamp.fromMillis(milliseconds); // value from the client
   }
 
-  serialize(timestamp: admin.firestore.Timestamp): number {
-    return timestamp.toMillis(); // value sent to the client
+  serialize(timestamp: { _seconds: number; _nanoseconds: number }): number {
+    return new admin.firestore.Timestamp(
+      /* eslint-disable no-underscore-dangle */
+      timestamp._seconds,
+      timestamp._nanoseconds,
+      /* eslint-enable */
+    ).toMillis(); // value sent to the client
   }
 
   parseLiteral(ast: ValueNode): admin.firestore.Timestamp {
