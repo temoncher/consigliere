@@ -154,12 +154,14 @@ export class GameService {
   private composeGame(): CreateGameMutationVariables['game'] {
     const { players, falls, quitPhases, roles } = this.store.selectSnapshot(PlayersState.getState);
     const result = this.store.selectSnapshot(TableState.getGameResult);
+    const { club, title, date } = this.store.selectSnapshot(TableState.getTableMeta);
     const host = this.store.selectSnapshot(PlayersState.getHost);
 
     const newGame: CreateGameMutationVariables['game'] = {
-      // TODO: populate fields wit real values
-      gameNumber: 1,
-      date: Date.now(),
+      title,
+      club,
+      date: new Date(date).getTime(),
+      // TODO: populate `triple`,  `donChecks`, `sheriffChecks` and `votes` with real values
       triple: [],
       donChecks: [],
       sheriffChecks: [],

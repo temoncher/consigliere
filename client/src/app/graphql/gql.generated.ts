@@ -196,7 +196,7 @@ export type Club = {
 
 export type Game = {
   club?: Maybe<Scalars['String']>;
-  gameNumber: Scalars['Int'];
+  title: Scalars['String'];
   date: Scalars['FirebaseTimestamp'];
   host: PlayerInput;
   triple: Array<Scalars['String']>;
@@ -306,10 +306,10 @@ export type ClubDetailsPageQuery = (
   ) }
 );
 
-export type ClubsPageQueryVariables = Exact<{ [key: string]: never; }>;
+export type CurrentPlayerClubsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ClubsPageQuery = (
+export type CurrentPlayerClubsQuery = (
   { __typename?: 'Query' }
   & { currentPlayerClubs: Array<(
     { __typename?: 'ClubOutput' }
@@ -492,8 +492,8 @@ export const ClubDetailsPageDocument = gql`
       super(apollo);
     }
   }
-export const ClubsPageDocument = gql`
-    query clubsPage {
+export const CurrentPlayerClubsDocument = gql`
+    query currentPlayerClubs {
   currentPlayerClubs {
     id
     avatar
@@ -507,8 +507,8 @@ export const ClubsPageDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class ClubsPageGQL extends Apollo.Query<ClubsPageQuery, ClubsPageQueryVariables> {
-    document = ClubsPageDocument;
+  export class CurrentPlayerClubsGQL extends Apollo.Query<CurrentPlayerClubsQuery, CurrentPlayerClubsQueryVariables> {
+    document = CurrentPlayerClubsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -104,14 +104,15 @@ export class PlayerInput implements IFireStorePlayer {
 }
 
 @InputType(GamesInputName.GAME)
-export class GameInput extends DocumentMeta implements Partial<IFireStoreGame> {
+export class GameInput extends DocumentMeta implements IFireStoreGame {
   @Field(() => String, { nullable: true })
   club?: string;
 
-  @Field(() => Int)
-  gameNumber: number;
+  @Field()
+  title: string;
   @Field(() => FirebaseTimestampScalar)
   date: fbAdmin.firestore.Timestamp;
+
   @Field(() => PlayerInput)
   host: IFireStorePlayer;
   @Field(() => [String])

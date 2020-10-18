@@ -10,8 +10,9 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 export interface IFireStoreGame {
   club?: string;
 
-  gameNumber: number;
+  title: string;
   date: fbAdmin.firestore.Timestamp;
+
   host: IFireStorePlayer;
   triple: [string, string, string];
   result: GameResult;

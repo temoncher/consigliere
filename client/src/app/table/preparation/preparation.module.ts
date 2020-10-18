@@ -5,9 +5,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { SharedModule } from '@/shared/shared.module';
 
+import { PlayerSuggestionsModalComponent } from './player-suggestions-modal/player-suggestions-modal.component';
 import { PlayersListComponent } from './players-list/players-list.component';
 import { RoleMenuComponent } from './players-list/role-menu.component';
-import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
 import { PreparationComponent } from './preparation.component';
 
 @NgModule({
@@ -22,7 +22,7 @@ import { PreparationComponent } from './preparation.component';
   ],
   declarations: [
     PreparationComponent,
-    PreparationModalComponent,
+    PlayerSuggestionsModalComponent,
     PlayersListComponent,
     RoleMenuComponent,
   ],

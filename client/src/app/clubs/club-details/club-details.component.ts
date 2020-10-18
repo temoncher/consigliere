@@ -11,7 +11,7 @@ import {
   ClubRole,
   JoinPublicClubGQL,
   LeaveClubGQL,
-  ClubsPageDocument,
+  CurrentPlayerClubsDocument,
 } from '@/graphql/gql.generated';
 import { consigliereLogo } from '@/shared/constants/avatars';
 
@@ -71,7 +71,7 @@ export class ClubDetailsComponent implements OnInit, OnDestroy {
       { clubId },
       {
         refetchQueries: [
-          { query: ClubsPageDocument },
+          { query: CurrentPlayerClubsDocument },
           {
             query: ClubDetailsPageDocument,
             variables: { id: clubId },
@@ -89,7 +89,7 @@ export class ClubDetailsComponent implements OnInit, OnDestroy {
       { clubId },
       {
         refetchQueries: [
-          { query: ClubsPageDocument },
+          { query: CurrentPlayerClubsDocument },
           {
             query: ClubDetailsPageDocument,
             variables: { id: clubId },

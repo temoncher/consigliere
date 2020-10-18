@@ -1,7 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.toolbarTitle" | translate }}
+      {{
+        "TABS.TABLE.PREPARATION.PLAYER_SUGGESTIONS_MODAL.toolbarTitle"
+          | translate
+      }}
+      <ion-spinner
+        style="height: 16px"
+        name="crescent"
+        [hidden]="!loading"
+      ></ion-spinner>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button fill="outlined" (click)="close()">
@@ -23,7 +31,10 @@
       >
         <ion-icon slot="start" name="add" color="primary"></ion-icon>
         <ion-label color="primary">
-          {{ "TABS.TABLE.PREPARATION.PREPARATION_MODAL.addGuest" | translate }}
+          {{
+            "TABS.TABLE.PREPARATION.PLAYER_SUGGESTIONS_MODAL.addGuest"
+              | translate
+          }}
         </ion-label>
       </ion-item>
     </div>

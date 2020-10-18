@@ -12,7 +12,7 @@ import { GameService } from '../services/game.service';
 import { ShufflePlayers, SetHost } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 
-import { PreparationModalComponent } from './preparation-modal/preparation-modal.component';
+import { PlayerSuggestionsModalComponent } from './player-suggestions-modal/player-suggestions-modal.component';
 
 import { Role } from '~types/enums/role.enum';
 
@@ -81,7 +81,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
 
   async presentHostModal() {
     const modal = await this.modalController.create({
-      component: PreparationModalComponent,
+      component: PlayerSuggestionsModalComponent,
       swipeToClose: true,
     });
 

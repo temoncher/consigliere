@@ -10,7 +10,7 @@ import { Player } from '@/shared/models/player.model';
 import { ReorderPlayer, RemovePlayer, AssignRole, AddPlayer } from '@/table/store/players/players.actions';
 import { PlayersState } from '@/table/store/players/players.state';
 
-import { PreparationModalComponent } from '../preparation-modal/preparation-modal.component';
+import { PlayerSuggestionsModalComponent } from '../player-suggestions-modal/player-suggestions-modal.component';
 
 import { RoleMenuComponent } from './role-menu.component';
 
@@ -93,7 +93,7 @@ export class PlayersListComponent implements OnInit {
 
   async presentPlayerModal() {
     const modal = await this.modalController.create({
-      component: PreparationModalComponent,
+      component: PlayerSuggestionsModalComponent,
       swipeToClose: true,
     });
 

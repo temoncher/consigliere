@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{
+        "TABS.TABLE.PREPARATION.PREPARATION_MODAL.CLUB_SUGGESTIONS_MODAL.toolbarTitle"
+          | translate
+      }}
+      <ion-spinner
+        style="height: 16px"
+        name="crescent"
+        [hidden]="!loading"
+      ></ion-spinner>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="outlined" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-list class="cards-list">
+  <div class="sticky top">
+    <ion-item
+      class="add-new"
+      data-cy="add-guest-item"
+      lines="none"
+      (click)="chooseClub()"
+    >
+      <ion-label color="primary">
+        {{
+          "TABS.TABLE.PREPARATION.PREPARATION_MODAL.CLUB_SUGGESTIONS_MODAL.noClub"
+            | translate
+        }}
+      </ion-label>
+    </ion-item>
+    <div class="app-divider"></div>
+  </div>
+</ion-list>
+
+<ion-content class="light">
+  <ion-list class="cards-list light">
+    <ion-item
+      *ngFor="let club of clubs"
+      lines="none"
+      (click)="chooseClub(club)"
+    >
+      <ion-avatar slot="start">
+        <img [src]="club.avatar ? club.avatar : consigliereLogo" />
+      </ion-avatar>
+      <ion-label>
+        <h3>{{ club.title }}</h3>
+        <p>{{ club.location }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

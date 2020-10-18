@@ -1,4 +1,4 @@
-query clubsPage {
+query currentPlayerClubs {
   currentPlayerClubs {
     id
     avatar
