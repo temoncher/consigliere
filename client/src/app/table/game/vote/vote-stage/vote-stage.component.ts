@@ -29,6 +29,7 @@ export class VoteStageComponent implements OnDestroy {
   players: Player[];
   proposedPlayers: Player[] = [];
   vote: Record<string, string[]>;
+  quitPhases: Record<string, IQuitPhase>;
 
   voteInfoMap: Map<string, Player> = new Map<string, Player>();
   numberSliderConfig: SwiperOptions = {
@@ -47,6 +48,10 @@ export class VoteStageComponent implements OnDestroy {
     const currentVote = this.store.selectSnapshot(CurrentVoteState.getCurrentVote);
     const alivePlayers = this.store.selectSnapshot(PlayersState.getAlivePlayers);
     const proposedPlayers: Player[] = [];
+
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
 
     // Implemented to keep players proposal order
     if (currentVote) {

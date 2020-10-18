@@ -16,7 +16,7 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   templateUrl: './propose-modal.component.html',
   styleUrls: ['./propose-modal.component.scss'],
 })
-export class ProposeModalComponent implements OnInit, OnDestroy {
+export class ProposeModalComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(CurrentDayState.getProposedPlayers) proposedPlayers$: Observable<Record<string, string>>;
@@ -24,6 +24,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
 
   players: Player[];
   proposedPlayers: Record<string, string> = {};
+  quitPhases: Record<string, IQuitPhase>;
 
   defaultAvatar = defaultAvatarSrc;
 
@@ -32,9 +33,11 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
   constructor(
     private modalController: ModalController,
     private store: Store,
-  ) { }
+  ) {
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
 
-  ngOnInit(): void {
     this.proposedPlayers$
       .pipe(takeUntil(this.destroy))
       .subscribe((proposedPlayers) => this.proposedPlayers = proposedPlayers);

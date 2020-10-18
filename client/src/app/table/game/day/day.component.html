@@ -10,7 +10,6 @@
 <ion-slides #playerSlider [options]="playerSliderConfig">
   <ng-container *ngFor="let player of players$ | async">
     <ion-slide
-      *ngIf="quitPhases$ | async as quitPhases"
       [hidden]="(isQuittedHidden$ | async) && !!quitPhases[player.uid]"
     >
       <app-player-timer

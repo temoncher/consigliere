@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content class="no-scroll">
-  <app-table-template *ngIf="quitPhases$ | async as quitPhases">
+  <app-table-template>
     <app-small-player-card
       *ngFor="let player of players"
       [slot]="player.number"

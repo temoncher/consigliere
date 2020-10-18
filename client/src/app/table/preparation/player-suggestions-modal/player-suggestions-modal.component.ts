@@ -47,8 +47,9 @@ export class PlayerSuggestionsModalComponent implements OnInit, OnDestroy {
       ).subscribe(([suggestedPlayers, tablePlayers, host]) => {
         this.loading = false;
         const tablePlayersIds = tablePlayers.map((player) => player.uid);
+        const participantsIds = host ? [...tablePlayersIds, host.uid] : tablePlayersIds;
 
-        this.users = suggestedPlayers.filter(({ uid }) => ![...tablePlayersIds, host?.uid].includes(uid));
+        this.users = suggestedPlayers.filter(({ uid }) => !(participantsIds.includes(uid)));
       });
     }
   }

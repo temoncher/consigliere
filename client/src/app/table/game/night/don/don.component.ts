@@ -26,6 +26,7 @@ export class DonComponent {
   defaultAvatar = defaultAvatarSrc;
 
   constructor(private store: Store) {
+    // TODO: unsubscribe
     this.donCheck$.subscribe((checkedPlayerId) => {
       if (checkedPlayerId) {
         const checkedPlayer = this.store.selectSnapshot(PlayersState.getPlayer(checkedPlayerId));

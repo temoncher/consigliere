@@ -1,9 +1,10 @@
 import {
-  Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges,
+  Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy,
 } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SwiperOptions } from 'swiper';
 
 import { Player } from '@/shared/models/player.model';
@@ -18,8 +19,10 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   templateUrl: './player-controls.component.html',
   styleUrls: ['./player-controls.component.scss'],
 })
-export class PlayerControlsComponent implements OnInit, OnChanges {
+export class PlayerControlsComponent implements OnChanges, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
   @ViewChild('numberSlider') numberSlider: IonSlides;
+
   @Select(GameMenuState.getBasicProp('isPlayerControlsVisible')) isPlayerControlsOpened$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isRolesVisible')) isRolesVisible$: Observable<boolean>;
   @Select(GameMenuState.getBasicProp('isQuittedHidden')) isQuittedHidden$: Observable<boolean>;
@@ -30,6 +33,7 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   @Input() showProposedPlayers = true; // TODO: hide proposed players on vote?
 
   players: Player[];
+  quitPhases: Record<string, IQuitPhase>;
 
   numberSliderConfig: SwiperOptions = {
     slidesPerView: 5.5,
@@ -39,22 +43,29 @@ export class PlayerControlsComponent implements OnInit, OnChanges {
   constructor(
     private store: Store,
   ) {
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
+
     this.players = this.store.selectSnapshot(PlayersState.getPlayers);
   }
 
-  ngOnInit() { }
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.unsubscribe();
+  }
 
-  ngOnChanges({ currentPlayerNumber }: SimpleChanges) {
+  ngOnChanges({ currentPlayerNumber }: SimpleChanges): void {
     if (currentPlayerNumber && this.numberSlider) {
       this.navigateToSlide(currentPlayerNumber.currentValue);
     }
   }
 
-  toggleControlsVisibility() {
+  toggleControlsVisibility(): void {
     this.store.dispatch(new ToggleGameMenuBoolean('isPlayerControlsVisible'));
   }
 
-  navigateToSlide(index: number) {
+  navigateToSlide(index: number): void {
     this.numberSlider.slideTo(index);
   }
 }

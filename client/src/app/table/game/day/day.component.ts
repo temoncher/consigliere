@@ -4,6 +4,7 @@ import {
 import { IonSlides } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { playerSliderConfig } from '@/shared/constants/slider';
 import { Player } from '@/shared/models/player.model';
@@ -29,13 +30,19 @@ export class DayComponent implements OnDestroy {
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
+  quitPhases: Record<string, IQuitPhase>;
+
   playerSliderConfig = playerSliderConfig;
 
   constructor(
     private store: Store,
     private timersService: TimersService,
     private gameService: GameService,
-  ) { }
+  ) {
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
+  }
 
   ngOnDestroy(): void {
     this.destroy.next();

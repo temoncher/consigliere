@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Player } from '@/shared/models/player.model';
 import { VoteService } from '@/table/services/vote.service';
@@ -15,12 +16,15 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   templateUrl: './eliminate-all-vote.component.html',
   styleUrls: ['./eliminate-all-vote.component.scss'],
 })
-export class EliminateAllVoteComponent implements OnInit {
+export class EliminateAllVoteComponent implements OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
+
   @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Record<string, boolean> | undefined>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
   eliminateVote: Record<string, boolean> = {};
+  quitPhases: Record<string, IQuitPhase>;
 
   get votedPlayersNumber(): number {
     const eliminateVote = this.store.selectSnapshot(CurrentVoteState.getEliminateVote);
@@ -31,11 +35,19 @@ export class EliminateAllVoteComponent implements OnInit {
   constructor(
     private store: Store,
     private voteService: VoteService,
-  ) { }
+  ) {
+    this.quitPhases$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((quitPhases) => this.quitPhases = quitPhases);
 
-  ngOnInit(): void {
-    // TODO: unsubsscribe
-    this.eliminateAllVote$.subscribe((eliminateVote) => this.eliminateVote = eliminateVote || {});
+    this.eliminateAllVote$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((eliminateVote) => this.eliminateVote = eliminateVote || {});
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.unsubscribe();
   }
 
   switchVote(playerId: string): void {

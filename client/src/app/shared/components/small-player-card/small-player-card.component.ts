@@ -5,6 +5,7 @@ import {
   EventEmitter,
   ViewEncapsulation,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
@@ -22,7 +23,7 @@ import { Role } from '~types/enums/role.enum';
   styleUrls: ['./small-player-card.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class SmallPlayerCardComponent implements OnDestroy {
+export class SmallPlayerCardComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Input() playerId: string;
   @Input() showRole = false;
@@ -42,7 +43,9 @@ export class SmallPlayerCardComponent implements OnDestroy {
 
   fallsNumber = 0;
 
-  constructor(private store: Store) {
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
     this.store.select(PlayersState.getPlayer(this.playerId))
       .pipe(takeUntil(this.destroy))
       .subscribe((player) => this.player = player);

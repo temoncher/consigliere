@@ -1,6 +1,5 @@
 <ion-card
   class="small-card"
-  *ngIf="player"
   [ngClass]="
     (showRole || showTeam) &&
     (playerRole === Role.MAFIA || playerRole === Role.DON)
@@ -10,9 +9,7 @@
   (click)="onClick($event)"
 >
   <div
-    *ngIf="
-      showRole && (playerRole === Role.DON || playerRole === Role.SHERIFF)
-    "
+    *ngIf="showRole && (playerRole === Role.DON || playerRole === Role.SHERIFF)"
     [id]="playerRole === Role.DON ? 'don-label' : 'sheriff-label'"
     class="clip-button top-left"
     [ngClass]="
@@ -36,7 +33,7 @@
     {{ fallsNumber }}
   </div>
 
-  <ion-card-content>{{ player.number }}</ion-card-content>
+  <ion-card-content>{{ player?.number }}</ion-card-content>
 
   <div
     *ngIf="showProposedPlayer && proposedPlayer?.number"
