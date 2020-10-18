@@ -20,7 +20,7 @@ type WinnerMap = {
 })
 export class ProfileComponent {
   user: ProfilePageQuery['user'];
-  games = [];
+  games: ProfilePageQuery['lastGamesByUserId'];
   loading = true;
 
   defaultGameAvatar = consigliereLogo;
@@ -43,6 +43,7 @@ export class ProfileComponent {
     ).subscribe(({ data, loading }) => {
       this.loading = loading;
       this.user = data.user;
+      this.games = data.lastGamesByUserId;
     });
   }
 
