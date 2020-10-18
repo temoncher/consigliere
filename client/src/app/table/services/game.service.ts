@@ -3,7 +3,8 @@ import { Navigate } from '@ngxs/router-plugin';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { StateReset } from 'ngxs-reset-plugin';
 
-import { CreateGameGQL, CreateGameMutationVariables } from '@/graphql/gql.generated';
+import { CreateGameGQL, CreateGameMutationVariables, ProfilePageDocument } from '@/graphql/gql.generated';
+import { AuthService } from '@/shared/services/auth.service';
 import { PlayersService } from '@/table/services/players.service';
 import { TimersService } from '@/table/services/timers.service';
 
@@ -38,6 +39,7 @@ export class GameService {
     private timersService: TimersService,
     private playersService: PlayersService,
     private createGameGQL: CreateGameGQL,
+    private authService: AuthService,
   ) {
     this.watchPlayerKick();
     this.watchGameEnd();
@@ -111,10 +113,19 @@ export class GameService {
 
   saveGame() {
     const newGame = this.composeGame();
+    const curretUserId = this.authService.currentUser.uid;
 
-    this.createGameGQL.mutate({
-      game: newGame,
-    }).subscribe(() => {
+    this.createGameGQL.mutate(
+      { game: newGame },
+      {
+        refetchQueries: [{
+          query: ProfilePageDocument,
+          variables: {
+            id: curretUserId,
+          },
+        }],
+      },
+    ).subscribe(() => {
       this.store.dispatch([
         new StateReset(TableState),
         new Navigate(['tabs', 'table']),
