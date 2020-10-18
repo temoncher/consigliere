@@ -14,7 +14,6 @@ console.log('Project:', process.env.GCLOUD_PROJECT);
 
 const server: express.Express = express();
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const createNestServer = async (expressInstance: express.Express): Promise<INestApplication> => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressInstance));
 

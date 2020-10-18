@@ -5,11 +5,13 @@ import * as admin from 'firebase-admin';
 
 import { ResolversModule } from './resolvers/resolvers.module';
 
+const FIRE_ADMIN_CREDENTIALS = admin.credential.applicationDefault();
+
 @Module({
   imports: [
     FirebaseAdminModule.forRootAsync({
       useFactory: () => ({
-        credential: admin.credential.applicationDefault(),
+        credential: FIRE_ADMIN_CREDENTIALS,
       }),
     }),
     GraphQLModule.forRoot({
