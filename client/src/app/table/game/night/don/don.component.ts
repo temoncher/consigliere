@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { CurrentNightState } from '@/table/store/round/current-night/current-nig
   templateUrl: './don.component.html',
   styleUrls: ['./don.component.scss'],
 })
-export class DonComponent implements OnInit {
+export class DonComponent {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getDon) don$: Observable<Player>;
@@ -30,24 +30,24 @@ export class DonComponent implements OnInit {
       if (checkedPlayerId) {
         const checkedPlayer = this.store.selectSnapshot(PlayersState.getPlayer(checkedPlayerId));
 
+        if (!checkedPlayer?.number) throw new Error('Checked player or number not found');
+
         this.checkedPlayerIndex = checkedPlayer.number - 1;
       }
     });
   }
 
-  ngOnInit() { }
-
-  check() {
+  check(): void {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
     this.store.dispatch(new CheckByDon(players[this.currentPlayerIndex].uid));
   }
 
-  next() {
+  next(): void {
     this.nextClick.emit();
   }
 
-  navigateToPlayer(playerNumber: number) {
+  navigateToPlayer(playerNumber: number): void {
     this.currentPlayerIndex = playerNumber - 1;
   }
 }

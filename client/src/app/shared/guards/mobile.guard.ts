@@ -10,9 +10,11 @@ export class MobileGuard implements CanActivate {
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // workaround for screen height, window.screen doesn't work with cypress
-    const { offsetHeight: height, offsetWidth: width } = document.querySelector('body');
+    const body = document.querySelector('body');
 
-    if (height < 1000 && width < 500) {
+    if (!body) throw new Error('Document body not found');
+
+    if (body.offsetHeight < 1000 && body.offsetWidth < 500) {
       return this.router.createUrlTree(['tabs', 'table']);
     }
 

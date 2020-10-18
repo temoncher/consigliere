@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { CurrentNightState } from '@/table/store/round/current-night/current-nig
   templateUrl: './sheriff.component.html',
   styleUrls: ['./sheriff.component.scss'],
 })
-export class SheriffComponent implements OnInit, OnDestroy {
+export class SheriffComponent implements OnInit {
   @Output() nextClick = new EventEmitter();
 
   @Select(PlayersState.getSheriff) sheriff$: Observable<Player>;
@@ -27,20 +27,20 @@ export class SheriffComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    // TODO: unsubscribe
     this.sheriffCheck$.subscribe((checkedPlayerId) => {
       if (checkedPlayerId) {
         const checkedPlayer = this.store.selectSnapshot(PlayersState.getPlayer(checkedPlayerId));
+
+        if (!checkedPlayer?.number) throw new Error('Checked player not found or number not found');
 
         this.checkedPlayerIndex = checkedPlayer.number - 1;
       }
     });
   }
 
-  ngOnDestroy() {
-  }
-
-  check() {
+  check(): void {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
 
     if (players) {
@@ -48,11 +48,11 @@ export class SheriffComponent implements OnInit, OnDestroy {
     }
   }
 
-  next() {
+  next(): void {
     this.nextClick.emit();
   }
 
-  navigateToPlayer(playerNumber: number) {
+  navigateToPlayer(playerNumber: number): void {
     this.currentPlayerIndex = playerNumber - 1;
   }
 }

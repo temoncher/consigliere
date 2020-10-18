@@ -3,6 +3,5 @@ export enum Role {
   CITIZEN = 'CITIZEN',
   DON = 'DON',
   SHERIFF = 'SHERIFF',
-  HOST = 'HOST',
-  CREATOR = 'CREATOR'
+  HOST = 'HOST'
 }

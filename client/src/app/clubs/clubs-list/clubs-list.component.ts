@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
@@ -11,19 +11,19 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './clubs-list.component.html',
   styleUrls: ['./clubs-list.component.scss'],
 })
-export class ClubsListComponent implements OnInit {
+export class ClubsListComponent {
   @Input() loading: boolean;
   @Input() clubs: CurrentPlayerClubsQuery['currentPlayerClubs'];
 
-  get administratedClubs() {
+  get administratedClubs(): CurrentPlayerClubsQuery['currentPlayerClubs'] {
     return this.clubs.filter(({ role }) => role === ClubRole.Admin);
   }
 
-  get confidantClubs() {
+  get confidantClubs(): CurrentPlayerClubsQuery['currentPlayerClubs'] {
     return this.clubs.filter(({ role }) => role === ClubRole.Confidant);
   }
 
-  get memberClubs() {
+  get memberClubs(): CurrentPlayerClubsQuery['currentPlayerClubs'] {
     return this.clubs.filter(({ role }) => role === ClubRole.Member);
   }
 
@@ -34,9 +34,11 @@ export class ClubsListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  ngOnInit() {}
-
-  navigateToClub(clubId: string) {
-    this.store.dispatch(new Navigate([clubId], null, { relativeTo: this.activatedRoute }));
+  navigateToClub(clubId: string): void {
+    this.store.dispatch(new Navigate(
+      [clubId],
+      undefined,
+      { relativeTo: this.activatedRoute },
+    ));
   }
 }

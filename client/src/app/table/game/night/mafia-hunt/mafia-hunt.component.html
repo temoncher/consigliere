@@ -7,24 +7,26 @@
   </ion-button>
 </app-portal>
 
-<app-table-template class="mafia-hunt">
+<app-table-template
+  class="mafia-hunt"
+  *ngIf="qutiPhases$ | async as qutiPhases"
+>
   <app-small-player-card
     *ngFor="let player of players$ | async"
     [slot]="player.number"
-    [disabled]="!!(qutiPhases$ | async)[player.uid]"
+    [disabled]="!!qutiPhases[player.uid]"
     [playerId]="player.uid"
     (cardClick)="navigateToPlayer(player.number)"
   >
-    <div
-      *ngIf="(victimsMap$ | async).get(player.uid)?.length"
-      slot="clips"
-    >
-      <div
-        class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast"
-      >
-        {{ (victimsMap$ | async).get(player.uid)?.length }}
+    <ng-container *ngIf="victimsMap$ | async as victimsMap">
+      <div *ngIf="victimsMap.get(player.uid)?.length" slot="clips">
+        <div
+          class="victim-clip clip-button top-right text-only background-color-danger text-color-dark-contrast"
+        >
+          {{ victimsMap.get(player.uid)?.length }}
+        </div>
       </div>
-    </div>
+    </ng-container>
   </app-small-player-card>
 
   <div slot="center" class="card-container">
@@ -42,9 +44,7 @@
 
       <ion-card-content class="player-card__content">
         <ion-avatar class="player-card__avatar">
-          <img
-            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
-          />
+          <img [src]="players[currentPlayerIndex].avatar || defaultAvatar" />
         </ion-avatar>
       </ion-card-content>
     </ion-card>

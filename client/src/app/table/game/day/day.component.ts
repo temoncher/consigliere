@@ -20,7 +20,7 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   selector: 'app-day',
   templateUrl: './day.component.html',
 })
-export class DayComponent implements OnInit, OnDestroy {
+export class DayComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
@@ -37,31 +37,29 @@ export class DayComponent implements OnInit, OnDestroy {
     private gameService: GameService,
   ) { }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  navigateToSlide(index: number) {
+  navigateToSlide(index: number): void {
     this.playerSlider.slideTo(index);
   }
 
-  endSpeech(playerId: string) {
+  endSpeech(playerId: string): void {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const quitPhases = this.store.selectSnapshot(PlayersState.getQuitPhases);
     const finishedPlayerIndex = players.findIndex((player) => player.uid === playerId);
 
     if (finishedPlayerIndex < players.length - 1) {
       const slideIndex = players.findIndex(({ uid }) => !quitPhases[uid]
-        && !this.timersService.getPlayerTimer(uid).isSpeechEnded);
+        && !this.timersService.getPlayerTimer(uid)?.isSpeechEnded);
 
       this.navigateToSlide(slideIndex);
     }
   }
 
-  endDay() {
+  endDay(): void {
     this.gameService.endDay();
   }
 }

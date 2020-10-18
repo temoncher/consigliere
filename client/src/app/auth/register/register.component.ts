@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { fadeSlide } from '@/shared/animations';
@@ -49,15 +49,15 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
   title = this.startingTitle;
 
-  get nickname() {
+  get nickname(): AbstractControl | null {
     return this.registerForm.get('nickname');
   }
 
-  get email() {
+  get email(): AbstractControl | null {
     return this.registerForm.get('email');
   }
 
-  get password() {
+  get password(): AbstractControl | null {
     return this.registerForm.get('password');
   }
 
@@ -67,22 +67,25 @@ export class RegisterComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.registerForm.statusChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(() => this.changeDetectorRef.detectChanges()); // to enable button on status change
   }
 
-  async register() {
+  async register(): Promise<void> {
     if (this.registerForm.invalid) return;
+
+    if (!this.email || !this.password || !this.nickname) throw new Error('Some inputs are missing');
 
     try {
       await this.authService.register(this.email.value, this.password.value, this.nickname.value);
     } catch (error) {
       if (error.code) {
         const firebaseError = error as firebase.auth.Error;
+        const errorCode = firebaseError.code as keyof typeof authErrorMessages;
 
-        this.errorMessage = authErrorMessages[firebaseError.code] || this.somethingWentWrong;
+        this.errorMessage = authErrorMessages[errorCode] || this.somethingWentWrong;
 
         return;
       }
@@ -94,7 +97,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  submitOnEnterKey({ key }: KeyboardEvent) {
+  submitOnEnterKey({ key }: KeyboardEvent): void {
     if (key !== 'Enter') return;
 
     this.register();

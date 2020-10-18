@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import * as firebase from 'firebase';
 import { distinctUntilChanged } from 'rxjs/operators';
 
@@ -38,11 +38,11 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   title = this.startingTitle;
 
-  get email() {
+  get email(): AbstractControl | null {
     return this.loginForm.get('email');
   }
 
-  get password() {
+  get password(): AbstractControl | null {
     return this.loginForm.get('password');
   }
 
@@ -52,23 +52,26 @@ export class LoginComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginForm.statusChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(() => this.changeDetectorRef.detectChanges()); // to enable button on status change
   }
 
-  async login() {
+  async login(): Promise<void> {
     this.title = this.loadingText;
     this.errorMessage = '';
+
+    if (!this.email || !this.password) throw new Error('Some inputs are missing');
 
     try {
       await this.authService.login(this.email.value, this.password.value);
     } catch (error) {
       if (error.code) {
         const firebaseError = error as firebase.auth.Error;
+        const errorCode = firebaseError.code as keyof typeof authErrorMessages;
 
-        this.errorMessage = authErrorMessages[firebaseError.code] || this.somethingWentWrong;
+        this.errorMessage = authErrorMessages[errorCode] || this.somethingWentWrong;
 
         return;
       }
@@ -79,7 +82,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  submitOnEnterKey({ key }: KeyboardEvent) {
+  submitOnEnterKey({ key }: KeyboardEvent): void {
     if (key !== 'Enter') return;
 
     this.login();

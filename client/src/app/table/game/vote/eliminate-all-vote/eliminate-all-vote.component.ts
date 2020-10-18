@@ -16,14 +16,16 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   styleUrls: ['./eliminate-all-vote.component.scss'],
 })
 export class EliminateAllVoteComponent implements OnInit {
-  @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Record<string, boolean>>;
+  @Select(CurrentVoteState.getEliminateVote) eliminateAllVote$: Observable<Record<string, boolean> | undefined>;
   @Select(PlayersState.getQuitPhases) quitPhases$: Observable<Record<string, IQuitPhase>>;
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
 
-  get votedPlayersNumber() {
+  eliminateVote: Record<string, boolean> = {};
+
+  get votedPlayersNumber(): number {
     const eliminateVote = this.store.selectSnapshot(CurrentVoteState.getEliminateVote);
 
-    return Object.keys(eliminateVote).length;
+    return Object.keys(eliminateVote || {}).length;
   }
 
   constructor(
@@ -31,13 +33,16 @@ export class EliminateAllVoteComponent implements OnInit {
     private voteService: VoteService,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    // TODO: unsubsscribe
+    this.eliminateAllVote$.subscribe((eliminateVote) => this.eliminateVote = eliminateVote || {});
+  }
 
-  switchVote(playerId: string) {
+  switchVote(playerId: string): void {
     this.store.dispatch(new VoteForElimination(playerId));
   }
 
-  endEliminateVote() {
+  endEliminateVote(): void {
     this.voteService.endEliminateVote();
   }
 }

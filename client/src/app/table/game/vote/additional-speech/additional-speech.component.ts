@@ -1,6 +1,4 @@
-import {
-  Component, OnInit, OnDestroy, ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Select } from '@ngxs/store';
 import { Subject, Observable, combineLatest } from 'rxjs';
@@ -19,7 +17,7 @@ import { CurrentVoteState } from '@/table/store/round/current-vote/current-vote.
   templateUrl: './additional-speech.component.html',
   styleUrls: ['./additional-speech.component.scss'],
 })
-export class AdditionalSpeechComponent implements OnInit, OnDestroy {
+export class AdditionalSpeechComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @ViewChild('playerSlider') playerSlider: IonSlides;
 
@@ -49,33 +47,37 @@ export class AdditionalSpeechComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  endPlayerSpeech(playerId: string) {
+  endPlayerSpeech(playerId: string): void {
     const finishedPlayerIndex = this.leaders.findIndex((player) => player.uid === playerId);
 
-    this.timers.get(playerId).endSpeech();
+    if (!(finishedPlayerIndex && playerId)) throw new Error('Finished player not found');
+
+    const playerTimer = this.timers.get(playerId);
+
+    if (!playerTimer) throw new Error('Player timer not found');
+
+    playerTimer.endSpeech();
 
     if (finishedPlayerIndex < this.leaders?.length - 1) {
-      const slideIndex = this.leaders.findIndex(({ uid }) => !this.timers.get(uid).isSpeechEnded);
+      const slideIndex = this.leaders.findIndex(({ uid }) => !this.timers.get(uid)?.isSpeechEnded);
 
       this.playerSlider.slideTo(slideIndex);
     }
   }
 
-  getTimeColor(playerId: string) {
+  getTimeColor(playerId: string): 'medium' | 'danger' | 'primary' {
     const timer = this.timers.get(playerId);
 
     if (timer?.time === 0 || timer?.isSpeechEnded) {
       return 'medium';
     }
 
-    if (timer?.time < 10) {
+    if (timer?.time && timer.time < 10) {
       return 'danger';
     }
 

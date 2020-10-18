@@ -28,7 +28,7 @@ export class TableComponent {
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  async presentPreparationModal() {
+  async presentPreparationModal(): Promise<void> {
     this.store.dispatch(new StateReset(TableState));
 
     const modal = await this.modalController.create({
@@ -43,7 +43,7 @@ export class TableComponent {
     if (role === 'start') {
       this.store.dispatch([
         new SetTableMeta({ ...tableMeta, isGameStarted: true }),
-        new Navigate(['preparation'], null, { relativeTo: this.activatedRoute }),
+        new Navigate(['preparation'], undefined, { relativeTo: this.activatedRoute }),
       ]);
     }
   }

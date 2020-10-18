@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController, AlertController, ToastController, PopoverController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
@@ -29,7 +29,7 @@ interface IonicReorderEvent {
   templateUrl: 'players-list.component.html',
   styleUrls: ['players-list.component.scss'],
 })
-export class PlayersListComponent implements OnInit {
+export class PlayersListComponent {
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
   @Select(PlayersState.getHost) host$: Observable<Player | null>;
   @Select(PlayersState.getRoles) roles$: Observable<Record<string, Role>>;
@@ -60,26 +60,24 @@ export class PlayersListComponent implements OnInit {
     this.roles$.subscribe((roles) => this.roles = roles);
   }
 
-  ngOnInit() { }
-
-  async doReorder({ detail: { from, to, complete } }: IonicReorderEvent) {
+  async doReorder({ detail: { from, to, complete } }: IonicReorderEvent): Promise<void> {
     await this.store.dispatch(new ReorderPlayer(from, to)).toPromise();
     complete();
   }
 
-  removePlayer(playerId: string) {
+  removePlayer(playerId: string): void {
     this.store.dispatch(new RemovePlayer(playerId));
   }
 
-  changeRole(playerId: string) {
+  changeRole(playerId: string): void {
     this.store.dispatch(new AssignRole(playerId, Role.DON));
   }
 
-  getPlayersRole(player: Player) {
+  getPlayersRole(player: Player): Role {
     return this.roles[player.uid];
   }
 
-  async presentRolesMenu(playerId: string) {
+  async presentRolesMenu(playerId: string): Promise<void> {
     const popover = await this.popoverController.create({
       component: RoleMenuComponent,
       translucent: true,
@@ -91,7 +89,7 @@ export class PlayersListComponent implements OnInit {
     this.store.dispatch(new AssignRole(playerId, role));
   }
 
-  async presentPlayerModal() {
+  async presentPlayerModal(): Promise<void> {
     const modal = await this.modalController.create({
       component: PlayerSuggestionsModalComponent,
       swipeToClose: true,
@@ -101,7 +99,7 @@ export class PlayersListComponent implements OnInit {
     this.awaitPlayerModalResult(modal);
   }
 
-  private async presentPlayerPrompt() {
+  private async presentPlayerPrompt(): Promise<void> {
     const prompt = await this.alertController.create({
       header: this.playerPrompt.header,
       inputs: [
@@ -121,7 +119,7 @@ export class PlayersListComponent implements OnInit {
         {
           cssClass: 'submit-button',
           text: this.playerPrompt.confirmButton,
-          handler: ({ nickname }: { nickname: string }) => {
+          handler: ({ nickname }: { nickname: string }): void => {
             this.addNewPlayer(new Player({ nickname }));
           },
         },
@@ -130,10 +128,10 @@ export class PlayersListComponent implements OnInit {
 
     await prompt.present();
 
-    document.getElementById('nickname-input').focus();
+    document.getElementById('nickname-input')?.focus();
   }
 
-  private async awaitPlayerModalResult(modal: HTMLIonModalElement) {
+  private async awaitPlayerModalResult(modal: HTMLIonModalElement): Promise<void> {
     const { data: user, role } = await modal.onWillDismiss();
 
     if (role === 'authenticated') {
@@ -147,7 +145,7 @@ export class PlayersListComponent implements OnInit {
     }
   }
 
-  private addNewPlayer(player: Player) {
+  private addNewPlayer(player: Player): void {
     this.store.dispatch(new AddPlayer(player))
       .pipe(
         first(),
@@ -159,7 +157,7 @@ export class PlayersListComponent implements OnInit {
       ).subscribe();
   }
 
-  private async displayToast(message: string, color: string) {
+  private async displayToast(message: string, color: string): Promise<void> {
     const toast = await this.toastController.create({
       message,
       color,

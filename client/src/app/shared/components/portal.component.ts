@@ -29,9 +29,13 @@ export class PortalComponent implements AfterViewInit, OnDestroy {
     private injector: Injector,
   ) {}
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    const target = document.querySelector(this.selector);
+
+    if (!target) throw new Error('Target selector was not found');
+
     this.outlet = new DomPortalOutlet(
-      document.querySelector(this.selector),
+      target,
       this.componentFactoryResolver,
       this.applicationRef,
       this.injector,
@@ -40,7 +44,7 @@ export class PortalComponent implements AfterViewInit, OnDestroy {
     this.outlet.attach(this.portal);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.outlet.detach();
   }
 }

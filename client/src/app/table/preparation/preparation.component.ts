@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store, Select } from '@ngxs/store';
@@ -6,7 +6,7 @@ import { of, Observable, Subject, combineLatest } from 'rxjs';
 import { catchError, first, takeUntil } from 'rxjs/operators';
 
 import { defaultAvatarSrc } from '@/shared/constants/avatars';
-import { Player } from '@/shared/models/player.model';
+import { Player, IPlayer } from '@/shared/models/player.model';
 
 import { GameService } from '../services/game.service';
 import { ShufflePlayers, SetHost } from '../store/players/players.actions';
@@ -28,7 +28,7 @@ interface HostPropmt {
   templateUrl: './preparation.component.html',
   styleUrls: ['./preparation.component.scss'],
 })
-export class PreparationComponent implements OnInit, OnDestroy {
+export class PreparationComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
 
   @Select(PlayersState.getPlayers) players$: Observable<Player[]>;
@@ -39,6 +39,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
 
   private hostPropmpt: HostPropmt;
   readyPlayersNumber = 0;
+  host: IPlayer | null;
 
   constructor(
     private store: Store,
@@ -48,6 +49,10 @@ export class PreparationComponent implements OnInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController,
   ) {
+    this.host$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((host) => this.host = host);
+
     this.translate.get('TABS.TABLE.PREPARATION.hostPropmpt')
       .pipe(takeUntil(this.destroy))
       .subscribe((hostPropmpt) => this.hostPropmpt = hostPropmpt);
@@ -57,29 +62,27 @@ export class PreparationComponent implements OnInit, OnDestroy {
       .subscribe(([rolesNumbers, validRoles]) => {
         this.readyPlayersNumber = Object.entries(rolesNumbers)
           .reduce((readyPlayersNumber, [role, playersNumber]) => (
-            validRoles[role]
-              ? readyPlayersNumber + playersNumber
+            validRoles[role as Role]
+              ? readyPlayersNumber + (playersNumber || 0)
               : readyPlayersNumber
           ), 0);
       });
   }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  shufflePlayers() {
+  shufflePlayers(): void {
     this.store.dispatch(new ShufflePlayers());
   }
 
-  start() {
+  start(): void {
     this.gameService.startGame();
   }
 
-  async presentHostModal() {
+  async presentHostModal(): Promise<void> {
     const modal = await this.modalController.create({
       component: PlayerSuggestionsModalComponent,
       swipeToClose: true,
@@ -89,7 +92,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
     this.awaitHostModalResult(modal);
   }
 
-  private async awaitHostModalResult(modal: HTMLIonModalElement) {
+  private async awaitHostModalResult(modal: HTMLIonModalElement): Promise<void> {
     const { data: user, role } = await modal.onWillDismiss();
 
     switch (role) {
@@ -105,7 +108,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
     }
   }
 
-  async presentHostPrompt() {
+  async presentHostPrompt(): Promise<void> {
     const prompt = await this.alertController.create({
       header: this.hostPropmpt.header,
       inputs: [
@@ -124,7 +127,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
         }, {
           cssClass: 'submit-button',
           text: this.hostPropmpt.confirmButton,
-          handler: ({ nickname }: { nickname: string }) => {
+          handler: ({ nickname }: { nickname: string }): void => {
             this.setHost(new Player({ nickname }));
           },
         },
@@ -132,10 +135,10 @@ export class PreparationComponent implements OnInit, OnDestroy {
     });
 
     await prompt.present();
-    document.getElementById('nickname-input').focus();
+    document.getElementById('nickname-input')?.focus();
   }
 
-  private setHost(player: Player) {
+  private setHost(player: Player): void {
     this.store.dispatch(new SetHost(player))
       .pipe(
         first(),
@@ -147,7 +150,7 @@ export class PreparationComponent implements OnInit, OnDestroy {
       ).subscribe();
   }
 
-  private async displayToast(message: string, color: string) {
+  private async displayToast(message: string, color: string): Promise<void> {
     const toast = await this.toastController.create({
       message,
       color,

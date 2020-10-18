@@ -22,8 +22,7 @@
           class="progress__circle"
           (click)="switchTimer()"
           [ngStyle]="{
-            backgroundImage:
-              'url(' + (player?.avatar || defaultAvatar) + ')'
+            backgroundImage: 'url(' + (player?.avatar || defaultAvatar) + ')'
           }"
           [current]="timer?.time"
           [max]="maxTime"
@@ -85,12 +84,12 @@
   <ion-card
     #proposedPlayerCard
     @fadeSlide
-    *ngIf="proposedPlayer$ | async"
+    *ngIf="proposedPlayer$ | async as proposedPlayer"
     class="proposed-player-card small-card background-color-medium"
     (click)="withdrawPlayer()"
   >
     <ion-card-content class="text-color-dark-contrast">
-      {{ (proposedPlayer$ | async).number }}
+      {{ proposedPlayer?.number }}
     </ion-card-content>
   </ion-card>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
@@ -14,7 +14,7 @@ import { consigliereLogo } from '@/shared/constants/avatars';
   templateUrl: './join-club.component.html',
   styleUrls: ['./join-club.component.scss'],
 })
-export class JoinClubComponent implements OnInit, OnDestroy {
+export class JoinClubComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   clubs: SearchClubsQuery['searchClubs'];
 
@@ -40,17 +40,15 @@ export class JoinClubComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {}
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  navigateToClub(clubId: string) {
+  navigateToClub(clubId: string): void {
     this.store.dispatch(new Navigate(
       [clubId],
-      null,
+      undefined,
       { relativeTo: this.activatedRoute },
     ));
   }

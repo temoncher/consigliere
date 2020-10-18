@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { PopoverController } from '@ionic/angular';
-import { filter, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import { ProfilePageGQL, ProfilePageQuery, GameResult } from '@/graphql/gql.generated';
 import { consigliereLogo, defaultAvatarSrc } from '@/shared/constants/avatars';
+import { isNotNullOrUndefined } from '@/shared/pipes/is-not-null-or-undefined.pipe';
 import { AuthService } from '@/shared/services/auth.service';
 
 import { SettingsMenuComponent } from './settings-menu.component';
@@ -19,8 +20,8 @@ type WinnerMap = {
   styleUrls: ['profile.component.scss'],
 })
 export class ProfileComponent {
-  user: ProfilePageQuery['user'];
-  games: ProfilePageQuery['lastGamesByUserId'];
+  user?: ProfilePageQuery['user'];
+  games?: ProfilePageQuery['lastGamesByUserId'];
   loading = true;
 
   defaultGameAvatar = consigliereLogo;
@@ -37,8 +38,9 @@ export class ProfileComponent {
     private fireauth: AngularFireAuth,
     private profilePageGQL: ProfilePageGQL,
   ) {
+    // TODO: ubsubscribe
     this.fireauth.user.pipe(
-      filter((fireUser) => !!fireUser),
+      isNotNullOrUndefined(),
       switchMap((fireUser) => this.profilePageGQL.watch({ id: fireUser.uid }).valueChanges),
     ).subscribe(({ data, loading }) => {
       this.loading = loading;
@@ -50,11 +52,11 @@ export class ProfileComponent {
     });
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     await this.authService.logout();
   }
 
-  async presentSettingsMenu() {
+  async presentSettingsMenu(): Promise<void> {
     const popover = await this.popoverController.create({
       component: SettingsMenuComponent,
       translucent: true,

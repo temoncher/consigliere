@@ -37,7 +37,7 @@
           ></ion-input>
         </ion-item>
         <div class="app-form__error-container">
-          <small class="text-color-danger" *ngIf="title.touched">
+          <small class="text-color-danger" *ngIf="title && title.touched">
             <ng-container *ngIf="title.errors?.required">
               Заголовок - это обязательное поле
             </ng-container>
@@ -59,7 +59,7 @@
             doneText="Сохранить"
             cancelText="Отмена"
             animated
-            [value]="date.value"
+            [value]="date?.value"
             (ionChange)="changeDate($event)"
           ></ion-datetime>
         </ion-item>

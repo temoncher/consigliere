@@ -8,6 +8,7 @@ import {
   createSelector,
 } from '@ngxs/store';
 
+import { Player } from '@/shared/models/player.model';
 import { IDay } from '@/table/models/day.interface';
 
 import { PlayersState, PlayersStateModel } from '../../players/players.state';
@@ -32,34 +33,39 @@ export type CurrentDayStateModel = IDay;
 @Injectable()
 export class CurrentDayState {
   @Selector()
-  static getFinishedTimers({ timers }: CurrentDayStateModel) {
+  static getFinishedTimers({ timers }: CurrentDayStateModel): Record<string, number> | undefined {
     return timers;
   }
 
   @Selector()
-  static getProposedPlayers({ proposedPlayers }: CurrentDayStateModel) {
+  static getProposedPlayers({ proposedPlayers }: CurrentDayStateModel): Record<string, string> | undefined {
     return proposedPlayers;
   }
 
-  static getProposedPlayer(playerId: string) {
+  static getProposedPlayer(playerId: string): (
+    dayState: CurrentDayStateModel,
+    playersState: PlayersStateModel
+  ) => Player | undefined {
     return createSelector(
       [CurrentDayState, PlayersState],
       ({ proposedPlayers }: CurrentDayStateModel, { players }: PlayersStateModel) => {
-        let foundCandidateId = null;
+        let foundCandidateId: string | undefined;
 
-        for (const [candidateId, proposingPlayerId] of Object.entries(proposedPlayers)) {
-          if (playerId === proposingPlayerId) {
-            foundCandidateId = candidateId;
+        if (proposedPlayers) {
+          for (const [candidateId, proposingPlayerId] of Object.entries(proposedPlayers)) {
+            if (playerId === proposingPlayerId) {
+              foundCandidateId = candidateId;
+            }
+          }
+
+          if (foundCandidateId) {
+            const foundPlayer = players.find((player) => player.uid === foundCandidateId);
+
+            return foundPlayer;
           }
         }
 
-        if (foundCandidateId) {
-          const foundPlayer = players.find((player) => player.uid === foundCandidateId);
-
-          return foundPlayer;
-        }
-
-        return null;
+        return undefined;
       },
     );
   }
@@ -71,9 +77,9 @@ export class CurrentDayState {
       playerId,
       candidateId,
     }: ProposePlayer,
-  ) {
+  ): void {
     const { proposedPlayers } = getState();
-    const newProposedPlayers = { ...proposedPlayers };
+    const newProposedPlayers = proposedPlayers ? { ...proposedPlayers } : {};
 
     if (!newProposedPlayers[candidateId]) {
       newProposedPlayers[candidateId] = playerId;
@@ -86,10 +92,10 @@ export class CurrentDayState {
   resetPlayerTimer(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId }: ResetPlayerTimer,
-  ) {
+  ): void {
     const { timers } = getState();
 
-    const newTimers = { ...timers };
+    const newTimers = timers ? { ...timers } : {};
 
     delete newTimers[playerId];
 
@@ -97,7 +103,7 @@ export class CurrentDayState {
   }
 
   @Action(ResetProposedPlayers)
-  resetProposedPlayers({ patchState }: StateContext<CurrentDayStateModel>) {
+  resetProposedPlayers({ patchState }: StateContext<CurrentDayStateModel>): void {
     patchState({ proposedPlayers: {} });
   }
 
@@ -105,9 +111,9 @@ export class CurrentDayState {
   withdrawPlayer(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId }: WithdrawPlayer,
-  ) {
+  ): void {
     const { proposedPlayers } = getState();
-    const newProposedPlayers = { ...proposedPlayers };
+    const newProposedPlayers = proposedPlayers ? { ...proposedPlayers } : {};
     let foundCandidateId = null;
 
     for (const [candidateId, proposingPlayerId] of Object.entries(newProposedPlayers)) {
@@ -117,17 +123,17 @@ export class CurrentDayState {
     }
 
     if (foundCandidateId) {
-      delete proposedPlayers[foundCandidateId];
+      delete newProposedPlayers[foundCandidateId];
     }
 
-    patchState({ proposedPlayers });
+    patchState({ proposedPlayers: newProposedPlayers });
   }
 
   @Action(SetPlayerTimer)
   setPlayerTimer(
     { patchState, getState }: StateContext<CurrentDayStateModel>,
     { playerId, timeElapsed }: SetPlayerTimer,
-  ) {
+  ): void {
     const { timers } = getState();
 
     const newTimers = {

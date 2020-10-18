@@ -7,17 +7,17 @@ export class Timer {
   isSpeechEnded = false;
   isPaused = true;
 
-  get time() {
+  get time(): number {
     return Math.round(this.timeLeft / 1000);
   }
 
   constructor(partialTimer?: Partial<Timer>) {
     this.timeLeft = (partialTimer?.time || 60) * 1000;
     this.isSpeechEnded = partialTimer?.isSpeechEnded || false;
-    this.isPaused = typeof partialTimer?.isPaused === 'undefined' ? true : partialTimer.isSpeechEnded;
+    this.isPaused = partialTimer?.isPaused === undefined || Boolean(partialTimer.isSpeechEnded);
   }
 
-  switchTimer() {
+  switchTimer(): void {
     this.isStarted = true;
 
     if (this.isSpeechEnded) {
@@ -43,13 +43,13 @@ export class Timer {
     });
   }
 
-  pauseTimer() {
+  pauseTimer(): void {
     this.isPaused = true;
 
     this.interval.unsubscribe();
   }
 
-  resetTimer(time: number) {
+  resetTimer(time: number): void {
     this.isPaused = true;
     this.isSpeechEnded = false;
     this.timeLeft = time * 1000;
@@ -57,7 +57,7 @@ export class Timer {
     this.interval.unsubscribe();
   }
 
-  endSpeech() {
+  endSpeech(): void {
     this.isPaused = true;
     this.isSpeechEnded = true;
 

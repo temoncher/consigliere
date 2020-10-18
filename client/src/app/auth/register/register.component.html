@@ -26,7 +26,12 @@
       (ngSubmit)="register()"
       (keydown)="submitOnEnterKey($event)"
     >
-      <h2 class="app-form__title" [ngClass]="{ 'text-color-danger': !!errorMessage }">{{ errorMessage || title }}</h2>
+      <h2
+        class="app-form__title"
+        [ngClass]="{ 'text-color-danger': !!errorMessage }"
+      >
+        {{ errorMessage || title }}
+      </h2>
       <ion-list>
         <ion-item>
           <ion-label position="stacked" color="medium">Псевдоним*</ion-label>
@@ -38,7 +43,7 @@
           ></ion-input>
         </ion-item>
         <div class="app-form__error-container">
-          <small class="text-color-danger" *ngIf="nickname.touched">
+          <small class="text-color-danger" *ngIf="nickname && nickname.touched">
             <ng-container *ngIf="nickname.errors?.required">
               Псевдоним - это обязательное поле
             </ng-container>
@@ -66,7 +71,7 @@
           ></ion-input>
         </ion-item>
         <div class="app-form__error-container">
-          <small class="text-color-danger" *ngIf="email.touched">
+          <small class="text-color-danger" *ngIf="email && email.touched">
             <ng-container *ngIf="email.errors?.required">
               Почта - это обязательное поле
             </ng-container>
@@ -86,7 +91,7 @@
           ></ion-input>
         </ion-item>
         <div class="app-form__error-container">
-          <small class="text-color-danger" *ngIf="password.touched">
+          <small class="text-color-danger" *ngIf="password && password.touched">
             <ng-container *ngIf="password.errors?.required">
               Пароль - это обязательное поле
             </ng-container>

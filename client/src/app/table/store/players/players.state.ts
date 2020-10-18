@@ -3,7 +3,7 @@ import { Action, State, Selector, StateContext, createSelector } from '@ngxs/sto
 import { compose, insertItem, patch, removeItem } from '@ngxs/store/operators';
 import { shuffle } from 'lodash';
 
-import { Player, IPlayer } from '@/shared/models/player.model';
+import { Player } from '@/shared/models/player.model';
 
 import {
   GiveRoles,
@@ -94,32 +94,35 @@ export class PlayersState {
   }
 
   @Selector()
-  static getAlivePlayers({ players, quitPhases }: PlayersStateModel) {
+  static getAlivePlayers({ players, quitPhases }: PlayersStateModel): Player[] {
     return players.filter(({ uid }) => !quitPhases[uid]);
   }
 
   @Selector()
-  static getSheriff({ players, roles }: PlayersStateModel) {
+  static getSheriff({ players, roles }: PlayersStateModel): Player | undefined {
     return players.find((player) => roles[player.uid] === Role.SHERIFF);
   }
 
   @Selector()
-  static getDon({ players, roles }: PlayersStateModel) {
+  static getDon({ players, roles }: PlayersStateModel): Player | undefined {
     return players.find((player) => roles[player.uid] === Role.DON);
   }
 
   @Selector()
-  static getRolesNumbers({ roles }: PlayersStateModel) {
+  static getRolesNumbers({ roles }: PlayersStateModel): Partial<Record<keyof typeof Role, number>> {
     const initial: Partial<Record<keyof typeof Role, number>> = {};
 
     return Object.entries(roles).reduce((accumulator, [, role]) => ({
       ...accumulator,
-      [role]: accumulator[role] + 1 || 1,
+      [role]: (accumulator[role] || 0) + 1 || 1,
     }), initial);
   }
 
   @Selector([PlayersState.getRolesNumbers])
-  static getValidRoles(ctx: PlayersStateModel, rolesNumbers: Partial<Record<keyof typeof Role, number>>) {
+  static getValidRoles(
+    ctx: PlayersStateModel,
+    rolesNumbers: Partial<Record<keyof typeof Role, number>>,
+  ): Partial<Record<keyof typeof Role, boolean>> {
     const validRoles: Partial<Record<keyof typeof Role, boolean>> = {};
 
     Object.keys(rolesNumbers).forEach((role) => {
@@ -137,30 +140,28 @@ export class PlayersState {
           validRoles[role] = rolesNumbers[role] === 1;
           break;
 
-        default:
-          validRoles[role] = false;
-          break;
+        default: throw new Error('Unregistered role');
       }
     });
 
     return validRoles;
   }
 
-  static getPlayer(playerId: string) {
+  static getPlayer(playerId: string): (state: PlayersStateModel) => Player | undefined {
     return createSelector(
       [PlayersState],
       ({ players }: PlayersStateModel) => players.find((player) => player.uid === playerId),
     );
   }
 
-  static getPlayerFalls(playerId: string) {
+  static getPlayerFalls(playerId: string): (state: PlayersStateModel) => number {
     return createSelector(
       [PlayersState],
       ({ falls }: PlayersStateModel) => falls[playerId],
     );
   }
 
-  static getPlayerQuitPhase(playerId: string) {
+  static getPlayerQuitPhase(playerId: string): (state: PlayersStateModel) => string | undefined {
     return createSelector(
       [PlayersState],
       ({ quitPhases }: PlayersStateModel) => {
@@ -170,19 +171,19 @@ export class PlayersState {
           return `${quitPhase.number}${(quitPhase.stage === RoundPhase.NIGHT ? 'н' : 'д')}`;
         }
 
-        return null;
+        return undefined;
       },
     );
   }
 
-  static getPlayerRole(playerId: string) {
+  static getPlayerRole(playerId: string): (playersState: PlayersStateModel) => Role {
     return createSelector(
       [PlayersState],
       ({ roles }: PlayersStateModel) => roles[playerId],
     );
   }
 
-  static getPlayersByRoles(chosenRoles: Role[]) {
+  static getPlayersByRoles(chosenRoles: Role[]): (playersState: PlayersStateModel) => Player[] {
     return createSelector(
       [PlayersState],
       ({ players, roles }: PlayersStateModel) => {
@@ -194,8 +195,9 @@ export class PlayersState {
   }
 
   @Action(GiveRoles)
-  giveRoles({ patchState, getState }: StateContext<PlayersStateModel>) {
+  giveRoles({ patchState, getState }: StateContext<PlayersStateModel>): void {
     const { players } = getState();
+    const initialRoles: Record<string, Role> = {};
     /* eslint-disable no-param-reassign */
     const newRoles: Record<string, Role> = shuffle([...rolesArray]).reduce((roles, currentRole, index) => {
       const playerId = players[index].uid;
@@ -203,7 +205,7 @@ export class PlayersState {
       roles[playerId] = currentRole;
 
       return roles;
-    }, {});
+    }, initialRoles);
     /* eslint-enable */
 
     patchState({ roles: newRoles });
@@ -213,28 +215,22 @@ export class PlayersState {
   setHost(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { player }: SetHost,
-  ) {
+  ): void {
     const { host, players } = getState();
 
-    if (!player.nickname) {
-      throw new Error(this.emptyNicknameText);
-    }
+    if (!player.nickname) throw new Error(this.emptyNicknameText);
 
-    if (player.nickname === host?.nickname) {
-      throw new Error(this.isPlayerAlreadyHostText);
-    }
+    if (player.nickname === host?.nickname) throw new Error(this.isPlayerAlreadyHostText);
 
     const isPlayerAlreadyPresent = !!players.find((existingPlayer) => existingPlayer.nickname === player.nickname);
 
-    if (isPlayerAlreadyPresent) {
-      throw new Error(this.isPlayerAlreadyPresentText);
-    }
+    if (isPlayerAlreadyPresent) throw new Error(this.isPlayerAlreadyPresentText);
 
     patchState({ host: player });
   }
 
   @Action(ShufflePlayers)
-  shufflePlayers({ patchState, getState }: StateContext<PlayersStateModel>) {
+  shufflePlayers({ patchState, getState }: StateContext<PlayersStateModel>): void {
     const { players } = getState();
     const newPlayers = shuffle(players);
 
@@ -242,7 +238,7 @@ export class PlayersState {
   }
 
   @Action(SetPlayersNumbers)
-  setPlayersNumbers({ patchState, getState }: StateContext<PlayersStateModel>) {
+  setPlayersNumbers({ patchState, getState }: StateContext<PlayersStateModel>): void {
     const { players } = getState();
     const newPlayers = players.map((player, index) => new Player({ ...player, number: index + 1 }));
 
@@ -250,23 +246,20 @@ export class PlayersState {
   }
 
   @Action(AddPlayer)
-  addPlayer({ patchState, getState }: StateContext<PlayersStateModel>, { player }: AddPlayer) {
+  addPlayer(
+    { patchState, getState }: StateContext<PlayersStateModel>,
+    { player }: AddPlayer,
+  ): void {
     const { host, players, roles } = getState();
     const newRoles = { ...roles };
 
-    if (!player.nickname) {
-      throw new Error(this.emptyNicknameText);
-    }
+    if (!player.nickname) throw new Error(this.emptyNicknameText);
 
-    if (host?.nickname === player?.nickname) {
-      throw new Error(this.isPlayerAlreadyHostText);
-    }
+    if (host?.nickname === player?.nickname) throw new Error(this.isPlayerAlreadyHostText);
 
     const isPlayerAlreadyPresent = !!players.find((existingPlayer) => existingPlayer.nickname === player.nickname);
 
-    if (isPlayerAlreadyPresent) {
-      throw new Error(this.isPlayerAlreadyPresentText);
-    }
+    if (isPlayerAlreadyPresent) throw new Error(this.isPlayerAlreadyPresentText);
 
     const newPlayer = new Player({ ...player, number: players.length });
     const newPlayers = [...players, newPlayer];
@@ -280,14 +273,14 @@ export class PlayersState {
   removePlayer(
     { setState, getState }: StateContext<PlayersStateModel>,
     { userId }: RemovePlayer,
-  ) {
+  ): void {
     const { roles } = getState();
     const newRoles = { ...roles };
 
     delete newRoles[userId];
 
     setState(patch<PlayersStateModel>({
-      players: removeItem(({ uid }) => uid === userId),
+      players: removeItem((player) => player?.uid === userId),
       roles: newRoles,
     }));
   }
@@ -296,7 +289,7 @@ export class PlayersState {
   killPlayer(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, quitPhase }: KillPlayer,
-  ) {
+  ): void {
     const { quitPhases } = getState();
 
     const newQuitPhases = {
@@ -311,7 +304,7 @@ export class PlayersState {
   reorderPlayer(
     { setState, getState }: StateContext<PlayersStateModel>,
     { previoustIndex, newIndex }: ReorderPlayer,
-  ) {
+  ): void {
     const { players } = getState();
     const playerToReorder = players[previoustIndex];
 
@@ -327,11 +320,14 @@ export class PlayersState {
   resetPlayer(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: ResetPlayer,
-  ) {
+  ): void {
     const { quitPhases, falls } = getState();
+    const newQuitPhases = { ...quitPhases };
+
+    delete newQuitPhases[playerId];
 
     patchState({
-      quitPhases: { ...quitPhases, [playerId]: null },
+      quitPhases: newQuitPhases,
       falls: { ...falls, [playerId]: 0 },
     });
   }
@@ -340,7 +336,7 @@ export class PlayersState {
   skipSpeech(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, roundNumber }: SkipSpeech,
-  ) {
+  ): void {
     const { speechSkips } = getState();
 
     const newSpeechSkips = {
@@ -355,7 +351,7 @@ export class PlayersState {
   assignFall(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId }: AssignFall,
-  ) {
+  ): void {
     const { falls } = getState();
     const playerFallsNumber = falls[playerId];
 
@@ -370,7 +366,7 @@ export class PlayersState {
   assignRole(
     { patchState, getState }: StateContext<PlayersStateModel>,
     { playerId, role }: AssignRole,
-  ) {
+  ): void {
     const { roles } = getState();
     const newRoles = {
       ...roles,

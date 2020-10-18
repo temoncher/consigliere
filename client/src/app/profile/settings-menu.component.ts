@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { LanguageCode } from '@/shared/models/language.interface';
+import { LanguageCode, ILanguage } from '@/shared/models/language.interface';
 import { LanguageService } from '@/shared/services/language.service';
 
 @Component({
@@ -18,16 +18,14 @@ import { LanguageService } from '@/shared/services/language.service';
     </ion-list>
   `,
 })
-export class SettingsMenuComponent implements OnInit {
-  supportedLanguages = [];
+export class SettingsMenuComponent {
+  supportedLanguages: ILanguage[] = [];
 
   constructor(private languageService: LanguageService) {
     this.supportedLanguages = this.languageService.supportedLanguages;
   }
 
-  ngOnInit() { }
-
-  switchLanguage(code: LanguageCode) {
+  switchLanguage(code: LanguageCode): void {
     this.languageService.setLanguage(code);
   }
 }

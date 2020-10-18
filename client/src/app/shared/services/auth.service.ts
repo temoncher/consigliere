@@ -13,7 +13,7 @@ import { UsersApi } from './api/users.api';
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser: firebase.User;
+  currentUser: firebase.User | null;
 
   constructor(
     private store: Store,
@@ -24,10 +24,13 @@ export class AuthService {
     this.watchAndUpdateUser();
   }
 
-  async register(email: string, password: string, nickname: string) {
-    const { user: { uid } } = await this.fireauth.createUserWithEmailAndPassword(email, password);
+  async register(email: string, password: string, nickname: string): Promise<void> {
+    const { user } = await this.fireauth.createUserWithEmailAndPassword(email, password);
+
+    if (!user?.uid) throw new Error('User wasn\'t created');
+
     const newUser: IUser = {
-      uid,
+      uid: user?.uid,
       nickname,
     };
 
@@ -37,10 +40,10 @@ export class AuthService {
     this.store.dispatch(new Navigate(['tabs', 'table']));
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     await this.fireauth.signInWithEmailAndPassword(email, password);
     const currentUser = await this.fireauth.currentUser;
-    const token = await currentUser.getIdToken();
+    const token = await currentUser?.getIdToken();
 
     this.logger.log('Logged in with user:', currentUser);
     this.logger.log('User\'s token:', token);
@@ -48,13 +51,13 @@ export class AuthService {
     this.store.dispatch(new Navigate(['tabs', 'table']));
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     await this.fireauth.signOut();
 
     this.store.dispatch(new Navigate(['auth', 'login']));
   }
 
-  private watchAndUpdateUser() {
+  private watchAndUpdateUser(): void {
     this.fireauth.user.pipe(
       filter((user) => !!user),
       tap((user) => this.logger.log('Detected user change:', user)),

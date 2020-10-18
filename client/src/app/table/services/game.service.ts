@@ -45,7 +45,7 @@ export class GameService {
     this.watchGameEnd();
   }
 
-  startGame() {
+  startGame(): void {
     this.timersService.resetTimers();
 
     this.store.dispatch([
@@ -55,7 +55,7 @@ export class GameService {
     ]);
   }
 
-  endNight() {
+  endNight(): void {
     const { players, roles, quitPhases } = this.store.selectSnapshot(PlayersState.getState);
     const victimsMap = this.store.selectSnapshot(CurrentNightState.getVictims);
     const aliveMafia = players.filter((player) => {
@@ -65,7 +65,7 @@ export class GameService {
       return !playerQuitPhase && (playerRole === Role.DON || playerRole === Role.MAFIA);
     });
 
-    let murderedPlayer: string;
+    let murderedPlayer: string | undefined;
 
     for (const [victimId, mafiaIds] of victimsMap.entries()) {
       if (mafiaIds.length === aliveMafia.length) {
@@ -87,8 +87,8 @@ export class GameService {
     ]);
   }
 
-  endDay() {
-    const proposedPlayers = this.store.selectSnapshot(CurrentDayState.getProposedPlayers);
+  endDay(): void {
+    const proposedPlayers = this.store.selectSnapshot(CurrentDayState.getProposedPlayers) || {};
     const proposedPlayersIds = [...Object.keys(proposedPlayers)];
 
     this.store.dispatch([
@@ -99,20 +99,20 @@ export class GameService {
     this.voteService.startVote(proposedPlayersIds);
   }
 
-  endVote() {
+  endVote(): void {
     this.startNewRound();
   }
 
-  dropGame() {
+  dropGame(): void {
     this.store.dispatch([
       new StateReset(TableState),
       new Navigate(['tabs', 'table']),
     ]);
   }
 
-  saveGame() {
+  saveGame(): void {
     const newGame = this.composeGame();
-    const curretUserId = this.authService.currentUser.uid;
+    const curretUserId = this.authService.currentUser?.uid;
 
     this.createGameGQL.mutate(
       { game: newGame },
@@ -132,7 +132,7 @@ export class GameService {
     });
   }
 
-  private startNewRound() {
+  private startNewRound(): void {
     const isVoteDisabled = this.store.selectSnapshot(TableState.getIsNextVotingDisabled);
     const round = this.getCurrentRound();
 
@@ -146,7 +146,7 @@ export class GameService {
     ]);
   }
 
-  private getCurrentRound() {
+  private getCurrentRound(): IRound {
     const currentNight = this.store.selectSnapshot(CurrentNightState);
     const currentDay = this.store.selectSnapshot(CurrentDayState);
     const kickedPlayers = this.store.selectSnapshot(RoundState.getKickedPlayers);
@@ -166,6 +166,10 @@ export class GameService {
     const result = this.store.selectSnapshot(TableState.getGameResult);
     const { club, title, date } = this.store.selectSnapshot(TableState.getTableMeta);
     const host = this.store.selectSnapshot(PlayersState.getHost);
+
+    if (!host) throw new Error('Host is missing');
+
+    if (!result) throw new Error('Game result is missing');
 
     const newGame: CreateGameMutationVariables['game'] = {
       title,
@@ -187,7 +191,7 @@ export class GameService {
     return newGame;
   }
 
-  private watchPlayerKick() {
+  private watchPlayerKick(): void {
     this.actions$.pipe(
       ofActionSuccessful(KickPlayer),
     ).subscribe(({ playerId }: KickPlayer) => {
@@ -202,7 +206,7 @@ export class GameService {
     });
   }
 
-  private watchGameEnd() {
+  private watchGameEnd(): void {
     this.actions$.pipe(
       ofActionSuccessful(EndGame),
     ).subscribe(() => {

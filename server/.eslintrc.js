@@ -16,12 +16,14 @@ module.exports = {
     jest: true,
   },
   rules: {
+    '@typescript-eslint/no-unused-vars': 2,
     '@typescript-eslint/interface-name-prefix': 0,
     '@typescript-eslint/no-unsafe-assignment': 0,
     '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/type-annotation-spacing': 1,
     '@typescript-eslint/no-empty-function': 1,
     '@typescript-eslint/lines-between-class-members': 0,
+    '@typescript-eslint/explicit-function-return-type': 1,
     '@typescript-eslint/member-delimiter-style': [
       1,
       {

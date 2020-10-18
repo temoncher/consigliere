@@ -13,15 +13,12 @@
 </ion-header>
 
 <ion-content class="no-scroll">
-  <app-table-template>
+  <app-table-template *ngIf="quitPhases$ | async as quitPhases">
     <app-small-player-card
       *ngFor="let player of players"
       [slot]="player.number"
       [playerId]="player.uid"
-      [disabled]="
-        isAlreadyACandidate(player.uid) ||
-        !!(quitPhases$ | async)[player.uid]
-      "
+      [disabled]="isAlreadyACandidate(player.uid) || !!quitPhases[player.uid]"
       (cardClick)="navigateToPlayer(player)"
     >
       <div
@@ -44,9 +41,7 @@
       </ion-card-header>
       <ion-card-content class="player-card__content ion-text-center">
         <ion-avatar class="player-card__avatar">
-          <img
-            [src]="players[currentPlayerIndex].avatar || defaultAvatar"
-          />
+          <img [src]="players[currentPlayerIndex].avatar || defaultAvatar" />
         </ion-avatar>
       </ion-card-content>
     </ion-card>

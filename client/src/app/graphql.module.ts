@@ -33,6 +33,9 @@ export function createApollo(
 
   const auth = setContext(async (operation, { headers }) => {
     const currentUser = await fireauth.currentUser;
+
+    if (!currentUser) throw new Error('Current user is not avalible');
+
     const token = await currentUser.getIdToken();
 
     const newHeaders: { Authorization: string } = {

@@ -7,12 +7,14 @@
     </ion-header>
 
     <div class="hero-block">
-      <ion-thumbnail *ngIf="!loading" class="square-avatar">
-        <img [src]="user.avatar || defaultAvatar" />
-      </ion-thumbnail>
-      <h2 *ngIf="user" class="hero-block__title">
-        {{ user.nickname }}
-      </h2>
+      <ng-container *ngIf="!loading && user">
+        <ion-thumbnail class="square-avatar">
+          <img [src]="user.avatar || defaultAvatar" />
+        </ion-thumbnail>
+        <h2 *ngIf="user" class="hero-block__title">
+          {{ user.nickname }}
+        </h2>
+      </ng-container>
       <ng-container *ngIf="loading">
         <ion-thumbnail class="square-avatar">
           <ion-skeleton-text animated></ion-skeleton-text>

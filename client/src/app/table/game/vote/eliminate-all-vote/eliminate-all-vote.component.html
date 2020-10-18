@@ -1,14 +1,14 @@
-<div>
+<div *ngIf="quitPhases$ | async as quitPhases">
   <app-table-template>
     <app-small-player-card
       *ngFor="let player of players$ | async"
       [slot]="player.number"
       [playerId]="player.uid"
-      [disabled]="(quitPhases$ | async)[player.uid]"
+      [disabled]="!!quitPhases[player.uid]"
       (cardClick)="switchVote(player.uid)"
     >
       <div
-        *ngIf="!!(eliminateAllVote$ | async)[player.uid]"
+        *ngIf="!!eliminateVote[player.uid]"
         slot="overlay"
         class="full-parent-overlay grid-content-center background-color-danger"
       >

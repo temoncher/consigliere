@@ -14,11 +14,11 @@ export class TimersService {
 
   constructor(private store: Store) { }
 
-  getPlayerTimer(playerId: string) {
+  getPlayerTimer(playerId: string): Timer | undefined {
     return this.timers.get(playerId);
   }
 
-  setTimer(playerId: string, time: number) {
+  setTimer(playerId: string, time: number): void {
     const playerTimer = this.timers.get(playerId);
 
     if (!playerTimer) {
@@ -30,13 +30,13 @@ export class TimersService {
     playerTimer.resetTimer(time);
   }
 
-  pauseAll() {
+  pauseAll(): void {
     for (const timer of this.timers.values()) {
       timer.pauseTimer();
     }
   }
 
-  resetTimers() {
+  resetTimers(): void {
     const players = this.store.selectSnapshot(PlayersState.getPlayers);
     const speechSkips = this.store.selectSnapshot(PlayersState.getSpeechSkips);
     const currentRoundNumber = this.store.selectSnapshot(TableState.getRoundNumber);
@@ -50,12 +50,15 @@ export class TimersService {
     }
   }
 
-  resetPlayerTimer(playerId: string) {
+  resetPlayerTimer(playerId: string): void {
     const speechSkips = this.store.selectSnapshot(PlayersState.getSpeechSkips);
     const currentRoundNumber = this.store.selectSnapshot(TableState.getRoundNumber);
 
     const time = speechSkips[playerId] === currentRoundNumber ? 0 : 60;
+    const playerTimer = this.timers.get(playerId);
 
-    this.timers.get(playerId).resetTimer(time);
+    if (!playerTimer) throw new Error('Player\'s timer not found');
+
+    playerTimer.resetTimer(time);
   }
 }

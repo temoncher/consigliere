@@ -34,7 +34,7 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
     private store: Store,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.proposedPlayers$
       .pipe(takeUntil(this.destroy))
       .subscribe((proposedPlayers) => this.proposedPlayers = proposedPlayers);
@@ -48,24 +48,26 @@ export class ProposeModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  navigateToPlayer(player: Player) {
+  navigateToPlayer(player: Player): void {
+    if (!player.number) throw new Error('Player has no number');
+
     this.currentPlayerIndex = player.number - 1;
   }
 
-  isAlreadyACandidate(playerId: string) {
-    return !!this.proposedPlayers[playerId];
+  isAlreadyACandidate(playerId: string): boolean {
+    return Boolean(this.proposedPlayers[playerId]);
   }
 
-  proposePlayer() {
+  proposePlayer(): void {
     this.modalController.dismiss(this.players[this.currentPlayerIndex], 'propose');
   }
 
-  close() {
+  close(): void {
     this.modalController.dismiss(null, 'cancel');
   }
 }

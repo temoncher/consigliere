@@ -32,23 +32,23 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
   @Output() speechEnd = new EventEmitter();
 
   @Select(CurrentVoteState.getIsVoteDisabled) isVoteDisabled$: Observable<boolean>;
-  proposedPlayer$: Observable<Player>;
+  proposedPlayer$: Observable<Player | undefined>;
 
-  player: Player;
-  timer: Timer;
-  playerQuitPhase: string;
+  player?: Player;
+  timer?: Timer;
+  playerQuitPhase?: string;
 
   defaultAvatar = defaultAvatarSrc;
   colors = colors;
 
   maxTime = 60;
 
-  get timeColor() {
+  get timeColor(): 'medium' | 'danger' | 'primary' {
     if (this.timer?.time === 0 || this.timer?.isSpeechEnded || this.playerQuitPhase) {
       return 'medium';
     }
 
-    if (this.timer?.time < 10) {
+    if (this.timer?.time && this.timer.time < 10) {
       return 'danger';
     }
 
@@ -61,7 +61,7 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     private timersService: TimersService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.timer = this.timersService.getPlayerTimer(this.playerId);
 
     this.store.select(PlayersState.getPlayer(this.playerId))
@@ -75,32 +75,34 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     this.proposedPlayer$ = this.store.select(CurrentDayState.getProposedPlayer(this.playerId));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  switchTimer() {
-    const wasTimerPaused = this.timer.isPaused;
+  switchTimer(): void {
+    const wasTimerPaused = this.timer?.isPaused;
 
     this.timersService.pauseAll();
+
+    if (!this.timer) throw new Error('Timer not found');
 
     if (wasTimerPaused) {
       this.timer.switchTimer();
     }
   }
 
-  withdrawPlayer() {
+  withdrawPlayer(): void {
     this.store.dispatch(new WithdrawPlayer(this.playerId));
   }
 
-  endPlayerSpeech() {
-    this.timer.endSpeech();
+  endPlayerSpeech(): void {
+    this.timer?.endSpeech();
     this.timersService.pauseAll();
     this.speechEnd.emit(this.playerId);
   }
 
-  async proposePlayer() {
+  async proposePlayer(): Promise<void> {
     const proposeModal = await this.modalController.create({
       component: ProposeModalComponent,
       swipeToClose: true,
@@ -110,7 +112,7 @@ export class PlayerTimerComponent implements OnInit, OnDestroy {
     this.awaitProposeModalResult(proposeModal);
   }
 
-  private async awaitProposeModalResult(proposeModal: HTMLIonModalElement) {
+  private async awaitProposeModalResult(proposeModal: HTMLIonModalElement): Promise<void> {
     const { data: proposedPlayer, role } = await proposeModal.onWillDismiss();
 
     switch (role) {

@@ -19,7 +19,7 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
   templateUrl: './mafia-hunt.component.html',
   styleUrls: ['./mafia-hunt.component.scss'],
 })
-export class MafiaHuntComponent implements OnInit, OnDestroy {
+export class MafiaHuntComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
   @Output() nextClick = new EventEmitter();
 
@@ -38,7 +38,7 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
 
   currentPlayerIndex = 0;
 
-  get numberOfShots() {
+  get numberOfShots(): number {
     const shots = this.store.selectSnapshot(CurrentNightState.getShots);
 
     return Object.keys(shots).length;
@@ -60,26 +60,24 @@ export class MafiaHuntComponent implements OnInit, OnDestroy {
       .subscribe((shots) => this.shots = shots);
   }
 
-  ngOnInit() { }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.unsubscribe();
   }
 
-  next() {
+  next(): void {
     this.nextClick.emit();
   }
 
-  navigateToPlayer(playerNumber: number) {
+  navigateToPlayer(playerNumber: number): void {
     this.currentPlayerIndex = playerNumber - 1;
   }
 
-  shootPlayer(mafiaPlayerId: string) {
+  shootPlayer(mafiaPlayerId: string): void {
     this.store.dispatch(new ShootPlayer(mafiaPlayerId, this.players[this.currentPlayerIndex].uid));
   }
 
-  currentShot(mafia: Player) {
+  currentShot(mafia: Player): string {
     return this.shots[mafia.uid];
   }
 }

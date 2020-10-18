@@ -1,28 +1,26 @@
 <div class="vote-stage">
-  <div>
+  <div *ngIf="quitPhases$ | async as quitPhases">
     <app-table-template>
       <app-small-player-card
         *ngFor="let player of players$ | async"
         [slot]="player.number"
         [playerId]="player.uid"
-        [disabled]="!!(quitPhases$ | async)[player.uid]"
+        [disabled]="quitPhases[player.uid]"
         (cardClick)="switchVote(player.uid)"
       >
         <div
           slot="overlay"
-          *ngIf="voteInfoMap.get(player.uid)"
+          *ngIf="voteInfoMap.get(player.uid) as votedPlayer"
           class="full-parent-overlay grid-content-center"
           [ngClass]="
-            voteInfoMap.get(player.uid).uid ===
-            proposedPlayers[currentPlayerIndex].uid
+            votedPlayer?.uid === proposedPlayers[currentPlayerIndex].uid
               ? 'background-color-danger'
               : 'background-color-medium'
           "
         >
           <ng-container
             *ngIf="
-              voteInfoMap.get(player.uid).uid ===
-                proposedPlayers[currentPlayerIndex].uid;
+              votedPlayer?.uid === proposedPlayers[currentPlayerIndex].uid;
               then iconBlock;
               else numberBlock
             "
@@ -31,7 +29,7 @@
             <ion-icon name="thumbs-up"></ion-icon>
           </ng-template>
           <ng-template #numberBlock>
-            <span>{{ voteInfoMap.get(player.uid)?.number }}</span>
+            <span>{{ votedPlayer?.number }}</span>
           </ng-template>
         </div>
       </app-small-player-card>

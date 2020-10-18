@@ -7,9 +7,10 @@ import {
   Selector,
   NgxsOnInit,
 } from '@ngxs/store';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@/shared/models/user.interface';
+import { isNotNullOrUndefined } from '@/shared/pipes/is-not-null-or-undefined.pipe';
 import { UsersApi } from '@/shared/services/api/users.api';
 import { LoggerService } from '@/table/services/logger.service';
 
@@ -24,7 +25,7 @@ export type UserStateModel = IUser | null;
 @Injectable()
 export class UserState implements NgxsOnInit {
   @Selector()
-  static getState(state: UserStateModel) {
+  static getState(state: UserStateModel): UserStateModel {
     return state;
   }
 
@@ -34,7 +35,7 @@ export class UserState implements NgxsOnInit {
     private logger: LoggerService,
   ) {}
 
-  ngxsOnInit(context: StateContext<UserStateModel>) {
+  ngxsOnInit(context: StateContext<UserStateModel>): void {
     this.watchAndUpdateUserData(context);
   }
 
@@ -42,24 +43,26 @@ export class UserState implements NgxsOnInit {
   setUser(
     { setState }: StateContext<UserStateModel>,
     { user }: SetUser,
-  ) {
+  ): void {
     this.logger.log('New user data is:', user);
     setState(user);
   }
 
-  private watchAndUpdateUserData(context: StateContext<UserStateModel>) {
+  private watchAndUpdateUserData(context: StateContext<UserStateModel>): void {
     this.fireauth.user.pipe(
-      filter((user) => !!user),
+      isNotNullOrUndefined(),
       tap((user) => {
         this.logUser(user);
       }),
       switchMap(({ uid }) => this.usersApi.getOne(uid)),
     ).subscribe((user) => {
+      if (!user) throw new Error('User not found');
+
       context.setState(user);
     });
   }
 
-  private async logUser(user: firebase.User) {
+  private async logUser(user: firebase.User): Promise<void> {
     const token = await user.getIdToken();
 
     this.logger.log('New token is:', { token });
