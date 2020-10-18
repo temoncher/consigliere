@@ -46,8 +46,6 @@ export class GameService {
   }
 
   startGame(): void {
-    this.timersService.resetTimers();
-
     this.store.dispatch([
       new SetPlayersNumbers(),
       // new GiveRoles(), // will be useful, when automatic roles shuffle will be implemented

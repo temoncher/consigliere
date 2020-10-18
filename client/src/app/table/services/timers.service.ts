@@ -1,8 +1,9 @@
 
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 
 import { Timer } from '../models/timer.model';
+import { SetPlayersNumbers } from '../store/players/players.actions';
 import { PlayersState } from '../store/players/players.state';
 import { TableState } from '../store/table.state';
 
@@ -12,7 +13,13 @@ import { TableState } from '../store/table.state';
 export class TimersService {
   timers = new Map<string, Timer>();
 
-  constructor(private store: Store) { }
+  constructor(
+    private store: Store,
+    private actions$: Actions,
+  ) {
+    this.resetTimers();
+    this.watchGameStart();
+  }
 
   getPlayerTimer(playerId: string): Timer | undefined {
     return this.timers.get(playerId);
@@ -60,5 +67,11 @@ export class TimersService {
     if (!playerTimer) throw new Error('Player\'s timer not found');
 
     playerTimer.resetTimer(time);
+  }
+
+  private watchGameStart(): void {
+    this.actions$.pipe(
+      ofActionSuccessful(SetPlayersNumbers),
+    ).subscribe(() => this.resetTimers());
   }
 }
