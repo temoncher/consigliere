@@ -55,7 +55,7 @@ export class AdditionalSpeechComponent implements OnDestroy {
   endPlayerSpeech(playerId: string): void {
     const finishedPlayerIndex = this.leaders.findIndex((player) => player.uid === playerId);
 
-    if (!(finishedPlayerIndex && playerId)) throw new Error('Finished player not found');
+    if (!playerId) throw new Error('Finished player not found');
 
     if (finishedPlayerIndex < this.leaders?.length - 1) {
       const slideIndex = this.leaders.findIndex(({ uid }) => !this.timers.get(uid)?.isSpeechEnded);

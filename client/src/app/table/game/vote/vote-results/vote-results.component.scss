@@ -1,7 +1,5 @@
 .vote-result {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  padding-top: 64px;
 
   &__container {
     flex: 2;

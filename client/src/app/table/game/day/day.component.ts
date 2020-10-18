@@ -20,6 +20,11 @@ import { IQuitPhase } from '~types/interfaces/quit-phase.interface';
 @Component({
   selector: 'app-day',
   templateUrl: './day.component.html',
+  styles: [`
+    .day {
+      padding-top: 32px
+    }
+  `],
 })
 export class DayComponent implements OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();

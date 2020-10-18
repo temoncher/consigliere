@@ -3,22 +3,28 @@
 ></ng-container>
 
 <ng-template #zeroNightBlock>
-  <app-zero-night (nextClick)="endNight()"></app-zero-night>
+  <app-zero-night
+    class="d-block h100"
+    (nextClick)="endNight()"
+  ></app-zero-night>
 </ng-template>
 
 <ng-template #nightBlock>
   <ng-container [ngSwitch]="stage">
     <app-mafia-hunt
+      class="d-block h100"
       *ngSwitchCase="NightStages.MAFIA"
       (nextClick)="nextStage()"
     ></app-mafia-hunt>
 
     <app-don
+      class="d-block h100"
       *ngSwitchCase="NightStages.DON"
       (nextClick)="nextStage()"
     ></app-don>
 
     <app-sheriff
+      class="d-block h100"
       *ngSwitchCase="NightStages.SHERIFF"
       (nextClick)="nextStage()"
     ></app-sheriff>

@@ -7,7 +7,7 @@
   </ion-button>
 </app-portal>
 
-<div>
+<div class="zero-night d-block h100">
   <ion-slides #playerSlider [options]="playerSliderConfig">
     <ion-slide>
       <ion-card class="don-card player-card">
@@ -46,9 +46,7 @@
               (click)="switchTimer()"
               [ngStyle]="{
                 backgroundImage:
-                  'url(' +
-                  ((sheriff$ | async)?.avatar || defaultAvatar) +
-                  ')'
+                  'url(' + ((sheriff$ | async)?.avatar || defaultAvatar) + ')'
               }"
               [current]="sheriffTimer.time"
               [max]="time"

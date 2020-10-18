@@ -3,3 +3,12 @@
   flex-direction: column;
   flex: 1;
 }
+
+.stage-container {
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    flex: 1;
+  }
+}
