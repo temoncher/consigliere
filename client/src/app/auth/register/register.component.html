@@ -99,9 +99,9 @@
               Пароль должен быть минимум из
               {{ password.errors?.minlength.requiredLength }} символов
             </ng-container>
-            <ng-container *ngIf="password.errors?.maxLength">
+            <ng-container *ngIf="password.errors?.maxlength">
               Пароль должен быть максимум из
-              {{ password.errors?.minlength.requiredLength }} символов
+              {{ password.errors?.maxlength.requiredLength }} символов
             </ng-container>
           </small>
         </div>
